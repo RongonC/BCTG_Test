@@ -64,19 +64,7 @@ namespace StemmonsMobile.Commonfiles
             return obj;
 
         }
-       
-        //public static void Getaccesstoken()
-        //{
-        //    try
-        //    {
-        //        #region API Details
-        //        var API_value = new List<KeyValuePair<string, string>>
-        //    {
-        //        new KeyValuePair<string, string>("API_Name", Functions.Baseurl + Constants.Get_Token),
-        //        new KeyValuePair<string, string>("API_Type", "POST")
-        //    };
-
-        //        #endregion
+     
 
         //        #region API Body Details
         //        var Body_value = new List<KeyValuePair<string, string>>
@@ -96,8 +84,6 @@ namespace StemmonsMobile.Commonfiles
         //    {
         //    }
         //}
-
-
 
         #region Entity APIs
 
