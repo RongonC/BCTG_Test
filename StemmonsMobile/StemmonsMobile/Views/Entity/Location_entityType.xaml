@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Views.Entity.Location_entityType"   Title="Location Entity Type">
+
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home" Icon="home.png"/>
+        <ToolbarItem x:Name="menu_create" Text="Create" Icon="plus.png" />
+        <ToolbarItem Text="More" Icon="more.png"/>
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="list_LocationEntity" 
+                      ItemTapped="List_LocationEntity_ItemTapped" 
+                      ItemTemplate="{StaticResource LocationEntityTypetemplate}">
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal"/>
+                </ListView.Footer>
+            </ListView>
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                <Button Text="+" FontSize="35" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

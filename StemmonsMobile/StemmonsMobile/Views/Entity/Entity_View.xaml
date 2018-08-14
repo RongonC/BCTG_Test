@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Entity.Entity_View"  
+             Title="Chiller Entity">
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Edit" Icon="Assets/Edit.png" x:Name="btn_editentity" Clicked="btn_editentity_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackLayout x:Name="Main_stack">
+
+                    <ScrollView Grid.Row="0">
+                        <StackLayout >
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="1"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="1"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Image  x:Name="IconSource" Grid.Row="0" 
+                                        IsVisible="False"  Source="Assets/Chart.png">
+                                </Image>
+
+                                <StackLayout x:Name="TextFieldsLayout" Grid.Row="1"/>
+
+                                <Grid   Grid.Row="2" >
+                                    <ListView  x:Name="gridEntitynotes" HasUnevenRows="True" 
+                                               ItemTapped="gridEntitynotes_ItemTapped" HeightRequest="700"
+                                       IsGroupingEnabled="True">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell >
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="auto" />
+                                                            <RowDefinition Height="auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <Label  Text="{Binding Note}"  Grid.Row="0"
+                                                                    Style="{StaticResource defaultLabelSize}"
+                                                                    IsVisible="{Binding LabelVisible}"/>
+
+                                                        <Image  x:Name="App_Logo" 
+                                                                    Aspect="AspectFit" 
+                                                                    HorizontalOptions="Center" 
+                                                                    Grid.Row="1" 
+                                                                    IsVisible="{Binding ImageVisible}"
+                                                                    HeightRequest="100" 
+                                                                    WidthRequest="100"
+                                                                    Source="{Binding ImageURL}" />
+                                                    </Grid>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.Footer>
+                                            <StackLayout Orientation="Horizontal" BackgroundColor="Green" />
+                                        </ListView.Footer>
+                                        <ListView.GroupHeaderTemplate>
+                                            <DataTemplate>
+                                                <ViewCell  Height="30">
+                                                    <ViewCell.View>
+                                                        <StackLayout Orientation="Horizontal"
+                                                             HorizontalOptions="Fill" 
+                                                         BackgroundColor="#DEE7F3" VerticalOptions="Center"   >
+                                                            <StackLayout Orientation="Horizontal" 
+                                                                 BackgroundColor="#DEE7F3" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
+                                                                <Label Text="Notes: " FontAttributes="Bold"   FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                                <Label FontSize="12" FontAttributes="Bold" Text="{Binding CreatedDate}"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                                <Label FontSize="12" FontAttributes="Bold" Text="{Binding Uname}" Margin="10,0,0,0"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                                            </StackLayout>
+                                                        </StackLayout>
+                                                    </ViewCell.View>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.GroupHeaderTemplate>
+                                    </ListView>
+                                </Grid>
+
+                                <Label x:Name="line_relatedgrid" Grid.Row="3"  BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0"/>
+                                <Grid Grid.Row="4" >
+                                    <ListView  x:Name="GroupedView"  
+                                   Header="{Binding Title}" 
+                                       ItemTapped="GroupedView_ItemTapped" 
+                                   GroupDisplayBinding="{Binding Title}"
+                                    HasUnevenRows="True" 
+                                   IsGroupingEnabled="True" 
+                                   RowHeight="40"  >
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <ViewCell.View>
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <StackLayout HorizontalOptions="StartAndExpand" >
+                                                                <Label  Text="{Binding Name}" Style="{StaticResource defaultLabelSize}"
+                                                            TextColor="Black" Margin="10,10,0,0" 
+                                                            HorizontalOptions="End" XAlign="End"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            </StackLayout>
+                                                            <Button Image="{Binding Icon}"  
+                                                        BackgroundColor="Transparent"  
+                                                        WidthRequest="40"   
+                                                        HorizontalOptions="End" Margin="0,0,0,0"/>
+                                                        </StackLayout>
+                                                    </ViewCell.View>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.GroupHeaderTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <StackLayout Orientation="Horizontal" Padding="0,5,5,5"  >
+                                                        <Button Image="{Binding StateIcon}"
+                                              BackgroundColor="Transparent"
+                                              WidthRequest="40"
+                                               Clicked="HeaderTapped" 
+                                              CommandParameter="{Binding .}"/>
+                                                        <Label Text="{Binding TitleWithItemCount}" 
+                                     TextColor="#005569"  
+                                     FontSize="15"
+                                     VerticalOptions="Center"/>
+                                                    </StackLayout>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.GroupHeaderTemplate>
+                                        <ListView.Footer>
+                                            <StackLayout Orientation="Horizontal" />
+                                        </ListView.Footer>
+                                    </ListView>
+                                </Grid>
+
+                                <Label Grid.Row="5" BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0"/>
+
+                                <Grid Grid.Row="6" Margin="10,0,0,0"  HorizontalOptions="Fill">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition  Height="1"/>
+                                        <RowDefinition  Height="auto"/>
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition  Height="auto"/>
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition  Height="auto"/>
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition  Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                    <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
+                                    <Label Grid.Row="1" Grid.Column="2"  FontSize="14" x:Name="lbl_createname"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="3" Grid.Column="2" FontSize="14"  x:Name="lbl_assignto"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="5" Grid.Column="2" FontSize="14"  x:Name="lbl_ownername"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Grid.Row="7" Grid.Column="2" FontSize="14"  x:Name="lbl_modifiedname"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                </Grid>
+                            </Grid>
+                        </StackLayout>
+                    </ScrollView>
+
+                    <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" 
+                                 IsClippedToBounds="True" BackgroundColor="White">
+                        <Button x:Name="btn_home" Image="Assets/Home_Icon.png"  BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="btn_home_Clicked"/>
+                        <Button x:Name="btn_add" Text="+" FontSize="35" Clicked="btn_add_Clicked" IsVisible="False" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                        <Button x:Name="btn_more" Image="Assets/menuicon.png" BackgroundColor="Transparent" Clicked="btn_more_Clicked" HorizontalOptions="CenterAndExpand" />
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

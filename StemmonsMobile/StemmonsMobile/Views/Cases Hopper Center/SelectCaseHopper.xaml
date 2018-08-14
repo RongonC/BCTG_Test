@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases_Hopper_Center.SelectCaseHopper"   Title = "Select Case Hopper">
+    <ContentPage.Content>
+        <AbsoluteLayout >
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <SearchBar Placeholder="Search Case Hopper" TextChanged="Handle_TextChanged" Grid.Row="0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                        <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+                    </StackLayout>-->
+
+                <ListView x:Name="HopperList" ItemTapped="Handle_ItemTapped" Grid.Row="1" RowHeight="37">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <ViewCell.ContextActions>
+                                    <MenuItem  CommandParameter="{Binding .}"
+               Text="Detail" Clicked="DetailClicked"/>
+                                    <MenuItem  CommandParameter="{Binding .}"
+               Text="Subscribe" Clicked="SubscribeClicked"/>
+                                </ViewCell.ContextActions>
+
+                                <Grid Margin="15,0,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80*"/>
+                                        <ColumnDefinition Width="20*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding HopperName}"  Style="{StaticResource defaultLabelSize_subtype}" TextColor="Black" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" 
+                                Margin="0,10,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Button Image="Assets/dropdowniconClose.png" Grid.Column="1" HorizontalOptions="End" Margin="0,5,5,0" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25"/>
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Footer>
+                        <StackLayout Orientation="Horizontal">
+                        </StackLayout>
+                    </ListView.Footer>
+                </ListView>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                    <Button Image="Assets/Home_Icon.png"  BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
+                    <Button Image="Assets/menuicon.png"  BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.CaseTypeDetails">
+    <ContentPage.Content>
+
+        <Grid VerticalOptions="Start" Margin="10,10,10,0" ColumnSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="1" />
+                <RowDefinition />
+                <RowDefinition Height="1" />
+                <RowDefinition />
+                <RowDefinition Height="1" />
+                <RowDefinition />
+                <RowDefinition Height="1" />
+                <RowDefinition />
+                <RowDefinition Height="1" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Text="Case Title"  Style="{StaticResource defaultLabelSize_subtype}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Label BackgroundColor="LightGray" Grid.Row="1" Grid.ColumnSpan="2" />
+            <Label Text="Priority" Grid.Row="2"  Style="{StaticResource defaultLabelSize_subtype}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Label BackgroundColor="LightGray" Grid.Row="3" Grid.ColumnSpan="2" />
+            <Label Text="Status" Grid.Row="4"   Style="{StaticResource defaultLabelSize_subtype}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Label BackgroundColor="LightGray" Grid.Row="5" Grid.ColumnSpan="2" />
+            <Label Text="Property" Grid.Row="6" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Label BackgroundColor="LightGray" Grid.Row="7" Grid.ColumnSpan="2" />
+            <Label Text="Notes" Grid.Row="8" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Entry Placeholder="Case Title" Grid.Column="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Entry x:Name="entryPriority" Placeholder="Level of Priority" Grid.Row="2" Grid.Column="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Entry x:Name="entryStatus" Placeholder="The Status" Grid.Row="4" Grid.Column="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Entry x:Name="entryProperty" Placeholder="Select The Property" TextColor="Blue" Grid.Row="6" Grid.Column="1" Focused="Property_Focused" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Entry Placeholder="Notes" Grid.Row="8" Grid.Column="1" Focused="Notes_Focused" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+        </Grid>
+
+
+
+    </ContentPage.Content>
+</ContentPage>

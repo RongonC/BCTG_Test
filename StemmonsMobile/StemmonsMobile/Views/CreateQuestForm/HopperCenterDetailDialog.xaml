@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rg:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Views.CreateQuestForm.HopperCenterDetailDialog"   xmlns:local="clr-namespace:StemmonsMobile.Views.CreateQuestForm" 
+    xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    >
+
+
+    <StackLayout>
+        <local:HopperCenterDetailsView x:Name="listView" VerticalOptions="CenterAndExpand" />
+        <Button x:Name="buttonFormOriginationDetails" Text="Form Origination Details"
+                BackgroundColor="{Binding BackgroundColor, Source={x:Reference listView}}"
+                BorderRadius="20" Margin="0,0,0,10" VerticalOptions="End">
+            <Button.BackgroundColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="iOS" Value="White" />
+                </OnPlatform>
+            </Button.BackgroundColor>
+        </Button>
+        <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="MainLayout_Tapped" />
+        </StackLayout.GestureRecognizers>
+    </StackLayout>
+
+    </rg:PopupPage>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.CreateQuestForm.NewQuestForm" 
+             Title = "New Quest Form">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="MenuItem1" Order="Primary"  Text="Save" Clicked="Handle_Clicked"/>
+
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <AbsoluteLayout>
+
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+                <ScrollView x:Name="scrollview" Grid.Row="0">
+                    <StackLayout>
+
+                        <StackLayout x:Name="DynamicFields" Margin="0,10,0,0">
+
+                        </StackLayout>
+
+                        <Label BackgroundColor="#D0D0D0" HeightRequest="1" />
+
+                        <ListView x:Name="listdata" HasUnevenRows="True" ItemTapped="Handle_ItemTapped">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid Margin="10,5,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                            </Grid.ColumnDefinitions>
+
+
+                                            <Label Text="{Binding strItemCategoryName}" Style="{StaticResource defaultLabelSize}"
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center"
+                                         Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="Incomplete" FontSize="10"
+                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                        Grid.Column="2" Grid.Row="0" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Label Text="{Binding PointsAvail}" FontSize="9" 
+                                       Grid.Column="0" 
+                                       Grid.Row="1" HorizontalOptions="CenterAndExpand" 
+                                       VerticalOptions="Center" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Label Text="{Binding PointsEarn}"
+                                       FontSize="9"
+                                       Grid.Column="1"   Grid.Row="1"
+                                       HorizontalOptions="CenterAndExpand" TextColor="Black"
+                                       VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Label Text="{Binding FinalScore}" FontSize="9"
+                                       Grid.Column="2" Grid.Row="1" 
+                                       HorizontalOptions="CenterAndExpand" TextColor="Black"
+                                       VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Button Image="Assets/dropdowniconClose.png" 
+                                        HorizontalOptions="End"    
+                                        VerticalOptions="Center"
+                                        BackgroundColor="Transparent" 
+                                        Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" 
+                                       />
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Footer>
+
+
+                                <StackLayout x:Name="StaticFooter" IsVisible="false">
+                                    <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0"/>
+
+                                    <Grid Margin="10,0,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="3*"/>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Label x:Name="overallpoints"
+                                   
+                                   Grid.Row="0" Grid.Column="0"
+                                   FontSize="12" HorizontalOptions="EndAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="Earned:-0"
+                                   Grid.Row="0" Grid.Column="1"
+                                   FontSize="12" HorizontalOptions="CenterAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="Score:-0%"
+                                   Grid.Row="0" Grid.Column="2"
+                                   FontSize="12" HorizontalOptions="StartAndExpand" Margin="0,0,1,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    </Grid>
+                                </StackLayout>
+
+                            </ListView.Footer>
+                        </ListView>
+                    </StackLayout>
+                </ScrollView>
+                <StackLayout Orientation="Horizontal"  VerticalOptions="EndAndExpand">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked" />
+                </StackLayout>
+            </Grid>
+
+
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

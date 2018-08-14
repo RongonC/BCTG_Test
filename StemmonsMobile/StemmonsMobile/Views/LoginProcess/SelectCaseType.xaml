@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Views.LoginProcess.SelectCaseType">
+    <ContentPage.Content>
+
+        <StackLayout>
+            <StackLayout Spacing="10" Orientation="Horizontal" BackgroundColor="Black" HeightRequest="60">
+
+                <Button x:Name="backbutton" Image="backicon.png" WidthRequest="30" HeightRequest="30" Margin="0,20,0,0"
+                         HorizontalOptions="Start" Clicked="BackButton_Clicked"/>
+
+                <StackLayout  HorizontalOptions="CenterAndExpand">
+
+
+
+                    <Label Text="Select Case Type" FontAttributes="Italic" FontSize="16" TextColor="White" 
+                                 Margin="-18,29,0,0" HorizontalOptions="CenterAndExpand"/>
+
+
+                </StackLayout>
+
+                <!--  <Image x:Name="MyImage" Source="plussign.png" WidthRequest="30" HeightRequest="30" Margin="0,20,0,0"
+                              HorizontalOptions="End"/>  -->
+
+
+
+            </StackLayout>
+
+            <SearchBar x:Name="Searchbar1"
+               SearchButtonPressed="Handle_SearchButtonPressed"   
+                TextChanged="Handle_TextChanged" 
+                Placeholder="Search for a Case Type" />
+
+            <StackLayout>
+                <Button x:Name="FavtButton" Text="My Favorite" HorizontalOptions="StartAndExpand" Margin="15,0,0,0" TextColor="Gray" 
+            FontAttributes="Italic" FontSize="12" Clicked="Handle_MyFavClick" HeightRequest="25" Image="dropdowniconClose.png"/>
+
+                <Label BackgroundColor="#dddddd" HeightRequest="1" Margin="10,0,0,0"/>
+
+                <ListView x:Name="listCaseType1" IsVisible="false" Margin="10,0,0,0" WidthRequest="50" ItemSelected="Handle_ItemSelected1" HeightRequest="220">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Clicked="Handle_Clicked" CommandParameter="{Binding .}" Text="Delete" IsDestructive="True"                                 />
+
+                                </ViewCell.ContextActions>
+                                <ViewCell.View>
+
+
+                                    <StackLayout Spacing="10" Orientation="Horizontal">
+                                        <StackLayout  HorizontalOptions="StartAndExpand">
+                                            <Label Text="{Binding casetypename}"  FontSize="16" TextColor="Black" Margin="18,10,0,0" HorizontalOptions="End" XAlign="End"/>
+
+                                        </StackLayout>
+
+                                        <Image x:Name="MyImage" Source="{Binding tempimage}" WidthRequest="30" HeightRequest="30" Margin="0,0,10,0"
+                                           
+                                 HorizontalOptions="End"/>
+                                    </StackLayout>
+
+                                </ViewCell.View>
+                            </ViewCell>
+
+                            <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
+
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <!-- <ListView.Footer>
+            <StackLayout Orientation="Horizontal">
+            </StackLayout>
+        </ListView.Footer>-->
+                </ListView>
+
+
+
+                <!-- SecondListView -->
+
+
+
+                <Button x:Name="CaseTypeButton" Text="Case Types" HorizontalOptions="StartAndExpand" Margin="15,0,0,0" TextColor="Gray" 
+            FontAttributes="Italic" FontSize="12" Clicked="Handle_CaseTypeClick" HeightRequest="25" Image="dropdowniconClose.png"/>
+
+                <Label BackgroundColor="#dddddd" HeightRequest="1" Margin="10,0,0,0"/>
+
+                <ListView x:Name="listCaseType2"  IsVisible="false" Margin="0,0,0,0" ItemSelected="Handle_ItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Clicked="Handle_Clicked1" CommandParameter="{Binding .}" Text="Delete" IsDestructive="True" 
+                                />
+
+                                </ViewCell.ContextActions>
+                                <ViewCell.View>
+
+
+                                    <StackLayout Spacing="10" Orientation="Horizontal">
+                                        <StackLayout  HorizontalOptions="StartAndExpand">
+                                            <Label Text="{Binding casetypename}" FontSize="16" TextColor="Black" Margin="18,10,0,0" HorizontalOptions="End" XAlign="End"/>
+
+                                        </StackLayout>
+
+                                        <Image x:Name="MyImage" Source="{Binding tempimage}" WidthRequest="30" HeightRequest="30" Margin="0,0,10,0"
+                                           
+                                 HorizontalOptions="End"/>
+                                    </StackLayout>
+
+                                </ViewCell.View>
+                            </ViewCell>
+
+                            <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
+
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Footer>
+                        <StackLayout Orientation="Horizontal">
+                        </StackLayout>
+                    </ListView.Footer>
+                </ListView>
+
+
+            </StackLayout>
+        </StackLayout>
+
+
+    </ContentPage.Content>
+</ContentPage>
+
+

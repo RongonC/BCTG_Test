@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+            xmlns:me="clr-namespace:StemmonsMobile.Views;assebly=StemmonsMobile"
+             x:Class="StemmonsMobile.Views.People_Screen.UserDetail" Title="User Profile">
+    <ContentPage.Content>
+        <AbsoluteLayout  Margin="10,0,0,0" >
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Row="0">
+                    <ScrollView VerticalOptions="Start" IsClippedToBounds="True" >
+                        <StackLayout VerticalOptions="Start" IsClippedToBounds="True">
+
+                            <Image x:Name="ProfileImg" Source="Assets/userIcon.png" Margin="10" WidthRequest="200" 
+                                          HeightRequest="200"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Label x:Name="labelDisplayName" 
+                       Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <!--Text="William E. Daugherty II"-->
+                            <Label Text="Display Name" FontSize="10" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1"  />
+
+                            <Label x:Name="labelRealName"  
+                       Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <!--Text="William Daugherty"-->
+                            <Label Text="Real Name" FontSize="10" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Label x:Name="labelDepartmentName" 
+                       Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <!--Text="Application Development"-->
+                            <Label Text="Department Name" FontSize="10" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Label x:Name="labelJobTitle"  Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <!--Text="Director, Application Development"-->
+                            <Label Text="Job Title" FontSize="10" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label x:Name="OfficePhone"  
+                           Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <!--Text="(713) 589-4298"-->
+                                <Label Text="Office Phone" FontSize="10" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="Assets/Phone.png" BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="OfficePhoneClick"/>
+                            </Grid>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label x:Name="CellPhone" 
+                           Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <!--Text="(713) 962-0445"-->
+
+                                <Label Text="Office Phone" FontSize="10" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="Assets/Phone.png"  BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="CellPhoneClicked"/>
+                            </Grid>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Label x:Name="CityState" 
+                       Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <!--Text="Houston, TX"-->
+                            <Label Text="City, State" FontSize="10" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label x:Name="EmailAddress"  Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <!--Text="william.daugherty@stemmons.com"-->
+                                <Label Text="Email Address" FontSize="10" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="Assets/Email.png"  BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="SendMail"/>
+                            </Grid>
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="lbl_supervisor"  Style="{StaticResource defaultLabelSize}" Clicked="Manager_clicked" TextColor="Black" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <!--Text="william.daugherty@stemmons.com"-->
+                                <Label Text="Manager / Supervisor" FontSize="10" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25" Margin="0,0,5,0"  Grid.Column="1" Grid.RowSpan="2" Clicked="Manager_clickd"/>
+                            </Grid>
+                            <Label BackgroundColor="LightGray" HeightRequest="1" />
+                            <ListView x:Name="listdata" HeightRequest="250" VerticalOptions="Start" ItemTemplate="{StaticResource CaseDetailsTemplate}"
+                           ItemTapped="Handle_ItemTapped">
+                                <ListView.Footer>
+                                    <StackLayout Orientation="Horizontal"/>
+                                </ListView.Footer>
+                            </ListView>
+                        </StackLayout>
+                    </ScrollView>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" 
+                             Grid.Row="1" IsClippedToBounds="True">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Entity.Entity_TypeDetails" Title="Entity Type Details">
+ 
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="List_EntityDetails" RowHeight="35" HasUnevenRows="True"
+                      ItemTapped="List_EntityDetails_ItemTapped" 
+                     >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            
+                            <StackLayout Orientation="Horizontal" HeightRequest="30">
+                                <StackLayout HorizontalOptions="StartAndExpand"  >
+                                    <Label  Text="{Binding Name}" VerticalOptions="Center" 
+                                        Style="{StaticResource defaultLabelSize}"  Margin="15,4,0,0"
+                                                TextColor="Black"  
+                                                HorizontalOptions="End"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                </StackLayout>
+                                <Label Text="{Binding Type_value}" HorizontalOptions="End" VerticalOptions="Center" 
+                            TextColor="Orange" Style="{StaticResource defaultLabelSize}"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Image Source="{Binding Img}"  
+                                           HorizontalOptions="End" VerticalOptions="Center" 
+                                       Margin="0,0,10,0"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal"/>
+                </ListView.Footer>
+            </ListView>
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                <Button Text="+" x:Name="btn_CreateEntity" Clicked="Btn_CreateEntity_Clicked" FontSize="35" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="StemmonsMobile.Views.Search.SearchList">
+	<ContentPage.Content>
+        <StackLayout>
+        <StackLayout Spacing="10" Orientation="Horizontal" BackgroundColor="Black" HeightRequest="60"> 
+
+             
+                 <Button x:Name="backbutton" Image="backicon.png" WidthRequest="30"  HeightRequest="30" Margin="0,20,0,0"
+                         HorizontalOptions="Start" Clicked="BackClicked_Clicked"/>
+                <StackLayout  HorizontalOptions="CenterAndExpand"> 
+                    
+                          <Label Text="Search" FontAttributes="Italic" FontSize="16" TextColor="White" 
+                                 Margin="-15,29,0,0" HorizontalOptions="CenterAndExpand"/>
+
+               
+                 </StackLayout>
+
+        
+              </StackLayout>
+
+            <ListView x:Name="InstanceList" Margin="0,-5,0,0" RowHeight="40" ItemTapped="Handle_ItemTapped">
+                <ListView.ItemTemplate>
+                   <DataTemplate>
+                     <ViewCell>
+                       
+                            <ViewCell.View>
+
+                                
+                                <StackLayout Spacing="10" Orientation="Horizontal"> 
+                                <StackLayout  HorizontalOptions="StartAndExpand"> 
+                                    <Label Text="{Binding}" FontSize="16" TextColor="Black" Margin="18,10,0,0" HorizontalOptions="End" XAlign="End"/>
+
+                                </StackLayout>
+
+                               <Image x:Name="dropdownicon" Source="dropdowniconClose.png" WidthRequest="10" HeightRequest="10" Margin="0,0,10,0"
+                                          
+                                 HorizontalOptions="End"/> 
+                               </StackLayout>
+    
+                     </ViewCell.View>
+                  </ViewCell>
+                        
+                         <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
+                              
+                
+                        </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+            <StackLayout Orientation="Horizontal">
+            </StackLayout>
+        </ListView.Footer>
+            </ListView>
+        </StackLayout>    
+	</ContentPage.Content>
+</ContentPage>

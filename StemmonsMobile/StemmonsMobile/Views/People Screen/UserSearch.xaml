@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Views.People_Screen.UserSearch">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="Main_stack">
+
+            <StackLayout  x:Name="Stack_indicator"  IsVisible="False"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                <ActivityIndicator x:Name="ActInd" IsRunning="True" Color ="Black"/>
+                <Label Text="Loading..." HorizontalOptions="Center" IsVisible="True" TextColor="Black"/>
+            </StackLayout>
+
+            <StackLayout  AbsoluteLayout.LayoutFlags="PositionProportional">
+                <StackLayout>
+                    <Label x:Name="searchlabel"  Margin="10" Style="{StaticResource defaultLabelSize}" Text="Employee Search" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    <StackLayout Orientation="Horizontal" Margin="10" >
+                        <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Button Text="Search"  x:Name="btn_search" TextColor="White" BackgroundColor="Orange" 
+                    HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" />
+                    </StackLayout>
+
+                    <ListView x:Name="lstSearchitem" 
+                          HasUnevenRows="True"  Margin="0,0,0,10" RowHeight="30"
+                      ItemTapped="lstSearchitem_ItemTapped" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid  Grid.Row="0" Grid.Column="0"  >
+                                                <Label  Text="{Binding DisplayName}"
+                                                            Style="{StaticResource defaultLabelSize}"
+                                                            Margin="10,-2,0,0"
+                                                            HorizontalOptions="Start" 
+                                                            VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            </Grid>
+
+                                            <Image Source="Assets/dropdowniconClose.png"  
+                                                       Grid.Row="0" Grid.Column="2"  
+                                                       HorizontalOptions="End" VerticalOptions="Center"
+                                                       Margin="5,0,10,0"/>
+                                        </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.Footer>
+                            <StackLayout Orientation="Horizontal"/>
+                        </ListView.Footer>
+                    </ListView>
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="End" 
+                         AbsoluteLayout.LayoutBounds=".5,1,.5,.1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand">
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Button Image="Assets/Home_Icon.png" Grid.Column="0"  BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/menuicon.png" Grid.Column="2" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </Grid>
+            </StackLayout>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="StemmonsMobile.Views.Standards.MyStandards">
+    <ContentPage.Content>
+
+        <StackLayout x:Name="main_stack">
+            <SearchBar Placeholder="Search for quest item in this list" x:Name="SearchQuest" />
+
+            <StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+            </StackLayout>
+            <ListView x:Name="FormData" RowHeight="90" ItemTapped="Handle_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="10,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="2*"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding AppName}" 
+                                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                       FontSize="18"/>
+                                <Label Text="{Binding Description}"
+                                       Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                       FontSize="18"
+                                       TextColor="{StaticResource DetailsColor}"/>
+                                <Label Text="{Binding sModifyDate}"
+                                       Grid.Row="2" Grid.Column="0" 
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                       FontSize="12"
+                                       />
+                                <Label Text="{Binding sLastVisitDate}"
+                                       Grid.Row="2" Grid.Column="1" 
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                        FontSize="12"
+                                       />
+
+                                <Button Image="Assets/dropdowniconClose.png"
+                                        Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" 
+                                        BackgroundColor="Transparent"
+                                        HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,5,0" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <!--<StackLayout Orientation="Vertical" Margin="15,0,0,0">
+                        <Label BackgroundColor="LightGray" HeightRequest="1" />
+                        <Button Text="Load More (Requires Internet)" />
+                    </StackLayout>-->
+                </ListView.Footer>
+            </ListView>
+
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+        </StackLayout>
+
+
+    </ContentPage.Content>
+</ContentPage>

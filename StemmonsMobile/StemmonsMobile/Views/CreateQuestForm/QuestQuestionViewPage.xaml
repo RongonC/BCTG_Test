@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+    x:Class="StemmonsMobile.Views.CreateQuestForm.QuestQuestionViewPage"
+             NavigationPage.HasNavigationBar="false"  >
+
+    <ContentPage.ToolbarItems>
+        <!--        <ToolbarItem x:Name="Save" Text="Save" Clicked="Handle_Clicked"/>-->
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <AbsoluteLayout>
+
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+                <StackLayout BackgroundColor="#696969" Grid.Row="0" HeightRequest="80">
+                    <Grid Margin="0,30,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                            <!--<ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="8*"/>-->
+                        </Grid.ColumnDefinitions>
+                        <Button Image="Assets/back_icon.png" Text="Back" TextColor="White" BackgroundColor="Transparent" FontAttributes="Bold"
+                                HorizontalOptions="Start" Grid.Row="0"
+                        Margin="-10,9,0,0" Grid.Column="1" Clicked="Save_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                      
+                        <Label Text="Quest View Form"  Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="4"  TextColor="White" HorizontalOptions="Center" 
+                               FontAttributes="Bold" FontSize="16" Margin="31,20,0,0" xmlns:local="clr-namespace:StemmonsMobile"/>
+                    </Grid>
+                </StackLayout>
+
+                <ScrollView  Grid.Row="1">
+                    <StackLayout x:Name="DynamicView">
+                    </StackLayout>
+                </ScrollView>
+
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home"  Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

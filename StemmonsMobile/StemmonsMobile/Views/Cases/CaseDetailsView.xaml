@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.CaseDetailsView">
+    <ContentPage.Content>
+        <StackLayout>
+
+            <ListView x:Name="listCaseDetails" ItemTapped="Handle_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="15,5,10,0" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Caseoptions}"  HorizontalOptions="StartAndExpand" 
+                            VerticalOptions="Center" TextColor="Black"  Style="{StaticResource defaultLabelSize_subtype}" Margin="0,5,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding Description}" HorizontalOptions="End" VerticalOptions="CenterAndExpand" 
+                             Grid.Column="1" TextColor="Orange"  Style="{StaticResource defaultLabelSize_subtype}" Margin="0,5,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="{Binding Icon}" Grid.Column="2" HorizontalOptions="End" 
+                             VerticalOptions="Center" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25" Margin="0,5,0,0"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer >
+                    <Grid Margin="15,0,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label Text="Create New Case"  LineBreakMode="TailTruncation"
+                           VerticalOptions="Center" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Button Image="Assets/plussign.png" BackgroundColor="Transparent" 
+                            Grid.Row="1" Grid.Column="1" WidthRequest="25" HeightRequest="25"    Clicked="NewCaseCreat_Clicked" />
+                    </Grid>
+                </ListView.Footer>
+            </ListView>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
+                <Button Text="+" FontSize="35" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="Footer_CreateCase" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked" HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

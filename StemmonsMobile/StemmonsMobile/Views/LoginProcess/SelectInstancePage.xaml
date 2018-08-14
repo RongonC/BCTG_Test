@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.LoginProcess.SelectInstancePage"  
+             Title = "Select Instance" Appearing="ContentPage_Appearing">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Create" Order="Primary"   Icon="Assets/plus11.png"  Priority="0" Clicked="Handle_Clicked"/>
+    </ContentPage.ToolbarItems>
+        <StackLayout>
+            <Image Aspect="AspectFit" Source="Assets/boxerlogo.png" Margin="5,10,0,0"/>
+
+            <Label Text="Service Instance" Margin="20,0,0,0" TextColor="Gray" FontAttributes="Italic" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+            <Label Margin="15,0,0,0" BackgroundColor="#D0D0D0" HeightRequest="1"/>
+
+            <ListView x:Name="InstanceList" Margin="0,5,0,0" RowHeight="40" ItemTapped="Handle_ItemTapped"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <StackLayout Spacing="10" Orientation="Horizontal">
+                                    <StackLayout  HorizontalOptions="StartAndExpand">
+                                        <Label Text="{Binding InstanceName}" Style="{StaticResource defaultLabelSize}" TextColor="Black" Margin="18,10,0,0" HorizontalOptions="End" XAlign="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                    </StackLayout>
+
+                                    <Image x:Name="dropdownicon" Source="Assets/dropdowniconClose.png"  VerticalOptions="Center"  Margin="0,0,10,0"
+                                          
+                                 HorizontalOptions="End"/>
+                                </StackLayout>
+
+                            </ViewCell.View>
+                        </ViewCell>
+
+                        <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>
+            </ListView>
+        </StackLayout>
+</ContentPage>

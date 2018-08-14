@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.FavoriteDetailsDialog" 
+             xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+            >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Frame BackgroundColor="#FAE091" HorizontalOptions="Center" VerticalOptions="End" CornerRadius="30">
+            <StackLayout>
+                <Label x:Name="labelTitle" Text="Property Work Order" FontSize="20" HorizontalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Label Text="Priority 3: Medium" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Label Text="Status: New" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Label Text="Property 720 North Post Oak Rd" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            </StackLayout>
+        </Frame>
+        <StackLayout VerticalOptions="End" Margin="0,0,0,10" Grid.Row="1">
+            <Button x:Name="buttonCaseTypeDetails" Text="Case Type Details" BackgroundColor="White" BorderRadius="20" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Button Text="Create Case with this Favorite" BackgroundColor="White" BorderRadius="20" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+        </StackLayout>
+        <!--<Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="MainLayout_Tapped" />
+        </Grid.GestureRecognizers>-->
+    </Grid>
+</ContentPage>

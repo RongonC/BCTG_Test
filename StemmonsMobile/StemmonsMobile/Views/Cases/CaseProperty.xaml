@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.CaseProperty"    Title="Property">
+    <ContentPage.Content>
+
+
+     
+        <!--<ListView x:Name="listViewCasesProperty" IsGroupingEnabled="True" 
+                  ItemTemplate="{StaticResource CasesPropertyListTemplate}" 
+                  GroupHeaderTemplate="{StaticResource GroupTemplateStandard}"
+                  ItemTapped="OnItemTapped" />-->
+
+
+
+        <StackLayout Margin="10">
+            <ListView x:Name="listviewCasesProperty" IsGroupingEnabled="True" VerticalOptions="Start">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label  Text="{Binding Title}" VerticalOptions="Center" Margin="5,0,0,0" TextColor="#2175c8"> </Label>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
+                                <Label Text="{Binding FirstLastName}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="{Binding Icon}" HorizontalOptions="End"  VerticalOptions="Center" Margin="0,0,5,0" 
+                                        BackgroundColor="Transparent">
+                                </Button>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal"/>
+                </ListView.Footer>
+            </ListView>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked" HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+
+
+
+        </StackLayout>
+        
+        
+ 
+    </ContentPage.Content>
+</ContentPage>

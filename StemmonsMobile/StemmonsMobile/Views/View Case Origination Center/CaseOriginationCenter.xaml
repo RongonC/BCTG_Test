@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseOriginationCenter" 
+    Title="Select Case Type">
+    <ContentPage.Content>
+        <StackLayout x:Name="Main_Stack">
+
+
+            <StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+            </StackLayout>
+
+            <SearchBar x:Name="Searchbar1" Placeholder="Search Case Type" TextChanged="Handle_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+
+
+            <ListView x:Name="listCaseType" ItemTapped="Handle_ItemTapped" RowHeight="38">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!--<ViewCell.ContextActions>
+                                <MenuItem Clicked="Handle_Clicked" Text="Delete" IsDestructive="True" 
+                                CommandParameter="{Binding .}"/>
+
+                            </ViewCell.ContextActions>-->
+                            <ViewCell.View>
+
+
+                                <StackLayout  Orientation="Horizontal" HeightRequest="30">
+                                    <StackLayout  HorizontalOptions="StartAndExpand"  VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"  Style="{StaticResource defaultLabelSize_subtype}" TextColor="Black" Margin="15,0,0,0" HorizontalOptions="End" XAlign="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                    </StackLayout>
+
+                                    <Image x:Name="MyImage" Source="Assets/dropdowniconClose.png"   HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                </StackLayout>
+
+                            </ViewCell.View>
+                        </ViewCell>
+
+                        <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
+
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>
+            </ListView>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
+

@@ -1,0 +1,714 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{751A7594-6421-48B8-9EA7-35465821221D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StemmonsMobile</RootNamespace>
+    <AssemblyName>StemmonsMobile</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssignCase.xaml.cs">
+      <DependentUpon>AssignCase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BorderEditor.cs" />
+    <Compile Include="CircleImage.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="Commonfiles\APICalls.cs" />
+    <Compile Include="Commonfiles\Constants.cs" />
+    <Compile Include="Commonfiles\Functions.cs" />
+    <Compile Include="Controls\NullableDatePicker.cs" />
+    <Compile Include="CustomFontExtension.cs" />
+    <Compile Include="IDatalayer.cs" />
+    <Compile Include="IsExpandedToImageConverter.cs" />
+    <Compile Include="LandingPage.xaml.cs">
+      <DependentUpon>LandingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActivityLog.cs" />
+    <Compile Include="Models\ApplicationList.cs" />
+    <Compile Include="Models\Case.cs" />
+    <Compile Include="Models\CaseGroup.cs" />
+    <Compile Include="Models\Cases_extedataSource.cs" />
+    <Compile Include="Models\Cases_Notes.cs" />
+    <Compile Include="Models\casetype.cs" />
+    <Compile Include="Models\CaseTypeData.cs" />
+    <Compile Include="Models\ChillerEntity.cs" />
+    <Compile Include="Models\ChillerEntityGroup.cs" />
+    <Compile Include="Models\EntityNotesGroup.cs" />
+    <Compile Include="Models\Entity_Notes.cs" />
+    <Compile Include="Models\Food.cs" />
+    <Compile Include="Models\FoodImageCell.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Group_Property.cs" />
+    <Compile Include="Models\Group_Standards.cs" />
+    <Compile Include="Models\InstanceList.cs" />
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\ItemType.cs" />
+    <Compile Include="Models\StaticTypes.cs" />
+    <Compile Include="Models\Topic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IDataStore.cs" />
+    <Compile Include="Services\MockDataStore.cs" />
+    <Compile Include="ToggleExpandCommand.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationListViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CaseTypeViewModel.cs" />
+    <Compile Include="ViewModels\InstanceListViewModel.cs" />
+    <Compile Include="ViewModels\ItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\ItemsViewModel.cs" />
+    <Compile Include="Views\BaseGestureRecognizer.cs" />
+    <Compile Include="Views\Cases Hopper Center\SelectCaseHopper.xaml.cs">
+      <DependentUpon>SelectCaseHopper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases Hopper Center\SelectedHopper.xaml.cs">
+      <DependentUpon>SelectedHopper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseActivityLog.xaml.cs">
+      <DependentUpon>CaseActivityLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseDetailsPage.xaml.cs">
+      <DependentUpon>CaseDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseDetailsView.xaml.cs">
+      <DependentUpon>CaseDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseNotes.xaml.cs">
+      <DependentUpon>CaseNotes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseProperty.xaml.cs">
+      <DependentUpon>CaseProperty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\CaseTypeDetails.xaml.cs">
+      <DependentUpon>CaseTypeDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\FavoriteDetailsDialog.xaml.cs">
+      <DependentUpon>FavoriteDetailsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\NewCase.xaml.cs">
+      <DependentUpon>NewCase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\SelectCaseType.xaml.cs">
+      <DependentUpon>SelectCaseType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\ViewCasePage.xaml.cs">
+      <DependentUpon>ViewCasePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\Attachment.xaml.cs">
+      <DependentUpon>Attachment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\HopperCenterDetailDialog.xaml.cs">
+      <DependentUpon>HopperCenterDetailDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\HopperCenterDetailPage.xaml.cs">
+      <DependentUpon>HopperCenterDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\HopperCenterDetailsView.xaml.cs">
+      <DependentUpon>HopperCenterDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\MyFormsPage.xaml.cs">
+      <DependentUpon>MyFormsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\NewQuestForm.xaml.cs">
+      <DependentUpon>NewQuestForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\QuestionTemplateSelector.cs" />
+    <Compile Include="Views\CreateQuestForm\QuestItemDetailPage.xaml.cs">
+      <DependentUpon>QuestItemDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\QuestItemPage.xaml.cs">
+      <DependentUpon>QuestItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\QuestQuestionViewPage.xaml.cs">
+      <DependentUpon>QuestQuestionViewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\SelectQuestArea.xaml.cs">
+      <DependentUpon>SelectQuestArea.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\SelectQuestForm.xaml.cs">
+      <DependentUpon>SelectQuestForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\ViewAttachment.xaml.cs">
+      <DependentUpon>ViewAttachment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EntityTypeDetails.cs" />
+    <Compile Include="Views\Entity\CreateEntityPage.xaml.cs">
+      <DependentUpon>CreateEntityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\EntityActivityLogPage.xaml.cs">
+      <DependentUpon>EntityActivityLogPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\EntityRealatedApplist.xaml.cs">
+      <DependentUpon>EntityRealatedApplist.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\EntitySearchUser.xaml.cs">
+      <DependentUpon>EntitySearchUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\Entity_CategoryType.xaml.cs">
+      <DependentUpon>Entity_CategoryType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\Entity_TypeDetails.xaml.cs">
+      <DependentUpon>Entity_TypeDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\EntityDetailsSubtype.xaml.cs">
+      <DependentUpon>EntityDetailsSubtype.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\Entity_View.xaml.cs">
+      <DependentUpon>Entity_View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\MyAssociations.xaml.cs">
+      <DependentUpon>MyAssociations.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\Select_EntityList.xaml.cs">
+      <DependentUpon>Select_EntityList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\Entity_AppList.xaml.cs">
+      <DependentUpon>Entity_AppList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GestureRecognizerExtensions.cs" />
+    <Compile Include="Views\INativeGestureRecognizer.cs" />
+    <Compile Include="Views\INativeGestureRecognizerCoordinator.cs" />
+    <Compile Include="Views\INativeGestureRecognizerFactory.cs" />
+    <Compile Include="Views\LoginProcess\CreateNewInstance.xaml.cs">
+      <DependentUpon>CreateNewInstance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginProcess\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginProcess\SelectInstancePage.xaml.cs">
+      <DependentUpon>SelectInstancePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LongPressGestureRecognizer.cs" />
+    <Compile Include="Views\PanGestureRecognizer.cs" />
+    <Compile Include="Views\People Screen\DirectReports.xaml.cs">
+      <DependentUpon>DirectReports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\People Screen\EntityRoleAssociation.xaml.cs">
+      <DependentUpon>EntityRoleAssociation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\People Screen\MyHoopers.xaml.cs">
+      <DependentUpon>MyHoopers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\People Screen\RelatedItems.xaml.cs">
+      <DependentUpon>RelatedItems.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\People Screen\UserDetail.xaml.cs">
+      <DependentUpon>UserDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\People Screen\UserSearch.xaml.cs">
+      <DependentUpon>UserSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PinchGestureRecognizer.cs" />
+    <Compile Include="Views\ResourceRectLabel.cs" />
+    <Compile Include="Views\Search\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Setting\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\BookContentsPage.xaml.cs">
+      <DependentUpon>BookContentsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\MyBookListPage.xaml.cs">
+      <DependentUpon>MyBookListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\MyPublicationBookListPage.xaml.cs">
+      <DependentUpon>MyPublicationBookListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\My_StandardPage.xaml.cs">
+      <DependentUpon>My_StandardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\StandardsBookPage.xaml.cs">
+      <DependentUpon>StandardsBookPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\StandardSearch.xaml.cs">
+      <DependentUpon>StandardSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\TopicPage.xaml.cs">
+      <DependentUpon>TopicPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Standards\TreeView\AdaptTreeViewItemProvider - Xamarin Forms.cs" />
+    <Compile Include="Views\Standards\TreeView\AdaptTreeViewItemProvider.cs" />
+    <Compile Include="Views\Standards\TreeView\CollectionInformation.cs" />
+    <Compile Include="Views\Standards\TreeView\ItemTemplateInfo.cs" />
+    <Compile Include="Views\Standards\TreeView\TreeView.cs" />
+    <Compile Include="Views\Standards\TreeView\TreeViewItem.cs" />
+    <Compile Include="Views\SwipeGestureRecognizer.cs" />
+    <Compile Include="Views\SwipeGestureRecognizerDirectonConverter.cs" />
+    <Compile Include="Views\View Case Origination Center\CaseList.xaml.cs">
+      <DependentUpon>CaseList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\View Case Origination Center\CaseOriginationCenter.xaml.cs">
+      <DependentUpon>CaseOriginationCenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateQuestForm\QuestQuestionForm.xaml.cs">
+      <DependentUpon>QuestQuestionForm.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\QuestQuestionForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LandingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AboutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AssignCase.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases Hopper Center\SelectCaseHopper.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases Hopper Center\SelectedHopper.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\CaseActivityLog.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\CaseDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\CaseDetailsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\CaseNotes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\CaseProperty.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\FavoriteDetailsDialog.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\NewCase.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\SelectCaseType.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Cases\ViewCasePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\Attachment.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\HopperCenterDetailDialog.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\HopperCenterDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\HopperCenterDetailsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\NewQuestForm.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\QuestItemPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\SelectQuestArea.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CreateQuestForm\SelectQuestForm.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Entity\EntityDetailsSubtype.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Entity\Select_EntityList.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Entity\Entity_AppList.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\View Case Origination Center\CaseList.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\View Case Origination Center\CaseOriginationCenter.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Setting\Settings.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Search\SearchPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\People Screen\RelatedItems.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\People Screen\UserDetail.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginProcess\CreateNewInstance.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginProcess\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginProcess\SelectInstancePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Cases\CaseTypeDetails.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\BookContentsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\StandardsBookPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\TopicPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\Entity_CategoryType.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\Entity_TypeDetails.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CreateQuestForm\QuestItemDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.5.1\lib\netstandard1.1\Acr.UserDialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="Acr.UserDialogs.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.5.1\lib\netstandard1.1\Acr.UserDialogs.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageCircle.Forms.Plugin.Abstractions, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Forms.ImageCircle.2.0.2\lib\netstandard1.0\ImageCircle.Forms.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AppCenter.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AppCenter.Analytics.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AppCenter.Crashes.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.Crashes.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>StemmMobileAssembly\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.3.0.3\lib\netstandard1.0\Plugin.Connectivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.3.0.3\lib\netstandard1.0\Plugin.Connectivity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media, Version=3.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Media.3.1.3\lib\netstandard1.0\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media.Abstractions, Version=3.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Media.3.1.3\lib\netstandard1.0\Plugin.Media.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Rg.Plugins.Popup">
+      <HintPath>StemmMobileAssembly\Rg.Plugins.Popup.dll</HintPath>
+    </Reference>
+    <Reference Include="Rg.Plugins.Popup.Platform">
+      <HintPath>StemmMobileAssembly\Rg.Plugins.Popup.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Splat.2.0.0\lib\netstandard1.1\Splat.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite-net, Version=1.5.166.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\sqlite-net-pcl.1.5.166-beta\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green">
+      <HintPath>StemmMobileAssembly\SQLitePCLRaw.batteries_green.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2">
+      <HintPath>StemmMobileAssembly\SQLitePCLRaw.batteries_v2.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core">
+      <HintPath>StemmMobileAssembly\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="StemmonsMobile.DataTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\StemmonsMobile.DataTypes\bin\Debug\StemmonsMobile.DataTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
+      <HintPath>StemmMobileAssembly\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform.Android">
+      <HintPath>..\StemmonsMobile.Android\AndroidAssembly\Xamarin.Forms.Platform.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\Entity_View.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\EntityRealatedApplist.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\servicebusapi\servicebusapi\DataServiceBus.csproj">
+      <Project>{762417EA-4C33-4FA7-BAA7-029E0450CDB4}</Project>
+      <Name>DataServiceBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj">
+      <Project>{691F64DB-A9E1-421C-81EE-A5B9895C5B6B}</Project>
+      <Name>StemmonsMobile.DataTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\CreateEntityPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\EntitySearchUser.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\EntityActivityLogPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\People Screen\DirectReports.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CreateQuestForm\MyFormsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\MyAssociations.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CreateQuestForm\QuestQuestionViewPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CreateQuestForm\ViewAttachment.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\People Screen\MyHoopers.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\People Screen\EntityRoleAssociation.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\My_StandardPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\StandardSearch.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\People Screen\UserSearch.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assembly\Acr.UserDialogs.dll" />
+    <Content Include="Assembly\Acr.UserDialogs.Interface.dll" />
+    <Content Include="Assembly\ImageCircle.Forms.Plugin.Abstractions.dll" />
+    <Content Include="Assembly\Newtonsoft.Json.dll" />
+    <Content Include="Assembly\PCLStorage.Abstractions.dll" />
+    <Content Include="Assembly\PCLStorage.dll" />
+    <Content Include="Assembly\Plugin.Connectivity.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.Connectivity.dll" />
+    <Content Include="Assembly\Plugin.Media.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.Media.dll" />
+    <Content Include="Assembly\Rg.Plugins.Popup.dll" />
+    <Content Include="Assembly\Rg.Plugins.Popup.Platform.dll" />
+    <Content Include="Assembly\Splat.dll" />
+    <Content Include="Assembly\SQLite-net.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.batteries_green.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.batteries_v2.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.core.dll" />
+    <Content Include="Assembly\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Core.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Platform.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Xaml.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Standards\MyBookListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Standards\MyPublicationBookListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />
+</Project>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Views.Entity.Add_newChillar" Title="New Chiller Entity">
+
+    <ContentPage.ToolbarItems>
+
+        <ToolbarItem Text="Create" Icon="Assets/create.png" Order="Primary" Clicked="menu_create_Clicked"/>
+
+
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <StackLayout>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="5"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="1" Grid.Row="0" Text="Title" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="Make" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}"/>
+                <Label Grid.Column="1" Grid.Row="2" Text="Model" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}"/>
+                <Label Grid.Column="1" Grid.Row="3" Text="Property" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}"/>
+                <Label Grid.Column="1" Grid.Row="4" Text="Add Notes" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}"/>
+
+                <Entry Grid.Column="3" Grid.Row="0" Placeholder="Enter Title"/>
+                <Entry Grid.Column="3" Grid.Row="1" Placeholder="Select Make"/>
+                <Entry Grid.Column="3" Grid.Row="2" Placeholder="Select Model"/>
+                <Entry Grid.Column="3" Grid.Row="3" Placeholder="Select Property"/>
+                <Entry Grid.Column="3" Grid.Row="4" Placeholder="Enter Notes"/>
+            </Grid>
+
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="Handle_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

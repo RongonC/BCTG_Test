@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <PortUrl>
+    <add key="portUrl" Value="http://192.168.0.173:100/"/>
+  </PortUrl>
+</root>

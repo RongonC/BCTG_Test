@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Standards.StandardSearch">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="Main_stack">
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackLayout Grid.Row="0">
+                    <Label x:Name="searchlabel"   Margin="5" Style="{StaticResource defaultLabelSize}" Text="Standard Search" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    <StackLayout Orientation="Horizontal"  Margin="5">
+                        <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Style="{StaticResource defaultLabelSize}" Completed="btn_search_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Button Text="Search"  x:Name="btn_search" TextColor="White" BackgroundColor="Orange"                    HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    </StackLayout>
+
+                    <ListView x:Name="lstSearchitem" 
+                          HasUnevenRows="True"  Margin="0,0,0,10"
+                      ItemTapped="lstSearchitem_ItemTapped" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <StackLayout   >
+                                            <Grid  >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid  Grid.Row="0" Grid.Column="0"  >
+                                                    <Label  Text="{Binding Name}"
+                                                            Style="{StaticResource defaultLabelSize}"
+                                                            Margin="10,0,0,0"
+                                                            HorizontalOptions="StartAndExpand" 
+                                                            VerticalOptions="Center" 
+                                                            FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                </Grid>
+
+                                                <Image Source="Assets/dropdowniconClose.png"  
+                                                       Grid.Row="0" Grid.Column="2"  
+                                                       HorizontalOptions="End" VerticalOptions="Center"
+                                                       Margin="5,0,10,0"/>
+                                            </Grid>
+                                        </StackLayout>
+                                    </ViewCell.View>
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.Footer>
+                            <StackLayout Orientation="Horizontal"/>
+                        </ListView.Footer>
+                    </ListView>
+                </StackLayout>
+
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" IsClippedToBounds="True"  >
+                    <Button Image="Assets/Home_Icon.png"  BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    <Button Image="Assets/menuicon.png"  BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                </StackLayout>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

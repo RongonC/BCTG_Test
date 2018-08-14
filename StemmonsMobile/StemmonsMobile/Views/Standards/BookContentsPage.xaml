@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Standards.BookContentsPage" 
+             xmlns:adapt="clr-namespace:StemmonsMobile.Views.Standards.TreeView" Title="Employee Handbook">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="icon_book" Clicked="Icon_book_Clicked" Text="Book View" Icon="Assets/icon_book.png"  />
+    </ContentPage.ToolbarItems>
+
+    <AbsoluteLayout  Margin="0,0,0,0"  x:Name="Main_Stack">
+
+        <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <adapt:TreeView SelectedItemChanged="Topic_Changed" Grid.Row="0">
+                <adapt:TreeView.ItemsSource>
+                    <adapt:AdaptTreeViewItemProvider DefaultCollectionTemplateKey="StemmonsMobile.Models.Topic"
+												 x:Name="Standardbooktreeview" ProbingPaths="Subtopics"
+												 IsAllNodesExpanded="False"  >
+                        <adapt:AdaptTreeViewItemProvider.ItemsTemplates>
+                            <adapt:ItemTemplateInfo TypeName="StemmonsMobile.Models.Topic">
+                                <adapt:ItemTemplateInfo.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Path=APP_ASSOC_META_DATA_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=TYPE_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=TYPE_NAME}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=NAME}" LineBreakMode="TailTruncation"
+										   HorizontalOptions="StartAndExpand" VerticalOptions="Center"  
+                                               FontSize="16" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=PARENT_META_DATA_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=DISPLAY_ORDER}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=CREATED_DATETIME}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=CREATED_BY}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=IS_ACTIVE}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=PARENT_LEVEL}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=APP_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=METADATA_DESC}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=METADATA_SUMMARY}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=METADATA_CONTENT}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding Path=HAS_DETAILS}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Image Source="Assets/dropdowniconClose.png" BackgroundColor="Transparent" Margin="3" />
+                                        </StackLayout>
+                                    </DataTemplate>
+                           
+                                </adapt:ItemTemplateInfo.ItemTemplate>
+                            </adapt:ItemTemplateInfo>
+                        </adapt:AdaptTreeViewItemProvider.ItemsTemplates>
+                    </adapt:AdaptTreeViewItemProvider>
+                </adapt:TreeView.ItemsSource>
+            </adapt:TreeView>
+
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" IsClippedToBounds="True" Grid.Row="1">
+                <Button Image="Assets/Home_Icon.png" HorizontalOptions="CenterAndExpand" x:Name="btn_home" Clicked="btn_home_Clicked" BackgroundColor="Transparent" />
+                <Button Image="Assets/menuicon.png" HorizontalOptions="CenterAndExpand"  BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+            </StackLayout>
+        </Grid>
+        
+        <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+            <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                    <ActivityIndicator.Margin>
+                        <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                    </ActivityIndicator.Margin>
+                </ActivityIndicator>
+                <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                    <Label.Margin>
+                        <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                    </Label.Margin>
+                </Label>
+            </StackLayout>
+        </ContentView>
+    </AbsoluteLayout>
+</ContentPage>

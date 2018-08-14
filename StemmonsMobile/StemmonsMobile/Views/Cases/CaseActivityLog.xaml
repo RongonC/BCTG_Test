@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:StemmonsMobile" x:Class="StemmonsMobile.Views.Cases.CaseActivityLog" Title="Activity Log">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" ColumnSpacing="1" RowSpacing="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <StackLayout x:Name="Main_Stack" Grid.Row="0">
+                    <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                        <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+                    </StackLayout>-->
+                    <Label x:Name="WarningLabel">Checking for update... Click here to force.</Label>
+                    <ListView x:Name="listViewActivityLog" ItemTapped="OnItemTapped" HasUnevenRows="true">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Margin="5" RowSpacing="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="5" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="5" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="5" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="0" Style="{StaticResource defaultLabelSize}" />
+                                        <Label Text="{Binding Description}" FontSize="11" Grid.Row="1" Grid.Column="0" LineBreakMode="WordWrap" />
+                                        <Label Text="{Binding CreatedByFullName}" Grid.Row="0" Grid.Column="2" TextColor="Orange" Style="{StaticResource defaultLabelSize}" HorizontalOptions="End" />
+                                        <Label Text="{Binding ModifiedDateTime}" Grid.Row="1" Grid.Column="2" FontSize="11" HorizontalOptions="End"  />
+                                    </Grid>
+                                    <!-- <Grid Margin="5">
+                                        <StackLayout>
+                                            <Label Text="{Binding Note}" Style="{StaticResource defaultLabelSize_subtype}" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" VerticalOptions="Center" Margin="0,0,5,0">
+                                            <Label Text="{Binding CreatedByFullName}" TextColor="Black" Style="{StaticResource defaultLabelSize_subtype}" HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
+                                            <Label Text="{Binding ModifiedDateTime}" TextColor="Black" Style="{StaticResource defaultLabelSize_subtype}" HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" LineBreakMode="TailTruncation" />
+                                        </StackLayout>
+                                    </Grid>-->
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.Footer>
+                            <StackLayout Orientation="Horizontal" />
+                        </ListView.Footer>
+                    </ListView>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" IsClippedToBounds="True">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked" HorizontalOptions="CenterAndExpand" />
+                </StackLayout>
+            </Grid>
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" IsVisible="false" AbsoluteLayout.LayoutFlags="All" BackgroundColor="Transparent">
+                <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+                    <ActivityIndicator x:Name="activityIndicator" IsRunning="True" IsVisible="True">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

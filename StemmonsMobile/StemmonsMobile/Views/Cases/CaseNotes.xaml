@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.CaseNotes"   Title="Notes">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="MenuItem1" Order="Primary"  Text="Add" Priority="0"  />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Label Text="Add Notes" Font="16" TextColor="Black" Margin="5,5,0,0"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <BoxView HeightRequest="1" Color="Transparent"/>
+            <Editor    Text="Enter the notes here" VerticalOptions="FillAndExpand"  BackgroundColor="White" Margin="5,5,5,5" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <!--<ctrls:PlaceholderEditor VerticalOptions="Fill" HorizontalOptions="StartAndExpand" Placeholder="add my comment title">
+            </ctrls:PlaceholderEditor>-->
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Cancel" BackgroundColor="Orange" TextColor="White" Margin="5,5,5,5" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Button Text="Done" BackgroundColor="Orange" TextColor="White" HorizontalOptions="EndAndExpand" Margin="5,5,5,5" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

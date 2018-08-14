@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+              xmlns:local="clr-namespace:StemmonsMobile.Views.CreateQuestForm"
+             xmlns:local1="clr-namespace:StemmonsMobile"
+    x:Class="StemmonsMobile.Views.CreateQuestForm.QuestQuestionForm"
+           NavigationPage.HasNavigationBar="false"  >
+
+    <ContentPage.ToolbarItems>
+        <!--        <ToolbarItem x:Name="Save" Text="Save" Clicked="Save_Clicked"/>-->
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+
+
+        <AbsoluteLayout>
+
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+                <StackLayout x:Name="stk" BackgroundColor="#696969" Grid.Row="0" HeightRequest="80">
+                    <Grid  Margin="0,30,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="7*"/>
+                        </Grid.ColumnDefinitions>
+                         
+                        <Button Image="Assets/back_icon.png" Text="Back" FontAttributes="Bold" TextColor="White" BackgroundColor="Transparent"  HorizontalOptions="Start" Grid.Row="0" Margin="0,9,0,0" Grid.Column="0" Clicked="Save_Clicked" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                        <Label Text="New form"  Grid.Row="0" Grid.Column="1" TextColor="White" FontAttributes="Bold" FontSize="16" Margin="50,20,0,0" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    </Grid>
+                </StackLayout>
+
+                <StackLayout x:Name="stk1" VerticalOptions="FillAndExpand" Grid.Row="1">
+                    <ScrollView>
+                        <StackLayout x:Name="DynamicView">
+                        </StackLayout>
+                    </ScrollView>
+                </StackLayout>
+
+                <StackLayout x:Name="stk2" Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home"  Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+
+</ContentPage>

@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{9D33EF3C-708C-40FC-A3FF-40390860A7CB}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StemmonsMobile.UWP</RootNamespace>
+    <AssemblyName>StemmonsMobile.UWP</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>StemmonsMobile.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Datalayer.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <Content Include="Assets\320\Stawix - SoinSansNeue-ExtraLight.otf" />
+    <Content Include="Assets\320\Stawix - SoinSansNeue-Roman.otf" />
+    <Content Include="Assets\btnmsg.png" />
+    <None Include="StemmonsMobile.UWP_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\320\actor1.png" />
+    <Content Include="Assets\320\casesblack.png" />
+    <Content Include="Assets\320\casesblack_1.png" />
+    <Content Include="Assets\320\departmentblack.png" />
+    <Content Include="Assets\320\Departmentblack_1.png" />
+    <Content Include="Assets\320\downarrow.png" />
+    <Content Include="Assets\320\entitiesblack.png" />
+    <Content Include="Assets\320\entitiesblack_1.png" />
+    <Content Include="Assets\320\magnify.png" />
+    <Content Include="Assets\320\plusgrey.png" />
+    <Content Include="Assets\320\questblack.png" />
+    <Content Include="Assets\320\Questblack_1.png" />
+    <Content Include="Assets\320\standardsblack.png" />
+    <Content Include="Assets\320\standardsblack_1.png" />
+    <Content Include="Assets\320\userIcon.png" />
+    <Content Include="Assets\actor1.png" />
+    <Content Include="Assets\actor12.png" />
+    <Content Include="Assets\actor_30.png" />
+    <Content Include="Assets\actor_36.png" />
+    <Content Include="Assets\alertIcon.png" />
+    <Content Include="Assets\backicon.png" />
+    <Content Include="Assets\boxerlogo.png" />
+    <Content Include="Assets\Cars.png" />
+    <Content Include="Assets\Casesblack.png" />
+    <Content Include="Assets\Casesblack_1.png" />
+    <Content Include="Assets\Chart.png" />
+    <Content Include="Assets\Checked.png" />
+    <Content Include="Assets\Checked2.png" />
+    <Content Include="Assets\create.png" />
+    <Content Include="Assets\Delete.png" />
+    <Content Include="Assets\Departmentblack.png" />
+    <Content Include="Assets\Departmentblack_1.png" />
+    <Content Include="Assets\document.png" />
+    <Content Include="Assets\downarrow.png" />
+    <Content Include="Assets\dropdownicon.png" />
+    <Content Include="Assets\dropdowniconClose.png" />
+    <Content Include="Assets\Edit.png" />
+    <Content Include="Assets\Email.png" />
+    <Content Include="Assets\entitiesblack.png" />
+    <Content Include="Assets\entitiesblack_1.png" />
+    <Content Include="Assets\Factblack.png" />
+    <Content Include="Assets\filter.png" />
+    <Content Include="Assets\FilterIcon.png" />
+    <Content Include="Assets\home.png" />
+    <Content Include="Assets\Home_Icon.png" />
+    <Content Include="Assets\icon_book.png" />
+    <Content Include="Assets\icon_topic.png" />
+    <Content Include="Assets\LargeTile.scale-100.png" />
+    <Content Include="Assets\LargeTile.scale-125.png" />
+    <Content Include="Assets\LargeTile.scale-150.png" />
+    <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\list_icon.png" />
+    <Content Include="Assets\LockScreenLogo.scale-100.png" />
+    <Content Include="Assets\LockScreenLogo.scale-125.png" />
+    <Content Include="Assets\LockScreenLogo.scale-150.png" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\LockScreenLogo.scale-400.png" />
+    <Content Include="Assets\magnify.png" />
+    <Content Include="Assets\magnify1.png" />
+    <Content Include="Assets\menuicon.png" />
+    <Content Include="Assets\more.png" />
+    <Content Include="Assets\Phone.png" />
+    <Content Include="Assets\plus.png" />
+    <Content Include="Assets\plus11.png" />
+    <Content Include="Assets\plus2x.png" />
+    <Content Include="Assets\plusgrey.png" />
+    <Content Include="Assets\plusgrey20.png" />
+    <Content Include="Assets\plussign.png" />
+    <Content Include="Assets\plussign1.png" />
+    <Content Include="Assets\Questblack.png" />
+    <Content Include="Assets\Questblack_1.png" />
+    <Content Include="Assets\Save.png" />
+    <Content Include="Assets\setting.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48_altform-unplated.png" />
+    <Content Include="Assets\standardsblack.png" />
+    <Content Include="Assets\StoreLogo.backup.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\switchoff.png" />
+    <Content Include="Assets\switchon.png" />
+    <Content Include="Assets\tab_about.png" />
+    <Content Include="Assets\tab_feed.png" />
+    <Content Include="Assets\Unchecked.png" />
+    <Content Include="Assets\userIcon.png" />
+    <Content Include="Assets\userIcon2.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\xamarin_logo.png" />
+    <Content Include="Assembly\Acr.UserDialogs.dll" />
+    <Content Include="Assembly\Acr.UserDialogs.Interface.dll" />
+    <Content Include="Assembly\clrcompression.dll" />
+    <Content Include="Assembly\clrjit.dll" />
+    <Content Include="Assembly\Coding4Fun.Toolkit.Controls.dll" />
+    <Content Include="Assembly\Coding4Fun.Toolkit.dll" />
+    <Content Include="Assembly\e_sqlite3.dll" />
+    <Content Include="Assembly\ImageCircle.Forms.Plugin.Abstractions.dll" />
+    <Content Include="Assembly\ImageCircle.Forms.Plugin.UWP.dll" />
+    <Content Include="Assembly\Microsoft.CSharp.dll" />
+    <Content Include="Assembly\Microsoft.VisualBasic.dll" />
+    <Content Include="Assembly\Microsoft.Win32.Primitives.dll" />
+    <Content Include="Assembly\Newtonsoft.Json.dll" />
+    <Content Include="Assembly\PCLStorage.Abstractions.dll" />
+    <Content Include="Assembly\PCLStorage.dll" />
+    <Content Include="Assembly\Plugin.Connectivity.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.Connectivity.dll" />
+    <Content Include="Assembly\Plugin.DeviceInfo.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.DeviceInfo.dll" />
+    <Content Include="Assembly\Plugin.FilePicker.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.FilePicker.dll" />
+    <Content Include="Assembly\Plugin.Media.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.Media.dll" />
+    <Content Include="Assembly\Plugin.Permissions.Abstractions.dll" />
+    <Content Include="Assembly\Plugin.Permissions.dll" />
+    <Content Include="Assembly\Rg.Plugins.Popup.dll" />
+    <Content Include="Assembly\Rg.Plugins.Popup.Platform.dll" />
+    <Content Include="Assembly\Rg.Plugins.Popup.UWP.dll" />
+    <Content Include="Assembly\Splat.dll" />
+    <Content Include="Assembly\SQLite-net.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.batteries_green.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.batteries_v2.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.core.dll" />
+    <Content Include="Assembly\SQLitePCLRaw.provider.e_sqlite3.dll" />
+    <Content Include="Assembly\System.AppContext.dll" />
+    <Content Include="Assembly\System.Buffers.dll" />
+    <Content Include="Assembly\System.Collections.Concurrent.dll" />
+    <Content Include="Assembly\System.Collections.dll" />
+    <Content Include="Assembly\System.Collections.Immutable.dll" />
+    <Content Include="Assembly\System.Collections.NonGeneric.dll" />
+    <Content Include="Assembly\System.Collections.Specialized.dll" />
+    <Content Include="Assembly\System.ComponentModel.Annotations.dll" />
+    <Content Include="Assembly\System.ComponentModel.DataAnnotations.dll" />
+    <Content Include="Assembly\System.ComponentModel.dll" />
+    <Content Include="Assembly\System.ComponentModel.EventBasedAsync.dll" />
+    <Content Include="Assembly\System.ComponentModel.Primitives.dll" />
+    <Content Include="Assembly\System.ComponentModel.TypeConverter.dll" />
+    <Content Include="Assembly\System.Console.dll" />
+    <Content Include="Assembly\System.Core.dll" />
+    <Content Include="Assembly\System.Data.Common.dll" />
+    <Content Include="Assembly\System.Diagnostics.Contracts.dll" />
+    <Content Include="Assembly\System.Diagnostics.Debug.dll" />
+    <Content Include="Assembly\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="Assembly\System.Diagnostics.StackTrace.dll" />
+    <Content Include="Assembly\System.Diagnostics.Tools.dll" />
+    <Content Include="Assembly\System.Diagnostics.Tracing.dll" />
+    <Content Include="Assembly\System.dll" />
+    <Content Include="Assembly\System.Dynamic.Runtime.dll" />
+    <Content Include="Assembly\System.Globalization.Calendars.dll" />
+    <Content Include="Assembly\System.Globalization.dll" />
+    <Content Include="Assembly\System.Globalization.Extensions.dll" />
+    <Content Include="Assembly\System.IO.Compression.dll" />
+    <Content Include="Assembly\System.IO.Compression.ZipFile.dll" />
+    <Content Include="Assembly\System.IO.dll" />
+    <Content Include="Assembly\System.IO.FileSystem.dll" />
+    <Content Include="Assembly\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="Assembly\System.IO.IsolatedStorage.dll" />
+    <Content Include="Assembly\System.IO.UnmanagedMemoryStream.dll" />
+    <Content Include="Assembly\System.Linq.dll" />
+    <Content Include="Assembly\System.Linq.Expressions.dll" />
+    <Content Include="Assembly\System.Linq.Parallel.dll" />
+    <Content Include="Assembly\System.Linq.Queryable.dll" />
+    <Content Include="Assembly\System.Net.dll" />
+    <Content Include="Assembly\System.Net.Http.dll" />
+    <Content Include="Assembly\System.Net.Http.Rtc.dll" />
+    <Content Include="Assembly\System.Net.NameResolution.dll" />
+    <Content Include="Assembly\System.Net.NetworkInformation.dll" />
+    <Content Include="Assembly\System.Net.Primitives.dll" />
+    <Content Include="Assembly\System.Net.Requests.dll" />
+    <Content Include="Assembly\System.Net.Sockets.dll" />
+    <Content Include="Assembly\System.Net.WebHeaderCollection.dll" />
+    <Content Include="Assembly\System.Net.WebSockets.Client.dll" />
+    <Content Include="Assembly\System.Net.WebSockets.dll" />
+    <Content Include="Assembly\System.Numerics.dll" />
+    <Content Include="Assembly\System.Numerics.Vectors.dll" />
+    <Content Include="Assembly\System.Numerics.Vectors.WindowsRuntime.dll" />
+    <Content Include="Assembly\System.ObjectModel.dll" />
+    <Content Include="Assembly\System.Private.DataContractSerialization.dll" />
+    <Content Include="Assembly\System.Private.ServiceModel.dll" />
+    <Content Include="Assembly\System.Private.Uri.dll" />
+    <Content Include="Assembly\System.Reactive.Core.dll" />
+    <Content Include="Assembly\System.Reactive.Interfaces.dll" />
+    <Content Include="Assembly\System.Reactive.Linq.dll" />
+    <Content Include="Assembly\System.Reactive.PlatformServices.dll" />
+    <Content Include="Assembly\System.Reactive.Windows.Threading.dll" />
+    <Content Include="Assembly\System.Reactive.WindowsRuntime.dll" />
+    <Content Include="Assembly\System.Reflection.Context.dll" />
+    <Content Include="Assembly\System.Reflection.DispatchProxy.dll" />
+    <Content Include="Assembly\System.Reflection.dll" />
+    <Content Include="Assembly\System.Reflection.Emit.dll" />
+    <Content Include="Assembly\System.Reflection.Emit.ILGeneration.dll" />
+    <Content Include="Assembly\System.Reflection.Emit.Lightweight.dll" />
+    <Content Include="Assembly\System.Reflection.Extensions.dll" />
+    <Content Include="Assembly\System.Reflection.Metadata.dll" />
+    <Content Include="Assembly\System.Reflection.Primitives.dll" />
+    <Content Include="Assembly\System.Reflection.TypeExtensions.dll" />
+    <Content Include="Assembly\System.Resources.ResourceManager.dll" />
+    <Content Include="Assembly\System.Runtime.dll" />
+    <Content Include="Assembly\System.Runtime.Extensions.dll" />
+    <Content Include="Assembly\System.Runtime.Handles.dll" />
+    <Content Include="Assembly\System.Runtime.InteropServices.dll" />
+    <Content Include="Assembly\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <Content Include="Assembly\System.Runtime.InteropServices.WindowsRuntime.dll" />
+    <Content Include="Assembly\System.Runtime.Numerics.dll" />
+    <Content Include="Assembly\System.Runtime.Serialization.dll" />
+    <Content Include="Assembly\System.Runtime.Serialization.Formatters.dll" />
+    <Content Include="Assembly\System.Runtime.Serialization.Json.dll" />
+    <Content Include="Assembly\System.Runtime.Serialization.Primitives.dll" />
+    <Content Include="Assembly\System.Runtime.Serialization.Xml.dll" />
+    <Content Include="Assembly\System.Runtime.WindowsRuntime.dll" />
+    <Content Include="Assembly\System.Runtime.WindowsRuntime.UI.Xaml.dll" />
+    <Content Include="Assembly\System.Security.Claims.dll" />
+    <Content Include="Assembly\System.Security.Cryptography.Algorithms.dll" />
+    <Content Include="Assembly\System.Security.Cryptography.Cng.dll" />
+    <Content Include="Assembly\System.Security.Cryptography.Encoding.dll" />
+    <Content Include="Assembly\System.Security.Cryptography.Primitives.dll" />
+    <Content Include="Assembly\System.Security.Cryptography.X509Certificates.dll" />
+    <Content Include="Assembly\System.Security.Principal.dll" />
+    <Content Include="Assembly\System.ServiceModel.dll" />
+    <Content Include="Assembly\System.ServiceModel.Duplex.dll" />
+    <Content Include="Assembly\System.ServiceModel.Http.dll" />
+    <Content Include="Assembly\System.ServiceModel.NetTcp.dll" />
+    <Content Include="Assembly\System.ServiceModel.Primitives.dll" />
+    <Content Include="Assembly\System.ServiceModel.Security.dll" />
+    <Content Include="Assembly\System.ServiceModel.Web.dll" />
+    <Content Include="Assembly\System.Text.Encoding.CodePages.dll" />
+    <Content Include="Assembly\System.Text.Encoding.dll" />
+    <Content Include="Assembly\System.Text.Encoding.Extensions.dll" />
+    <Content Include="Assembly\System.Text.RegularExpressions.dll" />
+    <Content Include="Assembly\System.Threading.dll" />
+    <Content Include="Assembly\System.Threading.Overlapped.dll" />
+    <Content Include="Assembly\System.Threading.Tasks.Dataflow.dll" />
+    <Content Include="Assembly\System.Threading.Tasks.dll" />
+    <Content Include="Assembly\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="Assembly\System.Threading.Tasks.Parallel.dll" />
+    <Content Include="Assembly\System.Threading.Timer.dll" />
+    <Content Include="Assembly\System.Windows.dll" />
+    <Content Include="Assembly\System.Xml.dll" />
+    <Content Include="Assembly\System.Xml.Linq.dll" />
+    <Content Include="Assembly\System.Xml.ReaderWriter.dll" />
+    <Content Include="Assembly\System.Xml.Serialization.dll" />
+    <Content Include="Assembly\System.Xml.XDocument.dll" />
+    <Content Include="Assembly\System.Xml.XmlDocument.dll" />
+    <Content Include="Assembly\System.Xml.XmlSerializer.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Core.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Platform.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Platform.UAP.dll" />
+    <Content Include="Assembly\Xamarin.Forms.Xaml.dll" />
+    <Content Include="Properties\Default.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StemmonsMobile\StemmonsMobile.csproj">
+      <Project>{f038b148-7a23-4cc5-a903-836b4a4ad25b}</Project>
+      <Name>StemmonsMobile</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Acr.DeviceInfo">
+      <Version>5.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="Acr.UserDialogs">
+      <Version>6.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Analytics">
+      <Version>1.6.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Crashes">
+      <Version>1.6.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>5.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="NETStandard.Library">
+      <Version>1.6.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="PCLStorage">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Splat">
+      <Version>1.6.2</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.5.166-beta</Version>
+    </PackageReference>
+    <PackageReference Include="Xam.Plugin.Connectivity">
+      <Version>3.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xam.Plugin.Media">
+      <Version>3.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle">
+      <Version>2.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>2.5.0.121934</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Plugin.FilePicker">
+      <Version>1.2.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+</Project>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.SelectCaseType"     Title="Select Case Type">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+                <!--<ScrollView>-->
+                
+                <StackLayout x:Name="Main_Stack" Orientation="Vertical" Grid.Row="0">
+                    <SearchBar x:Name="txt_seacrhbar"  Placeholder="Search" TextChanged="Txt_seacrhbar_TextChanged"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"></SearchBar>
+
+                    <!--My Favorites-->
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0"  >
+                        <!--<Button Image="Assets/downarrow.png" BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0"   CommandParameter="{Binding .}" HeightRequest="25" WidthRequest="25" />-->
+                        <Image Source="Assets/dropdownicon.png" BackgroundColor="Transparent"></Image>
+                        <Label Text="My Favorites"  TextColor="Black"   VerticalOptions="Center"  Style="{StaticResource defaultLabelSize}" Margin="10,0,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    </StackLayout>
+
+                    <Label Margin="15,0,0,0" BackgroundColor="#D0D0D0" HeightRequest="1"/>
+
+                    <ListView x:Name="MyFavoriteList"   HasUnevenRows="True"  Margin="0,0,0,10" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.ContextActions>
+                                        <MenuItem CommandParameter="{Binding .}" Text="Details" Clicked="MyFavDetail_Clicked"/>
+                                        <MenuItem CommandParameter="{Binding .}" Text="Delete" Clicked="MyFavDelete_Clicked"/>
+                                    </ViewCell.ContextActions>
+
+                                    <ViewCell.View>
+                                        <Grid Margin="15,0,10,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80*"/>
+                                                <ColumnDefinition Width="20*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding FavoriteName}" TextColor="Black" Grid.Row="0" Grid.Column="0" 
+                                           Style="{StaticResource defaultLabelSize_subtype}"
+                                           VerticalOptions="Center" Margin="0,7,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Button Image="Assets/plussign.png" BackgroundColor="Transparent"  
+                                            CommandParameter="{Binding .}" HeightRequest="25" WidthRequest="25"  VerticalOptions="Center" Grid.RowSpan="2" 
+                                           Grid.Column="1"  Clicked="NewCase_FavClicked"
+                                           HorizontalOptions="End"  Margin="0,5,0,0" />
+                                        </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                            <ListView.Footer>
+                                <StackLayout Orientation="Horizontal"  HeightRequest="0">
+                                </StackLayout>
+                            </ListView.Footer>
+
+                        </ListView>
+
+                    <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                    <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+                </StackLayout>-->
+
+                    <!--CaseTypes-->
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0"  >
+                        <Image Source="Assets/dropdownicon.png" BackgroundColor="Transparent"></Image>
+                        <Label Text="Case Types"  TextColor="Black"   VerticalOptions="Center" Style="{StaticResource defaultLabelSize}" Margin="10,0,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    </StackLayout>
+
+                    <Label Margin="15,0,0,0" BackgroundColor="#D0D0D0" HeightRequest="1"/>
+
+                    <ListView x:Name="CaseTypeList"  HasUnevenRows="True"
+                      CachingStrategy = "RecycleElementAndDataTemplate"  ItemTapped="Handle_ItemTapped" VerticalOptions="Center" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.ContextActions>
+                                        <!--<MenuItem CommandParameter="{Binding .}" Text="Delete"  Clicked="Delete_Clicked"/>-->
+                                        <MenuItem CommandParameter="{Binding .}" Text="Details" Clicked="Detail_Clicked"/>
+                                    </ViewCell.ContextActions>
+                                    <ViewCell.View>
+
+                                        <Grid Margin="15,0,10,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80*"/>
+                                                <ColumnDefinition Width="20*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding CaseTypeName}" TextColor="Black" Grid.Row="0" Grid.Column="0" 
+                                           Style="{StaticResource defaultLabelSize}" VerticalOptions="Center" Margin="0,7,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                            <Button Image="Assets/plussign.png" BackgroundColor="Transparent"  
+                                            CommandParameter="{Binding .}" HeightRequest="25" WidthRequest="25"  VerticalOptions="Center" Grid.RowSpan="2" 
+                                           Grid.Column="1" 
+                                           HorizontalOptions="End" Clicked="NewCase_Clicked" Margin="0,5,0,0" />
+
+                                        </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                            <ListView.Footer>
+                                <StackLayout Orientation="Horizontal"  HeightRequest="0">
+                                </StackLayout>
+                            </ListView.Footer>
+
+
+                        </ListView>
+                </StackLayout>
+
+                <!--</ScrollView>-->
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" IsClippedToBounds="True">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" 
+                            Clicked="HomeMenu_Click" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" 
+                            x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+
+            </Grid>
+            
+            
+            
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

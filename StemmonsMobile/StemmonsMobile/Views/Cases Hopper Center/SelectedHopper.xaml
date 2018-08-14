@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases_Hopper_Center.SelectedHopper">
+    <ContentPage.Content>
+
+        <StackLayout>
+            <ListView x:Name="hopperview">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="15,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Title}"  Style="{StaticResource defaultLabelSize_subtype}"  TextColor="Black" HorizontalOptions="StartAndExpand" 
+                            Margin="0,7,0,0" VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding CountData}" TextColor="Black" FontSize="13" HorizontalOptions="End" VerticalOptions="CenterAndExpand" 
+                            Margin="0,8,0,0" Grid.Column="1"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="{Binding Img}" Grid.Column="2" HorizontalOptions="End" 
+                            Margin="0,5,8,0" VerticalOptions="Center" BackgroundColor="Transparent"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>
+            </ListView>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" >
+                <Button Image="Home_Icon.png" HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" BackgroundColor="Transparent"/>
+                <Button Image="menuicon.png" HorizontalOptions="CenterAndExpand"  BackgroundColor="Transparent"  x:Name="btn_more" Clicked="btn_more_Clicked"/>
+            </StackLayout>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

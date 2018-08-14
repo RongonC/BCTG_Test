@@ -1,0 +1,662 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{691F64DB-A9E1-421C-81EE-A5B9895C5B6B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StemmonsMobile.DataTypes</RootNamespace>
+    <AssemblyName>StemmonsMobile.DataTypes</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DataType\Cases\GetCaseModifiedDateRequest.cs" />
+    <Compile Include="DataType\Cases\AcceptCaseRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseModifiedDateResponse.cs" />
+    <Compile Include="DataType\Cases\AcceptCaseResponse.cs" />
+    <Compile Include="DataType\Cases\AddAttachmentToCaseRequest.cs" />
+    <Compile Include="DataType\Cases\AddAttachmentToCaseResponse.cs" />
+    <Compile Include="DataType\Cases\AddAttachmentWithOutCaseRequest.cs" />
+    <Compile Include="DataType\Cases\AddAttachmentWithOutCaseResponse.cs" />
+    <Compile Include="DataType\Cases\AddCaseNotesRequest.cs" />
+    <Compile Include="DataType\Cases\AddCaseNotesResponse.cs" />
+    <Compile Include="DataType\Cases\AddFavoriteRequest.cs" />
+    <Compile Include="DataType\Cases\AddFavoriteResponse.cs" />
+    <Compile Include="DataType\Cases\ApprovalUserData.cs" />
+    <Compile Include="DataType\Cases\ApproveAndAssignToRequest.cs" />
+    <Compile Include="DataType\Cases\ApproveAndAssignToResponse.cs" />
+    <Compile Include="DataType\Cases\ApproveAndReturnRequest.cs" />
+    <Compile Include="DataType\Cases\ApproveAndReturnResponse.cs" />
+    <Compile Include="DataType\Cases\ApproveCaseRequest.cs" />
+    <Compile Include="DataType\Cases\ApproveCaseResponse.cs" />
+    <Compile Include="DataType\Cases\AssignCaseRequest.cs" />
+    <Compile Include="DataType\Cases\AssignCaseResponse.cs" />
+    <Compile Include="DataType\Cases\AssocCascadeInfo.cs" />
+    <Compile Include="DataType\Cases\CasesHomeGetCaseListUserRequest.cs" />
+    <Compile Include="DataType\Cases\CasesHomeGetCaseListUserResponse.cs" />
+    <Compile Include="DataType\Cases\Cases_MA.cs" />
+    <Compile Include="DataType\Cases\CaseTypeList.cs" />
+    <Compile Include="DataType\Cases\Class1.cs" />
+    <Compile Include="DataType\Cases\CloseCaseRequest.cs" />
+    <Compile Include="DataType\Cases\CloseCaseResponse.cs" />
+    <Compile Include="DataType\Cases\CreateAndAssignCaseRequest.cs" />
+    <Compile Include="DataType\Cases\CreateAndAssignCaseResponse.cs" />
+    <Compile Include="DataType\Cases\CreateCaseOptimizedRequest.cs" />
+    <Compile Include="DataType\Cases\CreateCaseOptimizedResponse.cs" />
+    <Compile Include="DataType\Cases\CreateCaseRequest.cs" />
+    <Compile Include="DataType\Cases\CreateCaseResponse.cs" />
+    <Compile Include="DataType\Cases\DeclineAndAssignToRequest.cs" />
+    <Compile Include="DataType\Cases\DeclineAndAssignToResponse.cs" />
+    <Compile Include="DataType\Cases\DeclineAndReturnRequest.cs" />
+    <Compile Include="DataType\Cases\DeclineAndReturnResponse.cs" />
+    <Compile Include="DataType\Cases\EditFavoriteRequest.cs" />
+    <Compile Include="DataType\Cases\EditFavoriteResponse.cs" />
+    <Compile Include="DataType\Cases\EDSCacheRequest.cs" />
+    <Compile Include="DataType\Cases\EDSCacheResponse.cs" />
+    <Compile Include="DataType\Cases\ExternalDatasourceInfo.cs" />
+    <Compile Include="DataType\Cases\ExternalDatasourceList.cs" />
+    <Compile Include="DataType\Cases\ExternalObjectDataItemRequest.cs" />
+    <Compile Include="DataType\Cases\ExternalObjectDataItemResponse.cs" />
+    <Compile Include="DataType\Cases\FormatPhoneRequest.cs" />
+    <Compile Include="DataType\Cases\FormatPhoneResponse.cs" />
+    <Compile Include="DataType\Cases\GetAllEmployeeUserRequest.cs" />
+    <Compile Include="DataType\Cases\GetAllEmployeeUserResponse.cs" />
+    <Compile Include="DataType\Cases\GetAllExternalDatasourceListRequest.cs" />
+    <Compile Include="DataType\Cases\GetAllExternalDatasourceListResponse.cs" />
+    <Compile Include="DataType\Cases\GetAssocCascadeInfoByCaseTypeRequest.cs" />
+    <Compile Include="DataType\Cases\GetAssocCascadeInfoByCaseTypeResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseActivityRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseActivityResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseBasicInfoRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseBasicInfoResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseIDByCaseTypeIDAndListIDRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseIDByCaseTypeIDAndListIDResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseLastAssigneeRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseLastAssigneeResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseListByHopperRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseListByHopperResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseListByUserRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseListByUserResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseListRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseNotesRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseNotesResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseNotesWithAttachmentsRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseNotesWithAttachmentsResponse.cs" />
+    <Compile Include="DataType\Cases\GetCasesForUserRequest.cs" />
+    <Compile Include="DataType\Cases\GetCasesForUserResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypeDataByUserRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypeDataByUserResponse.cs" />
+    <Compile Include="DataType\Cases\getCaseTypeListRequest.cs" />
+    <Compile Include="DataType\Cases\getCaseTypeListResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypeNameResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesToCreateByUserRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesToCreateByUserResponse.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesUserCaseTypeIDRequest.cs" />
+    <Compile Include="DataType\Cases\GetCaseTypesUserCaseTypeIDResponse.cs" />
+    <Compile Include="DataType\Cases\getConnectionStringRequest.cs" />
+    <Compile Include="DataType\Cases\GetEmailFieldRequest.cs" />
+    <Compile Include="DataType\Cases\GetEmailFieldResponse.cs" />
+    <Compile Include="DataType\Cases\GetEmployeesBySearchRequest.cs" />
+    <Compile Include="DataType\Cases\GetEmployeesBySearchResponse.cs" />
+    <Compile Include="DataType\Cases\GetExdCascadedValueRequest.cs" />
+    <Compile Include="DataType\Cases\GetExdCascadedValueResponse.cs" />
+    <Compile Include="DataType\Cases\GetExternalDataSourceByIdRequest.cs" />
+    <Compile Include="DataType\Cases\GetExternalDataSourceByIdResponse.cs" />
+    <Compile Include="DataType\Cases\GetFavoriteRequest.cs" />
+    <Compile Include="DataType\Cases\GetFavoriteResponse.cs" />
+    <Compile Include="DataType\Cases\GetFavoritesRequest.cs" />
+    <Compile Include="DataType\Cases\GetFavoritesResponse.cs" />
+    <Compile Include="DataType\Cases\GetFilterQuery_CasesResponse.cs" />
+    <Compile Include="DataType\Cases\GetHopperWithOwnerByUsernameRequest.cs" />
+    <Compile Include="DataType\Cases\GetHopperWithOwnerByUsernameResponse.cs" />
+    <Compile Include="DataType\Cases\GetPrevousCaseAssignment.cs" />
+    <Compile Include="DataType\Cases\GetPrevousCaseAssignmentResponse.cs" />
+    <Compile Include="DataType\Cases\GetSubscriptionsRequest.cs" />
+    <Compile Include="DataType\Cases\GetSubscriptionsResponse.cs" />
+    <Compile Include="DataType\Cases\GetSystemConfigurationValuesRequest.cs" />
+    <Compile Include="DataType\Cases\GetSystemConfigurationValuesResponse.cs" />
+    <Compile Include="DataType\Cases\GetTeamMembersRequest.cs" />
+    <Compile Include="DataType\Cases\GetTeamMembersResponse.cs" />
+    <Compile Include="DataType\Cases\GetTypesByCaseTypeIDRawRequest.cs" />
+    <Compile Include="DataType\Cases\GetTypesByCaseTypeIDRawResponse.cs" />
+    <Compile Include="DataType\Cases\GetTypesByCaseTypeIDResponse.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByAssocCaseTypeExternalDSRequest.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByAssocCaseTypeExternalDSResponse.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByAssocCaseTypeRequset.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByAssocCaseTypeResponse.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByParentIDRequest.cs" />
+    <Compile Include="DataType\Cases\GetTypeValuesByParentIDResponse.cs" />
+    <Compile Include="DataType\Cases\GetUserInfoRequest.cs" />
+    <Compile Include="DataType\Cases\GetUserInfoResponse.cs" />
+    <Compile Include="DataType\Cases\GetUserInformationRequest.cs" />
+    <Compile Include="DataType\Cases\GetUserInformationResponse.cs" />
+    <Compile Include="DataType\Cases\GetValuesQueryAndConnectionRequest.cs" />
+    <Compile Include="DataType\Cases\GetValuesQueryAndConnectionResponse.cs" />
+    <Compile Include="DataType\Cases\LoadCaseListRequest.cs" />
+    <Compile Include="DataType\Cases\LoadCaseListResponse.cs" />
+    <Compile Include="DataType\Cases\LogRequest.cs" />
+    <Compile Include="DataType\Cases\LogResponse.cs" />
+    <Compile Include="DataType\Cases\OriginationCenterDataRequest.cs" />
+    <Compile Include="DataType\Cases\OriginationCenterDataResponse.cs" />
+    <Compile Include="DataType\Cases\RefreshCalculationFieldsRequest.cs" />
+    <Compile Include="DataType\Cases\RefreshCalculationFieldsResponse.cs" />
+    <Compile Include="DataType\Cases\RemoveFavoriteRequest.cs" />
+    <Compile Include="DataType\Cases\RemoveFavoriteResponse.cs" />
+    <Compile Include="DataType\Cases\ReturnCaseToLastAssigneeRequest.cs" />
+    <Compile Include="DataType\Cases\ReturnCaseToLastAssigneeResponse.cs" />
+    <Compile Include="DataType\Cases\ReturnCaseToLastAssignerRequest.cs" />
+    <Compile Include="DataType\Cases\ReturnCaseToLastAssignerResponse.cs" />
+    <Compile Include="DataType\Cases\SaveCaseTypeRequest.cs" />
+    <Compile Include="DataType\Cases\SaveCaseTypeResponse.cs" />
+    <Compile Include="DataType\Cases\SearchRequest.cs" />
+    <Compile Include="DataType\Cases\SearchResponse.cs" />
+    <Compile Include="DataType\Cases\SendEmailAlertRequest.cs" />
+    <Compile Include="DataType\Cases\SendEmailAlertResponse.cs" />
+    <Compile Include="DataType\Cases\spi_MobileApp_GetTypesByCaseTypeResult.cs" />
+    <Compile Include="DataType\Cases\SubscribeToAlertRequest.cs" />
+    <Compile Include="DataType\Cases\SubscribeToAlertResponse.cs" />
+    <Compile Include="DataType\Cases\SubscribeToCaseAlertsRequest.cs" />
+    <Compile Include="DataType\Cases\SubscribeToCaseAlertsResponse.cs" />
+    <Compile Include="DataType\Cases\SubscribeToHopperRequest.cs" />
+    <Compile Include="DataType\Cases\SubscribeToHopperResponse.cs" />
+    <Compile Include="DataType\Cases\TakeOwnershipResponse.cs" />
+    <Compile Include="DataType\Cases\UnsubscribeFromAlertRequest.cs" />
+    <Compile Include="DataType\Cases\UnsubscribeFromAlertResponse.cs" />
+    <Compile Include="DataType\Default\Class1.cs" />
+    <Compile Include="DataType\Default\HomeScreenCount.cs" />
+    <Compile Include="DataType\Default\HomeScreenCountRequest.cs" />
+    <Compile Include="DataType\Default\RequestToken.cs" />
+    <Compile Include="DataType\Default\HomeScreenCountResponse.cs" />
+    <Compile Include="DataType\Default\ResponseToken.cs" />
+    <Compile Include="DataType\Entity\GetAssociatedEntityListRequest.cs" />
+    <Compile Include="DataType\Entity\GetAssociatedEntityListResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityByAssingToSAMRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityByAssingToSAMResponse.cs" />
+    <Compile Include="DataType\Entity\EntityAppRelatedTypes.cs" />
+    <Compile Include="DataType\Entity\GetAllEntityRoleRelationshipByEmpRequest.cs" />
+    <Compile Include="DataType\Entity\GetAllEntityRoleRelationshipByEmpResponse.cs" />
+    <Compile Include="DataType\Entity\BoxerCentralHome_Entities_GetEntityListRequest.cs" />
+    <Compile Include="DataType\Entity\BoxerCentralHome_Entities_GetEntityListResponse.cs" />
+    <Compile Include="DataType\Entity\Entity_Notes.cs" />
+    <Compile Include="DataType\Entity\GetFilterQuery_EntityRequest.cs" />
+    <Compile Include="DataType\Entity\GetFilterQuery_EntityResponse.cs" />
+    <Compile Include="DataType\Entity\ExternalDatasourceByQueryRequest.cs" />
+    <Compile Include="DataType\Entity\AddEntityNoteRequest.cs" />
+    <Compile Include="DataType\Entity\ExternalDatasourceByQueryResponse.cs" />
+    <Compile Include="DataType\Entity\EntityTypeListData.cs" />
+    <Compile Include="DataType\Entity\Entity_categoryList.cs" />
+    <Compile Include="DataType\Entity\FillEntityOfflineDataResponse.cs" />
+    <Compile Include="DataType\Entity\AddEntityNoteResponse.cs" />
+    <Compile Include="DataType\Entity\AddFileToEntityAssocTypeRequest.cs" />
+    <Compile Include="DataType\Entity\AddFileToEntityAssocTypeResponse.cs" />
+    <Compile Include="DataType\Entity\AddFileToEntityRequest.cs" />
+    <Compile Include="DataType\Entity\AddFileToEntityResponse.cs" />
+    <Compile Include="DataType\Entity\AssignEntityRequest.cs" />
+    <Compile Include="DataType\Entity\AssignEntityResponse.cs" />
+    <Compile Include="DataType\Entity\ASSOC_DECODE.cs" />
+    <Compile Include="DataType\Entity\AuthenticateRequest.cs" />
+    <Compile Include="DataType\Entity\AuthenticateResponse.cs" />
+    <Compile Include="DataType\Entity\ExternalDS.cs" />
+    <Compile Include="DataType\Entity\CreateNewEntityItemRequest.cs" />
+    <Compile Include="DataType\Entity\CreateNewEntityItemResponse.cs" />
+    <Compile Include="DataType\Entity\DataTypes.cs" />
+    <Compile Include="DataType\Entity\DeleteEntityItemRequest.cs" />
+    <Compile Include="DataType\Entity\DeleteEntityItemResponse.cs" />
+    <Compile Include="DataType\Entity\DeleteFileRequest.cs" />
+    <Compile Include="DataType\Entity\DeleteFileResponse.cs" />
+    <Compile Include="DataType\Entity\DemoRequest.cs" />
+    <Compile Include="DataType\Entity\EntityListMBView.cs" />
+    <Compile Include="DataType\Entity\EntityTypes.cs" />
+    <Compile Include="DataType\Entity\ENTITY_ASSOC_TYPE.cs" />
+    <Compile Include="DataType\Entity\EXTERNAL_DATASOURCE.cs" />
+    <Compile Include="DataType\Entity\FillEntityOfflineDataRequest.cs" />
+    <Compile Include="DataType\Entity\ForwardEntityRequest.cs" />
+    <Compile Include="DataType\Entity\ForwardEntityResponse.cs" />
+    <Compile Include="DataType\Entity\GetActivityRequest.cs" />
+    <Compile Include="DataType\Entity\GetActivityResponse.cs" />
+    <Compile Include="DataType\Entity\GetCasesRelationDataRequest.cs" />
+    <Compile Include="DataType\Entity\GetCasesRelationDataResponse.cs" />
+    <Compile Include="DataType\Entity\GetCustomTemplateTagsByAttributeRequest.cs" />
+    <Compile Include="DataType\Entity\GetCustomTemplateTagsByAttributeResponse.cs" />
+    <Compile Include="DataType\Entity\GetCustomTemplateTagsRequest.cs" />
+    <Compile Include="DataType\Entity\GetCustomTemplateTagsResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesBySystemCodeKeyValuePairRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesBySystemCodeKeyValuePairResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesBySystemCodeKeyValuePair_LazyLoadResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesRelationDataRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesRelationDataResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesToCalculateRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntitiesToCalculateResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityByEntityIDRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityByEntityIDResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityRelatedApplicationsRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityRelatedApplicationsResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityRoleRelationRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityRoleRelationResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeCategoryListRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeCategoryListResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeConfigurationRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeConfigurationResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeDetailRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeDetailResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeListRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeListResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeRelationRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeRelationResponse.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeSchemaByEntityTypeIDRequest.cs" />
+    <Compile Include="DataType\Entity\GetEntityTypeSchemaByEntityTypeIDResponse.cs" />
+    <Compile Include="DataType\Entity\GetExternalDataSourceByIDRequest.cs" />
+    <Compile Include="DataType\Entity\GetExternalDataSourceByIDResponse.cs" />
+    <Compile Include="DataType\Entity\GetExternalDataSourceByNameRequest.cs" />
+    <Compile Include="DataType\Entity\GetExternalDataSourceByNameResponse.cs" />
+    <Compile Include="DataType\Entity\GetFileByFileIDResponse.cs" />
+    <Compile Include="DataType\Entity\GetFilesByFileIDRequest.cs" />
+    <Compile Include="DataType\Entity\GetNotesRequest.cs" />
+    <Compile Include="DataType\Entity\GetNotesResponse.cs" />
+    <Compile Include="DataType\Entity\GetNoteTypesRequest.cs" />
+    <Compile Include="DataType\Entity\GetNoteTypesResponse.cs" />
+    <Compile Include="DataType\Entity\GetQuestRelationDataRequest.cs" />
+    <Compile Include="DataType\Entity\GetQuestRelationDataResponse.cs" />
+    <Compile Include="DataType\Entity\GetRelatedTypesRequest.cs" />
+    <Compile Include="DataType\Entity\GetRelatedTypesResponse.cs" />
+    <Compile Include="DataType\Entity\GetTriggerDataRequest.cs" />
+    <Compile Include="DataType\Entity\GetTriggerDataResponse.cs" />
+    <Compile Include="DataType\Entity\GetUserInformationRequest.cs" />
+    <Compile Include="DataType\Entity\GetUserInformationResponse.cs" />
+    <Compile Include="DataType\Entity\LazyLoad.cs" />
+    <Compile Include="DataType\Entity\SaveEntityItemRequest.cs" />
+    <Compile Include="DataType\Entity\SaveEntityItemResponse.cs" />
+    <Compile Include="DataType\Entity\Serializer.cs" />
+    <Compile Include="DataType\Entity\SetCalculationValuesRequest.cs" />
+    <Compile Include="DataType\Entity\SetCalculationValuesResponse.cs" />
+    <Compile Include="DataType\Entity\TakeOwnershipRequest.cs" />
+    <Compile Include="DataType\Entity\TakeOwnershipResponse.cs" />
+    <Compile Include="DataType\Entity\UpdateEntityIdforFileRequest.cs" />
+    <Compile Include="DataType\Entity\UpdateEntityIdforFileResponse.cs" />
+    <Compile Include="DataType\Entity\UserNameLookupRequest.cs" />
+    <Compile Include="DataType\Entity\UserNameLookupResponse.cs" />
+    <Compile Include="DataType\Entity\WS_GetEntityTypeListRequest.cs" />
+    <Compile Include="DataType\Entity\WS_GetEntityTypeListResponse.cs" />
+    <Compile Include="DataType\Entity\WS_GetEntityTypeSchemaByEntityTypeIDRequest.cs" />
+    <Compile Include="DataType\Entity\WS_GetEntityTypeSchemaByEntityTypeIDResponse.cs" />
+    <Compile Include="DataType\Quest\GenerateCaseQueueRequest.cs" />
+    <Compile Include="DataType\Quest\GenerateCaseQueueResponse.cs" />
+    <Compile Include="DataType\Quest\GetAllItemQuestionDecodeByItemIDRequest.cs" />
+    <Compile Include="DataType\Quest\Add_Questions_MetadataRequest.cs" />
+    <Compile Include="DataType\Quest\GetAllItemQuestionDecodeByItemIDResponse.cs" />
+    <Compile Include="DataType\Quest\Add_Questions_MetadataResponse.cs" />
+    <Compile Include="DataType\Quest\BoxerCentralHome_GetQuestFormsForUserRequest.cs" />
+    <Compile Include="DataType\Quest\BoxerCentralHome_GetQuestFormsForUserResponse.cs" />
+    <Compile Include="DataType\Quest\ExternalDatasourceInfo.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceByQueryRequest.cs" />
+    <Compile Include="DataType\Quest\AddCasetoFormRequest.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceByQueryResponse.cs" />
+    <Compile Include="DataType\Quest\AddCasetoFormResponse.cs" />
+    <Compile Include="DataType\Quest\AddCaseToQuestionRequest.cs" />
+    <Compile Include="DataType\Quest\AddCaseToQuestionResponse.cs" />
+    <Compile Include="DataType\Quest\AddFiletoFormRequest.cs" />
+    <Compile Include="DataType\Quest\AddFiletoFormResponse.cs" />
+    <Compile Include="DataType\Quest\AddFiletoQuestionRequest.cs" />
+    <Compile Include="DataType\Quest\AddFiletoQuestionResponse.cs" />
+    <Compile Include="DataType\Quest\AddFormRequest.cs" />
+    <Compile Include="DataType\Quest\AddFormResponse.cs" />
+    <Compile Include="DataType\Quest\AreaList.cs" />
+    <Compile Include="DataType\Quest\GetAllQuestRequest.cs" />
+    <Compile Include="DataType\Quest\AreaRequest.cs" />
+    <Compile Include="DataType\Quest\GetAllQuestResponse.cs" />
+    <Compile Include="DataType\Quest\AreaResponse.cs" />
+    <Compile Include="DataType\Quest\Class1.cs" />
+    <Compile Include="DataType\Quest\DeleteFileRequest.cs" />
+    <Compile Include="DataType\Quest\DeleteFileResponse.cs" />
+    <Compile Include="DataType\Quest\DeleteFileToQuestionRequest.cs" />
+    <Compile Include="DataType\Quest\DeleteFileToQuestionResponse.cs" />
+    <Compile Include="DataType\Quest\DeleteItemInstanceRequest.cs" />
+    <Compile Include="DataType\Quest\DeleteItemInstanceResponse.cs" />
+    <Compile Include="DataType\Quest\DeleteItemQuestionMetadataCaseRequest.cs" />
+    <Compile Include="DataType\Quest\DeleteItemQuestionMetadataCaseResponse.cs" />
+    <Compile Include="DataType\Quest\DeleteItemTranCaseRequest.cs" />
+    <Compile Include="DataType\Quest\DeleteItemTranCaseResponse.cs" />
+    <Compile Include="DataType\Quest\GetAreaListRequest.cs" />
+    <Compile Include="DataType\Quest\GetAreaListResponse.cs" />
+    <Compile Include="DataType\Quest\GetCountForQuestItemRequest.cs" />
+    <Compile Include="DataType\Quest\GetCountForQuestItemResponse.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceByIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceByIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceInfoByIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceInfoByIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceResultRequest.cs" />
+    <Compile Include="DataType\Quest\GetExternalDatasourceResultResponse.cs" />
+    <Compile Include="DataType\Quest\GetFilesByFormIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetFilesByFormIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetFilesByQuestionIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetFilesByQuestionIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetFilterQuery_QuestRequest.cs" />
+    <Compile Include="DataType\Quest\GetFilterQuery_QuestResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemCategoriesByItemIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemCategoriesByItemIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemCategoriesByItemID_ViewScoresRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemCategoriesByItemID_ViewScoresResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoDependencyRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoDependencyResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldMetaDataRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldMetaDataResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldsByItemIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldsByItemIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldsByItemInfoFieldIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInfoFieldsByItemInfoFieldIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInstanceTranDataRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInstanceTranDataResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemInstanceTranRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemInstanceTranResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionDecodeByFieldIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionDecodeByFieldIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionFieldsByItemCategoryIDRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionFieldsByItemCategoryIDResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionFieldsByItemCategoryID_ViewScoresRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionFieldsByItemCategoryID_ViewScoresResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionMetadataCaseRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionMetadataCaseResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionMetadataRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemQuestionMetadataResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemTranCaseRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemTranCaseResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemTranToCheckDuplicateRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemTranToCheckDuplicateResponse.cs" />
+    <Compile Include="DataType\Quest\GetItemWiseSummaryForScoresRequest.cs" />
+    <Compile Include="DataType\Quest\GetItemWiseSummaryForScoresResponse.cs" />
+    <Compile Include="DataType\Quest\GetQuestItemByStatusRequest.cs" />
+    <Compile Include="DataType\Quest\GetQuestItemByStatusResponse.cs" />
+    <Compile Include="DataType\Quest\GetSecurityDataRequest.cs" />
+    <Compile Include="DataType\Quest\GetSecurityDataResponse.cs" />
+    <Compile Include="DataType\Quest\ItemInfoField.cs" />
+    <Compile Include="DataType\Quest\ItemInstanceTranData.cs" />
+    <Compile Include="DataType\Quest\ItemInstanceTranLockUnlockRequest.cs" />
+    <Compile Include="DataType\Quest\ItemInstanceTranLockUnlockResponse.cs" />
+    <Compile Include="DataType\Quest\ItemsByAreaIDRequest.cs" />
+    <Compile Include="DataType\Quest\ItemsByAreaIDResponse.cs" />
+    <Compile Include="DataType\Quest\Questcls.cs" />
+    <Compile Include="DataType\Quest\Quest_MA.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseInfoToQuestionRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseInfoToQuestionResponse.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseNotesToFormRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseNotesToFormResponse.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseNotesToQuestionRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateCaseNotesToQuestionResponse.cs" />
+    <Compile Include="DataType\Quest\UpdateFileByQuestionMetadataIDNewFormRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateFileByQuestionMetadataIDNewFormResponse.cs" />
+    <Compile Include="DataType\Quest\UpdateFormRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateFormResponse.cs" />
+    <Compile Include="DataType\Quest\UpdateItemInstanceTranCategoryRequest.cs" />
+    <Compile Include="DataType\Quest\UpdateItemInstanceTranCategoryResponse.cs" />
+    <Compile Include="DataType\Response.cs" />
+    <Compile Include="DataType\Standards\AddAppMetadataRequest.cs" />
+    <Compile Include="DataType\Standards\AddAppMetadataResponse.cs" />
+    <Compile Include="DataType\Standards\AddAppTypeRequest.cs" />
+    <Compile Include="DataType\Standards\AddAppTypeResponse.cs" />
+    <Compile Include="DataType\Standards\AddAppUserLogRequest.cs" />
+    <Compile Include="DataType\Standards\AddAppUserLogResponse.cs" />
+    <Compile Include="DataType\Standards\AddDeptAppRequest.cs" />
+    <Compile Include="DataType\Standards\AddDeptAppResponse.cs" />
+    <Compile Include="DataType\Standards\AddDocRankRequest.cs" />
+    <Compile Include="DataType\Standards\AddDocRankResponse.cs" />
+    <Compile Include="DataType\Standards\AddFileDetailAppMetaDataRequest.cs" />
+    <Compile Include="DataType\Standards\AddFileDetailAppMetaDataResponse.cs" />
+    <Compile Include="DataType\Standards\AddPublishVersionRequest.cs" />
+    <Compile Include="DataType\Standards\AddPublishVersionResponse.cs" />
+    <Compile Include="DataType\Standards\AddSecurityDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\AddSecurityDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\AddSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\AddSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\AddSecurityRoleRequest.cs" />
+    <Compile Include="DataType\Standards\AddSecurityRoleResponse.cs" />
+    <Compile Include="DataType\Standards\AddSecurityUserRequest.cs" />
+    <Compile Include="DataType\Standards\AddSecurityUserResponse.cs" />
+    <Compile Include="DataType\Standards\AddTypeRequest.cs" />
+    <Compile Include="DataType\Standards\AddTypeResponse.cs" />
+    <Compile Include="DataType\Standards\AddUserFeedbackRequest.cs" />
+    <Compile Include="DataType\Standards\AddUserFeedbackResponse.cs" />
+    <Compile Include="DataType\Standards\BookView.cs" />
+    <Compile Include="DataType\Standards\ChangeParentRequest.cs" />
+    <Compile Include="DataType\Standards\ChangeParentResponse.cs" />
+    <Compile Include="DataType\Standards\ChangePublishStatusRequest.cs" />
+    <Compile Include="DataType\Standards\ChangePublishStatusResponse.cs" />
+    <Compile Include="DataType\Standards\Class1.cs" />
+    <Compile Include="DataType\Standards\DataTypes.cs" />
+    <Compile Include="DataType\Standards\DeleteAppTypeRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteAppTypeResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteDeptAppRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteDeptAppResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteFileDetailAppMetaDataRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteFileDetailAppMetaDataResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityRoleRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityRoleResponse.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityUserRequest.cs" />
+    <Compile Include="DataType\Standards\DeleteSecurityUserResponse.cs" />
+    <Compile Include="DataType\Standards\EntityNoteItem.cs" />
+    <Compile Include="DataType\Standards\EntityNoteType.cs" />
+    <Compile Include="DataType\Standards\ExternalDatasourceFilter.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByMetadataIDRequest.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByMetadataIDResponse.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_BookView_PDFRequest.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_BookView_PDFResponse.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_BookView_SyncRequest.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_BookView_SyncResponse.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_SyncRequest.cs" />
+    <Compile Include="DataType\Standards\GetAppMetadataByParentAppForUser_SyncResponse.cs" />
+    <Compile Include="DataType\Standards\GetAppTypeByAppIDRequest.cs" />
+    <Compile Include="DataType\Standards\GetAppTypeByAppIDResponse.cs" />
+    <Compile Include="DataType\Standards\GetBasicNameByTopLevelRequest.cs" />
+    <Compile Include="DataType\Standards\GetBasicNameByTopLevelResponse.cs" />
+    <Compile Include="DataType\Standards\GetAllStandardsRequest.cs" />
+    <Compile Include="DataType\Standards\GetBookDetailToUserRequest.cs" />
+    <Compile Include="DataType\Standards\GetAllStandardsResponse.cs" />
+    <Compile Include="DataType\Standards\GetBookDetailToUserResponse.cs" />
+    <Compile Include="DataType\Standards\GetDeptRolebyAppRequest.cs" />
+    <Compile Include="DataType\Standards\GetDeptRolebyAppResponse.cs" />
+    <Compile Include="DataType\Standards\GetEmailBySAMRequest.cs" />
+    <Compile Include="DataType\Standards\GetEmailBySAMResponse.cs" />
+    <Compile Include="DataType\Standards\GetFileByIDRequest.cs" />
+    <Compile Include="DataType\Standards\GetFileByIDResponse.cs" />
+    <Compile Include="DataType\Standards\GetFileDetailAppMetaDataRequest.cs" />
+    <Compile Include="DataType\Standards\GetFileDetailAppMetaDataResponse.cs" />
+    <Compile Include="DataType\Standards\GetJobFunctionBySubDeptRequest.cs" />
+    <Compile Include="DataType\Standards\GetJobFunctionBySubDeptResponse.cs" />
+    <Compile Include="DataType\Standards\GetJobTitleByJobFunctionRequest.cs" />
+    <Compile Include="DataType\Standards\GetJobTitleByJobFunctionResponse.cs" />
+    <Compile Include="DataType\Standards\GetMetadataFileInfoRequest.cs" />
+    <Compile Include="DataType\Standards\GetMetadataFileInfoResponse.cs" />
+    <Compile Include="DataType\Standards\GetMetadataFilesRequest.cs" />
+    <Compile Include="DataType\Standards\GetMetadataFilesResponse.cs" />
+    <Compile Include="DataType\Standards\GetMetadataInfoByMetadataIDForUserRequest.cs" />
+    <Compile Include="DataType\Standards\GetMetadataInfoByMetadataIDForUserResponse.cs" />
+    <Compile Include="DataType\Standards\GetPublishedDocsByMetadataIDRequest.cs" />
+    <Compile Include="DataType\Standards\GetPublishedDocsByMetadataIDResponse.cs" />
+    <Compile Include="DataType\Standards\GetRankingByMedatadataIDRequest.cs" />
+    <Compile Include="DataType\Standards\GetRankingByMedatadataIDResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesRoleRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesRoleResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesUserRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecuritiesUserResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecurityDetailsForUserAccessToolRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecurityDetailsForUserAccessToolResponse.cs" />
+    <Compile Include="DataType\Standards\GetSecurityForUserAccessToolRequest.cs" />
+    <Compile Include="DataType\Standards\GetSecurityForUserAccessToolResponse.cs" />
+    <Compile Include="DataType\Standards\GetTopLevelRequest.cs" />
+    <Compile Include="DataType\Standards\GetTopLevelResponse.cs" />
+    <Compile Include="DataType\Standards\GetTypeForNextLevelRequest.cs" />
+    <Compile Include="DataType\Standards\GetTypeForNextLevelResponse.cs" />
+    <Compile Include="DataType\Standards\GetTypeRequest.cs" />
+    <Compile Include="DataType\Standards\GetTypeResponse.cs" />
+    <Compile Include="DataType\Standards\List.cs" />
+    <Compile Include="DataType\Standards\RemoveNodeRequest.cs" />
+    <Compile Include="DataType\Standards\RemoveNodeResponse.cs" />
+    <Compile Include="DataType\Standards\SearchUserForSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\SearchUserForSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\security_ChangeDisplayOrderRequest.cs" />
+    <Compile Include="DataType\Standards\security_ChangeDisplayOrderResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetBasicNameRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetBasicNameResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetJobFunctionRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetJobFunctionResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetJobTitleRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetJobTitleResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetSubDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetSubDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetTopLevelRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Department_GetTopLevelResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAllAppForUserRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAllAppForUserResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppCreatedByUserBasedOnSAMRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppCreatedByUserBasedOnSAMResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppListRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppListResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppList_ViewDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppList_ViewDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByMetadataIDRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByMetadataIDResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByMetadataID_DeleteMetaDataRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByMetadataID_DeleteMetaDataResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByParentAppForUserRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByParentAppForUserResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByParentAppForUser_BookViewRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataByParentAppForUser_BookViewResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataForAppForUserRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataForAppForUserResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadataResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadata_ChangeParentUpdateRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetAppMetadata_ChangeParentUpdateResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetDocLatestUpdatesForUserRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetDocLatestUpdatesForUserResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetFeedbackByUserBasedOnSAMRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetFeedbackByUserBasedOnSAMResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetFeedbackForUserBasedOnSAMRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetFeedbackForUserBasedOnSAMResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetIsDeleteMetaDataByDeleteSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetIsDeleteMetaDataByDeleteSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetMetadataByIDRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetMetadataByIDResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetMetadataByID_JT_RAWStringRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetMetadataByID_JT_RAWStringResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetPopularDocForUserRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetPopularDocForUserResponse.cs" />
+    <Compile Include="DataType\Standards\security_GetPublishedAppByUserBasedOnSAMRequest.cs" />
+    <Compile Include="DataType\Standards\security_GetPublishedAppByUserBasedOnSAMResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetEntitiesByRoleRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetEntitiesByRoleResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetEntityTypesRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetEntityTypesResponse.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetRolesByEntityTypeRequest.cs" />
+    <Compile Include="DataType\Standards\Security_Role_GetRolesByEntityTypeResponse.cs" />
+    <Compile Include="DataType\Standards\security_SearchMetadataRequest.cs" />
+    <Compile Include="DataType\Standards\security_SearchMetadataResponse.cs" />
+    <Compile Include="DataType\Standards\STANDARDS_AUTHENTICATEUSERFORADMINACCESSRequest.cs" />
+    <Compile Include="DataType\Standards\STANDARDS_AUTHENTICATEUSERFORADMINACCESSResponse.cs" />
+    <Compile Include="DataType\Standards\Standards_AuthenticateUserForSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\Standards_AuthenticateUserForSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\Standards_Security_GetMetadataNameByIDRequest.cs" />
+    <Compile Include="DataType\Standards\Standards_Security_GetMetadataNameByIDResponse.cs" />
+    <Compile Include="DataType\Standards\SystemConfiguration.cs" />
+    <Compile Include="DataType\Standards\UpdateAppMetadataRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateAppMetadataResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateAppTypeRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateAppTypeResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateFileDetailAppMetaDataRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateFileDetailAppMetaDataResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityDepartmentRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityDepartmentResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityRoleRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityRoleResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityUserRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateSecurityUserResponse.cs" />
+    <Compile Include="DataType\Standards\UpdateTypeRequest.cs" />
+    <Compile Include="DataType\Standards\UpdateTypeResponse.cs" />
+    <Compile Include="DataType\Standards\WebView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1-beta3\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GettingStarted.Xamarin" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DatatypeAssembly\HtmlAgilityPack.dll" />
+    <Content Include="DatatypeAssembly\Newtonsoft.Json.dll" />
+    <Content Include="DatatypeAssembly\System.Net.Http.dll" />
+    <Content Include="DatatypeAssembly\System.Net.Http.Extensions.dll" />
+    <Content Include="DatatypeAssembly\System.Net.Http.Formatting.dll" />
+    <Content Include="DatatypeAssembly\System.Net.Http.Primitives.dll" />
+    <Content Include="DatatypeAssembly\Xamarin.Forms.Core.dll" />
+    <Content Include="DatatypeAssembly\Xamarin.Forms.Platform.dll" />
+    <Content Include="DatatypeAssembly\Xamarin.Forms.Xaml.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+</Project>

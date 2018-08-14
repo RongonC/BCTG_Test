@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Search.SearchPage"
+    Title="Search">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="Main_stack">
+
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout  AbsoluteLayout.LayoutFlags="PositionProportional" Grid.Row="0">
+                    <StackLayout Margin="10">
+                        <Label Text="" x:Name="searchlabel" Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <Button Text="Search"  x:Name="btn_search" TextColor="White" BackgroundColor="Orange" 
+                    HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        </StackLayout>
+
+                        <ListView x:Name="lstSearchitem" 
+                          HasUnevenRows="True"
+                      ItemTapped="lstSearchitem_ItemTapped" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ViewCell.View>
+                                            <StackLayout   >
+                                                <Grid  >
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="4*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="2.5*"/>
+                                                        <ColumnDefinition Width="25"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid  Grid.Row="0" Grid.ColumnSpan="2"  >
+                                                        <Label  Text="{Binding NAME}" Grid.ColumnSpan="2"   
+                                                            Style="{StaticResource defaultLabelSize}"
+                                                            Margin="10,-2,0,0"
+                                                            HorizontalOptions="Start" 
+                                                            VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="0" Grid.Column="2"  >
+                                                        <Label Text="{Binding LINK_ID}" 
+                                                           Style="{StaticResource defaultLabelSize}" 
+                                                           TextColor="Orange"
+                                           HorizontalOptions="EndAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="1" Grid.ColumnSpan="3"   >
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Label Text="{Binding FIELD_VALUE}" FontSize="12"
+                                                           LineBreakMode="TailTruncation"
+                                                           Grid.Column="0" HorizontalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                                                        <Label Text="{Binding STATUS}"
+                                                           LineBreakMode="TailTruncation" FontSize="12"
+                                                           Grid.Column="2"  HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                    </Grid>
+
+                                                    <Image Source="Assets/dropdowniconClose.png"  
+                                                       Grid.RowSpan="2" Grid.Column="3"  
+                                                       HorizontalOptions="End" VerticalOptions="Center"
+                                                       Margin="5,0,10,0"/>
+                                                </Grid>
+                                            </StackLayout>
+                                        </ViewCell.View>
+
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Footer>
+                                <StackLayout Orientation="Horizontal"/>
+                            </ListView.Footer>
+                        </ListView>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="1"
+                             IsClippedToBounds="True"
+                         AbsoluteLayout.LayoutBounds=".5,1,.5,.1" AbsoluteLayout.LayoutFlags="All">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+
+                    <Button Image="Assets/Home_Icon.png" Grid.Column="0"  BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/menuicon.png" Grid.Column="2" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+            </Grid>
+            
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>
+ 

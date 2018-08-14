@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:StemmonsMobile"
+    x:Class="StemmonsMobile.Views.CreateQuestForm.MyFormsPage"
+    >
+    <ContentPage.Content>
+
+    <AbsoluteLayout>
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+
+          <SearchBar Placeholder="Search for quest " x:Name="SearchQuest" Focused="FocusedEvent"
+                     TextChanged="Handle_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" Grid.Row="0"/>
+
+
+            <StackLayout Grid.Row="1">
+            <ListView x:Name="FormData" RowHeight="55" ItemTapped="Handle_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="10,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding strType}" 
+                                       Grid.Row="0" Grid.Column="0"
+                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                       Style="{StaticResource defaultLabelSize}" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding strIsLock}"
+                                       Grid.Row="0" Grid.Column="1"
+                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                       FontSize="14"
+                                       TextColor="{StaticResource DetailsColor}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding intListID}"
+                                       Grid.Row="0" Grid.Column="2" 
+                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                       FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding strAreaName}"
+                                       Grid.Row="1" Grid.Column="1" 
+                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                       FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding dcOverAllScore}" 
+                                       Grid.Row="1" Grid.Column="2" 
+                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                       FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Button Image="Assets/dropdowniconClose.png"
+                                        Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" 
+                                        BackgroundColor="Transparent"
+                                        HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,5,0" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                   <!-- <StackLayout Orientation="Vertical" Margin="15,0,0,0">
+                        <Label BackgroundColor="LightGray" HeightRequest="1" />
+                        <Button Text="Load More (Requires Internet)" />
+                    </StackLayout>-->
+                </ListView.Footer>
+            </ListView>
+            </StackLayout>
+
+         <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home"  Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
+
+                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+            </StackLayout>
+        </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

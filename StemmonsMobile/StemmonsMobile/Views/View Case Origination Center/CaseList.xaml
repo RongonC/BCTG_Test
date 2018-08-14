@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+               x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseList">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Filter" Icon="Assets/filter.png" Clicked="Handle_Clicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <AbsoluteLayout >
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackLayout x:Name="main_stack" Grid.Row="0">
+                    <SearchBar Placeholder="Search for a case in this list"
+               x:Name="SearchCase" TextChanged="Handle_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+
+                    <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
+                    <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
+                </StackLayout>-->
+                    <!--<Label x:Name="WarningLabel" Text="Checking for update... Click here to force." FontSize = "14" HorizontalOptions="Center"  LineBreakMode="WordWrap"></Label>
+-->
+                    <ListView x:Name="listdata" ItemTapped="Handle_ItemTapped"  
+                              IsPullToRefreshEnabled="True"
+                               RefreshCommand="{Binding RefreshCommand}"
+                                   IsRefreshing="{Binding IsRefreshing}"
+                              CachingStrategy = "RecycleElement">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Margin="15,0,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="6*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding CaseTitle}" HorizontalOptions="StartAndExpand" FontSize="16"
+                           LineBreakMode="TailTruncation" Grid.ColumnSpan="2"  TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" Margin="0,3,0,0"/>
+                                        <Label Text="{Binding DisplayListID}" Grid.Column="2" VerticalOptions="Center" FontSize="15" HorizontalOptions="End" TextColor="{StaticResource DetailsColor}" LineBreakMode="TailTruncation" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="{Binding AssignedTo}" Grid.Row="1" HorizontalOptions="End" FontSize="10" 
+                           VerticalOptions="Center" LineBreakMode="TailTruncation"  TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="{Binding PriorityValue}" HorizontalOptions="End" VerticalOptions="Center" Grid.Row="1"
+                           Grid.Column="1" FontSize="10"  TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="{Binding CaseStatus}" Grid.Row="1" Grid.Column="2" HorizontalOptions="End"  Margin="0,0,5,0"
+                           VerticalOptions="Center" FontSize="10"  TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Button Image="Assets/dropdowniconClose.png" Grid.Column="3" Grid.RowSpan="2"  BackgroundColor="Transparent"/>
+
+
+                                    </Grid>
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                        <!--<ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>-->
+                    </ListView>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1">
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                </StackLayout>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

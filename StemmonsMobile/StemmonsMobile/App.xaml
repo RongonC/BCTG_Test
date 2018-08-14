@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             xmlns:local1="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="BlackBackground">#000000</Color>
+            <Color x:Key="PrimaryDark">#1976D2</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightBackgroundColor">#FAFAFA</Color>
+            <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
+            <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource BlackBackground}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+
+            <Style x:Key="defaultLabelSize" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+
+            <Style x:Key="defaultLabelSize_setting" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+
+            <Style x:Key="defaultLabelSize_subtype" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+
+
+            <!-- Taken From Refrence Project -->
+            <Style x:Key="Hint" TargetType="Label">
+                <Setter Property="Font" Value="12" />
+            </Style>
+
+            <Style x:Key="Arrow" TargetType="Button">
+                <Setter Property="Image" Value="Assets/dropdowniconClose.png" />
+                <Setter Property="WidthRequest" Value="24" />
+                <Setter Property="HeightRequest" Value="24" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,5,0" />
+            </Style>
+
+            <DataTemplate x:Key="GroupTemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
+                        <Image Source="Assets/dropdownicon.png" WidthRequest="24" HeightRequest="24" />
+                        <Label Text="{Binding Heading}" VerticalOptions="Center" Style="{StaticResource Hint}" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="StandardBookListTemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
+                        <Label Text="{Binding APP_ASSOC_META_DATA_ID}"  IsVisible="False" TextColor="Black"/>
+                        <Label Text="{Binding TYPE_ID}"  IsVisible="False"/>
+                        <Label Text="{Binding DISPLAY_ORDER}"  IsVisible="False"/>
+                        <Label Text="{Binding PARENT_LEVEL}"  IsVisible="False"/>
+                        <Label Text="{Binding APP_ID}"  IsVisible="False"/>
+                        <Label Text="{Binding APP_NAME}" Margin="17,0,0,0" 
+                               HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                               Style="{StaticResource defaultLabelSize}" TextColor="Black" />
+                        <Label Text="{Binding IS_ACTIVE}"  IsVisible="False"/>
+                        <Label Text="{Binding APP_ASSOC_META_DATA_ID}"  IsVisible="False"/>
+                        <Button Image="Assets/dropdowniconClose.png"  BackgroundColor="Transparent"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="GroupTemplateStandard">
+                <ViewCell>
+                    <!-- HACK - work around https://bugzilla.xamarin.com/show_bug.cgi?id=42528 -->
+                    <StackLayout Orientation="Horizontal" Margin="0,0,0,0">
+                        <Button x:Name="buttonToggleExpand" 
+                                Image="{Binding IsExpanded, Converter={StaticResource isExpandedToImageConverter}}"
+                                HorizontalOptions="Center" VerticalOptions="Center"
+								Command="{x:Static local:Commands.ToggleExpandCommand}" CommandParameter="{Binding}" Margin="0,0,5,0" BackgroundColor="Transparent">
+                            <Button.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="iOS" Value="55" />
+                                    <On Platform="UWP" Value="34" />
+                                    <On Platform="Android" Value="24" />
+                                </OnPlatform>
+                            </Button.HeightRequest>
+                            <Button.WidthRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="iOS" Value="55" />
+                                    <On Platform="UWP" Value="35" />
+                                    <On Platform="Android" Value="24" />
+                                </OnPlatform>
+                            </Button.WidthRequest>
+                        </Button>
+                        <Label Text="{Binding Heading}" VerticalOptions="Center" Style="{StaticResource Hint}" FontSize="18" TextColor="Black" Margin="5,0,0,0"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TypeAddTemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
+                        <Label Text="{Binding}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                        <Button Style="{StaticResource Plus1}" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="CaseDetailsTemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding Category}"  HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label Text="{Binding Details}" FontSize="12" TextColor="{StaticResource DetailsColor}" HorizontalOptions="End" VerticalOptions="Center" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="ItemTemplate">
+                <ViewCell>
+                    <Grid Margin="15,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding Name}" FontSize="22" Grid.ColumnSpan="2" />
+                        <Label Text="{Binding Number}" TextColor="{StaticResource DetailsColor}"
+                                       Grid.Column="2" HorizontalOptions="End" VerticalOptions="Center" />
+                        <Label Text="{Binding Field2}" FontSize="10" Grid.Row="1" HorizontalOptions="End" />
+                        <Label Text="{Binding Field3}" FontSize="10" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" />
+                        <Label Text="{Binding Field4}" FontSize="10" Grid.Row="1" Grid.Column="2" HorizontalOptions="End" />
+                        <Button Style="{StaticResource Arrow}" Grid.Column="3" Grid.RowSpan="2" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="CreateNewFooterTemplate">
+                
+                <Grid Margin="15,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" />
+                    <Label Text="Create New Form"  LineBreakMode="TailTruncation"
+                           VerticalOptions="Center" Grid.Row="1" />
+                    <Button Image="Assets/plussign.png" BackgroundColor="Transparent" 
+                            Grid.Row="1" Grid.Column="1" />
+                </Grid>
+            </DataTemplate>
+            
+            <Color x:FactoryMethod="FromHex" x:Key="DetailsColor">
+                <x:Arguments>
+                    <x:String>#E5903D</x:String>
+                </x:Arguments>
+            </Color>
+            
+            <Color x:FactoryMethod="FromHex" x:Key="ButtonTextColor">
+                <x:Arguments>
+                    <x:String>#ECBA3F</x:String>
+                </x:Arguments>
+            </Color>
+            <!-- End From Refrence Project  -->
+            
+            <!--  Vishal P -->
+            
+            <!--Moved to Select_EntityList-->
+            <!--<DataTemplate x:Key="EntityTypetemplate">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem x:Name="Menu_Del"  Text="Delete" IsDestructive="True" 
+                                CommandParameter="{Binding .}" />
+                        <MenuItem x:Name="Menu_Details"  Text="Details"  
+                                CommandParameter="{Binding .}"/>
+                    </ViewCell.ContextActions>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                            <StackLayout HorizontalOptions="StartAndExpand"  >
+                                <Label  Text="{Binding EntityTypeName}" VerticalOptions="Center" FontSize="18" 
+                                                TextColor="Black"  Margin="15,4,0,0"
+                                                HorizontalOptions="End"  />
+                            </StackLayout>
+                            <Image Source="Assets/dropdowniconClose.png"  
+                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>-->
+            
+            <DataTemplate x:Key="EntityTypeCategorytemplate">
+                <ViewCell>
+                    <!--<ViewCell.ContextActions>
+                        <MenuItem x:Name="Menu_Del"  Text="Delete" IsDestructive="True" 
+                                CommandParameter="{Binding .}" />
+                        <MenuItem x:Name="Menu_Details"  Text="Details"  
+                                CommandParameter="{Binding .}"/>
+                    </ViewCell.ContextActions>-->
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                            <StackLayout HorizontalOptions="StartAndExpand">
+                                <Label  Text="{Binding EntityTypeCategoryName}" VerticalOptions="Center" TextColor="Black" Margin="15,7,0,0" HorizontalOptions="End"  FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            </StackLayout>
+                            <Image Source="Assets/dropdowniconClose.png"  
+                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="HistoryTypetemplate">
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout>
+                            <StackLayout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="2.5*" />
+                                        <ColumnDefinition Width="25" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                                        <Label Text="{Binding Name}" Grid.ColumnSpan="2" Style="{StaticResource defaultLabelSize}" Margin="10,-2,0,0" HorizontalOptions="Start" VerticalOptions="Center" />
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="2">
+                                        <Label Text="{Binding Address}" Style="{StaticResource defaultLabelSize}" TextColor="Orange" HorizontalOptions="EndAndExpand" />
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.ColumnSpan="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Field2}" FontSize="12" LineBreakMode="TailTruncation" Grid.Column="0" HorizontalOptions="Center" />
+                                        <Label Text="{Binding Field3}" FontSize="12" LineBreakMode="TailTruncation" Grid.Column="1" HorizontalOptions="Center" />
+                                        <Label Text="{Binding Field4}" LineBreakMode="TailTruncation" FontSize="12" Grid.Column="2" HorizontalOptions="End" />
+                                    </Grid>
+                                    <Image Source="{Binding Img}" Grid.RowSpan="2" Grid.Column="3" HorizontalOptions="End" VerticalOptions="Center" Margin="5,0,10,0" />
+                                </Grid>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="LocationEntityTypetemplate">
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                            <StackLayout HorizontalOptions="StartAndExpand">
+                                <Label Text="{Binding Name}" VerticalOptions="Center" TextColor="Black" Margin="15,4,0,0" HorizontalOptions="End" />
+                            </StackLayout>
+                            <Label Text="{Binding Type_value}" HorizontalOptions="End" VerticalOptions="Center" TextColor="Orange" />
+                            <Image Source="{Binding Img}" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0" />
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="EntityTypeDetailtemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" HeightRequest="30">
+                        <StackLayout HorizontalOptions="StartAndExpand">
+                            <Label Text="{Binding Name}" VerticalOptions="Center" Margin="15,4,0,0" TextColor="Black" HorizontalOptions="End" />
+                        </StackLayout>
+                        <Label Text="{Binding Type_value}" HorizontalOptions="End" VerticalOptions="Center" TextColor="Orange" />
+                        <Image Source="{Binding Img}" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            <!--<DataTemplate x:Key="EntityRelatedAppTypetemplate">
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                            <StackLayout HorizontalOptions="StartAndExpand"  >
+                                <Label  Text="{Binding Name}" VerticalOptions="Center"  
+                                        Style="{StaticResource defaultLabelSize}" 
+                                                TextColor="Black"  Margin="5,4,0,0"
+                                                HorizontalOptions="End"  />
+                            </StackLayout>
+                            <Image Source="Assets/dropdowniconClose.png"  
+                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </DataTemplate>-->
+            <!-- End of Vishal P -->
+            
+            <!-- Bipin p - Code Migration- -->
+            
+            <local:IsExpandedToImageConverter x:Key="isExpandedToImageConverter" />
+            
+            <Style x:Key="Plus1" TargetType="Button" BasedOn="{StaticResource Arrow}">
+                <Setter Property="Image" Value="Assets/plussign.png" />
+            </Style>
+           
+            <Style x:Key="Right_arrow" TargetType="Button" BasedOn="{StaticResource Arrow}">
+                <Setter Property="Image" Value="Assets/dropdownClose.png" />
+            </Style>
+            
+            
+            
+            <DataTemplate x:Key="TypeAddTemplateA">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" HeightRequest="30">
+                        <StackLayout HorizontalOptions="StartAndExpand">
+                            <Label Text="{Binding Caseoptions}" VerticalOptions="Center" Margin="15,4,0,0" TextColor="Black" HorizontalOptions="End" />
+                        
+                        
+                        
+                        </StackLayout>
+                        <Label Text="{Binding Description}" VerticalOptions="Center" HorizontalOptions="End" TextColor="Orange" />
+                        <Button x:Name="plus" Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" VerticalOptions="Center" Margin="0,0,3,0" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="CasesPropertyListTemplate">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
+                        <Label Text="{Binding CASE_TYPE_ID}" IsVisible="False" />
+                        <Label Text="{Binding SYSTEM_PRIORITY}" IsVisible="False" />
+                        <Label Text="{Binding ASSOC_TYPE_ID}" IsVisible="False" />
+                        <Label Text="{Binding ASSOC_TYPE_SYSTEM_CODE}" IsVisible="False" />
+                        <Label Text="{Binding ASSOC_TYPE_DESCRIPTION}" IsVisible="False" />
+                        <Label Text="{Binding ASSOC_TYPE_NAME}" Margin="17,0,0,0" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}" />
+                        <Label Text="{Binding EXTERNAL_DATASOURCE_ID}" IsVisible="False" />
+                        <Label Text="{Binding EXTERNAL_DATASOURCE_NAME}" IsVisible="False" />
+                        <Label Text="{Binding EXTERNAL_DATASOURCE_DESCRIPTION}" IsVisible="False" />
+                        <Label Text="{Binding count}" IsVisible="False" />
+                        <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="CreateNewFooterTemplateCases">
+                <Grid Margin="15,0,10,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" />
+                    <Label Text="Create New Cases" LineBreakMode="TailTruncation" VerticalOptions="Center" Grid.Row="1" />
+                    <Button Image="Assets/plussign.png" BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" WidthRequest="25" HeightRequest="25" />
+                </Grid>
+            </DataTemplate>
+            
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+    
