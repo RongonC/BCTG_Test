@@ -45,6 +45,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             searchvalue = _searchvalue;
             sTitle = _Titile == "" ? "Case List" : _Titile;
 
+
+
             listdata.RefreshCommand = RefreshCommand;
         }
         protected async override void OnAppearing()
@@ -53,7 +55,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             try
             {
                 Title = sTitle;
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
 
                 await SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
 
@@ -129,95 +132,92 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         {
             try
             {
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 lst = new List<GetCaseTypesResponse.BasicCase>();
 
                 #region Variable Settings
 
                 switch (param)
                 {
-                    case "casetypeid":
-                        casetypeid = val;
-                        switch (searchvalue)
-                        {
-                            case "caseDetailAssignedToMe":
-                                caseAssgnSam = Functions.UserName;
-                                break;
-                            case "caseDetailCreatedByMe":
-                                CaseCreateBySam = Functions.UserName;
-                                break;
-                            case "caseDetailClosedByMe":
-                                caseClosebySam = Functions.UserName;
-                                break;
-                            case "caseDetailClosesCases":
-                                showOpenClosetype = "C";
-                                break;
-                            case "caseDetailOpenCases":
-                                showOpenClosetype = "O";
-                                break;
-                            case "caseDetailTotalCases":
-                                showOpenClosetype = "A";
-                                break;
-                            case "caseDetailPastTCases":
-                                showpastcase = "Y";
-                                break;
-                            case "caseDetailPastMyCases":
-                                showpastcase = "Y";
-                                caseAssgnSam = Functions.UserName;
-                                break;
-                        }
+                case "casetypeid":
+                    casetypeid = val;
+                    switch (searchvalue)
+                    {
+                    case "caseDetailAssignedToMe":
+                        caseAssgnSam = Functions.UserName;
+                        break;
+                    case "caseDetailCreatedByMe":
+                        CaseCreateBySam = Functions.UserName;
+                        break;
+                    case "caseDetailClosedByMe":
+                        caseClosebySam = Functions.UserName;
+                        break;
+                    case "caseDetailClosesCases":
+                        showOpenClosetype = "C";
+                        break;
+                    case "caseDetailOpenCases":
+                        showOpenClosetype = "O";
+                        break;
+                    case "caseDetailTotalCases":
+                        showOpenClosetype = "A";
+                        break;
+                    case "caseDetailPastTCases":
+                        showpastcase = "Y";
+                        break;
+                    case "caseDetailPastMyCases":
+                        showpastcase = "Y";
+                        caseAssgnSam = Functions.UserName;
+                        break;
+                    }
 
-                        break;
-                    case "caseOwnerSAM":
-                        caseOwnerSam = val;
-                        scrnName = "_OwnedByMe";
-                        OwnerSam = Functions.UserName;
+                    break;
+                case "caseOwnerSAM":
+                    caseOwnerSam = val;
+                    scrnName = "_OwnedByMe";
+                    OwnerSam = Functions.UserName;
 
-                        break;
-                    case "caseAssgnSAM":
-                        caseAssgnSam = val;
-                        scrnName = "_AssignedToMe";
-                        AssgnSam = Functions.UserName;
+                    break;
+                case "caseAssgnSAM":
+                    caseAssgnSam = val;
+                    scrnName = "_AssignedToMe";
+                    AssgnSam = Functions.UserName;
 
-                        break;
-                    case "caseAssgnTM":
-                        caseAssgnSam = val;
-                        scrnName = "_AssignedToMyTeam";
-                        AssgnSamTM = Functions.UserName;
+                    break;
+                case "caseAssgnTM":
+                    caseAssgnSam = val;
+                    scrnName = "_AssignedToMyTeam";
+                    AssgnSamTM = Functions.UserName;
 
-                        break;
-                    case "caseCloseBySAM":
-                        caseClosebySam = val;
-                        break;
-                    case "caseCreateBySAM":
-                        CaseCreateBySam = val;
-                        scrnName = "_CreatedByMe";
-                        CreateBySam = Functions.UserName;
+                    break;
+                case "caseCloseBySAM":
+                    caseClosebySam = val;
+                    break;
+                case "caseCreateBySAM":
+                    CaseCreateBySam = val;
+                    scrnName = "_CreatedByMe";
+                    CreateBySam = Functions.UserName;
 
-                        break;
-                    case "propertyId":
-                        propertyId = val;
-                        break;
-                    case "tenant_Id":
-                        tenant_id = val;
-                        break;
-                    case "tenant_Code":
-                        tenant_code = val;
-                        break;
-                    case "showOpenClosedCasesType":
-                        showOpenClosetype = val;
-                        break;
-                    case "searchQuery":
-                        searchquery = val;
-                        break;
-                    case "showpastcase":
-                        showpastcase = val;
-                        break;
-                    default:
-                        //  showpastcase = val;
-                        break;
+                    break;
+                case "propertyId":
+                    propertyId = val;
+                    break;
+                case "tenant_Id":
+                    tenant_id = val;
+                    break;
+                case "tenant_Code":
+                    tenant_code = val;
+                    break;
+                case "showOpenClosedCasesType":
+                    showOpenClosetype = val;
+                    break;
+                case "searchQuery":
+                    searchquery = val;
+                    break;
+                case "showpastcase":
+                    showpastcase = val;
+                    break;
+                default:
+                    //  showpastcase = val;
+                    break;
                 }
 
                 if (string.IsNullOrEmpty(Username))
@@ -252,26 +252,42 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 else
                 {
                     isOnlineCall = App.Isonline;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 }
+
+                if (!string.IsNullOrEmpty(scrnName))
+                {
+                    this.ToolbarItems.Remove(Filter);
+
+                }
+
+
 
                 await Task.Run(() =>
                 {
-                    dynamic result = null;
-
-                    result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName);
+                    var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName);
                     result.Wait();
 
                     lst = result.Result;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        listdata.IsRefreshing = true;
+                    });
                 });
 
+                Device.StartTimer(TimeSpan.FromSeconds(3), () =>
+                {
+                    listdata.IsRefreshing = false;
+                    return false; // True = Repeat again, False = Stop the timer
+                });
                 this.listdata.ItemsSource = null;
                 if (lst.Count > 0)
                     this.listdata.ItemsSource = lst;
                 else
                 {
+                    listdata.IsRefreshing = false;
                     DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                 }
-                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
             }
             catch (Exception)
             {
@@ -331,27 +347,27 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                 switch (action)
                 {
-                    case "Assigned to my team":
-                        await SelectUser(Functions.UserName);
-                        break;
-                    case "Assigned to me":
+                case "Assigned to my team":
+                    await SelectUser(Functions.UserName);
+                    break;
+                case "Assigned to me":
 
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        this.listdata.ItemsSource = lst.Where(x => x.CaseAssignedToSAM.ToLower().Contains(Functions.UserName));
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-                    case "Created by me":
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        this.listdata.ItemsSource = lst.Where(x => x.CaseCreatedSAM.ToLower().Contains(Functions.UserName));
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        Getcaselistdatafromapi("caseCreateBySAM", Functions.UserName, "");
-                        break;
-                    case "Owned by me":
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        this.listdata.ItemsSource = lst.Where(x => x.CaseOwnerSAM.ToLower().Contains(Functions.UserName));
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    this.listdata.ItemsSource = lst.Where(x => x.CaseAssignedToSAM.ToLower().Contains(Functions.UserName));
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+                case "Created by me":
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    this.listdata.ItemsSource = lst.Where(x => x.CaseCreatedSAM.ToLower().Contains(Functions.UserName));
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    Getcaselistdatafromapi("caseCreateBySAM", Functions.UserName, "");
+                    break;
+                case "Owned by me":
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    this.listdata.ItemsSource = lst.Where(x => x.CaseOwnerSAM.ToLower().Contains(Functions.UserName));
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-                        break;
+                    break;
 
                 }
             }
@@ -360,7 +376,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             }
         }
 
-        private async Task SelectUser(string name)
+        private async Task SelectUser1(string name)
         {
             try
             {
@@ -403,33 +419,98 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
         }
 
+        private async Task SelectUser(string name)
+        {
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            try
+            {
+                List<GetUserInfoResponse.UserInfo> Userlist = new List<GetUserInfoResponse.UserInfo>();
+                await Task.Run(() =>
+                {
+                    var itemRec = CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    itemRec.Wait();
+                    Userlist = itemRec.Result;
+                });
+                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                if (Userlist?.Count > 0)
+                {
+                    var options = new List<string>();
+                    options.AddRange(Userlist.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.SAMName?.Trim()));
+
+                    //var count = project.Count();
+                    //var options = new List<string>(project.Take(count + 1));
+                    options.Add("Search for User.");
+                    var userAction = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
+
+
+                    if (userAction == "Search for User.")
+                    {
+
+                        var result = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle(
+                              "Please search for a user to show the cases assigned to.").SetInputMode(
+                              InputType.Name).SetOkText("Find"));
+
+                        if (result.Ok)
+                        {
+                            SearchAgain(result.Text);
+                        }
+                    }
+                    else if (userAction != "Cancel")
+                    {
+                        userAction = Userlist.Where(v => v.DisplayName != null ? v.DisplayName.ToLower() == userAction.ToLower() : v.SAMName.ToLower() == userAction.ToLower())?.FirstOrDefault().SAMName;
+
+                        Getcaselistdatafromapi("caseAssgnSAM", userAction, "");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
         public async void SearchAgain(string Username)
         {
             try
             {
                 TeamUserList = new List<string>();
+                List<UserDataCall> data = new List<UserDataCall>();
+                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                await Task.Run(() =>
+                 {
+                     var otheruserApicall = CasesAPIMethods.GetEmployeesBySearch(Username);
+                     var responseData = otheruserApicall.GetValue("ResponseContent");
+                     data = JsonConvert.DeserializeObject<List<UserDataCall>>(responseData.ToString());
+                 });
+                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                //if (responseData != null && responseData.ToString() != "[]")
+                //{
+                //    UserDataCall userdata;
+                //    List<UserDataCall> d = new List<UserDataCall>();
 
-                var otheruserApicall = CasesAPIMethods.GetEmployeesBySearch(Username);
-                var responseData = otheruserApicall.GetValue("ResponseContent");
+                //    foreach (var item in responseData)
+                //    {
+                //        userdata = JsonConvert.DeserializeObject<UserDataCall>(item.ToString());
+                //        d.Add(userdata);
+                //        TeamUserList.Add(userdata.UserID);
+                //    }
+                //}
 
-                if (responseData != null && responseData.ToString() != "[]")
-                {
-                    UserDataCall userdata;
-                    List<UserDataCall> d = new List<UserDataCall>();
+                //var count1 = TeamUserList.Count();
+                //var options1 = new List<string>(TeamUserList.Take(count1 + 1));
+                //options1.Add("Search Again...");
 
-                    foreach (var item in responseData)
-                    {
-                        userdata = JsonConvert.DeserializeObject<UserDataCall>(item.ToString());
-                        d.Add(userdata);
-                        TeamUserList.Add(userdata.UserID);
-                    }
+                var options = new List<string>();
 
-                }
+                options.AddRange(data.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.UserID?.Trim()));
 
-                var count1 = TeamUserList.Count();
-                var options1 = new List<string>(TeamUserList.Take(count1 + 1));
-                options1.Add("Search Again...");
-                var userAction1 = await this.DisplayActionSheet(null, "Cancel", null, options1.ToArray());
+                //var count = project.Count();
+                //var options = new List<string>(project.Take(count + 1));
+                options.Add("Search for User.");
+
+
+                var userAction1 = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
                 if (userAction1 == "Search Again...")
                 {
                     var result = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle(

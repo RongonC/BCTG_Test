@@ -187,7 +187,18 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public static Task<AppTypeInfoList> GetAppTypeInfoListByNameTypeIdScreenInfo(string SystemName, string TypeScreenInfo, int TypeId, string dbPath, string tm_username)
         {
             SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            return database.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.TYPE_SCREEN_INFO.ToUpper() == TypeScreenInfo.ToUpper() && i.TYPE_ID == TypeId && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && i.TM_Username == tm_username).FirstOrDefaultAsync();
+
+            try
+            {
+                if (tm_username != null)
+                    return database.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.TYPE_SCREEN_INFO.ToUpper() == TypeScreenInfo.ToUpper() && i.TYPE_ID == TypeId && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && i.TM_Username == tm_username)?.FirstOrDefaultAsync();
+                else
+                    return database.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.TYPE_SCREEN_INFO.ToUpper() == TypeScreenInfo.ToUpper() && i.TYPE_ID == TypeId && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID)?.FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+            }
+            return null;
         }
         #endregion
 

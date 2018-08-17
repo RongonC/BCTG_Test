@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using SQLite;
-using SQLitePCL;
-
+﻿ 
 namespace StemmonsMobile.Models
 {
     //public class InstanceList

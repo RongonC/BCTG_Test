@@ -1,4 +1,15 @@
-﻿using StemmonsMobile.Commonfiles;
+﻿using Acr.UserDialogs;
+using DataServiceBus.OfflineHelper.DataTypes.Cases;
+using DataServiceBus.OfflineHelper.DataTypes.Common;
+using DataServiceBus.OfflineHelper.DataTypes.Entity;
+using DataServiceBus.OfflineHelper.DataTypes.Quest;
+using DataServiceBus.OfflineHelper.DataTypes.Standards;
+using DataServiceBus.OnlineHelper.DataTypes;
+using Newtonsoft.Json;
+using Plugin.Connectivity;
+using StemmonsMobile.Commonfiles;
+using StemmonsMobile.DataTypes.DataType.Cases;
+using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.Models;
 using StemmonsMobile.ViewModels;
 using StemmonsMobile.Views.Cases;
@@ -6,33 +17,19 @@ using StemmonsMobile.Views.Cases_Hopper_Center;
 using StemmonsMobile.Views.CreateQuestForm;
 using StemmonsMobile.Views.Entity;
 using StemmonsMobile.Views.People_Screen;
+using StemmonsMobile.Views.PeopleScreen;
 using StemmonsMobile.Views.Search;
 using StemmonsMobile.Views.Setting;
 using StemmonsMobile.Views.Standards;
 using StemmonsMobile.Views.View_Case_Origination_Center;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Threading.Tasks;
-using DataServiceBus.OnlineHelper.DataTypes;
-using System.Collections.Generic;
-using Acr.UserDialogs;
-using Newtonsoft.Json;
-using System.Linq;
-using DataServiceBus.OfflineHelper.DataTypes.Entity;
-using PCLStorage;
-using StemmonsMobile.Views.PeopleScreen;
-using DataServiceBus.OfflineHelper.DataTypes.Common;
-using StemmonsMobile.DataTypes.DataType.Default;
-using DataServiceBus.OfflineHelper.DataTypes.Quest;
-using DataServiceBus.OfflineHelper.DataTypes.Cases;
-using DataServiceBus.OfflineHelper.DataTypes.Standards;
-using StemmonsMobile.Views.LoginProcess;
-using ImageCircle.Forms.Plugin.Abstractions;
-using Plugin.Connectivity;
-using System.Diagnostics;
-using System.Text;
-using System.Globalization;
 
 namespace StemmonsMobile
 {
@@ -551,9 +548,9 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
-                                    string str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                                    var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
 
-                                    if (!String.IsNullOrEmpty(str))
+                                    if (!String.IsNullOrEmpty(str.Result))
                                         Functions.ShowtoastAlert("Origination Center Sync Success.");
                                     else
                                         Functions.ShowtoastAlert("Origination Center Sync having issue.");
@@ -906,111 +903,115 @@ namespace StemmonsMobile
             }
         }
 
-        async void HomePageCount()
+        void HomePageCount()
         {
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
                 HomeScreenCount appCount = new HomeScreenCount();
 
-                ////Functions.ShowIndicator(ActInd, Stack_indicator, true, new StackLayout (), 0.5);
-                //Functions.ShowIndicatorUpdate(ActInd, Stack_indicator, true, Main_Stack, 0.5, this);
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-                await Task.Run(() =>
+                Task.Run(() =>
                 {
-                    string str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                    HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID).Wait();
 
-                    appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        UpdateCount(appCount);
+                    });
                 });
 
-                //this.IsBusy = false;
-
-                if (appCount == null)
-                {
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    return;
-                }
-
-                if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        CaseNotification.Text = appCount.CasesCount.ToString();
-                    });
-                }
-                else
-                {
-                    CaseNotification.IsVisible = false;
-                }
-
-                if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        associationNotification.Text = appCount.EntityCount.ToString();
-                    });
-
-                }
-                else
-                {
-                    associationNotification.IsVisible = false;
-                }
-
-                if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        standardNotification.Text = appCount.StandardCount.ToString();
-                    });
-
-                }
-                else
-                {
-                    standardNotification.IsVisible = false;
-                }
-
-                if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        formNotification.Text = appCount.QuestCount.ToString();
-                    });
-
-                }
-                else
-                {
-                    formNotification.IsVisible = false;
-                }
-                if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        teamNotification.Text = appCount.DepartmentCount.ToString();
-                    });
-
-                    teamNotification.IsVisible = true;
-                }
-                else
-                {
-                    teamNotification.IsVisible = false;
-                }
+                UpdateCount(appCount);
             }
             catch (Exception)
             {
             }
-            //   Functions.ShowIndicator(ActInd, Stack_indicator, false, Main_Stack, 1);
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        protected async override void OnAppearing()
+        public async void UpdateCount(HomeScreenCount appCount)
+        {
+            await Task.Run(() =>
+            {
+                appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+            });
+            if (appCount == null)
+            {
+                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    CaseNotification.Text = appCount.CasesCount.ToString();
+                });
+            }
+            else
+            {
+                CaseNotification.IsVisible = false;
+            }
+
+            if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    associationNotification.Text = appCount.EntityCount.ToString();
+                });
+
+            }
+            else
+            {
+                associationNotification.IsVisible = false;
+            }
+
+            if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    standardNotification.Text = appCount.StandardCount.ToString();
+                });
+
+            }
+            else
+            {
+                standardNotification.IsVisible = false;
+            }
+
+            if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    formNotification.Text = appCount.QuestCount.ToString();
+                });
+
+            }
+            else
+            {
+                formNotification.IsVisible = false;
+            }
+            if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    teamNotification.Text = appCount.DepartmentCount.ToString();
+                });
+
+                teamNotification.IsVisible = true;
+            }
+            else
+            {
+                teamNotification.IsVisible = false;
+            }
+        }
+
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-
             try
             {
                 if (App.Isonline)
                 {
-
                     btn_usericon.Source = ImageSource.FromUri(new Uri(DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName));
                 }
                 else
@@ -1049,25 +1050,30 @@ namespace StemmonsMobile
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
+       //List<string> project = new List<string>();
         private async Task SelectUser(string name)
         {
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
-
-                var itemRec = CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                itemRec.Wait();
-
-                if (itemRec.Result?.Count > 0)
+                List<GetUserInfoResponse.UserInfo> Userlist = new List<GetUserInfoResponse.UserInfo>();
+                await Task.Run(() =>
+                 {
+                     var itemRec = CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                     itemRec.Wait();
+                     Userlist = itemRec.Result;
+                 });
+                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                if (Userlist?.Count > 0)
                 {
                     var options = new List<string>();
-                    options.AddRange(itemRec.Result.Select(v => v.DisplayName?.ToLower()?.Trim() != null ? v.DisplayName?.ToLower()?.Trim() : v.SAMName?.ToLower()?.Trim()));
+                    options.AddRange(Userlist.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.SAMName?.Trim()));
 
-                    var count = project.Count();
+                   // var count = project.Count();
                     //var options = new List<string>(project.Take(count + 1));
                     options.Add("Search for User...");
                     var userAction = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
 
-                    userAction = itemRec.Result.Where(v => v.DisplayName != null ? v.DisplayName.ToLower() == userAction.ToLower() : v.SAMName.ToLower() == userAction.ToLower())?.FirstOrDefault().SAMName;
 
                     if (userAction == "Search for User...")
                     {
@@ -1083,6 +1089,8 @@ namespace StemmonsMobile
                     }
                     else if (userAction != "Cancel")
                     {
+                        userAction = Userlist.Where(v => v.DisplayName != null ? v.DisplayName.ToLower() == userAction.ToLower() : v.SAMName.ToLower() == userAction.ToLower())?.FirstOrDefault().SAMName;
+
                         await this.Navigation.PushAsync(new CaseList("caseAssgnTM", userAction, ""));
                     }
                 }
@@ -1091,7 +1099,7 @@ namespace StemmonsMobile
             {
 
             }
-
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         public async void SearchAgain(string Username)
@@ -1153,16 +1161,15 @@ namespace StemmonsMobile
             var applicationtype = button.BindingContext as ApplicationList;
             if (applicationtype.ApplicationName == "Cases")
             {
-                dynamic action = null;
-
+                string[] buttons;
                 if (Functions.HasTeam)
-                {
-                    action = await DisplayActionSheet("Select Option", "Cancel", null, "Assigned to Me", "Created by Me", "Owned by Me", "Assigned to My team", "My Hoppers");
-                }
+                    buttons = new string[] { "Assigned to Me", "Created by Me", "Owned by Me", "Assigned to My team", "My Hoppers" };
                 else
-                {
-                    action = await DisplayActionSheet("Select Option", "Cancel", null, "Assigned to Me", "Created by Me", "Owned by Me", "My Hoppers");
-                }
+                    buttons = new string[] { "Assigned to Me", "Created by Me", "Owned by Me", "My Hoppers" };
+
+
+                var action = await DisplayActionSheet("Select Option", "Cancel", null, buttons);
+
                 switch (action)
                 {
                     case "Assigned to Me":
@@ -1269,7 +1276,6 @@ namespace StemmonsMobile
                 }
             }
         }
-
         async void MoreClicked(object sender, System.EventArgs e)
         {
             var button = sender as Button;
@@ -1445,7 +1451,7 @@ namespace StemmonsMobile
             }
             else if (applicationtype.ApplicationName == "Departments")
             {
-                this.Navigation.PushAsync(new UserSearch());
+                await Navigation.PushAsync(new UserSearch());
             }
             else if (applicationtype.ApplicationName == "Standards")
             {
@@ -1460,42 +1466,41 @@ namespace StemmonsMobile
 
         async void MyCases_Clicked(object sender, System.EventArgs e)
         {
-            //await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, "HOMELIST"));
             await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
         }
 
-        void MyForm_Clicked(object sender, System.EventArgs e)
+        async void MyForm_Clicked(object sender, System.EventArgs e)
         {
-            this.Navigation.PushAsync(new MyFormsPage("Open", "MyForms"));
+            await this.Navigation.PushAsync(new MyFormsPage("Open", "MyForms"));
         }
 
-        void MyStandard_Clicked(object sender, System.EventArgs e)
+        async void MyStandard_Clicked(object sender, System.EventArgs e)
         {
-            this.Navigation.PushAsync(new My_StandardPage());
+            await this.Navigation.PushAsync(new My_StandardPage());
         }
 
-        void MyAssociation_Clicked(object sender, System.EventArgs e)
+        async void MyAssociation_Clicked(object sender, System.EventArgs e)
         {
-            this.Navigation.PushAsync(new MyAssociations("My Association", Functions.UserName));
+            await this.Navigation.PushAsync(new MyAssociations("My Association", Functions.UserName));
         }
 
-        void MyTeam_Clicked(object sender, System.EventArgs e)
+        async void MyTeam_Clicked(object sender, System.EventArgs e)
         {
-            this.Navigation.PushAsync(new DirectReports(Functions.UserName));
+            await this.Navigation.PushAsync(new DirectReports(Functions.UserName));
         }
 
-        void NewCaseClicked(object sender, System.EventArgs e)
+        async void NewCaseClicked(object sender, System.EventArgs e)
         {
             var button = sender as Button;
             var applicationtype = button.BindingContext as ApplicationList;
             if (applicationtype.ApplicationName == "Cases")
             {
-                this.Navigation.PushAsync(new SelectCaseType());
+                await this.Navigation.PushAsync(new SelectCaseType());
             }
             else if (applicationtype.ApplicationName == "Entities")
             {
                 IsCreateEntity = true;
-                this.Navigation.PushAsync(new Entity_CategoryType());
+                await this.Navigation.PushAsync(new Entity_CategoryType());
             }
             else if (applicationtype.ApplicationName == "Departments")
             {
@@ -1507,7 +1512,7 @@ namespace StemmonsMobile
             }
             else if (applicationtype.ApplicationName == "Quest")
             {
-                this.Navigation.PushAsync(new SelectQuestArea());
+                await this.Navigation.PushAsync(new SelectQuestArea());
             }
 
         }
@@ -1548,7 +1553,7 @@ namespace StemmonsMobile
             }
             else if (SearchSystem == "Search Employee")
             {
-                this.Navigation.PushAsync(new UserSearch());
+                await this.Navigation.PushAsync(new UserSearch());
             }
             else if (!string.IsNullOrEmpty(SearchSystem))
                 await this.Navigation.PushAsync(new SearchPage(SearchSystem));

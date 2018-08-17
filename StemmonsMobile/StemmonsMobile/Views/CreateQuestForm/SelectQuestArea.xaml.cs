@@ -41,20 +41,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 try
                 {
-					// await Task.Run(action: async () =>
-					//{                   //Arealst = await QuestSyncAPIMethods.GetAreaList(false, Functions.UserName, null, null, App.DBPath);
-
 					await Task.Run(action: () =>
 					{
 
 						Task<List<AreaResponse.Area>> Arealstt = QuestSyncAPIMethods.GetAreaList(App.Isonline, Functions.UserName, null, null, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 						Arealstt.Wait();
-						//string str = "";
-
-						//});
+						
 						Arealst = Arealstt.Result;
-
-
                     });
 					AreaList.ItemsSource = Arealst;
                 }
@@ -99,9 +92,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
             catch (Exception ex)
             {
-
             }
-
         }
 
         void Handle_Clicked(object sender, System.EventArgs e)

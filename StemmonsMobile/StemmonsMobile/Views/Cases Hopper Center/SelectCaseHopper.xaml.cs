@@ -32,7 +32,7 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
             }
             catch (Exception ex)
             {
-            }           
+            }
         }
 
         protected async override void OnAppearing()
@@ -40,7 +40,7 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
             base.OnAppearing();
             try
             {
-                  Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 lst = new List<GetCaseListByHopperResponse.HopperCenterData>();
 
 
@@ -70,7 +70,7 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
                 {
                     await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                 }
- 
+
             }
             catch (Exception ex)
             {
@@ -153,7 +153,6 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
         {
             try
             {
-
                 ListView g = (ListView)sender;
                 var sd = (GetCaseListByHopperResponse.HopperCenterData)g.SelectedItem;
                 this.Navigation.PushAsync(new CaseList("caseAssgnSAM", sd.HopperUsername, ""));

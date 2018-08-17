@@ -12,6 +12,7 @@ using StemmonsMobile.Views.View_Case_Origination_Center;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 //using Plugin.Clipboard;
 using System.Diagnostics;
 using System.Globalization;
@@ -21,6 +22,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
@@ -34,70 +36,44 @@ namespace StemmonsMobile.Views.Cases
     {
 
         ReturnCaseToLastAssigneeResponse.UserInfo casedatavalue;
-        ObservableCollection<CasesNotesGroup> Groups = new ObservableCollection<CasesNotesGroup>();
+        ObservableCollection<CasesNotesGroup> CasesnotesGroups = new ObservableCollection<CasesNotesGroup>();
         CaseData _Casedata;
 
-        string Casetitle = string.Empty;
-        string Casetypeid = string.Empty;
-        string CaseID = string.Empty;
+        public static string strTome = string.Empty;
+        public static string Casetitle = string.Empty;
+        public static string Casetypeid = string.Empty;
+        public static string CaseID = string.Empty;
+
         string _TitleFieldControlID = string.Empty;
         List<GetCaseTypesResponse.ItemType> sControls = new List<GetCaseTypesResponse.ItemType>();
         List<GetCaseTypesResponse.ItemType> sControlsList = new List<GetCaseTypesResponse.ItemType>();
         string ContolrLst = string.Empty;
-        private ObservableCollection<CasesNotesGroup> _allGroups = new ObservableCollection<CasesNotesGroup>();
-        private ObservableCollection<CasesNotesGroup> _expandedGroups;
         Dictionary<string, string> assocFieldValues = new Dictionary<string, string>();
         Dictionary<string, string> assocFieldTexts = new Dictionary<string, string>();
         string ischeckcalControl = string.Empty;
         List<KeyValuePair<List<GetCaseTypesResponse.ItemType>, string>> calculationsFieldlist = new List<KeyValuePair<List<GetCaseTypesResponse.ItemType>, string>>();
         List<Tuple<List<GetCaseTypesResponse.ItemType>, string, string>> lstcalculationsFieldlist = new List<Tuple<List<GetCaseTypesResponse.ItemType>, string, string>>();
         List<AssocCascadeInfo> AssocTypeCascades = new List<AssocCascadeInfo>();
-        bool flgvisible = false;
         BorderEditor txt_CasNotes = new BorderEditor();
-        string strTome = string.Empty;
         // Button btnIsRefresh = new Button();
         Label WarningLabel = new Label();
-        bool IsForceOfln = false;
-        bool Isdisplay = false;
+
         public ViewCasePage(string CASEID, string CASETYPEID, string CASETITLE, string ToMe = "")
         {
             InitializeComponent();
+
 
             Casetitle = CASETITLE;
             CaseID = CASEID;
             Casetypeid = CASETYPEID;
             strTome = ToMe;
-            Groups.Clear();
+            CasesnotesGroups.Clear();
+            CasesnotesGroups.Clear();
 
-        }
-
-        protected async override void OnAppearing()
-        {
-            base.OnAppearing();
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-            Groups.Clear();
             grd_IsRefresh.Children.Clear();
             EntryFieldsStack_CasesView.Children.Clear();
-            _allGroups.Clear();
 
-            if (Functions.UserName.ToLower() == "vishalpr" || Functions.UserName.ToLower() == "ankurp" || Functions.UserName.ToLower() == "hiteshs")
-            {
-                Button btn = new Button();
-                btn.Text = "New View Case Page Test";
-                btn.Clicked += async (s, e) =>
-                {
-                    //await Navigation.PushAsync(new ViewCasePage1(Convert.ToString(CaseID), Convert.ToString(Casetypeid), Casetitle, strTome));
-                };
-                //  grd_test.Children.Add(btn);
-            }
-            else
-                grd_test.WidthRequest = 0;
-
-            ////btnIsRefresh.Text = "Warning,this may not be the latest version of the case.To refresh the case click here.";
-            //btnIsRefresh.Image = (FileImageSource)ImageSource.FromFile("Assets/btnmsg.png");
-            //btnIsRefresh.BackgroundColor = Color.Transparent;
-
+            #region WarningLabel
             WarningLabel = new Label()
             {
                 Text = "Checking for update... Click here to force.",
@@ -119,24 +95,59 @@ namespace StemmonsMobile.Views.Cases
 
             };
             WarningLabel.GestureRecognizers.Add(tgr);
-
-            // btnIsRefresh.Clicked += async (s, e) =>
-            //{
-
-            //};
-
-            // btnIsRefresh.IsVisible = true;  
             WarningLabel.IsVisible = true;
+            #endregion
 
 
-            if (!string.IsNullOrEmpty(strTome))
-                Onlineflag = false;
-            else
-                Onlineflag = App.Isonline;
+            BindingContext = new CasesViewmodel(this);
+        }
 
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            var refreshView = new PullToRefreshLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Content = scrollView,
+                RefreshColor = Color.FromHex("#3498db")
+            };
+
+            refreshView.SetBinding<CasesViewmodel>(PullToRefreshLayout.IsRefreshingProperty, vm => vm.IsBusy, BindingMode.OneWay);
+            refreshView.SetBinding<CasesViewmodel>(PullToRefreshLayout.RefreshCommandProperty, vm => vm.RefreshCommand);
+
+            masterGrid.Children.Add(refreshView, 0, 2);
+            masterGrid.Children.Add(btm_stack, 0, 3);
+
+            abs_layout.Children.Add(masterGrid);
+            abs_layout.Children.Add(overlay);
+            Content = abs_layout;
+
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+            await PageAppearCall(false);
+
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+        public async Task ExtendedOnAppearing()
+        {
+            base.OnAppearing();
+            await PageAppearCall(true);
+        }
+        public async Task PageAppearCall(bool isExtenderCalls)
+        {
+            //if (!isExtenderCalls)
+            //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+            if (!isExtenderCalls)
+            {
+                if (!string.IsNullOrEmpty(strTome))
+                    Onlineflag = false;
+                else
+                    Onlineflag = App.Isonline;
+            }
 
             await GetCasesData();
-
 
             if (App.Isonline)
             {
@@ -174,19 +185,15 @@ namespace StemmonsMobile.Views.Cases
                     grd_IsRefresh.Children.Add(WarningLabel);
             }
 
-            if (!flgvisible)
-            {
-                IsForceOfln = App.Isonline;
-                DesignCaseForm_withvalue();
-            }
+            DesignCaseForm_withvalue();
 
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         string str_CaseFooter = string.Empty;
         bool IsModifiedDate_Same = false;
 
-        private async Task GetCasesData()
+        public async Task GetCasesData()
         {
             try
             {
@@ -199,7 +206,7 @@ namespace StemmonsMobile.Views.Cases
                         // For Create Case Controls Dynamically
                         var resultR = CasesSyncAPIMethods.AssignControlsAsync(Onlineflag, Convert.ToInt32(Casetypeid), App.DBPath, Functions.UserName);
                         resultR.Wait();
-                        metadata = resultR.Result;
+                        AssignControlsmetadata = resultR.Result;
                     }
                     catch (Exception)
                     {
@@ -216,10 +223,6 @@ namespace StemmonsMobile.Views.Cases
 
                     }
                 });
-
-                // CasesSyncAPIMethods.AddCasesLogs(App.DBPath, 3, "User " + Functions.UserName + " Is Viewing The Case " + CaseID + ".", CaseID, Convert.ToString(_Casedata.CaseTypeID), Functions.UserFullName, "User is viewing the case", "Viewing Case", Functions.UserName, "VWCAS");
-
-                //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
             }
             catch (Exception)
             {
@@ -228,64 +231,36 @@ namespace StemmonsMobile.Views.Cases
 
         public void LoadControls()
         {
-            Groups.Clear();
+            CasesnotesGroups.Clear();
             EntryFieldsStack_CasesView.Children.Clear();
-            _allGroups.Clear();
 
-            if (!flgvisible)
-            {
-                //App.Isonline = true;
-                DesignCaseForm_withvalue();
-                grd_test.Children.Clear();
-            }
+            DesignCaseForm_withvalue();
         }
 
-
-        bool Onlineflag = false;
+        public bool Onlineflag = false;
         public async void DesignCaseForm_withvalue()
         {
             try
             {
-                Groups.Clear();
+                CasesnotesGroups.Clear();
                 EntryFieldsStack_CasesView.Children.Clear();
-                _allGroups.Clear();
                 bool allowEditCaseData = false; //UPDATE right
                 bool showCaseData = false; // Read Right
                 List<MetaData> metadatacollection = new List<MetaData>();
-
-                //List<GetCaseTypesResponse.CaseData> result_getcase = new List<CaseData>();
-                // Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
 
                 if (_Casedata == null)
                 {
                     await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                     return;
-                    flgvisible = true;
                 }
                 else
                 {
-                    if (metadata.Count > 0)
+                    if (AssignControlsmetadata.Count > 0)
                     {
                         Casetypeid = Convert.ToString(_Casedata?.CaseTypeID);
                         Casetitle = _Casedata?.CaseTitle;
-                        //if (result_getcase != null && result_getcase.ToString() != "[]")
-                        if (_Casedata != null)
-                        {
-                            metadatacollection = _Casedata?.MetaDataCollection;
 
-                            foreach (var iitem in metadatacollection)
-                            {
-                                var exdvalue = metadata.Where(v => v.ASSOC_TYPE_ID == iitem.AssociatedTypeID).Select(a => a.ExternalDataSourceEntityTypeID);
-                                if (exdvalue.FirstOrDefault() != null)
-                                {
-                                    if (!Onlineflag)
-                                        metadatacollection.Where(v => v.AssociatedTypeID == iitem.AssociatedTypeID).Select(s => { s.ExternalDatasourceObjectID = exdvalue.FirstOrDefault(); return s; }).ToList();
-                                }
-                            }
-                        }
-
-
-                        foreach (var ritem in metadata)
+                        foreach (var ritem in AssignControlsmetadata)
                         {
                             GetCaseTypesResponse.ItemType iItem = new GetCaseTypesResponse.ItemType()
                             {
@@ -319,7 +294,7 @@ namespace StemmonsMobile.Views.Cases
                             sControls.Add(iItem);
                         }
                         sControlsList.AddRange(sControls);
-                        string CasetypeSecurity = metadata[0].SECURITY_TYPE;
+                        string CasetypeSecurity = AssignControlsmetadata[0].SECURITY_TYPE;
                         if (CasetypeSecurity != null)
                         {
                             if (CasetypeSecurity.ToLower().Equals("open"))
@@ -346,20 +321,36 @@ namespace StemmonsMobile.Views.Cases
                         if (!showCaseData)
                         {
                             DisplayAlert("Alert!", "You do not have permission to view this page.", "OK");
-                            Navigation.PopAsync();
+                            await Navigation.PopAsync();
                         }
                     }
 
                     #region  Dynamic Control Generate
-                    if (metadata.Count > 0)
-                    {
-                        spi_MobileApp_GetTypesByCaseTypeResult itemTypes = new spi_MobileApp_GetTypesByCaseTypeResult();
-                        Stopwatch sp = new Stopwatch();
-                        sp.Start();
 
-                        for (int i = 0; i < metadata.Count; i++)
+                    if (AssignControlsmetadata.Count > 0)
+                    {
+                        //if (_Casedata != null)
+                        //{
+                        metadatacollection = _Casedata?.MetaDataCollection;
+
+                        //    foreach (var iitem in metadatacollection)
+                        //    {
+                        //        var exdvalue = AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iitem.AssociatedTypeID).Select(a => a.ExternalDataSourceEntityTypeID);
+                        //        if (exdvalue.FirstOrDefault() != null)
+                        //        {
+                        //            if (!Onlineflag)
+                        //                metadatacollection.Where(v => v.AssociatedTypeID == iitem.AssociatedTypeID).Select(s => { s.ExternalDatasourceObjectID = exdvalue.FirstOrDefault(); return s; }).ToList();
+                        //        }
+                        //    }
+                        //}
+
+                        spi_MobileApp_GetTypesByCaseTypeResult itemTypes = new spi_MobileApp_GetTypesByCaseTypeResult();
+
+                        #region Draw Control on Layout
+
+                        for (int i = 0; i < AssignControlsmetadata.Count; i++)
                         {
-                            spi_MobileApp_GetTypesByCaseTypeResult item = metadata[i];
+                            spi_MobileApp_GetTypesByCaseTypeResult item = AssignControlsmetadata[i];
                             bool filedsecuritytype_update = false;
                             bool filedsecuritytype_read = false;
 
@@ -383,7 +374,6 @@ namespace StemmonsMobile.Views.Cases
 
                                 if (filedsecuritytype_read)
                                 {
-
                                     var Mainlayout = new StackLayout();
                                     Mainlayout.Orientation = StackOrientation.Horizontal;
                                     Mainlayout.Margin = new Thickness(10, 0, 0, 0);
@@ -401,256 +391,258 @@ namespace StemmonsMobile.Views.Cases
                                     Label1.HorizontalOptions = LayoutOptions.Start;
                                     Label1.FontSize = 16;
                                     Label1.WidthRequest = 200;
-                                    Label1.FontFamily = "Soin Sans Neue";
 
                                     LeftLayout.Children.Add(Label1);
                                     Mainlayout.Children.Add(LeftLayout);
-
-                                    Picker pk = new Picker();
-                                    pk.WidthRequest = 200;
-                                    pk.TextColor = Color.Gray;
-
-                                    DatePicker DO = new DatePicker();
-                                    DO.Date = Convert.ToDateTime("01/01/1900");
-                                    DO.Format = "MM/dd/yyyy";
-                                    DO.WidthRequest = 200;
-                                    DO.TextColor = Color.Gray;
-
-                                    Entry entry = new Entry();
-
-                                    Editor entry_notes = new Editor();
-                                    entry_notes.HeightRequest = 100;
-                                    entry_notes.FontSize = 16;
-                                    entry_notes.WidthRequest = 200;
-                                    entry_notes.Keyboard = Keyboard.Default;
-                                    entry_notes.FontFamily = "Soin Sans Neue";
-
-                                    Entry entry_number = new Entry();
-                                    entry_number.WidthRequest = 200;
-                                    entry_number.FontSize = 16;
-                                    entry_number.Keyboard = Keyboard.Numeric;
-                                    entry_number.FontFamily = "Soin Sans Neue";
 
                                     try
                                     {
                                         switch (item.ASSOC_FIELD_TYPE.ToLower())
                                         {
-                                            case "o":
-                                            case "e":
+                                        case "o":
+                                        case "e":
 
-                                                pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
+                                            Picker pk = new Picker();
+                                            pk.WidthRequest = 200;
+                                            pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
+                                            try
+                                            {
+                                                pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
 
-
-                                                try
                                                 {
-                                                    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-
+                                                    GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
                                                     {
-                                                        GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                        {
-                                                            NAME = "-- Select Item --",
-                                                            DESCRIPTION = "-- Select Item --",
-                                                            ID = 0
-                                                        };
-
-                                                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-
-                                                        if (Onlineflag)
-                                                        {
-                                                            var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
-                                                            var AssocType = json.GetValue("ResponseContent");
-                                                            AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
-                                                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == item.ASSOC_TYPE_ID).ToList();
-                                                            if (assocChild.Count < 1)
-                                                            {
-                                                                var result_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
-                                                                if (result_extdatasource.Result != null && result_extdatasource.Result.ToString() != "[]")
-                                                                {
-                                                                    lst_extdatasource.AddRange(result_extdatasource.Result);
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
-
-                                                            temp_extdatasource.Wait();
-                                                            if (temp_extdatasource.Result.Count > 0)
-                                                            {
-                                                                lst_extdatasource.AddRange(temp_extdatasource.Result);
-                                                            }
-                                                        }
-
-                                                        lst_extdatasource.Insert(0, cases_extedataSource);
-
-
-                                                        pk.ItemsSource = lst_extdatasource;
-                                                        pk.ItemDisplayBinding = new Binding("NAME");
-                                                    }
-                                                    if (!filedsecuritytype_update)
-                                                    {
-                                                        pk.IsEnabled = false;
-                                                    }
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                }
-                                                Mainlayout.Children.Add(pk);
-                                                break;
-
-                                            case "d":
-
-                                                pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
-
-                                                try
-                                                {
-                                                    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-
-                                                    List<ItemValue> lst_SSsource = new List<ItemValue>();
-                                                    ItemValue Value = new ItemValue
-                                                    {
-                                                        Name = "-- Select Item --",
-                                                        Description = "-- Select Item --",
+                                                        NAME = "-- Select Item --",
+                                                        DESCRIPTION = "-- Select Item --",
                                                         ID = 0
                                                     };
 
-                                                    lst_SSsource.Add(Value);
+                                                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
 
-                                                    GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS Request = new GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS();
-
-                                                    Request.assocCaseTypeID = item.ASSOC_TYPE_ID;
-                                                    Request.caseTypeID = Convert.ToInt32(Casetypeid);
-                                                    Request.caseTypeDesc = item.DESCRIPTION;
-                                                    Request.systemCode = item.SYSTEM_CODE;
-                                                    var result_extdatasource1 = CasesSyncAPIMethods.GetTypeValuesByAssocCaseType(Onlineflag, Request, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
-                                                    result_extdatasource1.Wait();
-                                                    if (result_extdatasource1.Result != null && result_extdatasource1.Result.ToString() != "[]")
+                                                    if (Onlineflag)
                                                     {
-                                                        lst_SSsource = result_extdatasource1?.Result;
+                                                        var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
+                                                        var AssocType = json.GetValue("ResponseContent");
+                                                        AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+                                                        var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == item.ASSOC_TYPE_ID).ToList();
+                                                        if (assocChild.Count < 1)
+                                                        {
+                                                            var result_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
+                                                            if (result_extdatasource.Result != null && result_extdatasource.Result.ToString() != "[]")
+                                                            {
+                                                                lst_extdatasource.AddRange(result_extdatasource.Result);
+                                                            }
+                                                        }
                                                     }
-                                                    pk.ItemsSource = lst_SSsource;
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                }
-
-                                                Mainlayout.Children.Add(pk);
-                                                break;
-
-                                            case "x":
-                                                BorderEditor editor = new BorderEditor();
-                                                editor.FontFamily = "Soin Sans Neue";
-                                                editor.StyleId = item.ASSOC_FIELD_TYPE + "_" + item.ASSOC_TYPE_ID;
-                                                try
-                                                {
-                                                    editor.HeightRequest = 100;
-                                                    editor.BorderColor = Color.LightGray;
-                                                    editor.BorderWidth = 1;
-                                                    editor.CornerRadius = 5;
-                                                    editor.FontSize = 16;
-                                                    editor.WidthRequest = 200;
-
-
-                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(editor.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), editor.StyleId?.Split('_')[0]?.ToUpper() + "_" + editor.StyleId?.Split('_')[1]?.Split('|')[0]);
-                                                    if (!string.IsNullOrEmpty(ischeckcalControl))
-                                                        editor.Unfocused += Entry_Unfocused;
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                }
-                                                Mainlayout.Children.Add(editor);
-                                                break;
-
-                                            case "a":
-                                                DO.StyleId = "a_" + item.ASSOC_TYPE_ID;
-                                                try
-                                                {
-                                                    if (!filedsecuritytype_update)
+                                                    else
                                                     {
-                                                        DO.IsEnabled = false;
+                                                        var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
+
+                                                        temp_extdatasource.Wait();
+                                                        if (temp_extdatasource.Result.Count > 0)
+                                                        {
+                                                            lst_extdatasource.AddRange(temp_extdatasource.Result);
+                                                        }
                                                     }
-                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]?.Split('|')[0]);
-                                                    if (!string.IsNullOrEmpty(ischeckcalControl))
-                                                        DO.DateSelected += DO_DateSelected;
-                                                    DO.WidthRequest = 200;
+
+                                                    lst_extdatasource.Insert(0, cases_extedataSource);
+
+
+                                                    pk.ItemsSource = lst_extdatasource;
+                                                    pk.ItemDisplayBinding = new Binding("NAME");
                                                 }
-                                                catch (Exception ex)
+                                                if (!filedsecuritytype_update)
                                                 {
-
-                                                    //throw;
+                                                    pk.IsEnabled = false;
                                                 }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+                                            Mainlayout.Children.Add(pk);
+                                            break;
 
-                                                Mainlayout.Children.Add(DO);
-                                                break;
+                                        case "d":
+                                            Picker pkr = new Picker();
+                                            pkr.WidthRequest = 200;
+                                            pkr.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
 
-                                            case "t":
-                                                entry.StyleId = "t_" + item.ASSOC_TYPE_ID;
+                                            try
+                                            {
+                                                pkr.SelectedIndexChanged += Pk_SelectedIndexChanged;
 
-                                                try
+                                                List<ItemValue> lst_SSsource = new List<ItemValue>();
+                                                ItemValue Value = new ItemValue
                                                 {
-                                                    if (!filedsecuritytype_update)
-                                                    {
-                                                        entry.IsEnabled = false;
-                                                    }
-                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(entry.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), entry.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry.StyleId?.Split('_')[1]?.Split('|')[0]);
-                                                    if (!string.IsNullOrEmpty(ischeckcalControl))
-                                                        entry.Unfocused += Entry_Unfocused;
-                                                    entry.Keyboard = Keyboard.Default;
-                                                    entry.Text = "";
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    entry.Text = "";
-                                                }
-                                                entry.WidthRequest = 200;
-                                                entry.FontSize = 16;
-                                                entry.FontFamily = "Soin Sans Neue";
-                                                Mainlayout.Children.Add(entry);
-                                                break;
-                                            case "c":
-                                                entry.StyleId = "c_" + item.ASSOC_TYPE_ID;
+                                                    Name = "-- Select Item --",
+                                                    Description = "-- Select Item --",
+                                                    ID = 0
+                                                };
 
-                                                try
+                                                lst_SSsource.Add(Value);
+
+                                                GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS Request = new GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS();
+
+                                                Request.assocCaseTypeID = item.ASSOC_TYPE_ID;
+                                                Request.caseTypeID = Convert.ToInt32(Casetypeid);
+                                                Request.caseTypeDesc = item.DESCRIPTION;
+                                                Request.systemCode = item.SYSTEM_CODE;
+                                                var result_extdatasource1 = CasesSyncAPIMethods.GetTypeValuesByAssocCaseType(Onlineflag, Request, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+                                                result_extdatasource1.Wait();
+                                                if (result_extdatasource1.Result != null && result_extdatasource1.Result.ToString() != "[]")
+                                                {
+                                                    lst_SSsource = result_extdatasource1?.Result;
+                                                }
+                                                pkr.ItemsSource = lst_SSsource;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+                                            Mainlayout.Children.Add(pkr);
+                                            break;
+
+                                        case "x":
+                                            BorderEditor editor = new BorderEditor();
+                                            editor.StyleId = item.ASSOC_FIELD_TYPE + "_" + item.ASSOC_TYPE_ID;
+                                            try
+                                            {
+                                                editor.HeightRequest = 100;
+                                                editor.BorderColor = Color.LightGray;
+                                                editor.BorderWidth = 1;
+                                                editor.CornerRadius = 5;
+                                                editor.FontSize = 16;
+                                                editor.WidthRequest = 200;
+                                                editor.Text = "";
+
+                                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(editor.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), editor.StyleId?.Split('_')[0]?.ToUpper() + "_" + editor.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                if (!string.IsNullOrEmpty(ischeckcalControl))
+                                                    editor.Unfocused += Entry_Unfocused;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+                                            Mainlayout.Children.Add(editor);
+                                            break;
+
+                                        case "a":
+                                            #region Date Picker
+                                            //DatePicker DO = new DatePicker();
+                                            //DO.Date = Convert.ToDateTime("01/01/1900");
+                                            //DO.Format = "MM/dd/yyyy";
+                                            //DO.WidthRequest = 200;
+                                            //DO.TextColor = Color.Gray;
+                                            //DO.StyleId = "a_" + item.ASSOC_TYPE_ID;
+                                            //try
+                                            //{
+                                            //    if (!filedsecuritytype_update)
+                                            //    {
+                                            //        DO.IsEnabled = false;
+                                            //    }
+                                            //    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                            //    if (!string.IsNullOrEmpty(ischeckcalControl))
+                                            //        DO.DateSelected += DO_DateSelected;
+                                            //    DO.WidthRequest = 200;
+                                            //}
+                                            //catch (Exception ex)
+                                            //{
+
+                                            //    //throw;
+                                            //}
+
+                                            //Mainlayout.Children.Add(DO); 
+                                            #endregion
+
+                                            Entry DO = new Entry();
+                                            DO.Placeholder = "Enter Date";
+                                            DO.WidthRequest = 200;
+                                            DO.TextColor = Color.Gray;
+                                            DO.Keyboard = Keyboard.Numeric;
+                                            DO.StyleId = "a_" + item.ASSOC_TYPE_ID;
+                                            DO.TextChanged += DO_TextChanged;
+                                            DO.Text = "";
+                                            try
+                                            {
+                                                if (!filedsecuritytype_update)
+                                                {
+                                                    DO.IsEnabled = false;
+                                                }
+                                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                if (!string.IsNullOrEmpty(ischeckcalControl))
+                                                    DO.Unfocused += Entry_Unfocused;
+                                                DO.WidthRequest = 200;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+
+                                            Mainlayout.Children.Add(DO);
+                                            break;
+
+                                        case "t":
+                                            Entry entry = new Entry();
+
+                                            entry.StyleId = "t_" + item.ASSOC_TYPE_ID;
+
+                                            try
+                                            {
+                                                if (!filedsecuritytype_update)
                                                 {
                                                     entry.IsEnabled = false;
-                                                    entry.WidthRequest = 200;
-                                                    entry.FontSize = 16;
-                                                    entry.Keyboard = Keyboard.Default;
-                                                    entry.FontFamily = "Soin Sans Neue";
-                                                    entry.Text = "";
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                }
-                                                Mainlayout.Children.Add(entry);
+                                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(entry.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), entry.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                if (!string.IsNullOrEmpty(ischeckcalControl))
+                                                    entry.Unfocused += Entry_Unfocused;
+                                                entry.Keyboard = Keyboard.Default;
+                                                entry.Text = "";
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                entry.Text = "";
+                                            }
+                                            entry.WidthRequest = 200;
+                                            entry.FontSize = 16;
+                                            Mainlayout.Children.Add(entry);
+                                            break;
+                                        case "c":
+                                            Entry _entry = new Entry();
 
-                                                break;
-                                            case "n":
-                                                entry_number.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                            _entry.StyleId = "c_" + item.ASSOC_TYPE_ID;
+                                            _entry.IsEnabled = false;
+                                            _entry.WidthRequest = 200;
+                                            _entry.FontSize = 16;
+                                            _entry.Keyboard = Keyboard.Default;
+                                            _entry.Text = "";
+                                            Mainlayout.Children.Add(_entry);
 
-                                                try
-                                                {
-                                                    if (!filedsecuritytype_update)
-                                                    {
-                                                        entry_number.IsEnabled = false;
-                                                    }
-                                                    entry_number.WidthRequest = 200;
-                                                    entry_number.FontSize = 16;
-                                                    entry_number.Keyboard = Keyboard.Numeric;
+                                            break;
+                                        case "n":
+                                            Entry entry_number = new Entry();
+                                            entry_number.WidthRequest = 200;
+                                            entry_number.FontSize = 16;
+                                            entry_number.Keyboard = Keyboard.Numeric;
+                                            entry_number.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
 
-                                                    entry_number.Text = "";
-                                                    entry_number.FontFamily = "Soin Sans Neue";
-                                                    ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(entry_number.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls?.Where(v => v.AssocFieldType == 'C').ToList(), entry_number.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry_number.StyleId?.Split('_')[1]?.Split('|')[0]);
-                                                    if (!string.IsNullOrEmpty(ischeckcalControl))
-                                                        entry_number.Unfocused += entry_number_Unfocused;
-                                                }
-                                                catch (Exception ex)
+                                            try
+                                            {
+                                                if (!filedsecuritytype_update)
                                                 {
+                                                    entry_number.IsEnabled = false;
                                                 }
-                                                Mainlayout.Children.Add(entry_number);
-                                                break;
-                                            default:
-                                                break;
+                                                entry_number.WidthRequest = 200;
+                                                entry_number.FontSize = 16;
+                                                entry_number.Keyboard = Keyboard.Numeric;
+                                                entry_number.Text = "";
+                                                ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(entry_number.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls?.Where(v => v.AssocFieldType == 'C').ToList(), entry_number.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry_number.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                if (!string.IsNullOrEmpty(ischeckcalControl))
+                                                    entry_number.Unfocused += entry_number_Unfocused;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+                                            Mainlayout.Children.Add(entry_number);
+                                            break;
+                                        default:
+                                            break;
                                         }
                                     }
                                     catch (Exception ex)
@@ -683,8 +675,6 @@ namespace StemmonsMobile.Views.Cases
                         layout14.HorizontalOptions = LayoutOptions.Start;
                         layout14.WidthRequest = 200;
 
-
-
                         txt_CasNotes.VerticalOptions = LayoutOptions.Start;
                         txt_CasNotes.WidthRequest = 200;
                         txt_CasNotes.HeightRequest = 100;
@@ -695,9 +685,7 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.CornerRadius = 5;
                         txt_CasNotes.FontFamily = "Soin Sans Neue";
 
-
                         layout14.Children.Add(txt_CasNotes);
-
 
                         layout1.Children.Add(Label11);
                         layout.Children.Add(layout1);
@@ -765,332 +753,394 @@ namespace StemmonsMobile.Views.Cases
                         {
                             EntryFieldsStack_CasesView.IsEnabled = false;
                         }
-                        Debug.WriteLine("Design Time =>" + sp.ElapsedMilliseconds);
-                        sp.Stop();
-                        foreach (var item in metadata)
+
+                        #endregion
+
+                        #region Bind Data on Control
+                        foreach (var Metaitem in AssignControlsmetadata)
                         {
                             try
                             {
-                                switch (item.ASSOC_FIELD_TYPE.ToLower())
+                                switch (Metaitem.ASSOC_FIELD_TYPE.ToLower())
                                 {
-                                    case "o":
-                                    case "e":
+                                case "o":
+                                case "e":
 
-                                        var control = FindPickerControls(item.ASSOC_TYPE_ID) as Picker;
-                                        if (control != null)
+                                    var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
+                                    if (control != null)
+                                    {
+                                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                                        lst_extdatasource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
+
+                                        try
                                         {
-                                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-
-                                            lst_extdatasource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
-
-                                            try
+                                            int idd = 0;
+                                            if (Onlineflag)
                                             {
-                                                int idd = 0;
-                                                if (Onlineflag)
+                                                if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
                                                 {
-                                                    if (item.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                                    int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                    if (id > 0)
                                                     {
-                                                        int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (id > 0)
-                                                        {
-                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
-                                                        }
+                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
                                                     }
-                                                    else if (item.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    {
-                                                        int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (id > 0)
-                                                        {
-                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
-                                                        }
-                                                    }
-                                                    control.SelectedIndex = idd;
                                                 }
-                                                else
+                                                else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
                                                 {
-                                                    if (item.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                                    int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                    if (id > 0)
                                                     {
-                                                        string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                        if (!string.IsNullOrEmpty(sTextvalue))
-                                                        {
-                                                            try
-                                                            {
-                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue?.ToLower()?.Trim()).FirstOrDefault());
-                                                            }
-                                                            catch
-                                                            {
-                                                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                                var rec = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                                if (rec != null)
-                                                                {
-                                                                    if (lst_extdatasource == null)
-                                                                    {
-                                                                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                                        {
-                                                                            NAME = "-- Select Item --",
-                                                                            DESCRIPTION = "-- Select Item --",
-                                                                            ID = 0
-                                                                        };
-                                                                        lst_extdatasource1.Add(lst);
-                                                                        lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                        {
-                                                                            DESCRIPTION = rec.TextValue,
-                                                                            NAME = rec.TextValue,
-                                                                            ID = rec.AssociatedTypeID
-                                                                        };
-                                                                        lst_extdatasource1.Add(lst);
-                                                                        control.ItemsSource = null;
-                                                                        control.ItemsSource = lst_extdatasource1;
-                                                                        idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == item.ASSOC_TYPE_ID));
-                                                                    }
-                                                                }
-                                                            }
-                                                            control.SelectedIndex = idd;
-                                                        }
-                                                        else
-                                                        {
-                                                            string sTextvalues = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
-                                                            if (!string.IsNullOrEmpty(sTextvalues))
-                                                            {
-                                                                try
-                                                                {
-                                                                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues?.ToLower()?.Trim()).FirstOrDefault());
-                                                                }
-                                                                catch
-                                                                {
-                                                                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                                    var rec = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                                    if (rec != null)
-                                                                    {
-                                                                        if (lst_extdatasource == null)
-                                                                        {
-                                                                            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                                            {
-                                                                                NAME = "-- Select Item --",
-                                                                                DESCRIPTION = "-- Select Item --",
-                                                                                ID = 0
-                                                                            };
-                                                                            lst_extdatasource1.Add(lst);
-                                                                            lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                            {
-                                                                                DESCRIPTION = rec.TextValue,
-                                                                                NAME = rec.TextValue,
-                                                                                ID = rec.AssociatedTypeID
-                                                                            };
-                                                                            lst_extdatasource1.Add(lst);
-                                                                            control.ItemsSource = null;
-                                                                            control.ItemsSource = lst_extdatasource1;
-                                                                            idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == item.ASSOC_TYPE_ID));
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            control.SelectedIndex = idd;
-                                                        }
+                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
                                                     }
-                                                    else if (item.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    {
-                                                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                        var rec = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                        if (rec != null)
-                                                        {
-                                                            if (lst_extdatasource == null)
-                                                            {
-
-                                                                GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                                {
-                                                                    NAME = "-- Select Item --",
-                                                                    DESCRIPTION = "-- Select Item --",
-                                                                    ID = 0
-                                                                };
-                                                                lst_extdatasource1.Add(lst);
-                                                                lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                {
-                                                                    DESCRIPTION = rec.TextValue,
-                                                                    NAME = rec.TextValue,
-                                                                    ID = rec.AssociatedTypeID
-                                                                };
-                                                                lst_extdatasource1.Add(lst);
-                                                                control.ItemsSource = null;
-                                                                control.ItemsSource = lst_extdatasource1;
-                                                                idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == item.ASSOC_TYPE_ID));
-                                                            }
-                                                            else
-                                                            {
-                                                                string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                                if (!string.IsNullOrEmpty(sTextvalue))
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
-                                                                        if (idd == -1)
-                                                                        {
-                                                                            var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                            {
-                                                                                DESCRIPTION = rec.TextValue,
-                                                                                NAME = rec.TextValue,
-                                                                                ID = rec.AssociatedTypeID
-                                                                            };
-                                                                            lst_extdatasource.Add(lst);
-                                                                            control.ItemsSource = null;
-                                                                            control.ItemsSource = lst_extdatasource;
-                                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
-                                                                        }
-                                                                    }
-                                                                    catch
-                                                                    {
-
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    string sTextvalues1 = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
-                                                                    if (!string.IsNullOrEmpty(sTextvalues1))
-                                                                    {
-                                                                        try
-                                                                        {
-                                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
-                                                                            if (idd == -1)
-                                                                            {
-                                                                                var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                                {
-                                                                                    DESCRIPTION = rec.FieldValue,
-                                                                                    NAME = rec.FieldValue,
-                                                                                    ID = rec.AssociatedTypeID
-                                                                                };
-                                                                                lst_extdatasource.Add(lst);
-                                                                                control.ItemsSource = null;
-                                                                                control.ItemsSource = lst_extdatasource;
-                                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
-                                                                            }
-                                                                        }
-                                                                        catch
-                                                                        {
-
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    control.SelectedIndex = idd;
                                                 }
+                                                control.SelectedIndex = idd;
                                             }
-                                            catch (Exception ex)
+                                            else
                                             {
-
-                                            }
-                                        }
-                                        break;
-
-                                    case "d":
-                                        control = FindPickerControls(item.ASSOC_TYPE_ID) as Picker;
-                                        if (control != null)
-                                        {
-                                            List<ItemValue> lst_SSsource = new List<ItemValue>();
-
-                                            lst_SSsource = control.ItemsSource as List<ItemValue>;
-                                            try
-                                            {
-                                                int j = 0;
-                                                for (j = 0; j < lst_SSsource.Count; j++)
+                                                if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
                                                 {
-                                                    if (lst_SSsource.Count != 0)
+                                                    int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                    if (id > 0)
                                                     {
-                                                        var i = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID).FirstOrDefault();
-
-                                                        if (i?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || i?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
-                                                            break;
+                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
                                                     }
                                                     else
+                                                    {
+                                                        lst_extdatasource.Add(new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        {
+                                                            ID = id,
+                                                            NAME = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue
+
+                                                        });
+                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
+                                                        control.ItemsSource = lst_extdatasource;
+                                                        control.SelectedIndex = idd;
+                                                    }
+                                                }
+                                                else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                {
+                                                    int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                    if (id > 0)
+                                                    {
+                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
+                                                    }
+                                                    else
+                                                    {
+                                                        var R = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
+                                                        if (!string.IsNullOrEmpty(R))
+                                                        {
+                                                            lst_extdatasource.Add(new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                            {
+                                                                ID = id,
+                                                                NAME = R
+                                                            });
+                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == id));
+                                                            control.ItemsSource = lst_extdatasource;
+                                                        }
+                                                        control.SelectedIndex = idd;
+                                                    }
+                                                }
+                                                control.SelectedIndex = idd;
+
+                                                #region old
+                                                //if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                                //{
+                                                //    string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                                //    if (!string.IsNullOrEmpty(sTextvalue))
+                                                //    {
+                                                //        try
+                                                //        {
+                                                //            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue?.ToLower()?.Trim()).FirstOrDefault());
+                                                //        }
+                                                //        catch
+                                                //        {
+                                                //            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                //            var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                //            if (rec != null)
+                                                //            {
+                                                //                if (lst_extdatasource == null)
+                                                //                {
+                                                //                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                //                    {
+                                                //                        NAME = "-- Select Item --",
+                                                //                        DESCRIPTION = "-- Select Item --",
+                                                //                        ID = 0
+                                                //                    };
+                                                //                    lst_extdatasource1.Add(lst);
+                                                //                    lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                //                    {
+                                                //                        DESCRIPTION = rec.TextValue,
+                                                //                        NAME = rec.TextValue,
+                                                //                        ID = rec.AssociatedTypeID
+                                                //                    };
+                                                //                    lst_extdatasource1.Add(lst);
+                                                //                    control.ItemsSource = null;
+                                                //                    control.ItemsSource = lst_extdatasource1;
+                                                //                    idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                //                }
+                                                //            }
+                                                //        }
+                                                //        control.SelectedIndex = idd;
+                                                //    }
+                                                //    else
+                                                //    {
+                                                //        string sTextvalues = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
+                                                //        if (!string.IsNullOrEmpty(sTextvalues))
+                                                //        {
+                                                //            try
+                                                //            {
+                                                //                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues?.ToLower()?.Trim()).FirstOrDefault());
+                                                //            }
+                                                //            catch
+                                                //            {
+                                                //                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                //                var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                //                if (rec != null)
+                                                //                {
+                                                //                    if (lst_extdatasource == null)
+                                                //                    {
+                                                //                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                //                        {
+                                                //                            NAME = "-- Select Item --",
+                                                //                            DESCRIPTION = "-- Select Item --",
+                                                //                            ID = 0
+                                                //                        };
+                                                //                        lst_extdatasource1.Add(lst);
+                                                //                        lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                //                        {
+                                                //                            DESCRIPTION = rec.TextValue,
+                                                //                            NAME = rec.TextValue,
+                                                //                            ID = rec.AssociatedTypeID
+                                                //                        };
+                                                //                        lst_extdatasource1.Add(lst);
+                                                //                        control.ItemsSource = null;
+                                                //                        control.ItemsSource = lst_extdatasource1;
+                                                //                        idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                //                    }
+                                                //                }
+                                                //            }
+                                                //        }
+                                                //        control.SelectedIndex = idd;
+                                                //    }
+                                                //}
+                                                //else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                //{
+                                                //    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                //    var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                //    if (rec != null)
+                                                //    {
+                                                //        if (lst_extdatasource == null)
+                                                //        {
+
+                                                //            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                //            {
+                                                //                NAME = "-- Select Item --",
+                                                //                DESCRIPTION = "-- Select Item --",
+                                                //                ID = 0
+                                                //            };
+                                                //            lst_extdatasource1.Add(lst);
+                                                //            lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                //            {
+                                                //                DESCRIPTION = rec.TextValue,
+                                                //                NAME = rec.TextValue,
+                                                //                ID = rec.AssociatedTypeID
+                                                //            };
+                                                //            lst_extdatasource1.Add(lst);
+                                                //            control.ItemsSource = null;
+                                                //            control.ItemsSource = lst_extdatasource1;
+                                                //            idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                //        }
+                                                //        else
+                                                //        {
+                                                //            string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                                //            if (!string.IsNullOrEmpty(sTextvalue))
+                                                //            {
+                                                //                try
+                                                //                {
+                                                //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
+                                                //                    if (idd == -1)
+                                                //                    {
+                                                //                        var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                //                        {
+                                                //                            DESCRIPTION = rec.TextValue,
+                                                //                            NAME = rec.TextValue,
+                                                //                            ID = rec.AssociatedTypeID
+                                                //                        };
+                                                //                        lst_extdatasource.Add(lst);
+                                                //                        control.ItemsSource = null;
+                                                //                        control.ItemsSource = lst_extdatasource;
+                                                //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
+                                                //                    }
+                                                //                }
+                                                //                catch
+                                                //                {
+
+                                                //                }
+                                                //            }
+                                                //            else
+                                                //            {
+                                                //                string sTextvalues1 = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
+                                                //                if (!string.IsNullOrEmpty(sTextvalues1))
+                                                //                {
+                                                //                    try
+                                                //                    {
+                                                //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
+                                                //                        if (idd == -1)
+                                                //                        {
+                                                //                            var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                //                            {
+                                                //                                DESCRIPTION = rec.FieldValue,
+                                                //                                NAME = rec.FieldValue,
+                                                //                                ID = rec.AssociatedTypeID
+                                                //                            };
+                                                //                            lst_extdatasource.Add(lst);
+                                                //                            control.ItemsSource = null;
+                                                //                            control.ItemsSource = lst_extdatasource;
+                                                //                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
+                                                //                        }
+                                                //                    }
+                                                //                    catch
+                                                //                    {
+
+                                                //                    }
+                                                //                }
+                                                //            }
+                                                //        }
+                                                //    }
+                                                //}
+                                                //control.SelectedIndex = idd; 
+                                                #endregion
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+
+                                        }
+                                    }
+                                    break;
+
+                                case "d":
+                                    control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
+                                    if (control != null)
+                                    {
+                                        List<ItemValue> lst_SSsource = new List<ItemValue>();
+
+                                        lst_SSsource = control.ItemsSource as List<ItemValue>;
+                                        try
+                                        {
+                                            int j = 0;
+                                            for (j = 0; j < lst_SSsource.Count; j++)
+                                            {
+                                                if (lst_SSsource.Count != 0)
+                                                {
+                                                    var i = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID).FirstOrDefault();
+
+                                                    if (i?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || i?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
                                                         break;
                                                 }
-                                                control.SelectedIndex = j;
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                            }
-                                        }
-                                        break;
-
-                                    case "a":
-                                        try
-                                        {
-                                            var cnt = FindCasesControls(item.ASSOC_TYPE_ID);
-                                            if (cnt != null)
-                                            {
-                                                DatePicker DO = new DatePicker();
-                                                DO = cnt as DatePicker;
-                                                DO.TextColor = Color.Gray;
-                                                string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                if (!String.IsNullOrEmpty(Dateval))
-                                                {
-                                                    var Str = App.DateFormatStringToString(Dateval);
-                                                    DateTime dt = Convert.ToDateTime(Str);
-                                                    DO.Date = dt;
-                                                }
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-                                        break;
-
-                                    case "x":
-                                        try
-                                        {
-                                            var cnt = FindCasesControls(item.ASSOC_TYPE_ID);
-                                            if (cnt != null)
-                                            {
-                                                BorderEditor bd = cnt as BorderEditor;
-                                                bd.FontSize = 16;
-                                                bd.FontFamily = "Soin Sans Neue";
-                                                bd.Text = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-                                        break;
-
-                                    case "t":
-                                    case "c":
-                                    case "n":
-                                        try
-                                        {
-                                            var cnt = FindCasesControls(item.ASSOC_TYPE_ID);
-                                            if (cnt != null)
-                                            {
-                                                Entry entry = new Entry();
-                                                entry.FontSize = 16;
-                                                entry = cnt as Entry;
-                                                entry.FontFamily = "Soin Sans Neue";
-                                                if (item.ASSOC_FIELD_TYPE.ToLower() == "c" && !Onlineflag)
-                                                {
-                                                    entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
-                                                }
                                                 else
-                                                {
-                                                    entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
-                                                }
+                                                    break;
                                             }
+                                            control.SelectedIndex = j;
                                         }
-                                        catch (Exception)
+                                        catch (Exception ex)
                                         {
                                         }
-                                        break;
+                                    }
+                                    break;
+
+                                case "a":
+                                    try
+                                    {
+                                        var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                        if (cnt != null)
+                                        {
+                                            Entry DO = new Entry();
+                                            DO = cnt as Entry;
+                                            DO.TextColor = Color.Gray;
+                                            string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                            if (!String.IsNullOrEmpty(Dateval))
+                                            {
+                                                var Str = App.DateFormatStringToString(Dateval);
+                                                //DateTime dt = Convert.ToDateTime(Str);
+                                                DO.Text = Str;
+                                            }
+                                            //DatePicker DO = new DatePicker();
+                                            //DO = cnt as DatePicker;
+                                            //DO.TextColor = Color.Gray;
+                                            //string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                            //if (!String.IsNullOrEmpty(Dateval))
+                                            //{
+                                            //    var Str = App.DateFormatStringToString(Dateval);
+                                            //    DateTime dt = Convert.ToDateTime(Str);
+                                            //    DO.Date = dt;
+                                            //}
+
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                    break;
+
+                                case "x":
+                                    try
+                                    {
+                                        var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                        if (cnt != null)
+                                        {
+                                            BorderEditor bd = cnt as BorderEditor;
+                                            bd.FontSize = 16;
+                                            bd.FontFamily = "Soin Sans Neue";
+                                            bd.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                    break;
+
+                                case "t":
+                                case "c":
+                                case "n":
+                                    try
+                                    {
+                                        var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                        if (cnt != null)
+                                        {
+                                            Entry entry = new Entry();
+                                            entry.FontSize = 16;
+                                            entry = cnt as Entry;
+                                            entry.FontFamily = "Soin Sans Neue";
+                                            if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "c" && !Onlineflag)
+                                            {
+                                                entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+                                            }
+                                            else
+                                            {
+                                                entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+
+                                            }
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                    break;
                                 }
                             }
                             catch (Exception ex)
                             {
                             }
                         }
+                        #endregion
                     }
                     else
                     {
                         await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                     }
-                    // Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
                     #endregion
                 }
             }
@@ -1098,10 +1148,7 @@ namespace StemmonsMobile.Views.Cases
             {
             }
 
-            if (!flgvisible)
-            {
-                reloadNotesArea();
-            }
+            ReloadNotesArea();
 
             #region Set Bottom Details
             try
@@ -1161,45 +1208,76 @@ namespace StemmonsMobile.Views.Cases
             }
             #endregion
 
-            // Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
             if (Onlineflag)
                 setStaticCal(ContolrLst);
-            Device.StartTimer(TimeSpan.FromSeconds(3), () =>
-            {
-                // Do something
-                if (!IsModifiedDate_Same)
-                {
-                    WarningLabel.IsVisible = false;
-                    grd_IsRefresh.Children.Remove(WarningLabel);
-                }
-                return true; // True = Repeat again, False = Stop the timer
-            });
 
-            // Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            Device.StartTimer(TimeSpan.FromSeconds(3), () =>
+                        {
+                            // Do something
+                            if (!IsModifiedDate_Same)
+                            {
+                                WarningLabel.IsVisible = false;
+                                grd_IsRefresh.Children.Remove(WarningLabel);
+                            }
+                            return true; // True = Repeat again, False = Stop the timer
+                        });
+
+            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
+        public async void Dynamic_Control_Generate(bool allowEditCaseData)
+        {
 
-        public void reloadNotesArea()
+
+            //if (ct > 0)
+            //    EntryFieldsStack_CasesView.Children.Clear();
+            //else
+            //    ct = 1;
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            return;
+        }
+
+        private void DO_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            try
+            {
+                var currText = ((Entry)sender).Text;
+
+
+                string oldtext = currText;
+                if (!string.IsNullOrEmpty(currText) && currText.Length >= 8 && currText.Length <= 10)
+                {
+                    oldtext = Convert.ToInt32(currText).ToString("##/##/####");
+                    ((Entry)sender).Text = oldtext;
+                }
+                else if (currText.Length > 10)
+                {
+                    //oldtext = Convert.ToDecimal(currText).ToString("##/##/####");
+                    ((Entry)sender).Text = e.OldTextValue;
+                }
+                DateTime d = new DateTime();
+                DateTime.TryParse(((Entry)sender).Text, out d);
+                //{01/01/01 12:00:00 AM}
+            }
+            catch (Exception c)
+            {
+            }
+        }
+
+        public void ReloadNotesArea()
         {
             try
             {
                 gridCasesnotes.ItemsSource = null;
-                Groups.Clear();
+                CasesnotesGroups.Clear();
 
                 Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                 NotesResponse.Wait();
-                var Noteslist = NotesResponse.Result;
-                if (Noteslist.Count == 0)
-                {
-                    if (IsForceOfln)
-                    {
-                        NotesResponse = CasesSyncAPIMethods.GetCaseNotes(IsForceOfln, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                        NotesResponse.Wait();
-                    }
-                }
+                var Noteslist = NotesResponse?.Result;
+
                 ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
-                if (NotesResponse?.Result?.Count > 0)
+                if (Noteslist?.Count > 0)
                 {
                     for (int i = 0; i < Noteslist.Count; i++)
                     {
@@ -1230,17 +1308,17 @@ namespace StemmonsMobile.Views.Cases
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
                             item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
                         }
-                        Groups.Add(item);
+                        CasesnotesGroups.Add(item);
                     }
 
                     gridCasesnotes.ItemsSource = null;
-                    gridCasesnotes.ItemsSource = Groups;
+                    gridCasesnotes.ItemsSource = CasesnotesGroups;
                 }
             }
             catch (Exception ex)
             {
             }
-            if (Groups.Count <= 0)
+            if (CasesnotesGroups.Count <= 0)
             {
                 gridCasesnotes.HeightRequest = 0;
             }
@@ -1248,40 +1326,7 @@ namespace StemmonsMobile.Views.Cases
                 gridCasesnotes.HeightRequest = 700;
         }
 
-        private void HeaderTapped(object sender, EventArgs args)
-        {
-            int selectedIndex = _expandedGroups.IndexOf(
-                ((CasesNotesGroup)((Button)sender).CommandParameter));
-            _allGroups[selectedIndex].Expanded = !_allGroups[selectedIndex].Expanded;
-            UpdateListContent();
-        }
-
-        private void UpdateListContent()
-        {
-            try
-            {
-                _expandedGroups = new ObservableCollection<CasesNotesGroup>();
-                foreach (CasesNotesGroup group in _allGroups)
-                {
-                    CasesNotesGroup newGroup = new CasesNotesGroup(group.Title, group.ShortName, Functions.UserName);
-
-                    if (group.Expanded)
-                    {
-                        foreach (GetCaseNotesResponse.NoteData food in group)
-                        {
-                            newGroup.Add(food);
-                        }
-                    }
-                    _expandedGroups.Add(newGroup);
-                }
-                gridCasesnotes.ItemsSource = _expandedGroups;
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        List<spi_MobileApp_GetTypesByCaseTypeResult> metadata = new List<spi_MobileApp_GetTypesByCaseTypeResult>();
+        List<spi_MobileApp_GetTypesByCaseTypeResult> AssignControlsmetadata = new List<spi_MobileApp_GetTypesByCaseTypeResult>();
         StackLayout layout15 = new StackLayout();
 
         #region MyRegion : Picker Event
@@ -1795,8 +1840,8 @@ namespace StemmonsMobile.Views.Cases
                                         savecase.caseTitle = en.Text;
                                     }
                                     int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                    string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FileldName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                    string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
 
                                     if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
                                     {
@@ -1811,8 +1856,6 @@ namespace StemmonsMobile.Views.Cases
                                 }
                                 catch (Exception ex)
                                 {
-
-                                    //throw;
                                 }
                             }
                             else if (ty.Name.ToLower() == "picker")
@@ -1828,8 +1871,8 @@ namespace StemmonsMobile.Views.Cases
                                     if (styletype.ToLower() == "d")
                                     {
                                         int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
                                         if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
                                         {
                                             DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -1863,8 +1906,8 @@ namespace StemmonsMobile.Views.Cases
                                         try
                                         {
 
-                                            string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                            string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
                                             if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
                                             {
                                                 DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -1924,8 +1967,8 @@ namespace StemmonsMobile.Views.Cases
                                         savecase.caseTitle = editor.Text;
                                     }
 
-                                    string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
                                     if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
                                     {
                                         DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -2000,73 +2043,70 @@ namespace StemmonsMobile.Views.Cases
                 switch (action)
                 {
 
-                    case "Save":
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
+                case "Save":
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
                         {
-                            await Task.Run(() =>
-                            {
-                                Task<int> save = SaveAndUpdate(savecase, createcase);
-                                save.Wait();
-                            });
+                            Task<int> save = SaveAndUpdate(savecase, createcase);
+                            save.Wait();
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = "";
 
-                            // CasesSyncAPIMethods.AddCasesLogs(App.DBPath, 5, "User " + Functions.UserName + " Is Updating The Case " + CaseID + ".", CaseID, Convert.ToString(Casetypeid), Functions.UserFullName, "New updates are in the case", "Updating Case", Functions.UserName, "UPDCA");
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = "";
+                    OnAppearing();
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-                        OnAppearing();
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
 
-                        break;
+                case "Save & Exit":
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            Task<int> saveExit = SaveAndUpdate(savecase, createcase);
+                            saveExit.Wait();
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-                    case "Save & Exit":
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                Task<int> saveExit = SaveAndUpdate(savecase, createcase);
-                                saveExit.Wait();
-                            });
-                            //CasesSyncAPIMethods.AddCasesLogs(App.DBPath, 5, "User " + Functions.UserName + " Is Updating The Case " + CaseID + ".", CaseID, Convert.ToString(Casetypeid), Functions.UserFullName, "New updates are in the case", "Updating Case", Functions.UserName, "UPDCA");
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    if (strTome == "_AssignedToMe")
+                    {
+                        await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
+                    }
+                    else if (strTome == "_CreatedByMe")
+                    {
+                        await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
+                    }
+                    else if (strTome == "_OwnedByMe")
+                    {
+                        await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
+                    }
+                    else if (strTome == "_AssignedToMyTeam")
+                    {
+                        var tm_uname = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
 
-                        if (strTome == "_AssignedToMe")
-                        {
-                            await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
-                        }
-                        else if (strTome == "_CreatedByMe")
-                        {
-                            await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
-                        }
-                        else if (strTome == "_OwnedByMe")
-                        {
-                            await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
-                        }
-                        else if (strTome == "_AssignedToMyTeam")
-                        {
-                            var tm_uname = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
+                        await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname ?? Functions.UserName, ""));
+                    }
+                    else
+                        await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
 
-                            await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname ?? Functions.UserName, ""));
-                        }
-                        else
-                            await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
-
-                        break;
+                    break;
 
                 }
             }
             catch (Exception ex)
             {
             }
-            requiredJump: int abc = 0;
+        requiredJump: int abc = 0;
         }
         #endregion
         public async Task<int> SaveAndUpdate(SaveCaseTypeRequest savecase, CreateCaseOptimizedRequest.CreateCaseModelOptimized createcase, object obj = null, bool Isapproved = false, bool Isdecline = false)
@@ -2094,9 +2134,12 @@ namespace StemmonsMobile.Views.Cases
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     string subject = Functions.UserFullName + " wants to share this " + Casetitle;
+                    subject = subject.Replace(" ", "&nbsp;");
                     string body = "please&nbsp;visit this url:  " + App.CasesImgURL + "/ViewCase.aspx?CaseID=" + CaseID;
-                    var email = Regex.Replace("yourcontact@mail.example.com", @"[^\u0000-\u00FF]", string.Empty);
-                    shareurl = "mailto:" + email + "?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
+                    body = body.Replace(" ", "&nbsp;");
+
+                   // var email = Regex.Replace("yourcontact@mail.example.com", @"[^\u0000-\u00FF]", string.Empty);
+                    shareurl = "mailto:?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
                     // shareurl = WebUtility.UrlEncode(shareurl).Replace("+", "");
                 }
                 else
@@ -2724,8 +2767,8 @@ namespace StemmonsMobile.Views.Cases
                                         savecase.caseTitle = en.Text;
                                     }
                                     int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                    string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FileldName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                    string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
 
                                     if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
                                     {
@@ -2748,8 +2791,8 @@ namespace StemmonsMobile.Views.Cases
                                     if (styletype.ToLower() == "d")
                                     {
                                         int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
                                         if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
                                         {
                                             DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -2776,8 +2819,8 @@ namespace StemmonsMobile.Views.Cases
                                         }
                                         try
                                         {
-                                            string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                            string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
                                             if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
                                             {
                                                 DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -2821,8 +2864,8 @@ namespace StemmonsMobile.Views.Cases
                                         savecase.caseTitle = editor.Text;
                                     }
 
-                                    string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
                                     if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
                                     {
                                         DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
@@ -2897,573 +2940,639 @@ namespace StemmonsMobile.Views.Cases
                 }
                 switch (action)
                 {
-                    case "offline"://Switch to offline
-                        App.SetForceFullOnLineOffline(false);
-                        App.SetConnectionFlag();
-                        break;
-                    case "online"://Switch to online
-                        App.SetForceFullOnLineOffline(true);
-                        App.SetConnectionFlag();
-                        break;
-                    case "Run Synchronization":
-                        if (Functions.CheckInternetWithAlert())
+                case "offline"://Switch to offline
+                    App.SetForceFullOnLineOffline(false);
+                    App.SetConnectionFlag();
+                    break;
+                case "online"://Switch to online
+                    App.SetForceFullOnLineOffline(true);
+                    App.SetConnectionFlag();
+                    break;
+                case "Run Synchronization":
+                    if (Functions.CheckInternetWithAlert())
+                    {
+                        App.isFirstcall = true;
+                        App.OnlineSyncRecord();
+                    }
+                    break;
+
+                case "Assign":
+
+                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, false, strTome, Onlineflag));
+                    txt_CasNotes.Text = string.Empty;
+                    break;
+
+                case "Return to Last Assignee":
+                    Task<int> ReturnToLastAssignee = null;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
                         {
-                            App.isFirstcall = true;
-                            App.OnlineSyncRecord();
-                        }
-                        break;
-
-                    case "Assign":
-
-                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, false, strTome, Onlineflag));
-                        txt_CasNotes.Text = string.Empty;
-                        break;
-
-                    case "Return to Last Assignee":
-                        Task<int> ReturnToLastAssignee = null;
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
-                                ReturnToLastAssignee.Wait();
-                                if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
-                                {
-                                    ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
-                                    {
-                                        caseID = Convert.ToInt32(CaseID),
-                                        username = Functions.UserName
-                                    };
-                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-                                    if (offlinerecord == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
-
-                                    offlinerecord.Wait();
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
-
-
-                                    CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-                                }
-                            });
-
+                            ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
+                            ReturnToLastAssignee.Wait();
                             if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
                             {
-                                Functions.ShowtoastAlert("Case Returned to Assignee Successfully.");
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Case Return to Assignee Operation failed. Please Try Again Later.");
-                            }
-                            this.OnAppearing();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-
-                    case "Return to Last Assigner":
-                        Task<int> ReturnToLastAssigner = null;
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                ReturnToLastAssigner = SaveAndUpdate(savecase, createcase, null);
-                                ReturnToLastAssigner.Wait();
-                                if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
+                                ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
                                 {
-                                    ReturnCaseToLastAssignerRequest objReturnCaseToLastAssigner = new ReturnCaseToLastAssignerRequest()
-                                    {
-                                        caseid = Convert.ToInt32(CaseID),
-                                        username = Functions.UserName
-                                    };
-
-                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-
-                                    if (offlinerecord == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
-                                    offlinerecord.Wait();
-
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
-
-                                    string _caseid = string.Empty;
-                                    switch (offlinerecord.Result?.IS_ONLINE)
-                                    {
-                                        case true:
-                                            _caseid = Convert.ToString(CaseID);
-                                            //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
-                                            break;
-                                        default:
-                                            _caseid = Convert.ToString(ReturnToLastAssigner.Result);
-                                            //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), Convert.ToString(ReturnToLastAssigner.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
-                                            break;
-                                    }
-
-                                    CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
-                                }
-                            });
-
-                            if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
-                            {
-                                Functions.ShowtoastAlert("Case Returned to last Assigner Successfully.");
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Case Returned To Last Assigner Operation failed. Please Try Again Later.");
-                            }
-                            this.OnAppearing();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-
-                    case "Approve and Return":
-                        Task<int> ApproveAndReturn = null;
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                ApproveAndReturn = SaveAndUpdate(savecase, createcase, null);
-                                ApproveAndReturn.Wait();
-                                if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
+                                    caseID = Convert.ToInt32(CaseID),
+                                    username = Functions.UserName
+                                };
+                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                if (offlinerecord == null)
                                 {
-                                    ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
-                                    {
-                                        caseID = Convert.ToInt32(CaseID),
-                                        username = Functions.UserName
-                                    };
-                                    Task<AppTypeInfoList> offlinerecord = null;
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-
-                                    if (offlinerecord.Result == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
-
-                                    offlinerecord.Wait();
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
-                                    string _caseID = string.Empty;
-
-                                    if (offlinerecord.Result.IS_ONLINE == true)
-                                        _caseID = CaseID;
-                                    else
-                                        _caseID = Convert.ToString(ApproveAndReturn.Result);
-
-
-                                    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(_caseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
-                                    //else
-                                    //    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(ApproveAndReturn.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
                                 }
-                            });
 
-                            if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
-                            {
-                                Functions.ShowtoastAlert("Case Approved and Returned Successfully.");
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Case Approved and Return operation failed. Please Try Again Later.");
-                            }
-                            this.OnAppearing();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-
-                    case "Approve and Assign":
-                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, true, false, strTome, Onlineflag));
-                        txt_CasNotes.Text = string.Empty;
-                        break;
-
-                    case "Decline and Return":
-                        Task<int> DeclineAndReturn = null;
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                DeclineAndReturn = SaveAndUpdate(savecase, createcase, null);
-                                DeclineAndReturn.Wait();
-                                if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
-                                {
-                                    DeclineAndReturnRequest objDeclineAndReturn = new DeclineAndReturnRequest()
-                                    {
-                                        caseid = Convert.ToInt32(CaseID),
-                                        Username = Functions.UserName
-                                        //notes = txt_CasNotes.Text
-                                    };
-
-                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-                                    if (offlinerecord == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
-
-                                    offlinerecord.Wait();
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
-
-                                    CasesSyncAPIMethods.storeDeclineAndReturn(Onlineflag, objDeclineAndReturn, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-
-                                }
-                            });
-
-                            if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
-                            {
-                                Functions.ShowtoastAlert("Case Declined and Returned Successfully.");
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Case Decline and Return Operation failed. Please Try Again Later.");
-                            }
-                            this.OnAppearing();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-                    case "Decline and Assign":
-
-                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, true, strTome, Onlineflag));
-
-                        txt_CasNotes.Text = string.Empty;
-                        break;
-
-                    case "Close Case":
-                        Task<int> Close = null;
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                Close = SaveAndUpdate(savecase, createcase, null);
-                                Close.Wait();
-
-                                if (Close != null && Close.Result > 0)
-                                {
-                                    CloseCaseRequest objClose = new CloseCaseRequest()
-                                    {
-                                        caseID = Convert.ToInt32(CaseID),
-                                        user = Functions.UserName
-                                    };
-
-                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-
-                                    if (offlinerecord == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
-
-                                    offlinerecord.Wait();
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
-                                    CasesSyncAPIMethods.storeClose(Onlineflag, objClose, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-                                }
-                            });
-
-                            if (Close != null && Close.Result > 0)
-                            {
-                                Functions.ShowtoastAlert("Case Closed Successfully.");
-                                //var answer = DisplayAlert("Close Case", "Case Close Successfully.", "OK");
-                                if (strTome == "_AssignedToMe")
-                                {
-                                    await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
-                                }
-                                else if (strTome == "_CreatedByMe")
-                                {
-                                    await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
-                                }
-                                else if (strTome == "_OwnedByMe")
-                                {
-                                    await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
-                                }
-                                else if (strTome == "_AssignedToMyTeam")
-                                {
-                                    var tm_uname1 = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
-
-                                    await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname1 ?? Functions.UserName, ""));
-                                }
-                                else
-                                    await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Case Close Operation failed. Please Try Again Later.");
-                                // var answer = DisplayAlert("Close Case", "Case Not Close. Please Try Again Later.", "OK");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-
-
-                    case "Take Ownership":
-                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        try
-                        {
-                            AcceptCaseRequest obj = new AcceptCaseRequest()
-                            {
-                                CaseId = Convert.ToInt32(CaseID),
-                                caseOwnerSAM = Functions.UserName,
-                                username = Functions.UserName
-                            };
-                            Task<int> TakeOwnership = null;
-
-                            await Task.Run(() =>
-                            {
-                                TakeOwnership = SaveAndUpdate(savecase, createcase, obj);
-                                TakeOwnership.Wait();
-                            });
-
-                            if (TakeOwnership.Result > 0)
-                            {
-                                Functions.ShowtoastAlert("You have Successfully Owned this case.");
-                            }
-                            else
-                            {
-                                Functions.ShowtoastAlert("Ownership has not been taken. Please try again later");
-                            }
-                            this.OnAppearing();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        txt_CasNotes.Text = string.Empty;
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
-
-
-                    case "Email Link":
-                        emailLink(savecase);
-                        break;
-
-                    case "Add Attachment":
-
-                        try
-                        {
-                            if (App.Isonline)
-                            {
-                                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                                // if (Device.RuntimePlatform != Device.Android)
+                                offlinerecord.Wait();
+                                BasicCase objview = new BasicCase();
+                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
                                 {
                                     try
                                     {
-                                        await CrossMedia.Current.Initialize();
-
-                                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        objview = objviewtemp?.FirstOrDefault();
+                                        if (objview == null)
                                         {
-                                            DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
-                                            return;
+                                            objview = objviewtemp.FirstOrDefault();
                                         }
+                                    }
+                                    catch
+                                    {
+                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                    }
+                                }
 
-                                        var file = await CrossMedia.Current.PickPhotoAsync();
 
-                                        if (file == null)
+                                CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+                            }
+                        });
+
+                        if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("Case Returned to Assignee Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Case Return to Assignee Operation failed. Please Try Again Later.");
+                        }
+                        this.OnAppearing();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+                case "Return to Last Assigner":
+                    Task<int> ReturnToLastAssigner = null;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            ReturnToLastAssigner = SaveAndUpdate(savecase, createcase, null);
+                            ReturnToLastAssigner.Wait();
+                            if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
+                            {
+                                ReturnCaseToLastAssignerRequest objReturnCaseToLastAssigner = new ReturnCaseToLastAssignerRequest()
+                                {
+                                    caseid = Convert.ToInt32(CaseID),
+                                    username = Functions.UserName
+                                };
+
+                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                if (offlinerecord == null)
+                                {
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                }
+                                offlinerecord.Wait();
+
+                                BasicCase objview = new BasicCase();
+                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                {
+                                    try
+                                    {
+                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                        if (objview == null)
                                         {
-                                            return;
+                                            objview = objviewtemp.FirstOrDefault();
                                         }
+                                    }
+                                    catch
+                                    {
+                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                    }
+                                }
 
-                                        long size = file.Path.Length;
-                                        byte[] fileBytes = null;
-                                        var bytesStream = file.GetStream();
-                                        using (var memoryStream = new MemoryStream())
+                                string _caseid = string.Empty;
+                                switch (offlinerecord.Result?.IS_ONLINE)
+                                {
+                                case true:
+                                    _caseid = Convert.ToString(CaseID);
+                                        //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                                        break;
+                                default:
+                                    _caseid = Convert.ToString(ReturnToLastAssigner.Result);
+                                        //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), Convert.ToString(ReturnToLastAssigner.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                                        break;
+                                }
+
+                                CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                            }
+                        });
+
+                        if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("Case Returned to last Assigner Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Case Returned To Last Assigner Operation failed. Please Try Again Later.");
+                        }
+                        this.OnAppearing();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+                case "Approve and Return":
+                    Task<int> ApproveAndReturn = null;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            ApproveAndReturn = SaveAndUpdate(savecase, createcase, null);
+                            ApproveAndReturn.Wait();
+                            if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
+                            {
+                                ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
+                                {
+                                    caseID = Convert.ToInt32(CaseID),
+                                    username = Functions.UserName
+                                };
+                                Task<AppTypeInfoList> offlinerecord = null;
+                                offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                if (offlinerecord.Result == null)
+                                {
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                }
+
+                                offlinerecord.Wait();
+                                BasicCase objview = new BasicCase();
+                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                {
+                                    try
+                                    {
+                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                        if (objview == null)
                                         {
-                                            bytesStream.CopyTo(memoryStream);
-                                            fileBytes = memoryStream.ToArray();
+                                            objview = objviewtemp.FirstOrDefault();
                                         }
-                                        size = fileBytes.Count();
+                                    }
+                                    catch
+                                    {
+                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                    }
+                                }
+                                string _caseID = string.Empty;
 
-                                        string File_Name = string.Empty;
+                                if (offlinerecord.Result.IS_ONLINE == true)
+                                    _caseID = CaseID;
+                                else
+                                    _caseID = Convert.ToString(ApproveAndReturn.Result);
 
-                                        try
+
+                                CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(_caseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
+                                    //else
+                                    //    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(ApproveAndReturn.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
+                                }
+                        });
+
+                        if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("Case Approved and Returned Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Case Approved and Return operation failed. Please Try Again Later.");
+                        }
+                        this.OnAppearing();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+                case "Approve and Assign":
+                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, true, false, strTome, Onlineflag));
+                    txt_CasNotes.Text = string.Empty;
+                    break;
+
+                case "Decline and Return":
+                    Task<int> DeclineAndReturn = null;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            DeclineAndReturn = SaveAndUpdate(savecase, createcase, null);
+                            DeclineAndReturn.Wait();
+                            if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
+                            {
+                                DeclineAndReturnRequest objDeclineAndReturn = new DeclineAndReturnRequest()
+                                {
+                                    caseid = Convert.ToInt32(CaseID),
+                                    Username = Functions.UserName
+                                        //notes = txt_CasNotes.Text
+                                    };
+
+                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                if (offlinerecord == null)
+                                {
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                }
+
+                                offlinerecord.Wait();
+                                BasicCase objview = new BasicCase();
+                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                {
+                                    try
+                                    {
+                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                        if (objview == null)
                                         {
-                                            if (Device.RuntimePlatform == Device.UWP)
-                                            {
-                                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                                            }
-                                            else
-                                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                                            objview = objviewtemp.FirstOrDefault();
                                         }
-                                        catch (Exception)
-                                        {
-                                        }
+                                    }
+                                    catch
+                                    {
+                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                    }
+                                }
 
-                                        string FileId = string.Empty;
+                                CasesSyncAPIMethods.storeDeclineAndReturn(Onlineflag, objDeclineAndReturn, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+
+                            }
+                        });
+
+                        if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("Case Declined and Returned Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Case Decline and Return Operation failed. Please Try Again Later.");
+                        }
+                        this.OnAppearing();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+                case "Decline and Assign":
+
+                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, true, strTome, Onlineflag));
+
+                    txt_CasNotes.Text = string.Empty;
+                    break;
+
+                case "Close Case":
+                    Task<int> Close = null;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            Close = SaveAndUpdate(savecase, createcase, null);
+                            Close.Wait();
+
+                            if (Close != null && Close.Result > 0)
+                            {
+                                CloseCaseRequest objClose = new CloseCaseRequest()
+                                {
+                                    caseID = Convert.ToInt32(CaseID),
+                                    user = Functions.UserName
+                                };
+
+                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                if (offlinerecord == null)
+                                {
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                }
+
+                                offlinerecord.Wait();
+                                BasicCase objview = new BasicCase();
+                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                {
+                                    try
+                                    {
+                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                        if (objview == null)
+                                        {
+                                            objview = objviewtemp.FirstOrDefault();
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                    }
+                                }
+                                CasesSyncAPIMethods.storeClose(Onlineflag, objClose, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+                            }
+                        });
+
+                        if (Close != null && Close.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("Case Closed Successfully.");
+                            //var answer = DisplayAlert("Close Case", "Case Close Successfully.", "OK");
+                            if (strTome == "_AssignedToMe")
+                            {
+                                await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
+                            }
+                            else if (strTome == "_CreatedByMe")
+                            {
+                                await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
+                            }
+                            else if (strTome == "_OwnedByMe")
+                            {
+                                await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
+                            }
+                            else if (strTome == "_AssignedToMyTeam")
+                            {
+                                var tm_uname1 = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
+
+                                await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname1 ?? Functions.UserName, ""));
+                            }
+                            else
+                                await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Case Close Operation failed. Please Try Again Later.");
+                            // var answer = DisplayAlert("Close Case", "Case Not Close. Please Try Again Later.", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+
+                case "Take Ownership":
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
+                    {
+                        AcceptCaseRequest obj = new AcceptCaseRequest()
+                        {
+                            CaseId = Convert.ToInt32(CaseID),
+                            caseOwnerSAM = Functions.UserName,
+                            username = Functions.UserName
+                        };
+                        Task<int> TakeOwnership = null;
+
+                        await Task.Run(() =>
+                        {
+                            TakeOwnership = SaveAndUpdate(savecase, createcase, obj);
+                            TakeOwnership.Wait();
+                        });
+
+                        if (TakeOwnership.Result > 0)
+                        {
+                            Functions.ShowtoastAlert("You have Successfully Owned this case.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Ownership has not been taken. Please try again later");
+                        }
+                        this.OnAppearing();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    txt_CasNotes.Text = string.Empty;
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+
+                case "Email Link":
+                    emailLink(savecase);
+                    break;
+
+                case "Add Attachment":
+
+                    try
+                    {
+                        if (App.Isonline)
+                        {
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            // if (Device.RuntimePlatform != Device.Android)
+                            {
+                                try
+                                {
+                                    await CrossMedia.Current.Initialize();
+
+                                    if (!CrossMedia.Current.IsPickPhotoSupported)
+                                    {
+                                        DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                                        return;
+                                    }
+
+                                    var file = await CrossMedia.Current.PickPhotoAsync();
+
+                                    if (file == null)
+                                    {
+                                        return;
+                                    }
+
+                                    long size = file.Path.Length;
+                                    byte[] fileBytes = null;
+                                    var bytesStream = file.GetStream();
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        bytesStream.CopyTo(memoryStream);
+                                        fileBytes = memoryStream.ToArray();
+                                    }
+                                    size = fileBytes.Count();
+
+                                    string File_Name = string.Empty;
+
+                                    try
+                                    {
+                                        if (Device.RuntimePlatform == Device.UWP)
+                                        {
+                                            File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                                        }
+                                        else
+                                            File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+
+                                    string FileId = string.Empty;
+                                    await Task.Run(() =>
+                                    {
+                                        var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
+
+                                        FileId = d.GetValue("ResponseContent").ToString();
+                                    });
+
+                                    if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                                    {
+                                        string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
                                         await Task.Run(() =>
                                         {
-                                            var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
-
-                                            FileId = d.GetValue("ResponseContent").ToString();
+                                            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
                                         });
 
-                                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+
+                                        if (!string.IsNullOrEmpty(txt_CasNotes.Text))
                                         {
-                                            string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
-                                            await Task.Run(() =>
-                                            {
-                                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-                                            });
+                                            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
 
-
-                                            if (!string.IsNullOrEmpty(txt_CasNotes.Text))
-                                            {
-                                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-
-                                            }
-                                            Functions.ShowtoastAlert("File Attached Successfully.");
+                                        }
+                                        Functions.ShowtoastAlert("File Attached Successfully.");
+                                    }
+                                    else
+                                    {
+                                        Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                                    }
+                                    gridCasesnotes.ItemsSource = CasesnotesGroups;
+                                    txt_CasNotes.Text = string.Empty;
+                                    try
+                                    {
+                                        if (Device.RuntimePlatform == Device.UWP)
+                                        {
+                                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                                         }
                                         else
                                         {
-                                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                                         }
-                                        gridCasesnotes.ItemsSource = Groups;
-                                        txt_CasNotes.Text = string.Empty;
-                                        try
-                                        {
-                                            if (Device.RuntimePlatform == Device.UWP)
-                                            {
-                                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                                            }
-                                            else
-                                            {
-                                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                                            }
 
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                     }
                                 }
+                                catch (Exception ex)
+                                {
+                                }
                             }
-                            else
-                                Functions.ShowtoastAlert("Please Go online to use this functionality!");
-
-                            reloadNotesArea();
                         }
-                        catch (Exception)
-                        {
-                        }
-                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break;
+                        else
+                            Functions.ShowtoastAlert("Please Go online to use this functionality!");
 
-                    case "Activity Log":
-                        await this.Navigation.PushAsync(new CaseActivityLog(CaseID.ToString(), _Casedata.CaseTypeID, Onlineflag));
-                        break;
-                    case "Logout":
-                        App.Logout(this);
-                        break;
+                        ReloadNotesArea();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    break;
+
+                case "Activity Log":
+                    await this.Navigation.PushAsync(new CaseActivityLog(CaseID.ToString(), _Casedata.CaseTypeID, Onlineflag));
+                    break;
+                case "Logout":
+                    App.Logout(this);
+                    break;
                 }
             }
             catch (Exception ex)
             {
             }
 
-            requiredJump: int abc = 0;
+        requiredJump: int abc = 0;
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
+    }
+
+    public class CasesViewmodel : INotifyPropertyChanged
+    {
+        public ObservableCollection<string> Items { get; set; }
+        Page page;
+        public CasesViewmodel(Page page)
+        {
+            this.page = page;
+
+        }
+
+        bool isBusy;
+
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                if (isBusy == value)
+                    return;
+
+                isBusy = value;
+                OnPropertyChanged("IsBusy");
+            }
+        }
+
+        ICommand refreshCommand;
+
+        public ICommand RefreshCommand
+        {
+            get { return refreshCommand ?? (refreshCommand = new Command(async () => await ExecuteRefreshCommand())); }
+        }
+
+        async Task ExecuteRefreshCommand()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            //ViewCasePage vc = new ViewCasePage(ViewCasePage.CaseID, ViewCasePage.Casetypeid, ViewCasePage.Casetitle, ViewCasePage.strTome);
+
+            var p = page as ViewCasePage;
+            p.Onlineflag = true;
+            await p.ExtendedOnAppearing();
+
+            p.IsBusy = false;
+            //await vc.GetCasesData();
+            //await vc.Dynamic_Control_Generate(true, new List<MetaData>());
+            IsBusy = false;
+        }
+
+        #region INotifyPropertyChanged implementation
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged == null)
+                return;
+
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

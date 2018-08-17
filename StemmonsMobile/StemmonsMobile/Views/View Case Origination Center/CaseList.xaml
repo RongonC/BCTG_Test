@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:StemmonsMobile"
                x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseList">
 
-    <ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems >
         <ToolbarItem x:Name="Filter" Icon="Assets/filter.png" Clicked="Handle_Clicked"/>
     </ContentPage.ToolbarItems>
 

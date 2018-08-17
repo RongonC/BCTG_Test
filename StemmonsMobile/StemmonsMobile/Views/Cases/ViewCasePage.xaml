@@ -8,25 +8,21 @@
         <ToolbarItem Text="Save" Icon="Assets/Save.png" Clicked="Menu_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <AbsoluteLayout>
+        <AbsoluteLayout x:Name="abs_layout">
 
             <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                   AbsoluteLayout.LayoutFlags="All" 
                   ColumnSpacing="1" RowSpacing="1" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="0"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Grid x:Name="grd_test" Grid.Row="0" IsClippedToBounds="True">
-
-                </Grid>
                 <Grid x:Name="grd_IsRefresh" Grid.Row="1" IsClippedToBounds="True">
                 </Grid>
                 <StackLayout x:Name="Main_stack" Grid.Row="2" IsClippedToBounds="True">
-
-                    <ScrollView Grid.Row="0" IsClippedToBounds="True">
+                    <ScrollView x:Name="scrollView" Grid.Row="0" IsClippedToBounds="True">
                         <Grid Grid.Row="0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -125,7 +121,7 @@
                     </ScrollView>
                 </StackLayout>
 
-                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" IsClippedToBounds="True" Grid.Row="3" >
+                <StackLayout x:Name="btm_stack" Orientation="Horizontal" VerticalOptions="EndAndExpand" IsClippedToBounds="True" Grid.Row="3" >
                     <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeMenu_Click" />
                     <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="Navigation_Click" />
                 </StackLayout>

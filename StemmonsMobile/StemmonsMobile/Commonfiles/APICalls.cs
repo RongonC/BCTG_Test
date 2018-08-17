@@ -64,6 +64,40 @@ namespace StemmonsMobile.Commonfiles
             return obj;
 
         }
+       
+        //public static void Getaccesstoken()
+        //{
+        //    try
+        //    {
+        //        #region API Details
+        //        var API_value = new List<KeyValuePair<string, string>>
+        //    {
+        //        new KeyValuePair<string, string>("API_Name", Functions.Baseurl + Constants.Get_Token),
+        //        new KeyValuePair<string, string>("API_Type", "POST")
+        //    };
+
+        //        #endregion
+
+        //        #region API Body Details
+        //        var Body_value = new List<KeyValuePair<string, string>>
+        //    {
+        //        new KeyValuePair<string, string>("grant_type", Grant_type),
+        //        new KeyValuePair<string, string>("username", Username),
+        //        new KeyValuePair<string, string>("password", Password)
+        //    };
+        //        #endregion
+
+        //        var val = AllpostAPIcall(API_value, Body_value);
+        //        if (val != null)
+        //            Functions.access_token = val.GetValue("access_token").ToString();
+        //        Debug.WriteLine("URL ==> " + Functions.Baseurl + Constants.Get_Token + Environment.NewLine + "access_token ==> " + Functions.access_token);
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+        //}
+
+
 
         #region Entity APIs
 

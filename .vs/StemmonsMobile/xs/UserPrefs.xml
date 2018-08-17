@@ -1,0 +1,28 @@
+﻿<Properties StartupConfiguration="{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}|Default" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workbench ActiveDocument="StemmonsCentralToGo Status">
+    <Files>
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/View Case Origination Center/CaseList.xaml.cs" Line="26" Column="6" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/View Case Origination Center/CaseList.xaml" Line="106" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/People Screen/UserDetail.xaml.cs" Line="31" Column="63" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Search/SearchPage.xaml" Line="136" Column="2" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Search/SearchPage.xaml.cs" Line="33" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Search/SearchResult.xaml.cs" Line="33" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/CreateQuestForm/SelectQuestForm.xaml.cs" Line="48" Column="22" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/CreateQuestForm/HopperCenterDetailDialog.xaml.cs" Line="22" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Search/SearchResult.xaml" Line="60" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Search/SearchList.xaml" Line="57" Column="1" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Commonfiles/Constants.cs" Line="1" Column="1" />
+      <File FileName="StemmonsCentralToGo Status" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.StemmonsMobile.Android PreferredExecutionTarget="Android.Android_Accelerated_x86" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="StemmonsMobile/StemmonsMobile/Commonfiles/APICalls.cs" line="74" offsetX="794" offsetY="1168" expression="userdata" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.StemmonsMobile.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.A91116D3-427B-4B83-88E1-8C5A8071FEE0" />
+</Properties>

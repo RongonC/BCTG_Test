@@ -164,39 +164,39 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         #endregion
 
         #region #2 Get Item List
-        public async static Task<List<ItemsByAreaIDResponse.ItemsByAreaID>> GetItemList(bool _IsOnline, string Sys_Name, int AreaId, string username, object _Body_value, int _InstanceUserAssocId, string _DBPath)
-        {
-            List<ItemsByAreaIDResponse.ItemsByAreaID> ItemList = new List<ItemsByAreaIDResponse.ItemsByAreaID>();
-            List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
-            try
-            {
-                if (_IsOnline)
-                {
-                    var result = QuestAPIMethods.GetItemsByAreaIDFormList(AreaId.ToString(), username);
-                    var temp = result.GetValue("ResponseContent");
-                    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
-                    {
-                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(temp.ToString());
-                    }
-                }
-                else
-                {
-                    lstResult = await DBHelper.GetAppTypeInfoListByCategoryId(Sys_Name, AreaId, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+        //public async static Task<List<ItemsByAreaIDResponse.ItemsByAreaID>> GetItemList(bool _IsOnline, string Sys_Name, int AreaId, string username, object _Body_value, int _InstanceUserAssocId, string _DBPath)
+        //{
+        //    List<ItemsByAreaIDResponse.ItemsByAreaID> ItemList = new List<ItemsByAreaIDResponse.ItemsByAreaID>();
+        //    List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
+        //    try
+        //    {
+        //        if (_IsOnline)
+        //        {
+        //            var result = QuestAPIMethods.GetItemsByAreaIDFormList(AreaId.ToString(), username);
+        //            var temp = result.GetValue("ResponseContent");
+        //            if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
+        //            {
+        //                ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(temp.ToString());
+        //            }
+        //        }
+        //        else
+        //        {
+        //            lstResult = await DBHelper.GetAppTypeInfoListByCategoryId(Sys_Name, AreaId, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
 
-                    foreach (var item in lstResult)
-                    {
-                        var ls = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemsByAreaIDResponse.ItemsByAreaID>(item.ASSOC_FIELD_INFO.ToString());
-                        ItemList.Add(ls);
-                    }
+        //            foreach (var item in lstResult)
+        //            {
+        //                var ls = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemsByAreaIDResponse.ItemsByAreaID>(item.ASSOC_FIELD_INFO.ToString());
+        //                ItemList.Add(ls);
+        //            }
 
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return ItemList;
-        }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return ItemList;
+        //}
         #endregion
 
         #region Assign Controls
@@ -1122,10 +1122,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
                     {
                         ItemsByAreaIDFormList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(temp.ToString());
-                        //if (ItemsByAreaIDFormList.Count > 0)
-                        //{
-                        //    var inserted = CommonConstants.AddRecordOfflineStore(JsonConvert.SerializeObject(ItemsByAreaIDFormList), QuestInstance, "H2_GetItemsByAreaIDFormList", _InstanceUserAssocId, _DBPath, GetAreaList.Result == null ? 0 : GetAreaList.Result.APP_TYPE_INFO_ID, AreaId, "M");
-                        //}
                     }
                 }
                 else
@@ -1150,7 +1146,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                             cnt++;
                         }
                     }
-                    //ItemsByAreaIDFormList = JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(GetAreaList.Result.ASSOC_FIELD_INFO.ToString());
                 }
             }
             catch (Exception ex)

@@ -25,12 +25,12 @@
 
 
                     <ListView x:Name="FormList"  HasUnevenRows="True"
-                      CachingStrategy = "RecycleElementAndDataTemplate"  ItemTapped="list_ItemTapped" VerticalOptions="Center" >
+                      CachingStrategy = "RecycleElementAndDataTemplate"  ItemTapped="FormList_ItemTapped" VerticalOptions="Center" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
                                     <ViewCell.ContextActions>
-                                        <MenuItem  CommandParameter="{Binding .}" Text="Details" Clicked="Detail_Clicked"/>
+                                        <MenuItem  CommandParameter="{Binding .}" Text="Details" Clicked="MenuItem_Clicked"/>
 
                                     </ViewCell.ContextActions>
 

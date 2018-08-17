@@ -69,10 +69,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>
-                   <!-- <StackLayout Orientation="Vertical" Margin="15,0,0,0">
-                        <Label BackgroundColor="LightGray" HeightRequest="1" />
-                        <Button Text="Load More (Requires Internet)" />
-                    </StackLayout>-->
                 </ListView.Footer>
             </ListView>
             </StackLayout>

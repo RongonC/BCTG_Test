@@ -28,59 +28,35 @@ namespace StemmonsMobile.Views.CreateQuestForm
             InitializeComponent();
             AreaId = areaid;
             ViewCount = 0;
-
-
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-              App.SetConnectionFlag();
+            App.SetConnectionFlag();
             if (ViewCount == 0)
             {
 
                 ViewCount = ViewCount + 1;
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                dynamic result = null;
                 try
                 {
                     await Task.Run(action: () =>
                     {
-
-                        result = QuestSyncAPIMethods.GetItemsByAreaIDFormList(App.Isonline, Functions.UserName, Convert.ToString(AreaId), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-
+                        var result = QuestSyncAPIMethods.GetItemsByAreaIDFormList(App.Isonline, Functions.UserName, Convert.ToString(AreaId), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                        AreaIdlst = result.Result;
                     });
 
-                    FormList.ItemsSource = result.Result;
-                    AreaIdlst = result.Result;
+                    FormList.ItemsSource = AreaIdlst;
                 }
                 catch (Exception ex)
                 {
-
                 }
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
             }
         }
 
-        void Detail_Clicked(object sender, System.EventArgs e)
-        {
-            try
-            {
-                var mi = ((MenuItem)sender);
-                var value = mi.CommandParameter as ItemsByAreaID;
-                Functions.tempitemid = value.intItemID;
-                if(value.securityType.ToUpper().Contains("R") || value.securityType.ToUpper().Contains("OPEN")){
-                this.Navigation.PushAsync(new HopperCenterDetailPage((string)value.strItemName));
-                }
-                else{
-                    DisplayAlert("Quest Form", "You dont have sufficient right to view this page.", "Ok");
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
+        
 
         void FocusedEvent(object sender, Xamarin.Forms.FocusEventArgs e)
         {
@@ -96,78 +72,56 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        void list_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
-        {
-            try
-            {
-                ListView l = (ListView)sender;
-                var sd = (ItemsByAreaID)l.SelectedItem;
-                if (sd.securityType.ToUpper().Contains("R") || sd.securityType.ToUpper().Contains("OPEN"))
-                {
-                    this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId)));
-                }
-                else{
-                    DisplayAlert("Quest Form", "You dont have sufficient rights to view this page.", "Ok");
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void QuestForms_ItemAppearing(object sender, ItemVisibilityEventArgs e)
-        {
-            try
-            {
-                var listView = (ListView)sender;
-                var cell = (ViewCell)listView.TemplatedItems.First(t => t.BindingContext == e.Item);
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                var value = e.Item as ItemsByAreaID;
+        //private void QuestForms_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var listView = (ListView)sender;
+        //        var cell = (ViewCell)listView.TemplatedItems.First(t => t.BindingContext == e.Item);
+        //        var tapGestureRecognizer = new TapGestureRecognizer();
+        //        var value = e.Item as ItemsByAreaID;
 
 
-                tapGestureRecognizer.Tapped += (obj, args) => this.Navigation.PushAsync(new QuestItemPage((String)value.strItemName, value.intItemID));
-                cell.View.GestureRecognizers.Add(tapGestureRecognizer);
-                var longPressGestureRecognizer = new LongPressGestureRecognizer();
-                longPressGestureRecognizer.OnAction +=
-                    (gestureRecognizer, state) =>
-                    {
-                        if (state == GestureRecognizerState.Began)
-                        {
-                            var hopperCenterDetailsDialog = new HopperCenterDetailDialog((string)e.Item);
-                            hopperCenterDetailsDialog.Content.HorizontalOptions = LayoutOptions.Center;
-                            hopperCenterDetailsDialog.Content.WidthRequest = this.Width * 9 / 10;
-                            hopperCenterDetailsDialog.ListHeight = this.Height / 2;
-                            this.Navigation.PushPopupAsync(hopperCenterDetailsDialog);
-                        }
-                    };
-                cell.View.GestureRecognizers.Add(longPressGestureRecognizer);
-            }
-            catch (Exception ex)
-            {
+        //        tapGestureRecognizer.Tapped += (obj, args) => this.Navigation.PushAsync(new QuestItemPage((String)value.strItemName, value.intItemID));
+        //        cell.View.GestureRecognizers.Add(tapGestureRecognizer);
+        //        var longPressGestureRecognizer = new LongPressGestureRecognizer();
+        //        longPressGestureRecognizer.OnAction +=
+        //            (gestureRecognizer, state) =>
+        //            {
+        //                if (state == GestureRecognizerState.Began)
+        //                {
+        //                    var hopperCenterDetailsDialog = new HopperCenterDetailDialog((string)e.Item);
+        //                    hopperCenterDetailsDialog.Content.HorizontalOptions = LayoutOptions.Center;
+        //                    hopperCenterDetailsDialog.Content.WidthRequest = this.Width * 9 / 10;
+        //                    hopperCenterDetailsDialog.ListHeight = this.Height / 2;
+        //                    this.Navigation.PushPopupAsync(hopperCenterDetailsDialog);
+        //                }
+        //            };
+        //        cell.View.GestureRecognizers.Add(longPressGestureRecognizer);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        private void QuestForms_ItemDisappearing(object sender, ItemVisibilityEventArgs e)
-        {
-            try
-            {
-                var listView = (ListView)sender;
-                var cell = (ViewCell)listView.TemplatedItems.First(t => t.BindingContext == e.Item);
-                cell.View.GestureRecognizers.Clear();
-                foreach (var menuItem in cell.ContextActions)
-                {
-                    menuItem.Clicked -= Details_Clicked;
-                }
-                var plus = cell.FindByName<Button>("plus");
-                plus.Clicked -= Plus_Clicked;
-            }
-            catch (Exception ex)
-            {
+        //private void QuestForms_ItemDisappearing(object sender, ItemVisibilityEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var listView = (ListView)sender;
+        //        var cell = (ViewCell)listView.TemplatedItems.First(t => t.BindingContext == e.Item);
+        //        cell.View.GestureRecognizers.Clear();
+        //        foreach (var menuItem in cell.ContextActions)
+        //        {
+        //            menuItem.Clicked -= MenuItem_Clicked;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
@@ -190,13 +144,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
             }
         }
-
-        private void Plus_Clicked(object sender, EventArgs e)
-        {
-        }
-        private void Details_Clicked(object sender, EventArgs e)
-        {
-        }
+ 
         void CreateQuest_Clicked(object sender, System.EventArgs e)
         {
             try
@@ -207,14 +155,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     this.Navigation.PushAsync(new NewQuestForm(value.intItemID, Convert.ToString(AreaId)));
                 }
-                else{
+                else
+                {
                     DisplayAlert("Quest Form", "You dont have suffiecient rights to view this page.", "Ok");
                 }
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
         }
 
@@ -229,15 +176,58 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        private async void btn_more_Clicked(object sender, EventArgs e)
+        private void btn_more_Clicked(object sender, EventArgs e)
         {
             try
             {
                 App.BtnHumburger(this);
-               
+
             }
             catch (Exception)
             {
+            }
+        }
+
+        private void MenuItem_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var mi = ((MenuItem)sender);
+                var value = mi.CommandParameter as ItemsByAreaID;
+                Functions.tempitemid = value.intItemID;
+                if (value.securityType.ToUpper().Contains("R") || value.securityType.ToUpper().Contains("OPEN"))
+                {
+                    this.Navigation.PushAsync(new HopperCenterDetailPage((string)value.strItemName));
+                }
+                else
+                {
+                    DisplayAlert("Quest Form", "You dont have sufficient right to view this page.", "Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void FormList_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            try
+            {
+                ListView l = (ListView)sender;
+                var sd = (ItemsByAreaID)l.SelectedItem;
+                if (sd.securityType.ToUpper().Contains("R") || sd.securityType.ToUpper().Contains("OPEN"))
+                {
+                    this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId)));
+                }
+                else
+                {
+                    DisplayAlert("Quest Form", "You dont have sufficient rights to view this page.", "Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

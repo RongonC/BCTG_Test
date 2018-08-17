@@ -11,7 +11,6 @@
                     <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
                         <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
                     </StackLayout>-->
-                    <Label x:Name="WarningLabel">Checking for update... Click here to force.</Label>
                     <ListView x:Name="listViewActivityLog" ItemTapped="OnItemTapped" HasUnevenRows="true">
                         <ListView.ItemTemplate>
                             <DataTemplate>

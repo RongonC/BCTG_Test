@@ -1,7 +1,6 @@
 ﻿
 using Foundation;
 using UIKit;
-
 namespace StemmonsMobile.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -21,7 +20,8 @@ namespace StemmonsMobile.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
-
+            ImageCircleRenderer.Init();
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
             return base.FinishedLaunching(app, options);
         }
     }

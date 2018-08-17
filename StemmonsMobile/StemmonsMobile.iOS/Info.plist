@@ -33,16 +33,11 @@
 	<key>XSLaunchImageAssets</key>
 	<string>Assets.xcassets/LaunchImage.launchimage</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.15</string>
+	<string>1.4.37</string>
 	<key>NSCameraUsageDescription</key>
 	<string>I want to Use camera!</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>I want to user Photo Gallary.</string>
-	<!--<key>UIAppFonts</key>
-	<array>
-		<string>Stawix - SoinSansNeue-ExtraLight.ttf</string>
-		<string>Stawix - SoinSansNeue-Roman.ttf</string>
-	</array>-->
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
