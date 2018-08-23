@@ -3380,117 +3380,8 @@ namespace StemmonsMobile.Views.Cases
                     break;
 
                 case "Add Attachment":
-
-                    try
-                    {
-                        if (App.Isonline)
-                        {
-                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                            // if (Device.RuntimePlatform != Device.Android)
-                            {
-                                try
-                                {
-                                    await CrossMedia.Current.Initialize();
-
-                                    if (!CrossMedia.Current.IsPickPhotoSupported)
-                                    {
-                                        DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
-                                        return;
-                                    }
-
-                                    var file = await CrossMedia.Current.PickPhotoAsync();
-
-                                    if (file == null)
-                                    {
-                                        return;
-                                    }
-
-                                    long size = file.Path.Length;
-                                    byte[] fileBytes = null;
-                                    var bytesStream = file.GetStream();
-                                    using (var memoryStream = new MemoryStream())
-                                    {
-                                        bytesStream.CopyTo(memoryStream);
-                                        fileBytes = memoryStream.ToArray();
-                                    }
-                                    size = fileBytes.Count();
-
-                                    string File_Name = string.Empty;
-
-                                    try
-                                    {
-                                        if (Device.RuntimePlatform == Device.UWP)
-                                        {
-                                            File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                                        }
-                                        else
-                                            File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-
-                                    string FileId = string.Empty;
-                                    await Task.Run(() =>
-                                    {
-                                        var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
-
-                                        FileId = d.GetValue("ResponseContent").ToString();
-                                    });
-
-                                    if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
-                                    {
-                                        string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
-                                        await Task.Run(() =>
-                                        {
-                                            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-                                        });
-
-
-                                        if (!string.IsNullOrEmpty(txt_CasNotes.Text))
-                                        {
-                                            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-
-                                        }
-                                        Functions.ShowtoastAlert("File Attached Successfully.");
-                                    }
-                                    else
-                                    {
-                                        Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
-                                    }
-                                    gridCasesnotes.ItemsSource = CasesnotesGroups;
-                                    txt_CasNotes.Text = string.Empty;
-                                    try
-                                    {
-                                        if (Device.RuntimePlatform == Device.UWP)
-                                        {
-                                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                                        }
-                                        else
-                                        {
-                                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                                        }
-
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-                        }
-                        else
-                            Functions.ShowtoastAlert("Please Go online to use this functionality!");
-
-                        ReloadNotesArea();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
+                        AddAttachment();
+                        break;
 
                 case "Activity Log":
                     await this.Navigation.PushAsync(new CaseActivityLog(CaseID.ToString(), _Casedata.CaseTypeID, Onlineflag));
@@ -3508,7 +3399,274 @@ namespace StemmonsMobile.Views.Cases
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
+
+
+
+
+
+
+        async void AddAttachment()
+        {
+            try
+            {
+                var action = await
+                    this.DisplayActionSheet(null, "Cancel", null, "From Photo Gallery", "Take Photo");
+                switch (action)
+                {
+                    case "From Photo Gallery":
+                        OpenGallery();
+                        break;
+                    case "Take Photo":
+                        TakePhoto();
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        async void OpenGallery(){
+            try
+            {
+                if (App.Isonline)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    // if (Device.RuntimePlatform != Device.Android)
+                    {
+                        try
+                        {
+                            await CrossMedia.Current.Initialize();
+
+                            if (!CrossMedia.Current.IsPickPhotoSupported)
+                            {
+                                DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                                return;
+                            }
+
+                            var file = await CrossMedia.Current.PickPhotoAsync();
+
+                            if (file == null)
+                            {
+                                return;
+                            }
+
+                            long size = file.Path.Length;
+                            byte[] fileBytes = null;
+                            var bytesStream = file.GetStream();
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                bytesStream.CopyTo(memoryStream);
+                                fileBytes = memoryStream.ToArray();
+                            }
+                            size = fileBytes.Count();
+
+                            string File_Name = string.Empty;
+
+                            try
+                            {
+                                if (Device.RuntimePlatform == Device.UWP)
+                                {
+                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                                }
+                                else
+                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            string FileId = string.Empty;
+                            await Task.Run(() =>
+                            {
+                                var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
+
+                                FileId = d.GetValue("ResponseContent").ToString();
+                            });
+
+                            if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                            {
+                                string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
+                                await Task.Run(() =>
+                                {
+                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+                                });
+
+
+                                if (!string.IsNullOrEmpty(txt_CasNotes.Text))
+                                {
+                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+
+                                }
+                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                            }
+                            gridCasesnotes.ItemsSource = CasesnotesGroups;
+                            txt_CasNotes.Text = string.Empty;
+                            try
+                            {
+                                if (Device.RuntimePlatform == Device.UWP)
+                                {
+                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                                }
+                                else
+                                {
+                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                                }
+
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+                else
+                    Functions.ShowtoastAlert("Please Go online to use this functionality!");
+
+                ReloadNotesArea();
+            }
+            catch (Exception)
+            {
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            
+        }
+
+        async void TakePhoto(){
+
+            try
+            {
+                if (App.Isonline)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    // if (Device.RuntimePlatform != Device.Android)
+                    {
+                        try
+                        {
+                            await CrossMedia.Current.Initialize();
+
+                            if (!CrossMedia.Current.IsPickPhotoSupported)
+                            {
+                                DisplayAlert("No Camera", ":( No camera available.", "OK");
+                                return;
+                            }
+
+                            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                            {
+                                Directory = "Sample",
+                                DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
+                                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                            });
+
+                            if (file == null)
+                            {
+                                return;
+                            }
+
+                            long size = file.Path.Length;
+                            byte[] fileBytes = null;
+                            var bytesStream = file.GetStream();
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                bytesStream.CopyTo(memoryStream);
+                                fileBytes = memoryStream.ToArray();
+                            }
+                            size = fileBytes.Count();
+
+                            string File_Name = string.Empty;
+
+                            try
+                            {
+                                if (Device.RuntimePlatform == Device.UWP)
+                                {
+                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                                }
+                                else
+                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            string FileId = string.Empty;
+                            await Task.Run(() =>
+                            {
+                                var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
+
+                                FileId = d.GetValue("ResponseContent").ToString();
+                            });
+
+                            if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                            {
+                                string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
+                                await Task.Run(() =>
+                                {
+                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+                                });
+
+
+                                if (!string.IsNullOrEmpty(txt_CasNotes.Text))
+                                {
+                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+
+                                }
+                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                            }
+                            gridCasesnotes.ItemsSource = CasesnotesGroups;
+                            txt_CasNotes.Text = string.Empty;
+                            try
+                            {
+                                if (Device.RuntimePlatform == Device.UWP)
+                                {
+                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                                }
+                                else
+                                {
+                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                                }
+
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+                else
+                    Functions.ShowtoastAlert("Please Go online to use this functionality!");
+
+                ReloadNotesArea();
+            }
+            catch (Exception)
+            {
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
+        }
+
+
     }
+
+
+
+
 
     public class CasesViewmodel : INotifyPropertyChanged
     {
