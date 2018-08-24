@@ -3053,462 +3053,462 @@ namespace StemmonsMobile.Views.Cases
                 }
                 switch (action)
                 {
-                case "offline"://Switch to offline
-                    App.SetForceFullOnLineOffline(false);
-                    App.SetConnectionFlag();
-                    break;
-                case "online"://Switch to online
-                    App.SetForceFullOnLineOffline(true);
-                    App.SetConnectionFlag();
-                    break;
-                case "Run Synchronization":
-                    if (Functions.CheckInternetWithAlert())
-                    {
-                        App.isFirstcall = true;
-                        App.OnlineSyncRecord();
-                    }
-                    break;
-
-                case "Assign":
-
-                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, false, strTome, Onlineflag));
-                    txt_CasNotes.Text = string.Empty;
-                    break;
-
-                case "Return to Last Assignee":
-                    Task<int> ReturnToLastAssignee = null;
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    try
-                    {
-                        await Task.Run(() =>
+                    case "offline"://Switch to offline
+                        App.SetForceFullOnLineOffline(false);
+                        App.SetConnectionFlag();
+                        break;
+                    case "online"://Switch to online
+                        App.SetForceFullOnLineOffline(true);
+                        App.SetConnectionFlag();
+                        break;
+                    case "Run Synchronization":
+                        if (Functions.CheckInternetWithAlert())
                         {
-                            ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
-                            ReturnToLastAssignee.Wait();
+                            App.isFirstcall = true;
+                            App.OnlineSyncRecord();
+                        }
+                        break;
+
+                    case "Assign":
+
+                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, false, strTome, Onlineflag));
+                        txt_CasNotes.Text = string.Empty;
+                        break;
+
+                    case "Return to Last Assignee":
+                        Task<int> ReturnToLastAssignee = null;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        try
+                        {
+                            await Task.Run(() =>
+                            {
+                                ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
+                                ReturnToLastAssignee.Wait();
+                                if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
+                                {
+                                    ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
+                                    {
+                                        caseID = Convert.ToInt32(CaseID),
+                                        username = Functions.UserName
+                                    };
+                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                    if (offlinerecord == null)
+                                    {
+                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    }
+
+                                    offlinerecord.Wait();
+                                    BasicCase objview = new BasicCase();
+                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                    {
+                                        try
+                                        {
+                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                            objview = objviewtemp?.FirstOrDefault();
+                                            if (objview == null)
+                                            {
+                                                objview = objviewtemp.FirstOrDefault();
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        }
+                                    }
+
+
+                                    CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+                                }
+                            });
+
                             if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
                             {
-                                ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
-                                {
-                                    caseID = Convert.ToInt32(CaseID),
-                                    username = Functions.UserName
-                                };
-                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-                                if (offlinerecord == null)
-                                {
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                }
+                                Functions.ShowtoastAlert("Case Returned to Assignee Successfully.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Case Return to Assignee Operation failed. Please Try Again Later.");
+                            }
+                            this.OnAppearing();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
 
-                                offlinerecord.Wait();
-                                BasicCase objview = new BasicCase();
-                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                    case "Return to Last Assigner":
+                        Task<int> ReturnToLastAssigner = null;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        try
+                        {
+                            await Task.Run(() =>
+                            {
+                                ReturnToLastAssigner = SaveAndUpdate(savecase, createcase, null);
+                                ReturnToLastAssigner.Wait();
+                                if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
                                 {
-                                    try
+                                    ReturnCaseToLastAssignerRequest objReturnCaseToLastAssigner = new ReturnCaseToLastAssignerRequest()
                                     {
-                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        objview = objviewtemp?.FirstOrDefault();
-                                        if (objview == null)
+                                        caseid = Convert.ToInt32(CaseID),
+                                        username = Functions.UserName
+                                    };
+
+                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                    if (offlinerecord == null)
+                                    {
+                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    }
+                                    offlinerecord.Wait();
+
+                                    BasicCase objview = new BasicCase();
+                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                    {
+                                        try
                                         {
-                                            objview = objviewtemp.FirstOrDefault();
+                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                            if (objview == null)
+                                            {
+                                                objview = objviewtemp.FirstOrDefault();
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
                                         }
                                     }
-                                    catch
+
+                                    string _caseid = string.Empty;
+                                    switch (offlinerecord.Result?.IS_ONLINE)
                                     {
-                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        case true:
+                                            _caseid = Convert.ToString(CaseID);
+                                            //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                                            break;
+                                        default:
+                                            _caseid = Convert.ToString(ReturnToLastAssigner.Result);
+                                            //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), Convert.ToString(ReturnToLastAssigner.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                                            break;
                                     }
+
+                                    CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
                                 }
+                            });
 
-
-                                CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-                            }
-                        });
-
-                        if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("Case Returned to Assignee Successfully.");
-                        }
-                        else
-                        {
-                            Functions.ShowtoastAlert("Case Return to Assignee Operation failed. Please Try Again Later.");
-                        }
-                        this.OnAppearing();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
-
-                case "Return to Last Assigner":
-                    Task<int> ReturnToLastAssigner = null;
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    try
-                    {
-                        await Task.Run(() =>
-                        {
-                            ReturnToLastAssigner = SaveAndUpdate(savecase, createcase, null);
-                            ReturnToLastAssigner.Wait();
                             if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
                             {
-                                ReturnCaseToLastAssignerRequest objReturnCaseToLastAssigner = new ReturnCaseToLastAssignerRequest()
-                                {
-                                    caseid = Convert.ToInt32(CaseID),
-                                    username = Functions.UserName
-                                };
-
-                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-
-                                if (offlinerecord == null)
-                                {
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                }
-                                offlinerecord.Wait();
-
-                                BasicCase objview = new BasicCase();
-                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                {
-                                    try
-                                    {
-                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                        if (objview == null)
-                                        {
-                                            objview = objviewtemp.FirstOrDefault();
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                    }
-                                }
-
-                                string _caseid = string.Empty;
-                                switch (offlinerecord.Result?.IS_ONLINE)
-                                {
-                                case true:
-                                    _caseid = Convert.ToString(CaseID);
-                                        //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
-                                        break;
-                                default:
-                                    _caseid = Convert.ToString(ReturnToLastAssigner.Result);
-                                        //CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), Convert.ToString(ReturnToLastAssigner.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
-                                        break;
-                                }
-
-                                CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+                                Functions.ShowtoastAlert("Case Returned to last Assigner Successfully.");
                             }
-                        });
-
-                        if (ReturnToLastAssigner != null && ReturnToLastAssigner?.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("Case Returned to last Assigner Successfully.");
-                        }
-                        else
-                        {
-                            Functions.ShowtoastAlert("Case Returned To Last Assigner Operation failed. Please Try Again Later.");
-                        }
-                        this.OnAppearing();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
-
-                case "Approve and Return":
-                    Task<int> ApproveAndReturn = null;
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    try
-                    {
-                        await Task.Run(() =>
-                        {
-                            ApproveAndReturn = SaveAndUpdate(savecase, createcase, null);
-                            ApproveAndReturn.Wait();
-                            if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
+                            else
                             {
-                                ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
-                                {
-                                    caseID = Convert.ToInt32(CaseID),
-                                    username = Functions.UserName
-                                };
-                                Task<AppTypeInfoList> offlinerecord = null;
-                                offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                Functions.ShowtoastAlert("Case Returned To Last Assigner Operation failed. Please Try Again Later.");
+                            }
+                            this.OnAppearing();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
 
-                                if (offlinerecord.Result == null)
+                    case "Approve and Return":
+                        Task<int> ApproveAndReturn = null;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        try
+                        {
+                            await Task.Run(() =>
+                            {
+                                ApproveAndReturn = SaveAndUpdate(savecase, createcase, null);
+                                ApproveAndReturn.Wait();
+                                if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
                                 {
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                }
-
-                                offlinerecord.Wait();
-                                BasicCase objview = new BasicCase();
-                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                {
-                                    try
+                                    ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
                                     {
-                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                        if (objview == null)
+                                        caseID = Convert.ToInt32(CaseID),
+                                        username = Functions.UserName
+                                    };
+                                    Task<AppTypeInfoList> offlinerecord = null;
+                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                    if (offlinerecord.Result == null)
+                                    {
+                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    }
+
+                                    offlinerecord.Wait();
+                                    BasicCase objview = new BasicCase();
+                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                    {
+                                        try
                                         {
-                                            objview = objviewtemp.FirstOrDefault();
+                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                            if (objview == null)
+                                            {
+                                                objview = objviewtemp.FirstOrDefault();
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
                                         }
                                     }
-                                    catch
-                                    {
-                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                    }
-                                }
-                                string _caseID = string.Empty;
+                                    string _caseID = string.Empty;
 
-                                if (offlinerecord.Result.IS_ONLINE == true)
-                                    _caseID = CaseID;
-                                else
-                                    _caseID = Convert.ToString(ApproveAndReturn.Result);
+                                    if (offlinerecord.Result.IS_ONLINE == true)
+                                        _caseID = CaseID;
+                                    else
+                                        _caseID = Convert.ToString(ApproveAndReturn.Result);
 
 
-                                CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(_caseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
+                                    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(_caseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
                                     //else
                                     //    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(ApproveAndReturn.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
                                 }
-                        });
+                            });
 
-                        if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("Case Approved and Returned Successfully.");
-                        }
-                        else
-                        {
-                            Functions.ShowtoastAlert("Case Approved and Return operation failed. Please Try Again Later.");
-                        }
-                        this.OnAppearing();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
-
-                case "Approve and Assign":
-                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, true, false, strTome, Onlineflag));
-                    txt_CasNotes.Text = string.Empty;
-                    break;
-
-                case "Decline and Return":
-                    Task<int> DeclineAndReturn = null;
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    try
-                    {
-                        await Task.Run(() =>
-                        {
-                            DeclineAndReturn = SaveAndUpdate(savecase, createcase, null);
-                            DeclineAndReturn.Wait();
-                            if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
+                            if (ApproveAndReturn != null && ApproveAndReturn.Result > 0)
                             {
-                                DeclineAndReturnRequest objDeclineAndReturn = new DeclineAndReturnRequest()
+                                Functions.ShowtoastAlert("Case Approved and Returned Successfully.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Case Approved and Return operation failed. Please Try Again Later.");
+                            }
+                            this.OnAppearing();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
+
+                    case "Approve and Assign":
+                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, true, false, strTome, Onlineflag));
+                        txt_CasNotes.Text = string.Empty;
+                        break;
+
+                    case "Decline and Return":
+                        Task<int> DeclineAndReturn = null;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        try
+                        {
+                            await Task.Run(() =>
+                            {
+                                DeclineAndReturn = SaveAndUpdate(savecase, createcase, null);
+                                DeclineAndReturn.Wait();
+                                if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
                                 {
-                                    caseid = Convert.ToInt32(CaseID),
-                                    Username = Functions.UserName
+                                    DeclineAndReturnRequest objDeclineAndReturn = new DeclineAndReturnRequest()
+                                    {
+                                        caseid = Convert.ToInt32(CaseID),
+                                        Username = Functions.UserName
                                         //notes = txt_CasNotes.Text
                                     };
 
-                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-                                if (offlinerecord == null)
-                                {
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                }
-
-                                offlinerecord.Wait();
-                                BasicCase objview = new BasicCase();
-                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                {
-                                    try
+                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                    if (offlinerecord == null)
                                     {
-                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                        if (objview == null)
+                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    }
+
+                                    offlinerecord.Wait();
+                                    BasicCase objview = new BasicCase();
+                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                    {
+                                        try
                                         {
-                                            objview = objviewtemp.FirstOrDefault();
+                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                            if (objview == null)
+                                            {
+                                                objview = objviewtemp.FirstOrDefault();
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
                                         }
                                     }
-                                    catch
-                                    {
-                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                    }
+
+                                    CasesSyncAPIMethods.storeDeclineAndReturn(Onlineflag, objDeclineAndReturn, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+
                                 }
+                            });
 
-                                CasesSyncAPIMethods.storeDeclineAndReturn(Onlineflag, objDeclineAndReturn, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-
+                            if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
+                            {
+                                Functions.ShowtoastAlert("Case Declined and Returned Successfully.");
                             }
-                        });
-
-                        if (DeclineAndReturn != null && DeclineAndReturn.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("Case Declined and Returned Successfully.");
+                            else
+                            {
+                                Functions.ShowtoastAlert("Case Decline and Return Operation failed. Please Try Again Later.");
+                            }
+                            this.OnAppearing();
                         }
-                        else
+                        catch (Exception)
                         {
-                            Functions.ShowtoastAlert("Case Decline and Return Operation failed. Please Try Again Later.");
                         }
-                        this.OnAppearing();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
-                case "Decline and Assign":
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
+                    case "Decline and Assign":
 
-                    await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, true, strTome, Onlineflag));
+                        await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, true, strTome, Onlineflag));
 
-                    txt_CasNotes.Text = string.Empty;
-                    break;
+                        txt_CasNotes.Text = string.Empty;
+                        break;
 
-                case "Close Case":
-                    Task<int> Close = null;
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    case "Close Case":
+                        Task<int> Close = null;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
 
-                    try
-                    {
-                        await Task.Run(() =>
+                        try
                         {
-                            Close = SaveAndUpdate(savecase, createcase, null);
-                            Close.Wait();
+                            await Task.Run(() =>
+                            {
+                                Close = SaveAndUpdate(savecase, createcase, null);
+                                Close.Wait();
+
+                                if (Close != null && Close.Result > 0)
+                                {
+                                    CloseCaseRequest objClose = new CloseCaseRequest()
+                                    {
+                                        caseID = Convert.ToInt32(CaseID),
+                                        user = Functions.UserName
+                                    };
+
+                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+
+                                    if (offlinerecord == null)
+                                    {
+                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    }
+
+                                    offlinerecord.Wait();
+                                    BasicCase objview = new BasicCase();
+                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                    {
+                                        try
+                                        {
+                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                            objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
+                                            if (objview == null)
+                                            {
+                                                objview = objviewtemp.FirstOrDefault();
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                        }
+                                    }
+                                    CasesSyncAPIMethods.storeClose(Onlineflag, objClose, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+                                }
+                            });
 
                             if (Close != null && Close.Result > 0)
                             {
-                                CloseCaseRequest objClose = new CloseCaseRequest()
+                                Functions.ShowtoastAlert("Case Closed Successfully.");
+                                //var answer = DisplayAlert("Close Case", "Case Close Successfully.", "OK");
+                                if (strTome == "_AssignedToMe")
                                 {
-                                    caseID = Convert.ToInt32(CaseID),
-                                    user = Functions.UserName
-                                };
-
-                                Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-
-                                if (offlinerecord == null)
-                                {
-                                    offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                    await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
                                 }
-
-                                offlinerecord.Wait();
-                                BasicCase objview = new BasicCase();
-                                if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                else if (strTome == "_CreatedByMe")
                                 {
-                                    try
-                                    {
-                                        var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        objview = objviewtemp?.Where(v => v.CaseID == Convert.ToInt32(CaseID))?.FirstOrDefault();
-                                        if (objview == null)
-                                        {
-                                            objview = objviewtemp.FirstOrDefault();
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                    }
+                                    await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
                                 }
-                                CasesSyncAPIMethods.storeClose(Onlineflag, objClose, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-                            }
-                        });
+                                else if (strTome == "_OwnedByMe")
+                                {
+                                    await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
+                                }
+                                else if (strTome == "_AssignedToMyTeam")
+                                {
+                                    var tm_uname1 = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
 
-                        if (Close != null && Close.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("Case Closed Successfully.");
-                            //var answer = DisplayAlert("Close Case", "Case Close Successfully.", "OK");
-                            if (strTome == "_AssignedToMe")
-                            {
-                                await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
-                            }
-                            else if (strTome == "_CreatedByMe")
-                            {
-                                await this.Navigation.PushAsync(new CaseList("caseCreateBySAM", Functions.UserName, ""));
-                            }
-                            else if (strTome == "_OwnedByMe")
-                            {
-                                await this.Navigation.PushAsync(new CaseList("caseOwnerSAM", Functions.UserName, ""));
-                            }
-                            else if (strTome == "_AssignedToMyTeam")
-                            {
-                                var tm_uname1 = DBHelper.GetAppTypeInfo_tmname(ConstantsSync.CasesInstance, _Casedata.CaseID, _Casedata.CaseTypeID, "E2_GetCaseList_AssignedToMyTeam", App.DBPath).Result?.TM_Username;
-
-                                await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname1 ?? Functions.UserName, ""));
+                                    await this.Navigation.PushAsync(new CaseList("caseAssgnTM", tm_uname1 ?? Functions.UserName, ""));
+                                }
+                                else
+                                    await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
                             }
                             else
-                                await Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(Casetypeid), "", Casetitle));
+                            {
+                                Functions.ShowtoastAlert("Case Close Operation failed. Please Try Again Later.");
+                                // var answer = DisplayAlert("Close Case", "Case Not Close. Please Try Again Later.", "OK");
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Functions.ShowtoastAlert("Case Close Operation failed. Please Try Again Later.");
-                            // var answer = DisplayAlert("Close Case", "Case Not Close. Please Try Again Later.", "OK");
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
 
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
 
 
-                case "Take Ownership":
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    try
-                    {
-                        AcceptCaseRequest obj = new AcceptCaseRequest()
+                    case "Take Ownership":
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        try
                         {
-                            CaseId = Convert.ToInt32(CaseID),
-                            caseOwnerSAM = Functions.UserName,
-                            username = Functions.UserName
-                        };
-                        Task<int> TakeOwnership = null;
+                            AcceptCaseRequest obj = new AcceptCaseRequest()
+                            {
+                                CaseId = Convert.ToInt32(CaseID),
+                                caseOwnerSAM = Functions.UserName,
+                                username = Functions.UserName
+                            };
+                            Task<int> TakeOwnership = null;
 
-                        await Task.Run(() =>
-                        {
-                            TakeOwnership = SaveAndUpdate(savecase, createcase, obj);
-                            TakeOwnership.Wait();
-                        });
+                            await Task.Run(() =>
+                            {
+                                TakeOwnership = SaveAndUpdate(savecase, createcase, obj);
+                                TakeOwnership.Wait();
+                            });
 
-                        if (TakeOwnership.Result > 0)
-                        {
-                            Functions.ShowtoastAlert("You have Successfully Owned this case.");
+                            if (TakeOwnership.Result > 0)
+                            {
+                                Functions.ShowtoastAlert("You have Successfully Owned this case.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Ownership has not been taken. Please try again later");
+                            }
+                            this.OnAppearing();
                         }
-                        else
+                        catch (Exception)
                         {
-                            Functions.ShowtoastAlert("Ownership has not been taken. Please try again later");
                         }
-                        this.OnAppearing();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    txt_CasNotes.Text = string.Empty;
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    break;
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break;
 
 
-                case "Email Link":
-                    emailLink(savecase);
-                    break;
+                    case "Email Link":
+                        emailLink(savecase);
+                        break;
 
-                case "Add Attachment":
+                    case "Add Attachment":
                         AddAttachment();
                         break;
 
-                case "Activity Log":
-                    await this.Navigation.PushAsync(new CaseActivityLog(CaseID.ToString(), _Casedata.CaseTypeID, Onlineflag));
-                    break;
-                case "Logout":
-                    App.Logout(this);
-                    break;
+                    case "Activity Log":
+                        await this.Navigation.PushAsync(new CaseActivityLog(CaseID.ToString(), _Casedata.CaseTypeID, Onlineflag));
+                        break;
+                    case "Logout":
+                        App.Logout(this);
+                        break;
                 }
             }
             catch (Exception ex)
             {
             }
 
-        requiredJump: int abc = 0;
+            requiredJump: int abc = 0;
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
@@ -3522,8 +3522,15 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                var action = await
-                    this.DisplayActionSheet(null, "Cancel", null, "From Photo Gallery", "Take Photo");
+                string[] buttons;
+                if (Functions.Platformtype != "Android")
+                    buttons = new string[] { "From Photo Gallery", "Take Photo" };
+                else
+                    buttons = new string[] { "From Photo Gallery" };
+
+                var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
+
+
                 switch (action)
                 {
                     case "From Photo Gallery":
@@ -3542,7 +3549,8 @@ namespace StemmonsMobile.Views.Cases
         }
 
 
-        async void OpenGallery(){
+        async void OpenGallery()
+        {
             try
             {
                 if (App.Isonline)
@@ -3652,10 +3660,11 @@ namespace StemmonsMobile.Views.Cases
             {
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-            
+
         }
 
-        async void TakePhoto(){
+        async void TakePhoto()
+        {
 
             try
             {
