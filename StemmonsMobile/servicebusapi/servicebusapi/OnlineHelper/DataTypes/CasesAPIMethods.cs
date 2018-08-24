@@ -323,7 +323,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
         #region Get Case List
         public static JObject GetCaseList(string user, string CaseTypeID = null, string CaseOwnerSAM = null, string AssignedToSAM = null, string ClosedBySAM = null, string CreatedBySAM = null,
-                                                    string PropertyID = null, string TenantCode = null, string TenantID = null, string showOpenClosedCasesType = "O", string showPastDueDate = "N", string SearchQuery = "")
+                                                    string PropertyID = null, string TenantCode = null, string TenantID = null, string showOpenClosedCasesType = "O", string showPastDueDate = "N", string SearchQuery = "", string Pagenumber = "0", string Pageindex = "0")
         {
             #region API Details
             var API_value = new List<KeyValuePair<string, string>>
@@ -347,6 +347,8 @@ namespace DataServiceBus.OnlineHelper.DataTypes
                 new KeyValuePair<string, string>("showOpenClosedCasesType", showOpenClosedCasesType),
                 new KeyValuePair<string, string>("showPastDueCases", showPastDueDate),
                 new KeyValuePair<string, string>("searchQuery", SearchQuery),
+                new KeyValuePair<string, string>("Pagenumber", Pagenumber),
+                new KeyValuePair<string, string>("Pageindex", Pageindex),
             };
             #endregion
 
@@ -361,8 +363,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
         #region Get Case List
-        public static JObject GetCaseListSync(string user, string CaseTypeID = null, string CaseOwnerSAM = null, string AssignedToSAM = null, string ClosedBySAM = null, string CreatedBySAM = null, List<KeyValuePair<string, string>> keyValuePairs = null,
-                                                    string PropertyID = null, string TenantCode = null, string TenantID = "0", char showOpenClosedCasesType = 'O', char showPastDueDate = 'N', string SearchQuery = "", string screenName = "")
+        public static JObject GetCaseListSync(string user, string CaseTypeID = null, string CaseOwnerSAM = null, string AssignedToSAM = null, string ClosedBySAM = null, string CreatedBySAM = null, List<KeyValuePair<string, string>> keyValuePairs = null, string PropertyID = null, string TenantCode = null, string TenantID = "0", char showOpenClosedCasesType = 'O', char showPastDueDate = 'N', string SearchQuery = "", string screenName = "", int? _pageindex = 0, int? _pagenumber = 0)
         {
             //#region API Details
             //var API_value = new List<KeyValuePair<string, string>>
@@ -382,6 +383,8 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             req.caseCreateBySAM = CreatedBySAM;
             req.propertyId = PropertyID;
             req.tenant_Code = TenantCode;
+            req.Pageindex = _pageindex;
+            req.Pagenumber = _pagenumber;
             try
             {
                 req.tenant_Id = Convert.ToInt32(TenantID);

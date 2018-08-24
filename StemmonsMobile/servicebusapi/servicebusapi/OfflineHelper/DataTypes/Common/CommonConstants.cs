@@ -64,9 +64,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                             record.Wait();
 
                             var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && /*v.TYPE_NAME == item.TYPE_NAME &&*/ v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
-                            // var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && v.TYPE_NAME == item.TYPE_NAME && v.ASSOC_FIELD_INFO == item.ASSOC_FIELD_INFO && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
-                            //var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && v.TYPE_NAME == item.TYPE_NAME && v.ASSOC_FIELD_INFO == item.ASSOC_FIELD_INFO && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
-                            //var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.TYPE_NAME == item.TYPE_NAME && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
                             if (ischeck == null)
                             {
@@ -125,8 +122,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                 var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
                                 Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
                                 record.Wait();
-                                //var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.EDS_RESULT == item.EDS_RESULT && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
-
+                                
                                 var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
                                 if (ischeck == null)

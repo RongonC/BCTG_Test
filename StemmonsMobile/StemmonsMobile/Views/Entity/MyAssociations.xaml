@@ -13,7 +13,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <SearchBar Placeholder="Search" x:Name="SearchQuest" TextChanged="Handle_TextChanged" Grid.Row="0"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <SearchBar Placeholder="Search" x:Name="SearchQuest" TextChanged="Handle_TextChanged" Grid.Row="0"  />
 
                 <StackLayout Grid.Row="1">
                     <ListView x:Name="FormData"   HasUnevenRows="True" 
@@ -37,53 +37,45 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Label Text="{Binding ENTITY_TITLE}" 
-                                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                       Style="{StaticResource defaultLabelSize}"  TextColor="{StaticResource DetailsColor}"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                               Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                               HorizontalOptions="StartAndExpand" 
+                                               VerticalOptions="Center"   Style="{StaticResource defaultLabelSize}" 
+                                               TextColor="{StaticResource DetailsColor}"  />
                                         <Label Text="{Binding ENTITY_TYPE_NAME}"
-                                       Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2"
-                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                       FontSize="15"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                      />
+                                               Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2"
+                                               HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                               FontSize="15"  />
                                         <Label Text="{Binding LIST_ID}"
-                                       Grid.Row="1" Grid.Column="2" 
-                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
-                                       FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                       />
+                                               Grid.Row="1" Grid.Column="2" 
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                               FontSize="12"   />
                                         <Label Text="{Binding MODIFIED_BY}"
-                                       Grid.Row="2" Grid.Column="0" 
-                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                        FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                       />
+                                               Grid.Row="2" Grid.Column="0" 
+                                               HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                               FontSize="12"   />
                                         <Label Text="{Binding MODIFIED_DATETIME}"
-                                       Grid.Row="2" Grid.Column="2" 
-                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
-                                        FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                       />
+                                               Grid.Row="2" Grid.Column="2" 
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                               FontSize="12"  />
                                         <Label Text="{Binding CREATED_BY}"
-                                       Grid.Row="3" Grid.Column="0" 
-                                       HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                        FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                       />
+                                               Grid.Row="3" Grid.Column="0" 
+                                               HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                               FontSize="12"  />
                                         <Label Text="{Binding CREATED_DATETIME}"
-                                       Grid.Row="3" Grid.Column="2" 
-                                       HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
-                                        FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
-                                       />
+                                               Grid.Row="3" Grid.Column="2" 
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                                               FontSize="12" />
 
                                         <Button Image="Assets/dropdowniconClose.png"
-                                          Grid.Column="3" Grid.RowSpan="3" 
-                                        BackgroundColor="Transparent"
-                                        HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="0,0,5,0" />
+                                                Grid.Column="3" Grid.RowSpan="3" 
+                                                BackgroundColor="Transparent"
+                                                HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                                Margin="0,0,5,0" />
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.Footer>
-                            <!--<StackLayout Orientation="Vertical" Margin="15,0,0,0">
-                        <Label BackgroundColor="LightGray" HeightRequest="1" />
-                        <Button Text="Load More (Requires Internet)" />
-                    </StackLayout>-->
                         </ListView.Footer>
                     </ListView>
                 </StackLayout>

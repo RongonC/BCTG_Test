@@ -27,37 +27,47 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             App.SetConnectionFlag();
             cm = new CaseTypeViewModel();
 
-            Functions.ShowIndicator(ActInd, Stack_indicator, true, Main_Stack, .5);
-            var result = CasesSyncAPIMethods.GetCaseTypes(App.Isonline, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-            result.Wait();
-            Functions.ShowIndicator(ActInd, Stack_indicator, false, Main_Stack, 1);
 
-
-
-            lst = result.Result;
-            listCaseType.ItemsSource = lst;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
             Searchbar1.Text = "";
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            await Task.Run(() =>
+             {
+                 var result = CasesSyncAPIMethods.GetCaseTypes(App.Isonline, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                 result.Wait();
+                 lst = result.Result;
+             });
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
+            listCaseType.ItemsSource = lst;
         }
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            try
             {
-                listCaseType.ItemsSource = lst;
-            }
-            else
-            {
-                listCaseType.ItemsSource = lst.Where(x => x.Name.Contains(e.NewTextValue));
-                if (lst.Where(x => x.Name.ToLower().Contains(e.NewTextValue.ToLower())).ToList().Count <= 0)
+                if (lst.Count > 0)
                 {
-                    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-                    ((SearchBar)sender).Text = "";
+                    if (string.IsNullOrEmpty(e.NewTextValue))
+                    {
+                        listCaseType.ItemsSource = lst;
+                    }
+                    else
+                    {
+                        listCaseType.ItemsSource = lst.Where(x => x.Name.Contains(e.NewTextValue));
+                        if (lst.Where(x => x.Name.ToLower().Contains(e.NewTextValue.ToLower())).ToList().Count <= 0)
+                        {
+                            DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+                            ((SearchBar)sender).Text = "";
+                        }
+                    }
                 }
-
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -85,8 +95,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             {
             }
         }
-
-
 
         private void btn_more_Clicked(object sender, EventArgs e)
         {

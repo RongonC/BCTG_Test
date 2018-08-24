@@ -1599,7 +1599,8 @@ namespace StemmonsMobile.Views.Entity
                                 mbView.EntityDetails.EntityTypeID = EntitySchemaLists.EntityTypeID;
                                 mbView.Title = EntitySchemaLists.EntityTypeName;
 
-                                await Navigation.PushAsync(new Entity_View(mbView));
+                                await Navigation.PopAsync();
+                                //await Navigation.PushAsync(new Entity_View(mbView));
                             }
                             break;
                         case "Save & Exit":
@@ -1609,7 +1610,37 @@ namespace StemmonsMobile.Views.Entity
                                 EntityOrgCenterList t = new EntityOrgCenterList();
                                 t.EntityTypeID = EntitySchemaLists.EntityTypeID;
                                 t.EntityTypeName = EntitySchemaLists.EntityTypeName;
-                                await Navigation.PushAsync(new EntityDetailsSubtype(t, null));
+                                //await Navigation.PushAsync(new EntityDetailsSubtype(t, null));
+                                EntityDetailsSubtype p = new EntityDetailsSubtype(t, null);
+                                var s = p.GetType().Name;
+                                try
+                                {
+                                    var existingPages = this.Navigation.NavigationStack.ToList();
+
+                                    if (existingPages.Count > 0)
+                                    {
+                                        int Counter = 0;
+                                        for (int i = 0; i < existingPages.Count; i++)
+                                        {
+                                            var typ = existingPages[i].GetType().Name;
+                                            if (typ == s)
+                                            {
+                                                Counter = i;
+                                                break;
+                                            }
+                                        }
+
+                                        for (int i = Counter + 1; i <= existingPages.Count; i++)
+                                        {
+                                            var ph = existingPages[i];
+                                            this.Navigation.RemovePage(ph);
+                                            var ta = this.Navigation.NavigationStack.ToList();
+                                        }
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                }
                             }
                             break;
                     }
@@ -1623,12 +1654,53 @@ namespace StemmonsMobile.Views.Entity
                             int result = await CreateEntitycall();
                             if (result > 0)
                             {
-                                mbView = new EntityListMBView();
-                                mbView.EntityDetails = new EntityClass();
-                                mbView.EntityDetails.EntityID = result;
-                                mbView.EntityDetails.EntityTypeID = EntitySchemaLists.EntityTypeID;
-                                mbView.Title = EntitySchemaLists.EntityTypeName;
-                                await Navigation.PushAsync(new Entity_View(mbView));
+                                mbView = new EntityListMBView
+                                {
+                                    EntityDetails = new EntityClass
+                                    {
+                                        EntityID = result,
+                                        EntityTypeID = EntitySchemaLists.EntityTypeID
+                                    },
+                                    Title = EntitySchemaLists.EntityTypeName
+                                };
+                                try
+                                {
+                                    //await Navigation.PushAsync(new Entity_View(mbView));
+
+                                    //var existingPages = this.Navigation.NavigationStack.ToList();
+                                    //var ph = existingPages[existingPages.Count - 1];
+                                    //this.Navigation.RemovePage(ph);
+
+
+                                    var existingPages = this.Navigation.NavigationStack.ToList();
+                                    // Get the page before Create Entity
+                                    //              or
+                                    // Get the Navigation Parent Page
+                                    var ph = existingPages[existingPages.Count - 2];
+
+
+                                    if (ph.GetType().Name.ToString().ToLower() == "entity_typedetails")
+                                    {
+                                        await Navigation.PushAsync(new Entity_View(mbView));
+                                        Navigation.RemovePage(ph);// remove entity_typedetails() Page from Queue
+
+                                        existingPages = this.Navigation.NavigationStack.ToList();
+                                        var Rph = existingPages[existingPages.Count - 2];
+                                        this.Navigation.RemovePage(Rph);//remove only Create entity Page
+                                    }
+                                    else
+                                    {
+                                        //var Rph = existingPages[existingPages.Count - 1];
+                                        //this.Navigation.RemovePage(Rph);
+                                        /// popout to the EntityDetailsSubtype() Page
+                                        await Navigation.PopAsync();
+                                    }
+
+
+                                }
+                                catch (Exception)
+                                {
+                                }
                             }
                             break;
                         case "Create & Exit":
@@ -1639,7 +1711,31 @@ namespace StemmonsMobile.Views.Entity
                                 EntityOrgCenterList t = new EntityOrgCenterList();
                                 t.EntityTypeID = EntitySchemaLists.EntityTypeID;
                                 t.EntityTypeName = EntitySchemaLists.EntityTypeName;
-                                await Navigation.PushAsync(new EntityDetailsSubtype(t, null));
+
+
+                                var existingPages = this.Navigation.NavigationStack.ToList();
+                                // Get the page before Create Entity
+                                //              or
+                                // Get the Navigation Parent Page
+                                var ph = existingPages[existingPages.Count - 2];
+
+
+                                if (ph.GetType().Name.ToString().ToLower() == "entity_typedetails")
+                                {
+                                    await Navigation.PushAsync(new EntityDetailsSubtype(t, null));
+                                    Navigation.RemovePage(ph);// remove entity_typedetails() Page from Queue
+
+                                    existingPages = this.Navigation.NavigationStack.ToList();
+                                    var Rph = existingPages[existingPages.Count - 2];
+                                    this.Navigation.RemovePage(Rph);//remove only Create entity Page
+                                }
+                                else
+                                {
+                                    //var Rph = existingPages[existingPages.Count - 1];
+                                    //this.Navigation.RemovePage(Rph);
+                                    /// popout to the EntityDetailsSubtype() Page
+                                    await Navigation.PopAsync();
+                                }
                             }
                             break;
                         case "Create & New":
@@ -1649,6 +1745,10 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 Functions.IsEditEntity = false;
                                 DesignFormDynamic();
+
+                                //var existingPages = this.Navigation.NavigationStack.ToList();
+                                //var ph = existingPages[existingPages.Count - 1];
+                                //this.Navigation.RemovePage(ph);
                             }
 
                             break;
@@ -1716,6 +1816,21 @@ namespace StemmonsMobile.Views.Entity
                                 {
                                     IsRequiredFieldEmpty = true;
                                     editor.Focus();
+                                    ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                                    break;
+                                }
+                            }
+
+                        }
+                        else if (cnt_type.Name.ToLower() == "datepicker")
+                        {
+                            var dt = (DatePicker)cnt;
+                            if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
+                            {
+                                if (dt.Date == Convert.ToDateTime("01/01/1900"))
+                                {
+                                    IsRequiredFieldEmpty = true;
+                                    dt.Focus();
                                     ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
                                     break;
                                 }
@@ -1842,6 +1957,10 @@ namespace StemmonsMobile.Views.Entity
                                         if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                         {
                                             Assoc_metatext.TextValue = App.DateFormatStringToString(date_pick.Date.ToString());
+                                        }
+                                        else
+                                        {
+                                            Assoc_metatext.TextValue = "";
                                         }
                                     }
                                     else if (cnt_type.Name.ToLower() == "entry")
@@ -2210,11 +2329,9 @@ namespace StemmonsMobile.Views.Entity
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
-
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
@@ -2279,6 +2396,23 @@ namespace StemmonsMobile.Views.Entity
         private void btn_more_Clicked(object sender, EventArgs e)
         {
             Tool_Create_Clicked(sender, e);
+        }
+
+        private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            try
+            {
+                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+                if (notes.ImageVisible)
+                {
+                    await Navigation.PushAsync(new ViewAttachment
+                    (notes.ImageURL));
+                }
+                gridEntitynotes.SelectedItem = null;
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }

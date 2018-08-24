@@ -94,17 +94,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
         async void DynamicViewCall()
         {
-
-
             try
             {
-
-
                 pItemQuestionfieldid = new List<string>();
                 pCASEREQUESTED = new List<string>();
                 pMEETS_STANDARDS = new List<string>();
                 pNOTES = new List<string>();
-
 
                 ViewCount = ViewCount + 1;
                 DynamicView.Children.Clear();
@@ -396,7 +391,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         {
                             Label ExtraNotes = new Label();
                             ExtraNotes.Text = Convert.ToString(extraNotes[ik].strNotes);
-                            ExtraNotes.FontFamily = "Soin Sans Neue";
                             ExtraNotes.FontSize = 16;
                             ExtraNotes.Margin = new Thickness(10, 5, 10, 0);
                             QuestionLayout.Children.Add(ExtraNotes);
@@ -413,7 +407,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             ExtraViewCase.BackgroundColor = Color.Transparent;
                             ExtraViewCase.TextColor = Color.Blue;
                             ExtraViewCase.Text = "ViewCase";
-                            ExtraViewCase.FontFamily = "Soin Sans Neue";
                             ExtraViewCase.FontSize = 13;
 
                             if (extraNotes[ik].intCaseID == null || extraNotes[ik].intCaseID == 0)
@@ -428,7 +421,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             ExtraAttachment.BackgroundColor = Color.Transparent;
                             ExtraAttachment.TextColor = Color.Blue;
                             ExtraAttachment.Text = "Attachment";
-                            ExtraAttachment.FontFamily = "Soin Sans Neue";
                             ExtraAttachment.FontSize = 13;
                             if (isedit)
                             {
@@ -448,7 +440,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             ExtraRemove.BackgroundColor = Color.Transparent;
                             ExtraRemove.TextColor = Color.Blue;
                             ExtraRemove.Text = "Remove";
-                            ExtraRemove.FontFamily = "Soin Sans Neue";
                             ExtraRemove.FontSize = 13;
                             if (isedit)
                             {
@@ -483,8 +474,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     QuestionLayout.Children.Add(devider);
                     DynamicView.Children.Add(QuestionLayout);
 
-
-
                     if (pMEETS_STANDARDS.Count > 0)
                     {
                         for (int j = 0; j < standardMeet.Count; j++)
@@ -497,7 +486,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             else
                             {
                                 pk.SelectedIndex = 1;
-
                             }
                         }
                     }
@@ -513,7 +501,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             else
                             {
                                 pk.SelectedIndex = 1;
-
                             }
                         }
                     }
@@ -627,20 +614,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-
-
-        //Add Comment To Question.
-        //void NewLine_Clicked(object sender, EventArgs e)
-        //{
         void SaveComment()
         {
             try
             {
-                //var pick = (Button)sender;
-                //var value = pick.CommandParameter as ItemQuestionMetaData;
-                //var stack = (StackLayout)pick.Parent.Parent;
-
-
                 for (int i = 0; i < listdata.Count; i++)
                 {
                     int CommentCount = 0;
@@ -657,55 +634,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         }
 
                         Comment.Unfocus();
-                        //stack.Children.Add(new Editor() { Text = commentdata, Margin = new Thickness(10, 0, 10, 0), FontSize = 16, IsEnabled = false });
-                        //Comment.Text = "";
-
-
-
-                        //var NewAttachmentDLayout = new StackLayout();
-                        //NewAttachmentDLayout.Margin = new Thickness(10, 5, 0, 0);
-
-                        //Button ExtraViewCase = new Button();
-                        //ExtraViewCase.BackgroundColor = Color.Transparent;
-                        //ExtraViewCase.TextColor = Color.Blue;
-                        //ExtraViewCase.Text = "ViewCase";
-                        //ExtraViewCase.FontSize = 13;
-
-                        //ExtraViewCase.IsEnabled = false;
-
-                        //ExtraViewCase.Clicked += ExtraViewCase1_Clicked;
-
-                        //ExtraViewCase.Margin = new Thickness(15, 0, 0, 0);
-
-                        //Button ExtraAttachment = new Button();
-                        //ExtraAttachment.BackgroundColor = Color.Transparent;
-                        //ExtraAttachment.TextColor = Color.Blue;
-                        //ExtraAttachment.Text = "Attachment";
-                        //ExtraAttachment.FontSize = 13;
-
-
-                        //ExtraAttachment.Clicked += ExtraAttachment1_Clicked;
-                        //ExtraAttachment.CommandParameter = value;
-                        //ExtraAttachment.HorizontalOptions = LayoutOptions.CenterAndExpand;
-                        //ExtraAttachment.Margin = new Thickness(15, 0, 0, 0);
-
-                        //Button ExtraRemove = new Button();
-                        //ExtraRemove.BackgroundColor = Color.Transparent;
-                        //ExtraRemove.TextColor = Color.Blue;
-                        //ExtraRemove.Text = "Remove";
-                        //ExtraRemove.FontSize = 13;
-                        //ExtraRemove.IsEnabled = false;
-                        //ExtraRemove.HorizontalOptions = LayoutOptions.EndAndExpand;
-                        //ExtraRemove.Margin = new Thickness(0, 0, 15, 0);
-
-
-                        //NewAttachmentDLayout.Children.Add(ExtraViewCase);
-                        //NewAttachmentDLayout.Children.Add(ExtraAttachment);
-                        //NewAttachmentDLayout.Children.Add(ExtraRemove);
-
-                        //NewAttachmentDLayout.Orientation = StackOrientation.Horizontal;
-                        //NewAttachmentDLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
-                        //stack.Children.Add(NewAttachmentDLayout);
 
                         string makecasevalue = makecaseacknowledgement("makecase_" + listdata[i].intItemQuestionFieldID);
 
@@ -720,7 +648,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         {
                             for (int j = 0; j < CommentsListId.Count; j++)
                             {
-
                                 if (CommentsListId[j] == Convert.ToString(listdata[i].intItemQuestionFieldID))
                                 {
                                     CommentCount = CommentCount + 1;
@@ -728,15 +655,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             }
                         }
 
-
-
                         if (makecasevalue.ToUpper() != "N" && !string.IsNullOrEmpty(Comment.Text) || (makecasevalue.ToUpper() == "N" && !string.IsNullOrEmpty(Comment.Text)) || (makecasevalue.ToUpper() == "Y" && string.IsNullOrEmpty(Comment.Text)))
                         {
                             if (CommentCount > 1)
                             {
-
-
-
                                 GetItemQuestionMetadataCaseResponse.ItemQuestionMetadataCase obj = new GetItemQuestionMetadataCaseResponse.ItemQuestionMetadataCase()
                                 {
                                     strNotes = commentdata,
@@ -753,10 +675,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 };
                                 var APICall = QuestSyncAPIMethods.UpdateCaseNotesToQuestion(App.Isonline, iteminstancetranid, ItemId, commentdata, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, objcasenotes, obj);
 
-
-
-
-
                                 AddCaseToQuestionRequest objAddCaseToQuestion = new AddCaseToQuestionRequest()
                                 {
                                     createdBy = Functions.UserName,
@@ -771,7 +689,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             }
                         }
                     }
-                    //UncheckMakeCase();
                 }
             }
             catch (Exception ex)
@@ -1254,9 +1171,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 var jsonBody = JObject.Parse(Convert.ToString(Body));
 
                 Functions.questObjectData = obj;
-
-
-
 
                 if (removeclick == 1)
                 {

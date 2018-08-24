@@ -5,7 +5,7 @@
                x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseList">
 
     <ContentPage.ToolbarItems >
-        <ToolbarItem x:Name="Filter" Icon="Assets/filter.png" Clicked="Handle_Clicked"/>
+        <ToolbarItem x:Name="Filter" Icon="Assets/filter.png" Clicked="Filter_Clicked"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -20,14 +20,14 @@
                 </Grid.RowDefinitions>
                 <StackLayout x:Name="main_stack" Grid.Row="0">
                     <SearchBar Placeholder="Search for a case in this list"
-               x:Name="SearchCase" TextChanged="Handle_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+               x:Name="SearchCase" TextChanged="SearchCase_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
 
                     <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
                     <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
                 </StackLayout>-->
                     <!--<Label x:Name="WarningLabel" Text="Checking for update... Click here to force." FontSize = "14" HorizontalOptions="Center"  LineBreakMode="WordWrap"></Label>
 -->
-                    <ListView x:Name="listdata" ItemTapped="Handle_ItemTapped"  
+                    <ListView x:Name="listdata" ItemTapped="listdata_ItemTapped"  
                               IsPullToRefreshEnabled="True"
                                RefreshCommand="{Binding RefreshCommand}"
                                    IsRefreshing="{Binding IsRefreshing}"
@@ -65,10 +65,24 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
 
-                        <!--<ListView.Footer>
-                    <StackLayout Orientation="Horizontal">
-                    </StackLayout>
-                </ListView.Footer>-->
+                        <ListView.Footer>
+                            <StackLayout x:Name="lstfooter_stl"  Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+                                <ActivityIndicator 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                                    <ActivityIndicator.Margin>
+                                        <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                                    </ActivityIndicator.Margin>
+                                </ActivityIndicator>
+                                <Label  Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                                    <Label.Margin>
+                                        <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                                    </Label.Margin>
+                                </Label>
+                            </StackLayout>
+                        </ListView.Footer>
                     </ListView>
                 </StackLayout>
 

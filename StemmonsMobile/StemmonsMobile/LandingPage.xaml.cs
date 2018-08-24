@@ -197,7 +197,6 @@ namespace StemmonsMobile
                 int itemCount = 12;
                 int Percentage = 100 / 13;
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
                 try
                 {
                     if (CrossConnectivity.Current.IsConnected)
@@ -856,13 +855,11 @@ namespace StemmonsMobile
                     }
 
                     dlg.Hide();
-                    watch.Stop();
-                    var elapsedMs = watch.ElapsedMilliseconds;
 
                     Functions.AppStartCount = Functions.AppStartCount + 1;
                     Application.Current.Properties["AppStartCount"] = Functions.AppStartCount;
 
-                    Debug.WriteLine("Maste Sync Time:" + elapsedMs);
+
                 }
                 catch (Exception ex)
                 {
@@ -1050,7 +1047,7 @@ namespace StemmonsMobile
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-       //List<string> project = new List<string>();
+        //List<string> project = new List<string>();
         private async Task SelectUser(string name)
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -1069,7 +1066,7 @@ namespace StemmonsMobile
                     var options = new List<string>();
                     options.AddRange(Userlist.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.SAMName?.Trim()));
 
-                   // var count = project.Count();
+                    // var count = project.Count();
                     //var options = new List<string>(project.Take(count + 1));
                     options.Add("Search for User...");
                     var userAction = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
@@ -1226,6 +1223,7 @@ namespace StemmonsMobile
                 switch (action)
                 {
                     case "My Team":
+
                         await this.Navigation.PushAsync(new DirectReports(Functions.UserName));
                         break;
 
@@ -1486,7 +1484,8 @@ namespace StemmonsMobile
 
         async void MyTeam_Clicked(object sender, System.EventArgs e)
         {
-            await this.Navigation.PushAsync(new DirectReports(Functions.UserName));
+            if (Functions.HasTeam)
+                await this.Navigation.PushAsync(new DirectReports(Functions.UserName));
         }
 
         async void NewCaseClicked(object sender, System.EventArgs e)

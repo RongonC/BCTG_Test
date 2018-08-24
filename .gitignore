@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/StemmonsMobile/StemmonsMobile.UWP
+/StemmonsMobile/servicebusapi/servicebusapi/obj/Debug
+/StemmonsMobile/servicebusapi/servicebusapi/bin/Debug
+/StemmonsMobile/StemmonsMobile/bin/Debug
+/StemmonsMobile/StemmonsMobile/obj/Debug
+/StemmonsMobile/StemmonsMobile.Android/obj/Debug
+/StemmonsMobile/StemmonsMobile.DataTypes/obj/Debug
+/StemmonsMobile/StemmonsMobile.DataTypes/bin/Debug
+/StemmonsMobile/StemmonsMobile.iOS/obj
+/StemmonsMobile/StemmonsMobile.iOS/IOS DLL
+/StemmonsMobile/StemmonsMobile.iOS/bin
+/.vs/StemmonsMobile/v15/Server/sqlite3/db.lock

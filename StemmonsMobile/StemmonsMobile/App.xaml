@@ -209,25 +209,28 @@
                 </ViewCell>
             </DataTemplate>-->
             
-            <DataTemplate x:Key="EntityTypeCategorytemplate">
+            <!--<DataTemplate x:Key="EntityTypeCategorytemplate">
                 <ViewCell>
-                    <!--<ViewCell.ContextActions>
+                    --><!--<ViewCell.ContextActions>
                         <MenuItem x:Name="Menu_Del"  Text="Delete" IsDestructive="True" 
                                 CommandParameter="{Binding .}" />
                         <MenuItem x:Name="Menu_Details"  Text="Details"  
                                 CommandParameter="{Binding .}"/>
-                    </ViewCell.ContextActions>-->
+                    </ViewCell.ContextActions>--><!--
                     <ViewCell.View>
                         <StackLayout Orientation="Horizontal" HeightRequest="30">
-                            <StackLayout HorizontalOptions="StartAndExpand">
-                                <Label  Text="{Binding EntityTypeCategoryName}" VerticalOptions="Center" TextColor="Black" Margin="15,7,0,0" HorizontalOptions="End"  FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center">
+                                <Label  Text="{Binding EntityTypeCategoryName}" 
+                                        VerticalOptions="Center" TextColor="Black" 
+                                        Margin="15,0,0,0"
+                                        HorizontalOptions="End"  />
                             </StackLayout>
                             <Image Source="Assets/dropdowniconClose.png"  
                                            HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
-            </DataTemplate>
+            </DataTemplate>-->
             
             <DataTemplate x:Key="HistoryTypetemplate">
                 <ViewCell>

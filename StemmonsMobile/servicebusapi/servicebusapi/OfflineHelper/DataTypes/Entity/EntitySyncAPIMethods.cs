@@ -872,6 +872,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 {
                     if (!isEdit)
                     {
+                        //"Success": false,
+                        //"Message": "BadRequestValue cannot be null for Entity Assoc Type : Due Date",
                         var Result = EntityAPIMethods.CreateNewEntityItem(_Body_value);
                         string temp = Convert.ToString(Result.GetValue("ResponseContent"));
                         insertedRecordid = Convert.ToInt32(temp == "" ? "0" : temp);
@@ -1059,14 +1061,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             {
                 //if (!_IsOnline)
                 //{
-                //    var JResult = EntityAPIMethods.BoxerCentralHome_Entities_GetEntityList(username, null);
-                //    string jsonValue = Convert.ToString(JResult.GetValue("ResponseContent"));
-                //    Result = new List<BoxerCentralHomePage_EntityList_Mob>();
-                //    Result = JsonConvert.DeserializeObject<List<BoxerCentralHomePage_EntityList_Mob>>(jsonValue);
+                //var JResult = EntityAPIMethods.BoxerCentralHome_Entities_GetEntityList(username, null);
+                //string jsonValue = Convert.ToString(JResult.GetValue("ResponseContent"));
+
+               // var Rew = JsonConvert.DeserializeObject<List<BoxerCentralHomePage_EntityList_Mob>>(jsonValue);
+
                 //    int TypeID = 0;
-
                 //    AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
-
                 //    _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
                 //    _AppTypeInfoList.ASSOC_FIELD_INFO = jsonValue;
                 //    _AppTypeInfoList.LAST_SYNC_DATETIME = DateTime.Now;
@@ -1085,29 +1086,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 //}
                 //else
                 {
-                    Task<List<AppTypeInfoList>> AppTypeInforesult = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, EntityItemView, _DBPath);
+                    Task<List<AppTypeInfoList>> AppTypeInforesult = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, MyEntityAssociation, _DBPath);
                     AppTypeInforesult.Wait();
                     if (AppTypeInforesult.Result != null)
                     {
-
                         foreach (var item in AppTypeInforesult.Result)
                         {
-                            var it = JsonConvert.DeserializeObject<EntityClass>(item.ASSOC_FIELD_INFO);
-                            var tit = it.AssociationFieldCollection.Where(v => v.AssocSystemCode?.ToLower() == "title").ToList()?.Select(d => d.AssocMetaDataText.Count > 0 ? d.AssocMetaDataText[0]?.TextValue : "NO TITLE PROVIDED")?.FirstOrDefault();
-
-                            Result.Add(
-                                new BoxerCentralHomePage_EntityList_Mob
-                                {
-                                    ENTITY_ID = Convert.ToString(it.EntityID),
-                                    ENTITY_TYPE_ID = Convert.ToString(it.EntityTypeID),
-                                    ENTITY_TITLE = tit,
-                                    ENTITY_TYPE_NAME = it.EntityTypeName,
-                                    LIST_ID = "List Id: " + Convert.ToString(it.ListID),
-                                    MODIFIED_BY = "Modified By: " + it.EntityModifiedByFullName,
-                                    MODIFIED_DATETIME = "Modified On: " + Convert.ToDateTime(it.EntityModifiedDateTime).ToString("MM/dd/yyyy"),
-                                    CREATED_BY = "Created By: " + it.EntityCreatedByFullName,
-                                    CREATED_DATETIME = "Created On: " + Convert.ToDateTime(it.EntityCreatedDateTime).ToString("MM/dd/yyyy"),
-                                });
+                            Result.Add(JsonConvert.DeserializeObject<BoxerCentralHomePage_EntityList_Mob>(item.ASSOC_FIELD_INFO));
                         }
                     }
                 }

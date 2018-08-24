@@ -21,6 +21,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StemmonsMobile.DataTypes", "StemmonsMobile\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj", "{691F64DB-A9E1-421C-81EE-A5B9895C5B6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StemmonsMobile", "StemmonsMobile\StemmonsMobile\StemmonsMobile.csproj", "{751A7594-6421-48B8-9EA7-35465821221D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{691F64DB-A9E1-421C-81EE-A5B9895C5B6B} = {691F64DB-A9E1-421C-81EE-A5B9895C5B6B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -366,29 +369,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7572364A-8C41-42F5-B99E-06D2DD0F7143}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://bpm-tfs101:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj
-		SccProjectName1 = StemmonsMobile/servicebusapi/servicebusapi
-		SccLocalPath1 = StemmonsMobile\\servicebusapi\\servicebusapi
-		SccProjectUniqueName2 = StemmonsMobile\\StemmonsMobile.Android\\StemmonsMobile.Android.csproj
-		SccProjectName2 = StemmonsMobile/StemmonsMobile.Android
-		SccLocalPath2 = StemmonsMobile\\StemmonsMobile.Android
-		SccProjectUniqueName3 = StemmonsMobile\\StemmonsMobile.iOS\\StemmonsMobile.iOS.csproj
-		SccProjectName3 = StemmonsMobile/StemmonsMobile.iOS
-		SccLocalPath3 = StemmonsMobile\\StemmonsMobile.iOS
-		SccProjectUniqueName4 = StemmonsMobile\\StemmonsMobile.UWP\\StemmonsMobile.UWP.csproj
-		SccProjectName4 = StemmonsMobile/StemmonsMobile.UWP
-		SccLocalPath4 = StemmonsMobile\\StemmonsMobile.UWP
-		SccProjectUniqueName5 = StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj
-		SccProjectName5 = StemmonsMobile/StemmonsMobile.DataTypes
-		SccLocalPath5 = StemmonsMobile\\StemmonsMobile.DataTypes
-		SccProjectUniqueName6 = StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj
-		SccProjectName6 = StemmonsMobile/StemmonsMobile
-		SccLocalPath6 = StemmonsMobile\\StemmonsMobile
 	EndGlobalSection
 EndGlobal

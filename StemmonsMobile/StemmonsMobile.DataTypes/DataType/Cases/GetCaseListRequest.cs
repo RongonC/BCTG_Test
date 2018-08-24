@@ -22,6 +22,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         public string ScreenName { get; set; }
         public char? showPastDueCases { get; set; }
         public List<KeyValuePair<string, string>> keyValuePairs { get; set; }
+        public int? Pageindex { get; set; }
+        public int? Pagenumber { get; set; }
 
     }
 }

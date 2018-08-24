@@ -1120,6 +1120,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\Assets\btnmsg.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\Assets\btnmsg.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Assets\btnmsg.png" />
+    <AndroidResource Include="Resources\drawable\Assets\erase-16.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\erase-16.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\erase-16.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\erase-16.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dependencies\" />

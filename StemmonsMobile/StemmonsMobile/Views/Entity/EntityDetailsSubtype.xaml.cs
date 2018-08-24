@@ -129,7 +129,7 @@ namespace StemmonsMobile.Views.Entity
                                     break;
                             }
                         }
-                        mb.Field2 = EntityLists[i].EntityCreatedByFullName;
+                        mb.Field2 = "Created By: " + EntityLists[i].EntityCreatedByFullName;
                         mb.Field4 = Convert.ToDateTime(App.DateFormatStringToString(EntityLists[i].EntityCreatedDateTime)).ToString("MM/dd/yyyy");
 
                         string a = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(EntityLists[i].ListID);

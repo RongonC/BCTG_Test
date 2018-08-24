@@ -655,12 +655,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
         void SaveCommnets()
         {
-
-
             if (QuestionList?.Count > 0)
             {
-
-
                 for (int i = 0; i < QuestionList.Count; i++)
                 {
 

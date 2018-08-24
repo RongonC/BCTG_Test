@@ -220,7 +220,7 @@
                         <Label x:Name="lbl_association" Text="My Associations" Margin="0,-4,0,0"
                            FontSize="12" Grid.Row="0" Grid.Column="0"
                            TextColor="Black" WidthRequest="80"
-                           HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                     </StackLayout>
 
                     <me:RoundRectLabel x:Name="associationNotification" Text = "0" 

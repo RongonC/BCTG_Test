@@ -54,6 +54,7 @@
     <Compile Include="Commonfiles\APICalls.cs" />
     <Compile Include="Commonfiles\Constants.cs" />
     <Compile Include="Commonfiles\Functions.cs" />
+    <Compile Include="Controls\NullableDatePicker.cs" />
     <Compile Include="CustomFontExtension.cs" />
     <Compile Include="IDatalayer.cs" />
     <Compile Include="IsExpandedToImageConverter.cs" />
@@ -129,9 +130,6 @@
     </Compile>
     <Compile Include="Views\Cases\SelectCaseType.xaml.cs">
       <DependentUpon>SelectCaseType.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Cases\ViewCasePage1.xaml.cs">
-      <DependentUpon>ViewCasePage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cases\ViewCasePage.xaml.cs">
       <DependentUpon>ViewCasePage.xaml</DependentUpon>
@@ -287,6 +285,9 @@
       <DependentUpon>QuestQuestionForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="PullToRefreshLayout.cs" />
+    <Compile Include="Views\ViewAttachment.xaml.cs">
+      <DependentUpon>ViewAttachment.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainPage.xaml">
@@ -689,17 +690,17 @@
     <Content Include="Assembly\Xamarin.Forms.Xaml.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Cases\ViewCasePage1.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\Standards\MyBookListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Standards\MyPublicationBookListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ViewAttachment.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

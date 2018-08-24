@@ -1045,9 +1045,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 pick_Ext_datasrc = (Picker)cnt;
                             }
 
-
-
-
                             if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
                             {
                                 picker_value = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource;
@@ -1067,21 +1064,16 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 }
                                 else
                                 {
-
-
                                     strobjid += picker_value?.strObjectID + ",";
                                     striteminfoFieldsIds += ControlSchema[i]?.intItemInfoFieldID + ",";
                                     striteminfoFieldsValues += picker_value?.strName + ",";
                                 }
-
                             }
                             else
                             {
-
                                 strobjid += picker_value?.strObjectID + ",";
                                 striteminfoFieldsIds += ControlSchema[i]?.intItemInfoFieldID + ",";
                                 striteminfoFieldsValues += picker_value?.strName + ",";
-
                             }
                             break;
 
@@ -1104,11 +1096,20 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             if (cnt_type.Name.ToLower() == "datepicker")
                             {
                                 date_pick = (DatePicker)cnt;
-                                if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
+                                if (ControlSchema[i]._IS_REQUIRED == "Y")
                                 {
-                                    strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
-                                    striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
-                                    striteminfoFieldsValues += Convert.ToString(App.DateFormatStringToString(date_pick.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy")) + ",";
+                                    if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
+                                    {
+                                        strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
+                                        striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
+                                        striteminfoFieldsValues += Convert.ToString(App.DateFormatStringToString(date_pick.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy")) + ",";
+                                    }
+                                    else
+                                    {
+                                        DisplayAlert("Field Required.", "Please enter valid data in " + ControlSchema[i].strItemInfoFieldName, "OK");
+                                        RequiredFieldCount = RequiredFieldCount + 1;
+                                        goto requiredJump;
+                                    }
                                 }
                             }
                             else if (cnt_type.Name.ToLower() == "entry")
@@ -1117,7 +1118,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                 if (ControlSchema[i]._IS_REQUIRED == "Y")
                                 {
-
                                     if (string.IsNullOrEmpty(ent.Text))
                                     {
                                         DisplayAlert("Field Required.", "Please enter valid data in " + ControlSchema[i].strItemInfoFieldName, "OK");
@@ -1127,8 +1127,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                     else
                                     {
-
-
                                         strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
                                         striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
                                         striteminfoFieldsValues += Convert.ToString(ent.Text) + ",";
@@ -1230,9 +1228,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     await Task.Run(async () =>
                     {
                         var ApiCallUpdateForm = QuestSyncAPIMethods.StoreAndUpdate(App.Isonline, int.Parse(itemid), UpdateForm, "", Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, addForm, lst);
-                        //var res = QuestAPIMethods.UpdateForm(addForm);
-                        //var ApiCallResponse = res.GetValue("Success");
-
                         ApiCallResponse = ApiCallUpdateForm.Result;
                     });
 
@@ -1240,14 +1235,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     if (CategoryObjectlist.Count > 0)
                     {
-
                         for (int i = 0; i < CategoryObjectlist.Count; i++)
                         {
-
                             Add_Questions_MetadataRequest obj = new Add_Questions_MetadataRequest();
                             obj = CategoryObjectlist[i];
-
-
 
                             JObject Body = (JObject)JToken.FromObject(obj);
                             var jsonBody = JObject.Parse(Convert.ToString(Body));
@@ -1262,15 +1253,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             string transNotes = CategoryObjectlist[i].pNOTES;
 
 
-
                             var apicall = QuestSyncAPIMethods.AddQuestionsMetadata(App.Isonline, Iteminstancetranid, itemid, Convert.ToString(CategoryObjectlist[i].pITEM_QUESTION_FIELD_IDs), CategoryObjectlist[i].pMEETS_STANDARDS, CategoryObjectlist[i].pPOINTS_AVAILABLE, CategoryObjectlist[i].pPOINTS_EARNED, CategoryObjectlist[i].pIS_CASE_REQUESTED, "0", CategoryObjectlist[i].pNOTES, CategoryObjectlist[i].pCREATED_BY, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, jsonBody, "C");
                             responseStatus = apicall.Result;
-                            //var apicall = QuestSyncAPIMethods.AddQuestionsMetadata(App.Isonline, ItemInstanceTranId, Convert.ToString(CategoryObjectlist[i].pITEM_ID), Convert.ToString(CategoryObjectlist[i].pITEM_QUESTION_FIELD_IDs), CategoryObjectlist[i].pMEETS_STANDARDS, CategoryObjectlist[i].pPOINTS_AVAILABLE, CategoryObjectlist[i].pPOINTS_EARNED, CategoryObjectlist[i].pIS_CASE_REQUESTED, "0", CategoryObjectlist[i].pNOTES, Functions.UserName, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, jsonBody);
-                            //apicall.Wait();
-                            //responseStatus = apicall.Result;
                         }
-
-
                     }
 
 

@@ -483,9 +483,21 @@ namespace StemmonsMobile.Views.Entity
             //string clipboardText = await CrossClipboard.Current.GetTextAsync();
         }
 
-        private void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            gridEntitynotes.SelectedItem = null;
+            try
+            {
+                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+                if (notes.ImageVisible)
+                {
+                    await Navigation.PushAsync(new ViewAttachment
+                    (notes.ImageURL));
+                }
+                gridEntitynotes.SelectedItem = null;
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private async void Btn_addnotes_Clicked(object sender, EventArgs e)

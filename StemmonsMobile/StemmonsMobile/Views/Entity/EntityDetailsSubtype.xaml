@@ -14,12 +14,13 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <SearchBar x:Name="txt_seacrhbar" TextChanged="Txt_seacrhbar_TextChanged" Grid.Row="0" Placeholder="Search"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <SearchBar x:Name="txt_seacrhbar" TextChanged="Txt_seacrhbar_TextChanged" Grid.Row="0" Placeholder="Search"  />
  
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
                     <ListView x:Name="List_entity_subtypes" 
                           ItemsSource="{Binding EntityLists}" Grid.Row="0"  
-                          HasUnevenRows="True"                    ItemTapped="List_entity_subtypes_ItemTapped">
+                          HasUnevenRows="True"           
+                              ItemTapped="List_entity_subtypes_ItemTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -34,7 +35,7 @@
                                             <StackLayout   >
                                                 <Grid  >
                                                     <Grid.RowDefinitions>
-                                                        <RowDefinition Height="5"/>
+                                                        <RowDefinition Height="0"/>
                                                         <RowDefinition Height="*"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
@@ -50,20 +51,20 @@
                                                             Style="{StaticResource defaultLabelSize}" TextColor="Black"
                                                             Margin="10,0,0,0" 
                                                                 LineBreakMode="TailTruncation"
-                                                                
                                                             HorizontalOptions="Start" 
-                                                            VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            VerticalOptions="Center" />
                                                     </Grid>
 
                                                     <Grid Grid.Row="1" Grid.Column="2"  >
                                                         <Label Text="{Binding ListId}" 
                                                            Style="{StaticResource defaultLabelSize}" 
                                                            TextColor="Orange"
-                                           HorizontalOptions="EndAndExpand"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                           HorizontalOptions="EndAndExpand"  />
                                                     </Grid>
 
                                                     <Grid Grid.Row="2" Grid.ColumnSpan="3"   >
                                                         <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="4"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
@@ -71,15 +72,15 @@
 
                                                         <Label Text="{Binding Field2}" FontSize="12"
                                                            LineBreakMode="TailTruncation" TextColor="Black"
-                                                           Grid.Column="0" HorizontalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="1" HorizontalOptions="Start"  />
 
                                                         <Label Text="{Binding Field3}" FontSize="12" 
                                                            LineBreakMode="TailTruncation" TextColor="Black"
-                                                           Grid.Column="1" HorizontalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="2" HorizontalOptions="Center" />
 
                                                         <Label Text="{Binding Field4}"
                                                            LineBreakMode="TailTruncation" FontSize="12" TextColor="Black"
-                                                           Grid.Column="2"  HorizontalOptions="End"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="3"  HorizontalOptions="End"  />
                                                     </Grid>
 
                                                     <Image Source="Assets/dropdowniconClose.png"  

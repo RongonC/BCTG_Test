@@ -2340,18 +2340,17 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
 
         #region Get CaseList
-        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseList(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle = "", bool SaveSql = true, string screenName = "")
+        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseList(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle, bool SaveSql, string screenName, int? _pageindex, int? _pagenumber)
         {
             List<GetCaseTypesResponse.BasicCase> OnlineCaselist = new List<GetCaseTypesResponse.BasicCase>();
             //int id = CommonConstants.GetResultBySytemcode(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
-
 
             try
             {
                 if (_IsOnline)
                 {
                     var result = CasesAPIMethods.GetCaseList(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM,
-                                                    _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery);
+                                                    _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, Convert.ToString(_pagenumber), Convert.ToString(_pageindex));
                     var temp = result.GetValue("ResponseContent");
 
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
@@ -2384,7 +2383,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                 {
                                     Ntm_uname = _user;
                                 }
-
 
                                 var infolist = DBHelper.GetAppTypeInfoListByTransTypeSyscode_tm_username(CasesInstance, _DBPath, "E2_GetCaseList" + screenName, "M", Ntm_uname);
                                 infolist.Wait();
@@ -2472,8 +2470,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                                     DBHelper.DeleteAppTypeInfoListById(off_note, _DBPath).Wait();
                                                 }
                                                 #endregion
-
-
                                             }
 
                                             CommonConstants.InsertnewCase_C8_C4_Json(_DBPath, _user, Convert.ToString(typeid), Convert.ToString(id), INSTANCE_USER_ASSOC_ID, rTM_Name == "" ? _user : rTM_Name);
@@ -2639,64 +2635,64 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get CaseList To Me
-        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseListToMe(bool _Isonline, string screenName, string _DBPath, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId)
-        {
-            List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
-            screenName = "E2_GetCaseList" + screenName;
+        //public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseListToMe(bool _Isonline, string screenName, string _DBPath, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId)
+        //{
+        //    List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
+        //    screenName = "E2_GetCaseList" + screenName;
 
-            try
-            {
-                if (_Isonline)
-                {
-                    var results = CasesAPIMethods.GetCaseList(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery);
-                    var temp = results.GetValue("ResponseContent");
+        //    try
+        //    {
+        //        if (_Isonline)
+        //        {
+        //            var results = CasesAPIMethods.GetCaseList(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery);
+        //            var temp = results.GetValue("ResponseContent");
 
-                    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
-                    {
-                        lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(temp.ToString());
-                        if (lstResult.Count > 0)
-                        {
-                            Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
-                            result.Wait();
+        //            if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
+        //            {
+        //                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(temp.ToString());
+        //                if (lstResult.Count > 0)
+        //                {
+        //                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
+        //                    result.Wait();
 
-                            if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                            {
-                                string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-                                var lstResults = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
+        //                    if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
+        //                    {
+        //                        string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
+        //                        var lstResults = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
 
-                                string lstt = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-                                var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lstt);
+        //                        string lstt = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
+        //                        var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lstt);
 
-                                string lstnote = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
-                                var lstResultsnotes = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lstnote);
+        //                        string lstnote = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
+        //                        var lstResultsnotes = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lstnote);
 
-                                var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResults) + "|||" + JsonConvert.SerializeObject(templstResult) + "|||" + JsonConvert.SerializeObject(lstResultsnotes), CasesInstance, screenName, _InstanceUserAssocId, _DBPath, result.Result.APP_TYPE_INFO_ID, "", "M", "", 0, "", "", true);
-                            }
+        //                        var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResults) + "|||" + JsonConvert.SerializeObject(templstResult) + "|||" + JsonConvert.SerializeObject(lstResultsnotes), CasesInstance, screenName, _InstanceUserAssocId, _DBPath, result.Result.APP_TYPE_INFO_ID, "", "M", "", 0, "", "", true);
+        //                    }
 
-                        }
-                    }
-                }
+        //                }
+        //            }
+        //        }
 
-                else
-                {
-                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
-                    result.Wait();
+        //        else
+        //        {
+        //            Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
+        //            result.Wait();
 
-                    if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                    {
-                        string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-                        lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(lst);
+        //            if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
+        //            {
+        //                string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
+        //                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(lst);
 
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw ex;
-            }
-            return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
-        }
+        //        throw ex;
+        //    }
+        //    return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
+        //}
         #endregion
 
         #region Get CaseList To Me Metadata
@@ -2893,7 +2889,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             JObject result = null;
             try
             {
-                result = CasesAPIMethods.GetCaseListSync(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, idAndDateTime, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, screenName);
+                result = CasesAPIMethods.GetCaseListSync(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, idAndDateTime, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, screenName, 0, 0);
                 var temp = result.GetValue("ResponseContent");
 
                 Debug.WriteLine("GetCaseListSync||" + screenName + " ==> " + Convert.ToString(temp));
@@ -4056,7 +4052,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
             try
             {
-
                 if (_IsOnline)
                 {
                     var result = CasesAPIMethods.GetCaseTypes();

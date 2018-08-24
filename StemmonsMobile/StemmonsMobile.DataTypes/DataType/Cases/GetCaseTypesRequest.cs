@@ -24,6 +24,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         public string CasesAssgnTo { get; set; }
         public string metaDataValues { get; set; }
         public string caseNotes { get; set; }
+        public int? Pageindex { get; set; }
+        public int? Pagenumber { get; set; }
 
         #region ParentSelectedValues
         public class ParentSelectedValues
@@ -33,9 +35,6 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         }
         #endregion
 
-
-
-        
     }
     #region UploadFileToCaseTypeModel
     public class UploadFileToCaseTypeModel

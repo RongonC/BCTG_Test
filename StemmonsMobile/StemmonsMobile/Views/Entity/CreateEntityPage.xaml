@@ -33,7 +33,7 @@
                             <Label x:Name="line_NotedHead" Grid.Row="1" BackgroundColor="#D0D0D0" HeightRequest="0" Margin="10,0,0,0" />
 
                             <Grid   Grid.Row="2" >
-                                <ListView  x:Name="gridEntitynotes"   HasUnevenRows="True" HeightRequest="700"
+                                <ListView  x:Name="gridEntitynotes" ItemTapped="gridEntitynotes_ItemTapped"   HasUnevenRows="True" HeightRequest="700"
                                    IsGroupingEnabled="True" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -70,9 +70,12 @@
                                                                      BackgroundColor="#DEE7F3"
                                                                      HorizontalOptions="CenterAndExpand" 
                                                                      VerticalOptions="Center">
-                                                            <Label Text="Notes: " FontAttributes="Bold"   FontSize="12"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                                            <Label FontSize="12" FontAttributes="Bold" Text="{Binding CreatedDate}"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                                            <Label FontSize="12" FontAttributes="Bold" Text="{Binding Uname}" Margin="10,0,0,0"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            <Label Text="Notes: " FontAttributes="Bold"  
+                                                                   FontSize="12"  />
+                                                            <Label FontSize="12" FontAttributes="Bold" 
+                                                                   Text="{Binding CreatedDate}"  />
+                                                            <Label FontSize="12" FontAttributes="Bold" Text="{Binding Uname}" 
+                                                                   Margin="10,0,0,0"  />
                                                         </StackLayout>
                                                     </StackLayout>
                                                 </ViewCell.View>
