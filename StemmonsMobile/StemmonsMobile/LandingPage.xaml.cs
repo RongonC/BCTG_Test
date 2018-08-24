@@ -858,8 +858,6 @@ namespace StemmonsMobile
 
                     Functions.AppStartCount = Functions.AppStartCount + 1;
                     Application.Current.Properties["AppStartCount"] = Functions.AppStartCount;
-
-
                 }
                 catch (Exception ex)
                 {
