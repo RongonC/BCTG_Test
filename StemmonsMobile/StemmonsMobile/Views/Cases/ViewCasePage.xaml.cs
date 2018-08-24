@@ -2260,14 +2260,15 @@ namespace StemmonsMobile.Views.Cases
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     string subject = Functions.UserFullName + " wants to share this " + Casetitle;
-                    subject = subject.Replace(" ", "&nbsp;");
-                    string body = "please visit this url:  " + App.CasesImgURL + "/ViewCase.aspx?CaseID=" + CaseID;
-                    body = body.Replace(" ", "&nbsp;");
+                    subject = WebUtility.UrlEncode(subject).Replace("+", "%20");
+                    string body = "please visit this url:  " + App.CasesImgURL + "/ViewCase.aspx?CaseID=" + CaseID;
+                    body = WebUtility.UrlEncode(body).Replace("+", "%20");
 
                     // var email = Regex.Replace("yourcontact@mail.example.com", @"[^\u0000-\u00FF]", string.Empty);
-                    shareurl = "mailto:?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
+                    shareurl = "mailto:?subject=" + (subject) + "&body=" + (body);
                     // shareurl = WebUtility.UrlEncode(shareurl).Replace("+", "");
                 }
+
                 else
                 {
                     //for Android it is not necessary to code nor is it necessary to assign a destination email

@@ -454,11 +454,14 @@ namespace StemmonsMobile.Views.Entity
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     string subject = Functions.UserFullName + " wants to share this Entity with you: " + saveentity.EntityDetails.EntityTypeName;
-
+                    subject = WebUtility.UrlEncode(subject).Replace("+", "%20");
 
                     string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityDetails.EntityID;
+
+                    body = WebUtility.UrlEncode(body).Replace("+", "%20");
+
                     var email = Regex.Replace("", @"[^\u0000-\u00FF]", string.Empty);
-                    shareurl = "mailto:" + email + "?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
+                    shareurl = "mailto:?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
                 }
                 else
                 {
