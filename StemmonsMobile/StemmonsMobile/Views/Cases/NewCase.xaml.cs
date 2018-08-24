@@ -214,11 +214,7 @@ namespace StemmonsMobile.Views.Cases
                         pk.WidthRequest = 200;
                         pk.TextColor = Color.Gray;
 
-                        DatePicker DO = new DatePicker();
-                        DO.Format = "MM/dd/yyyy";
-                        DO.Date = Convert.ToDateTime("01/01/1900");
-                        DO.WidthRequest = 200;
-                        DO.TextColor = Color.Gray;
+
 
                         Entry entry = new Entry();
                         entry.FontFamily = "Soin Sans Neue";
@@ -246,10 +242,8 @@ namespace StemmonsMobile.Views.Cases
 
                                 pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
 
-
                                 try
                                 {
-
                                     pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
                                     List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
                                     GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
@@ -330,8 +324,6 @@ namespace StemmonsMobile.Views.Cases
 
                                     // throw;
                                 }
-
-
                                 Mainlayout.Children.Add(pk);
                                 break;
                             case "d":
@@ -350,7 +342,6 @@ namespace StemmonsMobile.Views.Cases
                                     };
 
                                     lst_SSsource.Add(Value);
-
                                     GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS Request = new GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS();
 
                                     Request.assocCaseTypeID = item.ASSOC_TYPE_ID;
@@ -427,7 +418,6 @@ namespace StemmonsMobile.Views.Cases
                                 break;
                             case "x":
                                 entry_notes.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
-
                                 try
                                 {
                                     entry_notes.WidthRequest = 200;
@@ -441,43 +431,122 @@ namespace StemmonsMobile.Views.Cases
 
                                     //  throw;
                                 }
-
                                 Mainlayout.Children.Add(entry_notes);
-
                                 break;
 
                             case "a":
+                                #region DatePicker
+                                //DatePicker DO = new DatePicker();
+                                //DO.Format = "MM/dd/yyyy";
+                                //DO.WidthRequest = 200;
+                                //DO.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                //try
+                                //{
+                                //    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                //    if (!string.IsNullOrEmpty(ischeckcalControl))
+                                //        DO.DateSelected += DO_DateSelected;
 
-                                DO.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                //    var metaDatatextValueDate = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
+
+                                //    if (metaDatatextValueDate != null)
+                                //    {
+                                //        if (!string.IsNullOrEmpty(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value))
+                                //        {
+                                //            var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value);
+                                //            DateTime dt = Convert.ToDateTime(Str);
+                                //            DO.Date = dt;
+                                //        }
+                                //    }
+                                //}
+                                //catch (Exception ex)
+                                //{
+
+                                //    // throw;
+                                //}
 
 
-                                try
+                                //Mainlayout.Children.Add(DO);
+
+                                #endregion
+
+                                #region txt_Date
+                                Entry txt_Date = new Entry();
+                                txt_Date.Placeholder = "Select Date";
+                                txt_Date.WidthRequest = 175;
+                                txt_Date.TextColor = Color.Gray;
+                                txt_Date.Keyboard = Keyboard.Numeric;
+                                txt_Date.StyleId = "a_" + item.ASSOC_TYPE_ID;
+                                txt_Date.Text = "";
+
+                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]?.Split('|')[0]);
+
+                                if (!string.IsNullOrEmpty(ischeckcalControl))
+                                    txt_Date.TextChanged += DO_TextChanged;
+
+                                #endregion
+
+                                Image im = new Image();
+                                im.StyleId = "imgcl_" + item.ASSOC_TYPE_ID;
+                                im.Source = ImageSource.FromFile("Assets/erase-16.png");
+
+                                #region date_pick
+                                DatePicker date_pick = new DatePicker();
+                                date_pick.IsVisible = false;
+                                date_pick.Format = "MM/dd/yyyy";
+                                date_pick.WidthRequest = 200;
+                                date_pick.TextColor = Color.Gray;
+                                date_pick.StyleId = "dt_" + item.ASSOC_TYPE_ID;
+                                #endregion
+
+
+                                Mainlayout.Children.Add(txt_Date);
+                                Mainlayout.Children.Add(im);
+                                Mainlayout.Children.Add(date_pick);
+
+                                txt_Date.Focused += (sender, e) =>
                                 {
-                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]?.Split('|')[0]);
-                                    if (!string.IsNullOrEmpty(ischeckcalControl))
-                                        DO.DateSelected += DO_DateSelected;
-
-                                    var metaDatatextValueDate = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
-
-                                    if (metaDatatextValueDate != null)
+                                    try
                                     {
-                                        if (!string.IsNullOrEmpty(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value))
+                                        var cnt = (Entry)sender;
+                                        var sty_id = cnt.StyleId?.Split('_')[1];
+                                        var dt_c = FindCasesControls(Convert.ToInt32(sty_id), "DatePicker") as DatePicker;
+                                        Device.BeginInvokeOnMainThread(() =>
                                         {
-                                            var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value);
-                                            DateTime dt = Convert.ToDateTime(Str);
-                                            DO.Date = dt;
-                                        }
-
+                                            dt_c.Focus();
+                                        });
                                     }
+                                    catch (Exception)
+                                    {
+                                    }
+                                };
 
-                                }
-                                catch (Exception ex)
+                                var tgr = new TapGestureRecognizer();
+                                tgr.Tapped += async (s, e) =>
                                 {
+                                    Entry C_ent = new Entry();
+                                    try
+                                    {
+                                        var ct = (Image)s;
+                                        var sty_id = ct.StyleId?.Split('_')[1];
+                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                                        C_ent.Text = "";
+                                    }
+                                    catch (Exception)
+                                    {
+                                        C_ent.Text = "";
+                                    }
+                                };
+                                im.GestureRecognizers.Add(tgr);
 
-                                    // throw;
+                                if (Device.RuntimePlatform == "iOS")
+                                {
+                                    date_pick.Unfocused += Date_pick_Unfocused;
                                 }
-                                DO.TextColor = Color.Gray;
-                                Mainlayout.Children.Add(DO);
+                                else
+                                {
+                                    date_pick.DateSelected += Date_pick_DateSelected;
+
+                                }
 
                                 break;
                             case "t":
@@ -867,19 +936,60 @@ namespace StemmonsMobile.Views.Cases
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        private object FindCasesControls(int AssocID)
+        private object FindCasesControls(int AssocID, string Cnt_type = "")
         {
             try
             {
-                foreach (StackLayout infofield in Cases_EntryStack.Children)
+                if (string.IsNullOrEmpty(Cnt_type))
                 {
-                    foreach (var subitem in infofield.Children)
+                    foreach (StackLayout infofield in Cases_EntryStack.Children)
                     {
-                        var xy = subitem;
-                        Type ty = xy.GetType();
-                        if (ty.Name != "StackLayout")
-                            if (xy.StyleId.Contains(AssocID.ToString()))
-                                return xy;
+                        foreach (var subitem in infofield.Children)
+                        {
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name != "StackLayout")
+                                if (xy.StyleId.Contains(AssocID.ToString()))
+                                    return xy;
+                        }
+                    }
+                }
+                else if (Cnt_type == "DatePicker")
+                {
+                    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                    {
+                        foreach (var subitem in infofield.Children)
+                        {
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name != "StackLayout")
+                            {
+                                if (ty.Name == "DatePicker")
+                                {
+                                    if (xy.StyleId.Contains(AssocID.ToString()))
+                                        return xy;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (Cnt_type == "Image")
+                {
+                    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                    {
+                        foreach (var subitem in infofield.Children)
+                        {
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name != "StackLayout")
+                            {
+                                if (ty.Name == "Image")
+                                {
+                                    if (xy.StyleId.Contains(AssocID.ToString()))
+                                        return xy;
+                                }
+                            }
+                        }
                     }
                 }
                 return null;
@@ -887,6 +997,65 @@ namespace StemmonsMobile.Views.Cases
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        private void Date_pick_Unfocused(object sender, FocusEventArgs e)
+        {
+            Date_pick_DateSelected(sender, null);
+        }
+
+        private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            Entry dtp = new Entry();
+            try
+            {
+                var cnt = (DatePicker)sender;
+                var sty_id = cnt.StyleId?.Split('_')[1];
+                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+            }
+            catch (Exception)
+            {
+                dtp.Text = "";
+            }
+        }
+
+        private void DO_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                Entry en = (Entry)sender;
+
+                DyanmicSetCalc(en.StyleId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            try
+            {
+
+                //var currText = ((Entry)sender).Text;
+
+                //string oldtext = currText;
+                //if (!string.IsNullOrEmpty(currText) && currText.Length >= 8 && currText.Length <= 10)
+                //{
+                //    oldtext = Convert.ToInt32(currText).ToString("##/##/####");
+                //    ((Entry)sender).Text = oldtext;
+                //}
+                //else if (currText.Length > 10)
+                //{
+                //    //oldtext = Convert.ToDecimal(currText).ToString("##/##/####");
+                //    ((Entry)sender).Text = e.OldTextValue;
+                //}
+                //DateTime d = new DateTime();
+                //DateTime.TryParse(((Entry)sender).Text, out d);
+                ////{01/01/01 12:00:00 AM}
+            }
+            catch (Exception c)
+            {
             }
         }
 
@@ -1798,13 +1967,13 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 try
                                 {
-                                    datepicker = (DatePicker)xy;
-                                    if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                    {
-                                        string str = App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                    //datepicker = (DatePicker)xy;
+                                    //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                    //{
+                                    //    string str = App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
 
-                                        textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), Value = str });
-                                    }
+                                    //    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), Value = str });
+                                    //}
                                 }
                                 catch (Exception ex)
                                 {
@@ -1864,7 +2033,7 @@ namespace StemmonsMobile.Views.Cases
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         if (status > 0)
                         {
-                           // CasesSyncAPIMethods.AddCasesLogs(App.DBPath, 2, "User " + Functions.UserName + " Created The Case " + CASEID + ".", CASEID, Convert.ToString(casedata.CaseTypeID), Functions.UserFullName, "User created this new case", "Created Case", Functions.UserName, "CASEC");
+                            // CasesSyncAPIMethods.AddCasesLogs(App.DBPath, 2, "User " + Functions.UserName + " Created The Case " + CASEID + ".", CASEID, Convert.ToString(casedata.CaseTypeID), Functions.UserFullName, "User created this new case", "Created Case", Functions.UserName, "CASEC");
                             //await Navigation.PushAsync(new CaseList("casetypeid", Casetypeid, ""));
                             await Navigation.PopAsync();
                         }

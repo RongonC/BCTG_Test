@@ -225,7 +225,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else
                                     {
-                                        if (Device.OS == TargetPlatform.iOS)
+                                        if (Device.RuntimePlatform == "iOS")
                                         {
                                             pk.Unfocused += Pk_Unfocused;
                                         }

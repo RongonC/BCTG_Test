@@ -646,23 +646,15 @@ namespace StemmonsMobile.Views.Cases
                                                 };
                                                 im.GestureRecognizers.Add(tgr);
 
-                                                date_pick.DateSelected += (sender, e) =>
+                                                if (Device.RuntimePlatform == "iOS")
                                                 {
-                                                    Entry dtp = new Entry();
-                                                    try
-                                                    {
-                                                        var cnt = (DatePicker)sender;
-                                                        var sty_id = cnt.StyleId?.Split('_')[1];
-                                                        var dt_c = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
-                                                        dt_c.Text = date_pick.Date.ToString("MM/dd/yyyy");
-                                                    }
-                                                    catch (Exception)
-                                                    {
-                                                        dtp.Text = "";
-                                                    }
-                                                };
+                                                    date_pick.Unfocused += Date_pick_Unfocused;
+                                                }
+                                                else
+                                                {
+                                                    date_pick.DateSelected += Date_pick_DateSelected;
 
-
+                                                }
                                                 break;
 
                                             case "t":
@@ -1318,6 +1310,27 @@ namespace StemmonsMobile.Views.Cases
                         });
 
             //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private void Date_pick_Unfocused(object sender, FocusEventArgs e)
+        {
+            Date_pick_DateSelected(sender, null);
+        }
+
+        private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            Entry dtp = new Entry();
+            try
+            {
+                var cnt = (DatePicker)sender;
+                var sty_id = cnt.StyleId?.Split('_')[1];
+                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+            }
+            catch (Exception)
+            {
+                dtp.Text = "";
+            }
         }
 
         private void DO_TextChanged(object sender, TextChangedEventArgs e)
@@ -3512,11 +3525,6 @@ namespace StemmonsMobile.Views.Cases
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
-
-
-
-
-
 
         async void AddAttachment()
         {
