@@ -15,5 +15,16 @@
 	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-sdk android:minSdkVersion="21" />
-	<application android:allowBackup="true" android:hardwareAccelerated="false" android:largeHeap="true" android:supportsRtl="true" android:label="Stemmons Central To Go"></application>
+	<application android:allowBackup="true" android:hardwareAccelerated="false" android:largeHeap="true" android:supportsRtl="true" android:label="Stemmons Central To Go">
+
+
+    <provider android:name="android.support.v4.content.FileProvider"
+				android:authorities="com.stemmonscentraltogo.com.fileprovider"
+				android:exported="false"
+				android:grantUriPermissions="true">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths"></meta-data>
+    </provider>
+
+  </application>
 </manifest>

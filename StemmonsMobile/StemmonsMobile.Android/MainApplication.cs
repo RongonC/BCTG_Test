@@ -19,7 +19,16 @@ namespace StemmonsMobile.Droid
         public override void OnCreate()
         {
             base.OnCreate();
+
+        
+                CrossCurrentActivity.Current.Init(this);
+            
+         
+
+      
             RegisterActivityLifecycleCallbacks(this);
+
+           
             //A great place to initialize Xamarin.Insights and Dependency Services!
         }
 

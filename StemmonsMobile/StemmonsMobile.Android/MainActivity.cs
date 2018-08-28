@@ -9,6 +9,12 @@ using System.Linq;
 using StemmonsMobile.Views.Cases;
 using Android.Content;
 using StemmonsMobile.Commonfiles;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
+using Plugin.CurrentActivity;
+using Android.Runtime;
+using Android.Widget;
+
 
 namespace StemmonsMobile.Droid
 {
@@ -22,15 +28,27 @@ namespace StemmonsMobile.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(bundle);
-
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+         
             UserDialogs.Init(this);
             ImageCircleRenderer.Init();
+      
+            global::Xamarin.Forms.Forms.Init(this, bundle);
+            CrossCurrentActivity.Current.Init(this,bundle);
             LoadApplication(new App());
 
         }
 
-       
+        //public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+        //{
+        //    Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        //}
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+        {
+            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+
 
 
     }
