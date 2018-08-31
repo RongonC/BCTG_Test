@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.companyname.StemmonsMobile" android:versionCode="1" android:versionName="1.0" android:installLocation="auto" android:largeHeap="true">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.stemmonscentraltogo.com" android:versionName="1.01" android:installLocation="auto" android:largeHeap="true" android:versionCode="3">
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -14,10 +14,17 @@
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="27" />
+	<uses-sdk android:minSdkVersion="21" />
 	<application android:allowBackup="true" android:hardwareAccelerated="false" android:largeHeap="true" android:supportsRtl="true" android:label="Stemmons Central To Go">
-		<provider android:name="android.support.v4.content.FileProvider" android:authorities="com.companyname.StemmonsMobile.fileprovider" android:exported="false" android:grantUriPermissions="true">
-			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
-		</provider>
-	</application>
+
+
+    <provider android:name="android.support.v4.content.FileProvider"
+				android:authorities="com.stemmonscentraltogo.com.fileprovider"
+				android:exported="false"
+				android:grantUriPermissions="true">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths"></meta-data>
+    </provider>
+
+  </application>
 </manifest>
