@@ -26,7 +26,8 @@ namespace StemmonsMobile.Views.LoginProcess
         {
             InitializeComponent();
             LoginButton.TextColor = Color.FromHex("1D9FEC");
-            txt_uname.Text = ""; txt_pwd.Text = "";
+            txt_uname.Text = "";
+            txt_pwd.Text = "";
 
             DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = temp.InstanceUrl;
             Application.Current.Properties["Baseurl"] = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl;

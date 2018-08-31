@@ -549,7 +549,7 @@ namespace StemmonsMobile
                                 {
                                     var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
 
-                                    if (!String.IsNullOrEmpty(str.Result))
+                                    if (!String.IsNullOrEmpty(str))
                                         Functions.ShowtoastAlert("Origination Center Sync Success.");
                                     else
                                         Functions.ShowtoastAlert("Origination Center Sync having issue.");
@@ -907,7 +907,10 @@ namespace StemmonsMobile
 
                 Task.Run(() =>
                 {
-                    HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID).Wait();
+                    Task.Run(() =>
+                    {
+                        HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                    }).Wait();
 
                     Device.BeginInvokeOnMainThread(() =>
                     {

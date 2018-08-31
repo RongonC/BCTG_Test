@@ -50,9 +50,6 @@ namespace StemmonsMobile.Views.LoginProcess
             if (!string.IsNullOrEmpty(txt_instanceurl.Text))
             {
                 txt_instanceurl.Text = txt_instanceurl.Text.ToLower();
-                //char[] letters = username.ToCharArray();
-                //letters[0] = char.ToLower(letters[0]);
-                //txt_instanceurl.Text = new string(letters);
             }
         }
 
@@ -61,27 +58,12 @@ namespace StemmonsMobile.Views.LoginProcess
             try
             {
                 string resultedValueForService = string.Empty;
-                // Common _EntitiesCommon = new Common();
 
                 if (txt_instanceurl.Text.Trim() != "")
                 {
                     string orignalServiceURL = this.txt_instanceurl.Text.Replace("http://", "").Replace("https://", "");
 
                     List<string> posibilities = new List<string>();
-
-                    //        string[] prefixes =
-                    //            {
-                    //    "","http://","https://","http://entities.","http://Central.","http://stems.","http://stemmons.","http://home.","https://entities.",
-                    //    "https://Central.","https://stems.","https://stemmons.","https://home."
-                    //};
-                    /*
-                       string[] suffexes =
-                        {
-                "","/","/entities/entitieswebservice/CommonService.asmx","entities/entitieswebservice/CommonService.asmx","/entitieswebservice/CommonService.asmx",
-                "entitieswebservice/CommonService.asmx","/CommonService.asmx","CommonService.asmx"
-                };
-                     */
-
 
                     string[] prefixes =
                         {
@@ -120,23 +102,6 @@ namespace StemmonsMobile.Views.LoginProcess
                             {
                                 return item;
                             }
-
-                            //if (_EntitiesCommon != null)
-                            //{
-                            //    resultedValueForService = item;
-                            //    break;
-                            //}
-                            //WebRequest request = WebRequest.Create(item);
-                            //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                            //if (response == null || response.StatusCode != HttpStatusCode.OK)
-                            //{
-                            //    // Not the one.
-                            //}
-                            //else
-                            //{
-                            //    resultedValueForService = item;
-                            //    break;
-                            //}
                         }
                         catch (Exception ex) { }
                     }
@@ -145,11 +110,9 @@ namespace StemmonsMobile.Views.LoginProcess
             catch { }
             finally
             {
-                //  Cursor.Current = Cursors.Default;
             }
             return "";
         }
-
 
         private string CheckUserHasAccess(string InstanceURL)
         {

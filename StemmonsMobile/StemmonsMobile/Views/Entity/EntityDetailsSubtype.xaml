@@ -18,8 +18,8 @@
  
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
                     <ListView x:Name="List_entity_subtypes" 
-                          ItemsSource="{Binding EntityLists}" Grid.Row="0"  
-                          HasUnevenRows="True"           
+                              ItemsSource="{Binding EntityLists}"
+                              HasUnevenRows="True"           
                               ItemTapped="List_entity_subtypes_ItemTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -104,9 +104,9 @@
 
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" 
                              IsClippedToBounds="True">
-                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked"  HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="Btn_home_Clicked"  HorizontalOptions="CenterAndExpand" />
                     <Button x:Name="btn_addentity" Text="+"  Clicked="Btn_addentity_Clicked" FontSize="35" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
-                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="Btn_more_Clicked"/>
                 </StackLayout>
 
             </Grid>

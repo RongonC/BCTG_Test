@@ -14,7 +14,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
     {
 
         #region Get All Home Page Count
-        public static Task<string> GetAllHomeCount(string username, int INSTANCE_ID, string _DBPath, int? INSTANCE_USER_ASSOC_ID)
+        public static string GetAllHomeCount(string username, int INSTANCE_ID, string _DBPath, int? INSTANCE_USER_ASSOC_ID)
         {
             string sError = string.Empty;
            
@@ -46,7 +46,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(Result), "N", "GetAllHomeCount", username, DateTime.Now.ToString());
             }
 
-            return Task.Run(() => sError);
+            return sError;
         }
         #endregion
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace DataServiceBus
 {
@@ -98,7 +99,7 @@ namespace DataServiceBus
                 return JObject.Parse(result.Result);
             }
             catch (Exception ex)
-           {
+            {
                 throw ex;
             }
         }
@@ -139,6 +140,9 @@ namespace DataServiceBus
             }
             catch (Exception e)
             {
+                Debug.WriteLine("URL => " + APIDetails[0].Value);
+                Debug.WriteLine("InnerException => " + e.InnerException);
+                Debug.WriteLine("Message => " + e.Message);
                 throw e;
             }
             return jobj;

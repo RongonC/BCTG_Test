@@ -18,7 +18,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
             database.CreateTableAsync<ItemTranInfoList>().Wait();
             database.CreateTableAsync<FavoriteList>().Wait();
             database.CreateTableAsync<INSTANCE_USER_ASSOC>().Wait();
-            database.CreateTableAsync<ActivityDetails>().Wait();
+           // database.CreateTableAsync<ActivityDetails>().Wait();
         }
 
         #region InstanceList Table Queries
@@ -752,45 +752,45 @@ namespace DataServiceBus.OfflineHelper.DataTypes
 
         #region # ActivityDetails Tables Queries
 
-        #region Get Instance List
-        public static Task<List<ActivityDetails>> GetActivityDetails(string dbPath)
-        {
-            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            return database.Table<ActivityDetails>().ToListAsync();
-        }
-        #endregion
+        //#region Get Instance List
+        //public static Task<List<ActivityDetails>> GetActivityDetails(string dbPath)
+        //{
+        //    SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+        //    return database.Table<ActivityDetails>().ToListAsync();
+        //}
+        //#endregion
 
-        #region Get Instance List By ID
-        public static Task<ActivityDetails> GetActivityDetailsByID(int id, string dbPath)
-        {
-            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            return database.Table<ActivityDetails>().Where(i => i.ActivityId == id).FirstOrDefaultAsync();
-        }
-        #endregion
+        //#region Get Instance List By ID
+        //public static Task<ActivityDetails> GetActivityDetailsByID(int id, string dbPath)
+        //{
+        //    SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+        //    return database.Table<ActivityDetails>().Where(i => i.ActivityId == id).FirstOrDefaultAsync();
+        //}
+        //#endregion
 
-        #region Save Instance
-        public static Task<int> SaveActivityDetails(ActivityDetails item, string dbPath)
-        {
-            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            if (item.ActivityId != 0)
-            {
-                return database.UpdateAsync(item);
-            }
-            else
-            {
-                return database.InsertAsync(item);
-            }
-        }
-        #endregion
+        //#region Save Instance
+        //public static Task<int> SaveActivityDetails(ActivityDetails item, string dbPath)
+        //{
+        //    SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+        //    if (item.ActivityId != 0)
+        //    {
+        //        return database.UpdateAsync(item);
+        //    }
+        //    else
+        //    {
+        //        return database.InsertAsync(item);
+        //    }
+        //}
+        //#endregion
 
-        #region Get App Type Info List By SystemName == ID == TYPE_ID == Screen_Name
-        public static Task<ActivityDetails> GetActivityDetails(string SystemName, int Id, int TypeID, string dbPath)
-        {
-            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            return database.Table<ActivityDetails>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.ID == Id && i.TYPE_ID == TypeID && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
+        //#region Get App Type Info List By SystemName == ID == TYPE_ID == Screen_Name
+        //public static Task<ActivityDetails> GetActivityDetails(string SystemName, int Id, int TypeID, string dbPath)
+        //{
+        //    SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+        //    return database.Table<ActivityDetails>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.ID == Id && i.TYPE_ID == TypeID && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
 
-        }
-        #endregion
+        //}
+        //#endregion
 
 
 

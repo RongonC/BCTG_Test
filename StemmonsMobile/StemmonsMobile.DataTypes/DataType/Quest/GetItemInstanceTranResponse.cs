@@ -98,28 +98,9 @@ namespace StemmonsMobile.DataTypes.DataType.Quest
             public string strCol18ItemInfoFieldValue { get; set; }
             public string strCol19ItemInfoFieldValue { get; set; }
             public string strCol20ItemInfoFieldValue { get; set; }
-
-
-
             public string strIsLocked { get; set; }
-
             public decimal? dcOverallScore { get; set; }
-
-
             public string strInspectedByName { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
             public string Url { get; set; }
             public string SECURITY_TYPE_AREA { get; set; }
             public string SECURITY_TYPE_ITEM { get; set; }

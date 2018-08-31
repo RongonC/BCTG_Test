@@ -39,10 +39,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 #endregion
 
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
-                Debug.WriteLine("GetAllCaseTypeWithID ==> " + Convert.ToString(Result));
-
                 if (Result != null)
                 {
+                    Debug.WriteLine("GetAllCaseTypeWithID ==> " + Convert.ToString(Result));
                     DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
 
                     string Res = Convert.ToString(Result.GetValue("ResponseContent"));
@@ -1397,7 +1396,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                             av.CaseTitle = jsonRecordOfln.Where(vvv => vvv.CaseID == Convert.ToInt32(insertedRecordid))?.FirstOrDefault().CaseTitle;
                                             av.CaseID = insertedRecordid;
                                             return av;
-                                        }).OrderByDescending(v => v.CaseID).ToList(); ;
+                                        }).OrderByDescending(v => v.CaseID).ToList();
                                     }
                                 }
 
@@ -1468,7 +1467,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                         av.CaseTitle = jsonRecordOfln.Where(vvv => vvv.CaseID == Convert.ToInt32(insertedRecordid))?.FirstOrDefault().CaseTitle;
                                         av.CaseID = insertedRecordid;
                                         return av;
-                                    }).OrderByDescending(v => v.CaseID).ToList(); ;
+                                    }).OrderByDescending(v => v.CaseID).ToList();
                                 }
                             }
 
@@ -1872,7 +1871,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                     av.CaseTitle = jsonRecordOfln.CaseTitle;
                                     av.CaseID = jsonRecordOfln.CaseID;
                                     return av;
-                                }).OrderByDescending(v => v.CaseID).ToList(); ;
+                                }).OrderByDescending(v => v.CaseID).ToList();
                             }
                         }
                         else
@@ -2616,7 +2615,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                     av.CaseTitle = temp.CaseTitle;
                                     av.CaseID = temp.CaseID;
                                     return av;
-                                }).OrderByDescending(v => v.CaseID).ToList(); ;
+                                }).OrderByDescending(v => v.CaseID).ToList();
                             }
                         }
                         else
@@ -4124,48 +4123,48 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
         public static void AddCasesLogsas(string _dbpath, int ActivityTypeID, string NOTE, string CASE_ID, string CaseTypeID, string CREATED_BY_FULLNAME, string DESCRIPTION, string NAME, string MODIFIED_BY, string SystemCode)
         {
-            try
-            {
-                GetCaseActivityResponse.Activity responseItem = new GetCaseActivityResponse.Activity();
-                responseItem.ActivityTypeID = ActivityTypeID;
-                responseItem.Note = NOTE;
-                responseItem.CaseID = CASE_ID;
-                responseItem.SystemCode = SystemCode;
-                responseItem.CaseTypeID = CaseTypeID;
-                responseItem.CreatedByFullName = CREATED_BY_FULLNAME;
-                responseItem.CreatedDateTime = DateTime.Now;
-                responseItem.Description = DESCRIPTION;
-                responseItem.IsActive = "Y";
-                responseItem.Name = NAME;
-                responseItem.ModifiedBy = MODIFIED_BY;
-                responseItem.ModifiedDateTime = DateTime.Now;
+            //try
+            //{
+            //    GetCaseActivityResponse.Activity responseItem = new GetCaseActivityResponse.Activity();
+            //    responseItem.ActivityTypeID = ActivityTypeID;
+            //    responseItem.Note = NOTE;
+            //    responseItem.CaseID = CASE_ID;
+            //    responseItem.SystemCode = SystemCode;
+            //    responseItem.CaseTypeID = CaseTypeID;
+            //    responseItem.CreatedByFullName = CREATED_BY_FULLNAME;
+            //    responseItem.CreatedDateTime = DateTime.Now;
+            //    responseItem.Description = DESCRIPTION;
+            //    responseItem.IsActive = "Y";
+            //    responseItem.Name = NAME;
+            //    responseItem.ModifiedBy = MODIFIED_BY;
+            //    responseItem.ModifiedDateTime = DateTime.Now;
 
-                ActivityDetails log = new ActivityDetails
-                {
-                    ID = Convert.ToInt32(CASE_ID),
-                    INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
-                    SYSTEM = ConstantsSync.CasesInstance,
-                    TYPE_ID = Convert.ToInt32(CaseTypeID),
-                    ActivityType = "C10_GetCaseActivity"
-                };
-                List<GetCaseActivityResponse.Activity> lstResult = new List<GetCaseActivityResponse.Activity>();
-                var Rec = DBHelper.GetActivityDetails(CasesInstance, Convert.ToInt32(CASE_ID), Convert.ToInt32(CaseTypeID), _dbpath);
-                Rec.Wait();
-                if (Rec.Result != null)
-                {
-                    log.ActivityId = Rec.Result.ActivityId;
-                    lstResult = JsonConvert.DeserializeObject<List<GetCaseActivityResponse.Activity>>(Rec.Result.ActivityJson.ToString());
-                }
+            //    ActivityDetails log = new ActivityDetails
+            //    {
+            //        ID = Convert.ToInt32(CASE_ID),
+            //        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+            //        SYSTEM = ConstantsSync.CasesInstance,
+            //        TYPE_ID = Convert.ToInt32(CaseTypeID),
+            //        ActivityType = "C10_GetCaseActivity"
+            //    };
+            //    List<GetCaseActivityResponse.Activity> lstResult = new List<GetCaseActivityResponse.Activity>();
+            //    var Rec = DBHelper.GetActivityDetails(CasesInstance, Convert.ToInt32(CASE_ID), Convert.ToInt32(CaseTypeID), _dbpath);
+            //    Rec.Wait();
+            //    if (Rec.Result != null)
+            //    {
+            //        log.ActivityId = Rec.Result.ActivityId;
+            //        lstResult = JsonConvert.DeserializeObject<List<GetCaseActivityResponse.Activity>>(Rec.Result.ActivityJson.ToString());
+            //    }
 
-                lstResult.Add(responseItem);
+            //    lstResult.Add(responseItem);
 
-                log.ActivityJson = JsonConvert.SerializeObject(lstResult);
+            //    log.ActivityJson = JsonConvert.SerializeObject(lstResult);
 
-                DBHelper.SaveActivityDetails(log, _dbpath).Wait();
-            }
-            catch (Exception)
-            {
-            }
+            //    DBHelper.SaveActivityDetails(log, _dbpath).Wait();
+            //}
+            //catch (Exception)
+            //{
+            //}
         }
     }
 }

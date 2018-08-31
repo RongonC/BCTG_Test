@@ -359,10 +359,17 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lstfooter_stl.IsVisible = false;
-                                foreach (var ite in result.Result)
+                                try
                                 {
-                                    BasicCase_lst.Add(ite);
+                                    lstfooter_stl.IsVisible = false;
+                                    if (result.Result != null)
+                                        foreach (var ite in result.Result)
+                                        {
+                                            BasicCase_lst.Add(ite);
+                                        }
+                                }
+                                catch (Exception)
+                                {
                                 }
                             });
                         });
@@ -679,10 +686,20 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                             result.Wait();
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                listdata.IsRefreshing = false;
-                                //  WarningLabel.IsVisible = false;
-                                BasicCase_lst = result.Result;
-                                this.listdata.ItemsSource = BasicCase_lst;
+                                try
+                                {
+                                    listdata.IsRefreshing = false;
+                                    //  WarningLabel.IsVisible = false;
+                                    if (result.Result.Count > 0)
+                                    {
+                                        var t = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
+                                        BasicCase_lst = t;
+                                    }
+                                    this.listdata.ItemsSource = BasicCase_lst;
+                                }
+                                catch (Exception)
+                                {
+                                }
                             });
                         });
 

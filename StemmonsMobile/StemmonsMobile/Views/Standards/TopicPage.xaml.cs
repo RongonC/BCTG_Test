@@ -35,6 +35,7 @@ namespace StemmonsMobile.Views.Standards
             {
                 string content = @"<html><body>";
                 content += Recursion(N_topic);
+                content += @"</body></html>";
                 var htmlWebViewSource = new HtmlWebViewSource { Html = content };
                 this.webView.Source = htmlWebViewSource;
                 _content = string.Empty;

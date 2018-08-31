@@ -38,11 +38,11 @@
                                                 <ColumnDefinition Width="3*" />
                                                 <ColumnDefinition Width="1*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Text="{Binding QuestionCategoryName}" Style="{StaticResource defaultLabelSize}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="Complete" FontSize="10" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Grid.Column="3" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding QuestionAvailblePoints}" FontSize="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding QuestionEarnedPoints}" FontSize="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding QuestionOveralscore}" FontSize="10" Grid.Column="3" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                            <Label Text="{Binding QuestionCategoryName}" Style="{StaticResource defaultLabelSize}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" />
+                                            <Label Text="Complete" FontSize="10" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Grid.Column="3" />
+                                            <Label Text="{Binding QuestionAvailblePoints}" FontSize="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
+                                            <Label Text="{Binding QuestionEarnedPoints}" FontSize="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
+                                            <Label Text="{Binding QuestionOveralscore}" FontSize="10" Grid.Column="3" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
                                             <Button Image="Assets/dropdowniconClose.png" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" />
                                         </Grid>
                                     </ViewCell>
@@ -60,9 +60,9 @@
                                             <ColumnDefinition Width="2*" />
                                             <ColumnDefinition Width="3*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label x:Name="OverallPoints" Text="Overall Points Available:-" Grid.Row="0" Grid.Column="0" FontSize="12" HorizontalOptions="EndAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                        <Label x:Name="EarnedPoints" Text="Earned:-" Grid.Row="0" Grid.Column="1" FontSize="12" HorizontalOptions="CenterAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                        <Label x:Name="TotalPercentage" Text="Score:-" Grid.Row="0" Grid.Column="2" FontSize="12" HorizontalOptions="StartAndExpand" Margin="0,0,1,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label x:Name="OverallPoints" Text="Overall Points Available:-" Grid.Row="0" Grid.Column="0" FontSize="12" HorizontalOptions="EndAndExpand" />
+                                        <Label x:Name="EarnedPoints" Text="Earned:-" Grid.Row="0" Grid.Column="1" FontSize="12" HorizontalOptions="CenterAndExpand" />
+                                        <Label x:Name="TotalPercentage" Text="Score:-" Grid.Row="0" Grid.Column="2" FontSize="12" HorizontalOptions="StartAndExpand" Margin="0,0,1,0"/>
                                     </Grid>
                                 </StackLayout>
                             </ListView.Footer>
