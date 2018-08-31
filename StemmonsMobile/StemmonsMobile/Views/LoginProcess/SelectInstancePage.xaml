@@ -11,12 +11,12 @@
         <StackLayout>
             <Image Aspect="AspectFit" Source="Assets/boxerlogo.png" Margin="5,10,0,0"/>
 
-            <Label Text="Service Instance" Margin="20,0,0,0" TextColor="Gray" FontAttributes="Italic" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <Label Text="Service Instance" Margin="20,0,0,0" TextColor="Gray" FontAttributes="Italic" FontSize="14"  />
 
             <Label Margin="15,0,0,0" BackgroundColor="#D0D0D0" HeightRequest="1"/>
 
-            <ListView x:Name="InstanceList" Margin="0,5,0,0" RowHeight="40" ItemTapped="Handle_ItemTapped"
-                >
+            <ListView x:Name="InstanceList" Margin="0,5,0,0" RowHeight="40" 
+                      ItemTapped="Handle_ItemTapped" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -34,9 +34,6 @@
 
                             </ViewCell.View>
                         </ViewCell>
-
-                        <!--   <TextCell Text="{Binding casetypename}" TextColor="black"/>-->
-
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>

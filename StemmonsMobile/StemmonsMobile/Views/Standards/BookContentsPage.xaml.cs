@@ -56,34 +56,9 @@ namespace StemmonsMobile.Views.Standards
                 Tlist = (JsonConvert.DeserializeObject<List<Topic>>(view.ToString()));
                 if (Tlist.Count() > 0)
                 {
-
                     Topic Final = new Topic();
 
                     Final = ArrangeTree(Tlist);
-
-                    //for (int i = 0; i < Tlist.Count; i++)
-                    //{
-
-                    //    if (Tlist[i].PARENT_LEVEL != "1")
-                    //    {
-                    //        if (Tlist[i].pARENT_META_DATA_IDField == Final.APP_ASSOC_META_DATA_ID)
-                    //            Final.Subtopics.AddRange(new[] { Tlist[i] });
-                    //        else
-                    //        {
-                    //            for (int j = 0; j < Final.Subtopics.Count; j++)
-                    //            {
-                    //                //BuildTreeTopic(Tlist[i], ref Final);
-                    //                if (Tlist[i].pARENT_META_DATA_IDField == Final.Subtopics[j].APP_ASSOC_META_DATA_ID)
-                    //                    Final.Subtopics[j].Subtopics.AddRange(new[] { Tlist[i] });
-                    //            }
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        Final = Tlist[i];
-                    //    }
-
-                    //}
 
                     Tlist2.Add(Final);
 
@@ -102,7 +77,6 @@ namespace StemmonsMobile.Views.Standards
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-
         private Topic ArrangeTree(List<Topic> Tlist)
         {
             if (Tlist.Count < 0)
@@ -111,32 +85,14 @@ namespace StemmonsMobile.Views.Standards
             }
 
             Topic tp = new Topic();
-            //
-
             var tpFirst = Tlist.Where(t => t.PARENT_META_DATA_ID == "0").FirstOrDefault();
             tp = tpFirst;
             var childtp = Tlist.Where(t => t.PARENT_META_DATA_ID == tp.APP_ASSOC_META_DATA_ID).ToList();
             ArrangeTree(Tlist, ref childtp);
             tp.Subtopics.AddRange(childtp);
 
-            // 1,2,3,4 child
-
-            //foreach (var subchild in childtp)
-            //{
-            //    var subchildtp = Tlist.Where(t => t.pARENT_LEVELField == subchild.APP_ASSOC_META_DATA_ID);
-            //    tp.Subtopics.AddRange(childtp);
-            //}            
-
-            //for (int i = 0; i <= Tlist.Count - 1; i++)
-            //{
-            //    int iAPP_ASSOC_META_DATA_ID = int.Parse(Tlist[i].APP_ASSOC_META_DATA_ID);
-            //    var childtp = Tlist.Where(t => int.Parse(t.pARENT_LEVELField) == iAPP_ASSOC_META_DATA_ID).ToList();
-            //    Tlist[i].Subtopics.AddRange(childtp);
-            //}
             return tp;
         }
-
-
 
         private void ArrangeTree(List<Topic> Tlist, ref List<Topic> Childlist)
         {

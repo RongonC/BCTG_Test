@@ -19,7 +19,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Grid x:Name="grd_IsRefresh" Grid.Row="1" IsClippedToBounds="True">
+                <Grid x:Name="grd_warning" Grid.Row="1" IsClippedToBounds="True">
                 </Grid>
                 <StackLayout x:Name="Main_stack" Grid.Row="2" IsClippedToBounds="True">
                     <ScrollView x:Name="scrollView" Grid.Row="0" IsClippedToBounds="True">
@@ -30,7 +30,7 @@
                                 <RowDefinition Height="1"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <StackLayout x:Name="EntryFieldsStack_CasesView" 
+                            <StackLayout x:Name="CasesView_ControlStack" 
                                          Grid.Row="0" IsClippedToBounds="True" Margin="0,10,10,10">
                             </StackLayout>
 
@@ -49,12 +49,13 @@
                                                     </Grid.RowDefinitions>
                                                     <Label  Text="{Binding Note}" Grid.Row="0"
                                                                 Style="{StaticResource defaultLabelSize}"
-                                                                IsVisible="{Binding LabelVisible}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                                IsVisible="{Binding LabelVisible}"/>
 
-                                                    <Image  x:Name="App_Logo" Aspect="AspectFit"   Grid.Row="1"
-                                                                        HeightRequest="100" WidthRequest="100"
-                                                                        Source="{Binding ImageURL}"
-                                                                  IsVisible="{Binding ImageVisible}"/>
+                                                    <Image  x:Name="App_Logo" Aspect="AspectFit"   
+                                                            Grid.Row="1"
+                                                            HeightRequest="100" WidthRequest="100"
+                                                            Source="{Binding ImageURL}"
+                                                            IsVisible="{Binding ImageVisible}"/>
                                                 </Grid>
                                             </ViewCell.View>
                                         </ViewCell>

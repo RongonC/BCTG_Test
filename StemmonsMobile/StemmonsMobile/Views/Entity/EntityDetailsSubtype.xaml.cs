@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,7 +24,8 @@ namespace StemmonsMobile.Views.Entity
         ObservableCollection<EntityListMBView> List_Entityitem = new ObservableCollection<EntityListMBView>();
         EntityOrgCenterList _selectedlist;
         List<EntityClass> EntityLists = new List<EntityClass>();
-
+        //int? _pageindex = 1;
+        //int? pageSize = 20;
         string _Viewtype = "";
         public EntityDetailsSubtype(EntityOrgCenterList selectedlist, string Viewtype)
         {
@@ -32,6 +33,7 @@ namespace StemmonsMobile.Views.Entity
             _selectedlist = selectedlist;
             Title = _selectedlist.EntityTypeName;
             _Viewtype = Viewtype;
+
         }
 
 
@@ -47,125 +49,123 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
-
-                GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest Lazyload_request = new GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest
-                {
-                    user = Functions.UserName,
-                };
-
-                if (_Viewtype?.ToLower() == "assigned to me")
-                    Lazyload_request.assignedToMe = 'Y';
-                if (_Viewtype?.ToLower() == "active")
-                    Lazyload_request.isActive = 'Y';
-                if (_Viewtype?.ToLower() == "inactive")
-                    Lazyload_request.isActive = 'N';
-                if (_Viewtype?.ToLower() == "created by me")
-                    Lazyload_request.createdByMe = 'Y';
-                if (_Viewtype?.ToLower() == "owned by me")
-                    Lazyload_request.ownedByMe = 'Y';
-                if (_Viewtype?.ToLower() == "associated by me")
-                    Lazyload_request.associatedToMe = 'Y';
-                if (_Viewtype?.ToLower() == "inactivated by me")
-                    Lazyload_request.inActivatedByMe = 'Y';
-
-                FILTER_VALUE fv = new FILTER_VALUE
-                {
-                    SHOW_ENTITIES_ACTIVE_INACTIVE = "ALL",
-                    ENTITY_TYPE = new List<int>
-                {
-                    Convert.ToInt32(_selectedlist.EntityTypeID)
-                }
-                };
-                Lazyload_request.entityTypeSchema = fv;
-
-                await Task.Run(async () =>
-                {
-                    EntityLists = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, Convert.ToInt32(_selectedlist.EntityTypeID), Functions.UserFullName, _Viewtype);
-                });
-                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                // convert EntityLists To EntityListMBView 
-                // find Title fields ID From entityList Collection
-                if (EntityLists?.Count > 0)
-                {
-                    int count = EntityLists.Count();
-                    EntityListMBView mb = new EntityListMBView();
-                    var AssocCollection = EntityLists.Select(t => t.AssociationFieldCollection).ToList();
-                    for (int i = 0; i < EntityLists.Count; i++)
-                    {
-                        var te1 = EntityLists[i].AssociationFieldCollection;
-                        for (int j = 0; j < te1.Count; j++)
-                        {
-                            switch (te1[j]?.FieldType?.ToLower())
-                            {
-                                case "se":
-                                case "el":
-                                case "me":
-                                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                    {
-                                        if (te1[j].AssocMetaData.Count != 0)
-                                            mb.Title = te1[j].AssocMetaData[0].FieldValue;
-                                        else
-                                            mb.Title = "";
-                                    }
-                                    break;
-                                default:
-                                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                    {
-                                        if (te1[j].AssocMetaDataText.Count != 0)
-                                        {
-                                            if (te1[j].AssocMetaDataText.Count != 0)
-                                                mb.Title = te1[j].AssocMetaDataText[0].TextValue;
-                                            else
-                                                mb.Title = "";
-                                        }
-                                        else if (te1[j].AssocDecode.Count != 0)
-                                        {
-                                            if (te1[j].AssocDecode.Count != 0)
-                                                mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
-                                            else
-                                                mb.Title = "";
-                                        }
-                                    }
-                                    break;
-                            }
-                        }
-                        mb.Field2 = "Created By: " + EntityLists[i].EntityCreatedByFullName;
-                        mb.Field4 = Convert.ToDateTime(App.DateFormatStringToString(EntityLists[i].EntityCreatedDateTime)).ToString("MM/dd/yyyy");
-
-                        string a = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(EntityLists[i].ListID);
-
-                        string b = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(count++);
-
-                        mb.ListId = EntityLists[i].ListID.ToString() != "0" ? a : b;
-
-                        mb.EntityDetails = EntityLists[i];
-                        List_Entityitem.Add(mb);
-                        mb = new EntityListMBView();
-                    }
-                    //List<EntityListMBView> ls = List_Entityitem.ToList();
-
-                    //ls = ls.Select(i =>
-                    //{
-                    //    i.Field4 = Convert.ToDateTime(i.Field4).ToString("MM/dd/yyyy");
-                    //    return i;
-                    //}).ToList();
-
-                    //var orderByResult = from s in ls
-                    //                    orderby s.Field4 
-                    //                    select s;
-
-                    List_entity_subtypes.ItemsSource = List_Entityitem;
-                }
-                else
-                {
-                    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-                }
+                await LoadEntityList(1, 0);
             }
             catch (Exception ex)
             {
                 // 
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private async Task LoadEntityList(int? pageIndex, int? pageSize)
+        {
+            GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest Lazyload_request = new GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest
+            {
+                user = Functions.UserName,
+            };
+
+            if (_Viewtype?.ToLower() == "assigned to me")
+                Lazyload_request.assignedToMe = 'Y';
+            if (_Viewtype?.ToLower() == "active")
+                Lazyload_request.isActive = 'Y';
+            if (_Viewtype?.ToLower() == "inactive")
+                Lazyload_request.isActive = 'N';
+            if (_Viewtype?.ToLower() == "created by me")
+                Lazyload_request.createdByMe = 'Y';
+            if (_Viewtype?.ToLower() == "owned by me")
+                Lazyload_request.ownedByMe = 'Y';
+            if (_Viewtype?.ToLower() == "associated by me")
+                Lazyload_request.associatedToMe = 'Y';
+            if (_Viewtype?.ToLower() == "inactivated by me")
+                Lazyload_request.inActivatedByMe = 'Y';
+
+            FILTER_VALUE fv = new FILTER_VALUE
+            {
+                SHOW_ENTITIES_ACTIVE_INACTIVE = "ALL",
+                ENTITY_TYPE = new List<int>
+                {
+                    Convert.ToInt32(_selectedlist.EntityTypeID)
+                }
+            };
+            //Lazyload_request.entityTypeSchema = fv;
+            //Lazyload_request.pageIndex = pageIndex;
+            //Lazyload_request.pageSize = pageSize;
+
+            await Task.Run(async () =>
+            {
+                EntityLists = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, Convert.ToInt32(_selectedlist.EntityTypeID), Functions.UserFullName, _Viewtype);
+            });
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            // convert EntityLists To EntityListMBView 
+            // find Title fields ID From entityList Collection
+            if (EntityLists?.Count > 0)
+            {
+                int count = EntityLists.Count();
+                EntityListMBView mb = new EntityListMBView();
+                var AssocCollection = EntityLists.Select(t => t.AssociationFieldCollection).ToList();
+                for (int i = 0; i < EntityLists.Count; i++)
+                {
+                    var te1 = EntityLists[i].AssociationFieldCollection;
+                    for (int j = 0; j < te1.Count; j++)
+                    {
+                        switch (te1[j]?.FieldType?.ToLower())
+                        {
+                            case "se":
+                            case "el":
+                            case "me":
+                                if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+                                {
+                                    if (te1[j].AssocMetaData.Count != 0)
+                                        mb.Title = te1[j].AssocMetaData[0].FieldValue;
+                                    else
+                                        mb.Title = "";
+                                }
+                                break;
+                            default:
+                                if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+                                {
+                                    if (te1[j].AssocMetaDataText.Count != 0)
+                                    {
+                                        if (te1[j].AssocMetaDataText.Count != 0)
+                                            mb.Title = te1[j].AssocMetaDataText[0].TextValue;
+                                        else
+                                            mb.Title = "";
+                                    }
+                                    else if (te1[j].AssocDecode.Count != 0)
+                                    {
+                                        if (te1[j].AssocDecode.Count != 0)
+                                            mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
+                                        else
+                                            mb.Title = "";
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    mb.Field2 = "Created By: " + EntityLists[i].EntityCreatedByFullName;
+                    mb.Field4 = Convert.ToDateTime(App.DateFormatStringToString(EntityLists[i].EntityCreatedDateTime)).ToString("MM/dd/yyyy");
+
+                    string a = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(EntityLists[i].ListID);
+
+                    string b = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(count++);
+
+                    mb.ListId = EntityLists[i].ListID.ToString() != "0" ? a : b;
+
+                    mb.EntityDetails = EntityLists[i];
+                    List_Entityitem.Add(mb);
+                    mb = new EntityListMBView();
+                }
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    List_entity_subtypes.ItemsSource = List_Entityitem;
+                });
+            }
+            else
+            {
+                DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+            }
         }
 
         private async void List_entity_subtypes_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -198,7 +198,8 @@ namespace StemmonsMobile.Views.Entity
                                 if (temp.Result)
                                 {
                                     var Remove = List_Entityitem.Remove((List_Entityitem.Where(t => t.ListId == bind.ListId).ToList())[0]);
-                                    if (Remove) List_entity_subtypes.ItemsSource = List_Entityitem;
+                                    if (Remove)
+                                        List_entity_subtypes.ItemsSource = List_Entityitem;
                                 }
                                 break;
                             default:
@@ -214,7 +215,7 @@ namespace StemmonsMobile.Views.Entity
 
             }
         }
-        private async void Txt_seacrhbar_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txt_seacrhbar_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -222,7 +223,7 @@ namespace StemmonsMobile.Views.Entity
                     List_entity_subtypes.ItemsSource = List_Entityitem;
                 else
                 {
-                    var itemlist = List_Entityitem.Where(x => x.Title != null && x.Title.ToLower().Contains(e.NewTextValue.ToLower())).ToList(); ;
+                    var itemlist = List_Entityitem.Where(x => x.Title != null && x.Title.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
                     List_entity_subtypes.ItemsSource = itemlist;
 
                     if (itemlist.Count <= 0)
@@ -253,7 +254,7 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        private void btn_home_Clicked(object sender, EventArgs e)
+        private void Btn_home_Clicked(object sender, EventArgs e)
         {
             try
             {
@@ -264,7 +265,7 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        private async void btn_more_Clicked(object sender, EventArgs e)
+        private void Btn_more_Clicked(object sender, EventArgs e)
         {
             try
             {

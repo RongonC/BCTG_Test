@@ -13,36 +13,38 @@ namespace StemmonsMobile
     {
         public MainPage()
         {
-            var editText = new Entry
-            {
-                Placeholder = "Select Date.",
-            };
+            InitializeComponent();
 
-            var date = new DatePicker
-            {
-                IsVisible = false,
-                IsEnabled = false,
-            };
+            //var editText = new Entry
+            //{
+            //    Placeholder = "Select Date.",
+            //};
 
-            var stack = new StackLayout
-            {
-                Orientation = StackOrientation.Vertical,
-                Children = { editText, date }
-            };
+            //var date = new DatePicker
+            //{
+            //    IsVisible = false,
+            //    IsEnabled = false,
+            //};
 
-            editText.Focused += (sender, e) =>
-            {
-                date.Focus();
-                //date.IsVisible = true;
-                //date.IsEnabled = true;
-                //editText.Unfocus();
-            };
-            date.DateSelected += (sender, e) =>
-            {
-                editText.Text = date.Date.ToString();
-            };
+            //var stack = new StackLayout
+            //{
+            //    Orientation = StackOrientation.Vertical,
+            //    Children = { editText, date }
+            //};
 
-            Content = stack;
+            //editText.Focused += (sender, e) =>
+            //{
+            //    date.Focus();
+            //    //date.IsVisible = true;
+            //    //date.IsEnabled = true;
+            //    //editText.Unfocus();
+            //};
+            //date.DateSelected += (sender, e) =>
+            //{
+            //    editText.Text = date.Date.ToString();
+            //};
+
+            //Content = stack;
         }
 
         private void En_Unfocused(object sender, FocusEventArgs e)

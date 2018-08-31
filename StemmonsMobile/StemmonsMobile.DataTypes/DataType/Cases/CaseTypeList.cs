@@ -38,49 +38,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         public int CaseID { get; set; }
         public int ListID { get; set; }
         public string CaseTypeName { get; set; }
-        public string CaseTitle
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(this._caseTitle))
-                {
-                    return _caseTitle;
-                }
-                else
-                {
-                    return "NO TITLE PROVIDED";
-                }
-            }
-
-            set => _caseTitle = value;
-        }
-        public string DisplayListID
-        {
-            get
-            {
-                return CaseTypeId.ToString() + "-" + ListID.ToString();
-            }
-        }
-        public string CaseStatusSystemName { get; set; }
-        public string CaseStatus
-        {
-            get
-            {
-                return $"{"Status:"}{CaseStatusSystemName}";
-            }
-        }
-        public string CaseAssignedToDisplayName { get; set; }
-        public string AssignedTo
-        {
-            get
-            {
-                return $"{"Assigned To:"}{CaseAssignedToDisplayName}";
-            }
-        }
-        public string CaseAssignedToSAM { get; set; }
-        public string CaseAssignDateTimeDateOnly { get; }
-        public string CaseAssignDateTime { get; set; }
-        public string CasePriorityValue { get; set; }
+      
         public override string ToString()
         {
             string format = "{0}, CaseID = {1},CaseTypeId = {2}";

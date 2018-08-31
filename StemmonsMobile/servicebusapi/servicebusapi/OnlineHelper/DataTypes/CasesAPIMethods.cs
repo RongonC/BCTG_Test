@@ -1754,7 +1754,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
-        #region GetSearchData
+        #region Get Search Data
         public static JObject GetSearchData(string SystemId, string TypeId, string FieldId, string ItemInfoFieldsId, string SearchText, string FromPageIndex, string ToPageIndex, string username)
         {
             #region API Details
@@ -1790,7 +1790,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
         #endregion
 
-        #region GetSearchData
+        #region EDS Cache
         public static JObject EDSCache(string EXTERNAL_DATASOURCE_ID)
         {
             #region API Details
@@ -1819,7 +1819,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
         #endregion
 
-        #region GetSearchData
+        #region Get Cases For User
         public static JObject GetCasesForUser(string user, string assignedTo, string caseIds, string pageIndex, string pageSize, string sortBy, string sortOrder, string searchXml, string SystemCodes)
         {
             #region API Details
@@ -1857,7 +1857,23 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
 
+        #region GetCaseInfo
+        public static JObject GetCaseInfo(string username, int CaseId)
+        {
+            try
+            {
+                GetCaseBasicInfoRequest Body_value = new GetCaseBasicInfoRequest();
+                Body_value.username = username;
+                Body_value.CaseId = CaseId;
 
+                return Constants.ApiCommon(Body_value, Constants.GetCaseInfo);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
     }
 }
 

@@ -66,6 +66,7 @@ namespace StemmonsMobile
             try
             {
                 Isonline = e.IsConnected;
+                isFirstcall = true;
                 OnlineSyncRecord();
             }
             catch (Exception)
@@ -73,7 +74,7 @@ namespace StemmonsMobile
             }
         }
         public static bool isFirstcall = true;
-        public async static void OnlineSyncRecord()
+        public static void OnlineSyncRecord()
         {
             if (Isonline && isFirstcall)
             {
@@ -91,7 +92,6 @@ namespace StemmonsMobile
                         try
                         {
                             int MainQueueCount = QueueCount;
-
 
                             config = new ProgressDialogConfig().SetTitle("Please Wait...")
                                                                  // setting false will just create a spinner
@@ -144,13 +144,22 @@ namespace StemmonsMobile
                         }
                         catch (Exception)
                         {
-                            dlg.Hide();
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                            {
+                                dlg.Hide();
+                            });
                         }
-                        dlg.Hide();
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            dlg.Hide();
+                        });
                     }
                     catch (Exception)
                     {
-                        dlg.Hide();
+                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                        {
+                            dlg.Hide();
+                        });
                     }
                     Functions.ShowtoastAlert("Online Data Sync Operation Success!");
                 }
@@ -475,6 +484,7 @@ namespace StemmonsMobile
                         case "Run Synchronization":
                             if (Functions.CheckInternetWithAlert())
                             {
+                                isFirstcall = true;
                                 OnlineSyncRecord();
                             }
                             break;

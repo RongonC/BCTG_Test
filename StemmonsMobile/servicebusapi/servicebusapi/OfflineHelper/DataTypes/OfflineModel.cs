@@ -87,20 +87,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public string HOME_SCREEN_INFO { get; set; }
     }
 
-    public class ActivityDetails
-    {
-        private DateTime _lAST_MODIFIED_DATETIME;
+    //public class ActivityDetails
+    //{
+    //    private DateTime _lAST_MODIFIED_DATETIME;
 
-        [PrimaryKey, AutoIncrement]
-        public int ActivityId { get; set; }
-        public string SYSTEM { get; set; }
-        public int? TYPE_ID { get; set; }
-        public int? ID { get; set; }// it will save Entity Id, Case id and so on
-        public string ActivityJson { get; set; }
-        public string ActivityType { get; set; }
-        public DateTime LAST_MODIFIED_DATETIME { get => _lAST_MODIFIED_DATETIME; set => _lAST_MODIFIED_DATETIME = DateTime.Now; }
-        public int INSTANCE_USER_ASSOC_ID { get; set; }
-    }
+    //    [PrimaryKey, AutoIncrement]
+    //    public int ActivityId { get; set; }
+    //    public string SYSTEM { get; set; }
+    //    public int? TYPE_ID { get; set; }
+    //    public int? ID { get; set; }// it will save Entity Id, Case id and so on
+    //    public string ActivityJson { get; set; }
+    //    public string ActivityType { get; set; }
+    //    public DateTime LAST_MODIFIED_DATETIME { get => _lAST_MODIFIED_DATETIME; set => _lAST_MODIFIED_DATETIME = DateTime.Now; }
+    //    public int INSTANCE_USER_ASSOC_ID { get; set; }
+    //}
 
     #endregion
 

@@ -106,6 +106,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetHopperWithOwnerByUsername = "/api/v1/Cases/GetHopperWithOwnerByUsername";
         public static string GetItemValueFromQueryExd = "/api/v1/Cases/GetItemValueFromQueryExd";
         public static string GetCaseModifiedDate = "/api/v1/Cases/GetCaseModifiedDate";
+        public static string GetCaseInfo = "/api/v1/Cases/GetCaseInfo";
 
         
         #endregion
