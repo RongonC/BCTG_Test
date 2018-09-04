@@ -48,7 +48,7 @@ namespace StemmonsMobile.Views.People_Screen
             }
         }
 
-        private async Task lstSearchitem_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void lstSearchitem_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {

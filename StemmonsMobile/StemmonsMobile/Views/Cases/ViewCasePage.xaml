@@ -2,11 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StemmonsMobile.Views.Cases.ViewCasePage"
-              xmlns:local="clr-namespace:StemmonsMobile"
+              xmlns:local="clr-namespace:StemmonsMobile;assembly=StemmonsMobile"
              Title="View Cases">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Icon="Assets/Save.png" Clicked="Menu_Clicked"/>
     </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HtmlLabelConverter x:Key="HtmlLabelConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout x:Name="abs_layout">
 
@@ -47,7 +52,7 @@
                                                         <RowDefinition Height="auto" />
                                                         <RowDefinition Height="auto" />
                                                     </Grid.RowDefinitions>
-                                                    <Label  Text="{Binding Note}" Grid.Row="0"
+                                                    <Label  FormattedText="{Binding Note, Converter={StaticResource HtmlLabelConverter}}" Grid.Row="0"
                                                                 Style="{StaticResource defaultLabelSize}"
                                                                 IsVisible="{Binding LabelVisible}"/>
 

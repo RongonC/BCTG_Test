@@ -19,7 +19,7 @@ namespace StemmonsMobile.Views.LoginProcess
 
             //loader.IsRunning = true;
         }
-        private async Task ContentPage_Appearing(object sender, EventArgs e)
+        private async void ContentPage_Appearing(object sender, EventArgs e)
         {
             var _temp = await DBHelper.GetInstanceList(App.DBPath);
             InstanceList.ItemsSource = _temp;

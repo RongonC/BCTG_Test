@@ -53,7 +53,7 @@ namespace StemmonsMobile.Views.Standards
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        private async Task lstSearchitem_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void lstSearchitem_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {
