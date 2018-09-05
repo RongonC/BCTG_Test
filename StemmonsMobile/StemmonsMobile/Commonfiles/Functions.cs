@@ -93,6 +93,9 @@ namespace StemmonsMobile.Commonfiles
             sbHTML.Replace("<br ", "\n<br ");
             sbHTML.Replace("<p ", "\n<p ");
 
+            sbHTML.Replace("<a", "\astart");
+            sbHTML.Replace("</a>", "\aEnd");
+
             // Finally, remove all HTML tags and return plain text
             return System.Text.RegularExpressions.Regex.Replace(
               sbHTML.ToString(), "<[^>]*>", "");
