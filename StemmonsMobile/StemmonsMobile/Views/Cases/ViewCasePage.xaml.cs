@@ -2283,7 +2283,7 @@ namespace StemmonsMobile.Views.Cases
                     //        var eqsplit = item.Split(new string[] { "CaseID=" }, StringSplitOptions.None);
                     //        foreach (var ite in eqsplit[1].ToCharArray())
                     //        {
-                                
+
                     //            if (char.IsDigit(ite))
                     //            {
                     //                link_Nav_id += ite;
@@ -2296,12 +2296,39 @@ namespace StemmonsMobile.Views.Cases
                     //        }
 
                     //    }
-                    //    if (item.Contains("?casetypeid=")&& item.Contains("&listid="))
+                    //    if (item.Contains("?casetypeid=") && item.Contains("&listid="))
                     //    {
-                    //       // link_Nav_Typeid
-                    //                link_Nav_Listid
+                    //        appname = "Cases";
+                    //        var eqsplit = item.Split(new string[] { "?casetypeid=" }, StringSplitOptions.None);
+                    //        foreach (var ite in eqsplit[1].ToCharArray())
+                    //        {
+                    //            if (char.IsDigit(ite))
+                    //            {
+                    //                link_Nav_Typeid += ite;
+                    //            }
+                    //            else
+                    //            {
+                    //                link_Nav_Typeid = "0";
+                    //                break;
+                    //            }
+                    //        }
 
+                    //        eqsplit = item.Split(new string[] { "&listid=" }, StringSplitOptions.None);
+                    //        foreach (var ite in eqsplit[1].ToCharArray())
+                    //        {
+                    //            if (char.IsDigit(ite))
+                    //            {
+                    //                link_Nav_Listid += ite;
+                    //            }
+                    //            else
+                    //            {
+                    //                link_Nav_Listid = "0";
+                    //                break;
+                    //            }
+                    //        }
 
+                    //        var result = CasesAPIMethods.GetCaseIDByCaseTypeIDAndListID(link_Nav_Typeid, link_Nav_Listid);
+                    //        link_Nav_id = result.GetValue("ResponseContent").ToString();
                     //    }
                     //    else if (item.Contains("?intItemInstanceTranID="))
                     //    {
@@ -2367,7 +2394,6 @@ namespace StemmonsMobile.Views.Cases
 
                     //    }
                     //}
-
                 }
             }
             catch (Exception ex)
@@ -3949,26 +3975,32 @@ namespace StemmonsMobile.Views.Cases
 
         async Task ExecuteRefreshCommand()
         {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-            //ViewCasePage vc = new ViewCasePage(ViewCasePage.CaseID, ViewCasePage.Casetypeid, ViewCasePage.Casetitle, ViewCasePage.strTome);
-
-            var p = page as ViewCasePage;
-            p.Onlineflag = true;
-
-            Task.Run(() =>
+            try
             {
-                HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
-            });
+                if (IsBusy)
+                    return;
 
-            await p.ExtendedOnAppearing();
+                IsBusy = true;
+                //ViewCasePage vc = new ViewCasePage(ViewCasePage.CaseID, ViewCasePage.Casetypeid, ViewCasePage.Casetitle, ViewCasePage.strTome);
 
-            p.IsBusy = false;
-            //await vc.GetCasesData();
-            //await vc.Dynamic_Control_Generate(true, new List<MetaData>());
-            IsBusy = false;
+                var p = page as ViewCasePage;
+                p.Onlineflag = true;
+
+                Task.Run(() =>
+                {
+                    HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+                });
+
+                await p.ExtendedOnAppearing();
+
+                p.IsBusy = false;
+                //await vc.GetCasesData();
+                //await vc.Dynamic_Control_Generate(true, new List<MetaData>());
+                IsBusy = false;
+            }
+            catch (Exception)
+            {
+            }
         }
 
         #region INotifyPropertyChanged implementation

@@ -51,72 +51,90 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
             listdata.ItemAppearing += async (object sender, ItemVisibilityEventArgs e) =>
             {
-                if (App.Isonline)
+                try
                 {
-                    var item = e.Item as GetCaseTypesResponse.BasicCase;
-                    int index = 0;
-                    try
+                    if (App.Isonline)
                     {
-                        index = BasicCase_lst.IndexOf(item);
-                    }
-                    catch (Exception eqs)
-                    {
-
-                    }
-                    if (BasicCase_lst.Count - 2 <= index)
-                    {
-                        if (BasicCase_lst.Count == (_pagenumber * _pageindex))
+                        var item = e.Item as GetCaseTypesResponse.BasicCase;
+                        int index = 0;
+                        try
                         {
-                            lstfooter_stl.IsVisible = true;
-                            await Task.Run(() =>
+                            index = BasicCase_lst.IndexOf(item);
+                        }
+                        catch (Exception eqs)
+                        {
+
+                        }
+                        if (BasicCase_lst.Count - 2 <= index)
+                        {
+                            if (BasicCase_lst.Count == (_pagenumber * _pageindex))
                             {
-                                _pageindex++;
-
-                                var result = CasesSyncAPIMethods.GetCaseList(true, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, _pageindex, _pagenumber);
-                                result.Wait();
-
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    foreach (var ite in result.Result)
-                                    {
-                                        BasicCase_lst.Add(ite);
-                                    }
-
-                                    // this.listdata.ItemsSource = BasicCase_lst;
+                                    lstfooter_stl.IsVisible = true;
                                 });
+                                await Task.Run(() =>
+                                {
+                                    _pageindex++;
 
-                            });
-                            lstfooter_stl.IsVisible = false;
+                                    var result = CasesSyncAPIMethods.GetCaseList(true, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, _pageindex, _pagenumber);
+                                    result.Wait();
+
+                                    Device.BeginInvokeOnMainThread(() =>
+                                    {
+                                        try
+                                        {
+                                            foreach (var ite in result.Result)
+                                            {
+                                                BasicCase_lst.Add(ite);
+                                            }
+
+                                            this.listdata.ItemsSource = BasicCase_lst;
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    });
+
+                                });
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    lstfooter_stl.IsVisible = false;
+                                });
+                            }
+                            //    try
+                            //    {
+                            //        int cn = lst.Count;
+                            //        for (int i = 0; i < 20; i++)
+                            //        {
+                            //            try
+                            //            {
+                            //                GetCaseTypesResponse.BasicCase ob = new GetCaseTypesResponse.BasicCase();
+                            //                ob.CaseTitle = "lazy Load - " + (cn++);
+                            //                ob.CaseTypeID = 15;
+                            //                ob.ListID = i;
+
+                            //                lst.Add(ob);
+                            //            }
+                            //            catch (Exception f)
+                            //            {
+                            //            }
+                            //        }
+
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //    }
+                            //    Device.BeginInvokeOnMainThread(() =>
+                            //    {
+                            //        listdata.ItemsSource = null;
+                            //        this.listdata.ItemsSource = lst;
+                            //    });
                         }
-                        //    try
-                        //    {
-                        //        int cn = lst.Count;
-                        //        for (int i = 0; i < 20; i++)
-                        //        {
-                        //            try
-                        //            {
-                        //                GetCaseTypesResponse.BasicCase ob = new GetCaseTypesResponse.BasicCase();
-                        //                ob.CaseTitle = "lazy Load - " + (cn++);
-                        //                ob.CaseTypeID = 15;
-                        //                ob.ListID = i;
-
-                        //                lst.Add(ob);
-                        //            }
-                        //            catch (Exception f)
-                        //            {
-                        //            }
-                        //        }
-
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //    }
-                        //    Device.BeginInvokeOnMainThread(() =>
-                        //    {
-                        //        listdata.ItemsSource = null;
-                        //        this.listdata.ItemsSource = lst;
-                        //    });
                     }
+                }
+                catch (Exception)
+                {
                 }
             };
         }

@@ -15,9 +15,12 @@
                 </Grid.RowDefinitions>
 
                 <SearchBar x:Name="txt_seacrhbar" TextChanged="Txt_seacrhbar_TextChanged" Grid.Row="0" Placeholder="Search"  />
- 
+
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
                     <ListView x:Name="List_entity_subtypes" 
+                              IsPullToRefreshEnabled="True"
+                              RefreshCommand="{Binding RefreshCommand}"
+                              IsRefreshing="{Binding IsRefreshing}"
                               ItemsSource="{Binding EntityLists}"
                               HasUnevenRows="True"           
                               ItemTapped="List_entity_subtypes_ItemTapped">
@@ -110,7 +113,7 @@
                 </StackLayout>
 
             </Grid>
-            
+
             <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">
