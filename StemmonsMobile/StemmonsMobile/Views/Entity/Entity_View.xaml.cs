@@ -35,7 +35,7 @@ namespace StemmonsMobile.Views.Entity
         List<AssociationField> EntityAssocOrder = new List<AssociationField>();
         EntityClass EntityLists = new EntityClass();
         List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
-        string NavScreenname = string.Empty;
+        string NavScreenname = string.Empty;// To manage Online and Offline View entity as per Screen name
         public static EntityListMBView _entityListMBView = new EntityListMBView();
 
         /// <summary>  Main Required Para is Below for this page Work
@@ -47,6 +47,8 @@ namespace StemmonsMobile.Views.Entity
         /// 
         public Entity_View(EntityListMBView _SelectedEntity, string _navscreenname = "")
         {
+            //_entityListMBView.EntityDetails.EntityID
+            //_entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName
             InitializeComponent();
             _entityListMBView = _SelectedEntity;
             Title = string.IsNullOrEmpty(_SelectedEntity.Title) ? "View Entity" : _SelectedEntity.Title;
@@ -68,7 +70,8 @@ namespace StemmonsMobile.Views.Entity
         public async void GetEntityDetails()
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-            string EntityRelatedResponse = ""; ;
+            string EntityRelatedResponse = "";
+            ;
             try
             {
                 bool Onlineflag = false;
@@ -251,7 +254,8 @@ namespace StemmonsMobile.Views.Entity
                     txt_EntNotes.BorderColor = Color.Gray;
                     txt_EntNotes.BorderWidth = 1;
                     txt_EntNotes.CornerRadius = 5;
-                    txt_EntNotes.FontFamily = "Soin Sans Neue"; ;
+                    txt_EntNotes.FontFamily = "Soin Sans Neue";
+                    ;
 
                     var btn_addnotes = new Button { };
                     btn_addnotes.Text = "Add Notes";
@@ -670,22 +674,13 @@ namespace StemmonsMobile.Views.Entity
 
         private async void btn_add_Clicked(object sender, EventArgs e)
         {
-            EntityOrgCenterList mb = new EntityOrgCenterList();
-            mb.EntityTypeID = _entityListMBView.EntityDetails.EntityTypeID;
-            mb.NewEntityText = _entityListMBView.EntityDetails.EntityTypeName;
-            mb.EntityID = _entityListMBView.EntityDetails.EntityID;
-            await Navigation.PushAsync(new CreateEntityPage(mb, _entityListMBView));
+            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityDetails.EntityTypeID, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeName, _entityListMBView));
         }
 
         private async void btn_editentity_Clicked(object sender, EventArgs e)
         {
             Functions.IsEditEntity = true;
-            EntityOrgCenterList mb = new EntityOrgCenterList();
-            mb.EntityTypeID = _entityListMBView.EntityDetails.EntityTypeID;
-            mb.NewEntityText = _entityListMBView.EntityDetails.EntityTypeName;
-            mb.EntityID = _entityListMBView.EntityDetails.EntityID;
-            _entityListMBView.EntityDetails = EntityLists;
-            await Navigation.PushAsync(new CreateEntityPage(mb, _entityListMBView));
+            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityDetails.EntityTypeID, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeName, _entityListMBView));
         }
 
         private async void btn_more_Clicked(object sender, EventArgs e)
@@ -760,7 +755,7 @@ namespace StemmonsMobile.Views.Entity
                             await Navigation.PushAsync(new EntitySearchUser(EntityLists, "Assign"));
                             break;
                         case "Activity Log":
-                            await Navigation.PushAsync(new EntityActivityLogPage(_entityListMBView));
+                            await Navigation.PushAsync(new EntityActivityLogPage(Convert.ToString(_entityListMBView.EntityDetails.EntityID)));
                             break;
                         case "Delete Item":
                             try

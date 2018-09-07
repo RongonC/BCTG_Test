@@ -58,7 +58,8 @@ namespace StemmonsMobile.Commonfiles
         {
             if (HTMLCode == null)
                 return "";
-
+            string trimChars = "<p>";
+            HTMLCode = HTMLCode.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray()).Replace("<p>", Environment.NewLine);
             // Remove new lines since they are not visible in HTML
             HTMLCode = HTMLCode.Replace("\n", " ");
 
@@ -263,7 +264,7 @@ namespace StemmonsMobile.Commonfiles
 
         public static string nRcrdOffline = "No Record Found.\nPlease go online to view full list.";
         public static string nRcrdOnline = "No Record Found.";
-        
+
         #endregion
 
 

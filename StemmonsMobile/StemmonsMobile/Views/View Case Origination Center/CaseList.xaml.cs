@@ -71,7 +71,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    lstfooter_stl.IsVisible = true;
+                                    lstfooter_indicator.IsVisible = true;
                                 });
                                 await Task.Run(() =>
                                 {
@@ -99,7 +99,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                 });
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    lstfooter_stl.IsVisible = false;
+                                    lstfooter_indicator.IsVisible = false;
                                 });
                             }
                             //    try
@@ -369,7 +369,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lstfooter_stl.IsVisible = true;
+                                lstfooter_indicator.IsVisible = true;
                             });
                             var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, ind, _pagenumber);
                             result.Wait();
@@ -379,7 +379,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                             {
                                 try
                                 {
-                                    lstfooter_stl.IsVisible = false;
+                                    lstfooter_indicator.IsVisible = false;
                                     if (result.Result != null)
                                         foreach (var ite in result.Result)
                                         {

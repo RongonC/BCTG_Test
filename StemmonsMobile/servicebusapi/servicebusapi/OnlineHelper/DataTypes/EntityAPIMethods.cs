@@ -1207,5 +1207,24 @@ namespace DataServiceBus.OnlineHelper.DataTypes
                 return null;
         }
         #endregion
+
+        #region Get Entities By System Code Key Value Pair_LazyLoad
+        public static JObject GetEntityBasicDetails(int EntityId, string user_name)
+        {
+            try
+            {
+                EntityBasicDetailsRequest Body_value = new EntityBasicDetailsRequest();
+                Body_value.Entity_id = EntityId;
+                Body_value.User_Name = user_name;
+
+                return Constants.ApiCommon(Body_value, Constants.EntityBasicDetails);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        #endregion
     }
 }

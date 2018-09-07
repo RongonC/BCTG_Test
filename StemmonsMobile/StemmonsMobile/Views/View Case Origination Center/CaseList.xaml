@@ -66,7 +66,7 @@
                         </ListView.ItemTemplate>
 
                         <ListView.Footer>
-                            <StackLayout x:Name="lstfooter_stl"  Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False"
+                            <StackLayout x:Name="lstfooter_indicator"  Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False"
                               HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
                                 <ActivityIndicator 
                                        IsRunning="True" IsVisible="True" Color="Black">

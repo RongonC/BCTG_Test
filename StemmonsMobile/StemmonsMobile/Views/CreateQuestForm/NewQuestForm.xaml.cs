@@ -34,18 +34,18 @@ namespace StemmonsMobile.Views.CreateQuestForm
         string jsonaddForm = string.Empty;
         double avpoints = 0.0;
         //List<GetItemInfoDependencyResponse.ItemInfoDependancy> lstItemInfoDependancy = new List<GetItemInfoDependencyResponse.ItemInfoDependancy>();
-        string catid = string.Empty;
+        string aredID = string.Empty;
         List<string> CategoryIdList = new List<string>();
         List<Add_Questions_MetadataRequest> CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
         List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId> lstcatbyitemid = new List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId>();
 
-        public NewQuestForm(int _itemid, string scatid = "")
+        public NewQuestForm(int _itemid ,string arID = "")
         {
             InitializeComponent();
             itemid = _itemid;
             ViewCount = 0;
             SaveClick = 0;
-            catid = scatid;
+            aredID = arID;
             Functions.questObjectData = null;
             CategoryIdList = new List<string>();
             CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
@@ -59,14 +59,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
             {
                 if (!string.IsNullOrEmpty(clickedCategoryId) && Functions.questObjectData != null)
                 {
-
                     if (CategoryIdList.Count > 0)
                     {
                         if (CategoryIdList.Contains(clickedCategoryId))
                         {
                             int indexofcategory = (CategoryIdList.IndexOf(clickedCategoryId));
                             CategoryObjectlist[indexofcategory] = Functions.questObjectData;
-
                         }
                         else
                         {
@@ -79,16 +77,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         CategoryIdList.Add(clickedCategoryId);
                         CategoryObjectlist.Add(Functions.questObjectData);
                     }
-
-
-
                 }
             }
             catch (Exception ex)
             {
-
             }
-
 
             if (ViewCount == 0)
             {
@@ -376,7 +369,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
 
                     List<Getitemcategory> itemcategories = new List<Getitemcategory>();
-                    var getitemcategoryCall = QuestSyncAPIMethods.GetItemCategoriesByItemID(App.Isonline, Convert.ToString(itemid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, catid);
+                    var getitemcategoryCall = QuestSyncAPIMethods.GetItemCategoriesByItemID(App.Isonline, Convert.ToString(itemid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, aredID);
                     getitemcategoryCall.Wait();
 
                     var tempgetitemcategory = getitemcategoryCall.Result;
@@ -993,7 +986,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
                 }
 
-                this.Navigation.PushAsync(new QuestQuestionForm(sd.strItemCategoryName, Convert.ToString(sd.intItemCategoryID), ItemInstanceTranId, Convert.ToString(sd.intItemID), catid, addForm, lstcatbyitemid));
+                this.Navigation.PushAsync(new QuestQuestionForm(sd.strItemCategoryName, Convert.ToString(sd.intItemCategoryID), ItemInstanceTranId, Convert.ToString(sd.intItemID), aredID, addForm, lstcatbyitemid));
             }
             catch (Exception ex)
             {

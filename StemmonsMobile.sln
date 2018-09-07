@@ -211,6 +211,7 @@ Global
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Debug|x64.ActiveCfg = Debug|iPhone
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Debug|x86.ActiveCfg = Debug|iPhone
+		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Debug|x86.Build.0 = Debug|iPhone
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Release|ARM.ActiveCfg = Release|iPhone
 		{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}.Release|iPhone.ActiveCfg = Release|iPhone

@@ -18,7 +18,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
             database.CreateTableAsync<ItemTranInfoList>().Wait();
             database.CreateTableAsync<FavoriteList>().Wait();
             database.CreateTableAsync<INSTANCE_USER_ASSOC>().Wait();
-           // database.CreateTableAsync<ActivityDetails>().Wait();
+            // database.CreateTableAsync<ActivityDetails>().Wait();
         }
 
         #region InstanceList Table Queries
@@ -133,7 +133,15 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Get AppTypeInfoList By TYPE_ID and System Name
+        #region Get AppTypeInfoList By ID and System Name
+        public static Task<AppTypeInfoList> GetAppTypeInfoListByID(int id, string System, string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            return database.Table<AppTypeInfoList>().Where(i => i.ID == id && i.SYSTEM.ToLower() == System.ToLower() && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region Get AppTypeInfoList By TYPE_ID and System Name screenname
         public static Task<AppTypeInfoList> GetAppTypeInfoListByTypeID_SystemName(int id, string System, string screenname, string dbPath)
         {
             SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
@@ -157,14 +165,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Get AppTypeInfoList By ID == TYPE_SCREEN_INFO
-        public static Task<List<AppTypeInfoList>> GetAppTypeInfoListByID(int id, string Screenname, string dbPath)
-        {
-            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
-            return database.Table<AppTypeInfoList>().Where(i => i.ID == id && i.TYPE_SCREEN_INFO == Screenname && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).ToListAsync();
-        }
-        #endregion
-
         #region Get AppTypeInfoList By SYSTEM & TYPE_SCREEN_INFO
         public static Task<List<AppTypeInfoList>> GetAppTypeInfoListBySystemName(string SystemName, string ScreenName, string dbPath)
         {
@@ -183,7 +183,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Get AppTypeInfoList By SYSTEM == TypeScreenInfo == TYPE_ID
+        #region Get AppTypeInfoList By SYSTEM == TypeScreenInfo == TYPE_ID == TM_Username
         public static Task<AppTypeInfoList> GetAppTypeInfoListByNameTypeIdScreenInfo(string SystemName, string TypeScreenInfo, int TypeId, string dbPath, string tm_username)
         {
             SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
@@ -241,7 +241,15 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Get AppTypeInfo List By ID Sync
+        #region Get App Type Info List By SystemName, & ID & TYPE_SCREEN_INFO & Screen_Name
+        public static Task<AppTypeInfoList> GetAppTypeInfoListContains_scrname(string SystemName, int? Id, string Screen_Name, string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            return database.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.ID == Id && i.TYPE_SCREEN_INFO.ToLower().Contains(Screen_Name.ToLower()) && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region Get AppTypeInfo List By ID Sync SystemName == Id
         public static Task<List<AppTypeInfoList>> GetAppTypeInfoListByIDSync(string SystemName, int Id, string dbPath)
         {
             SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
@@ -326,7 +334,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Get AppTypeInfo List By ID Sync
+        #region Get AppTypeInfo List By ID Sync SystemName == TypeId == Id 
         public static Task<AppTypeInfoList> GetAppTypeInfoListByIDS(string SystemName, int TypeId, int Id, string dbPath)
         {
             SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
@@ -357,7 +365,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
 
         #endregion
-
 
         #region GetApp Type InfoList By SystemName == TYPE_SCREEN_INFO ==TransactionType 
 

@@ -38,48 +38,38 @@ namespace StemmonsMobile.Views.Entity
 
             List_entity_subtypes.ItemAppearing += async (object sender, ItemVisibilityEventArgs e) =>
             {
-                //if (App.Isonline)
-                //{
-                //    var item = e.Item as EntityListMBView;
-                //    int index = 0;
-                //    try
-                //    {
-                //        index = List_Entityitem.IndexOf(item);
-                //    }
-                //    catch (Exception eqs)
-                //    {
+                if (App.Isonline)
+                {
+                    var item = e.Item as EntityListMBView;
+                    int index = 0;
+                    try
+                    {
+                        index = List_Entityitem.IndexOf(item);
+                    }
+                    catch (Exception eqs)
+                    {
 
-                //    }
-                //    if (List_Entityitem.Count - 2 <= index)
-                //    {
-                //        if (List_Entityitem.Count == (pageSize * _pageindex))
-                //        {
-                //            List_entity_subtypes.IsVisible = true;
+                    }
+                    if (List_Entityitem.Count - 2 <= index)
+                    {
+                        if (List_Entityitem.Count == (pageSize * _pageindex))
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                lstfooter_indicator.IsVisible = true;
+                            });
 
-                //            _pageindex++;
-                //            await LoadEntityList(1, pageSize);
-                //            //await Task.Run(() =>
-                //            //{
+                            _pageindex++;
+                            await LoadEntityList(_pageindex, pageSize);
 
-                //            //    var result = CasesSyncAPIMethods.GetCaseList(true, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, _pageindex, _pagenumber);
-                //            //    result.Wait();
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                lstfooter_indicator.IsVisible = false;
+                            });
+                        }
 
-                //            //    Device.BeginInvokeOnMainThread(() =>
-                //            //    {
-                //            //        foreach (var ite in result.Result)
-                //            //        {
-                //            //            List_Entityitem.Add(ite);
-                //            //        }
-
-                //            //        // this.listdata.ItemsSource = BasicCase_lst;
-                //            //    });
-
-                //            //});
-                //            List_entity_subtypes.IsVisible = false;
-                //        }
-
-                //    }
-                //}
+                    }
+                }
             };
         }
 
@@ -96,11 +86,10 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
-                await LoadEntityList(0, 0);
+                await LoadEntityList(1, pageSize);
             }
             catch (Exception ex)
             {
-                // 
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
@@ -135,12 +124,13 @@ namespace StemmonsMobile.Views.Entity
                     Convert.ToInt32(_selectedlist.EntityTypeID)
                 }
             };
-            //Lazyload_request.entityTypeSchema = fv;
-            //Lazyload_request.pageIndex = pageIndex;
-            //Lazyload_request.pageSize = pageSize;
+            Lazyload_request.entityTypeSchema = fv;
+            Lazyload_request.pageIndex = pageIndex;
+            Lazyload_request.pageSize = pageSize;
 
             await Task.Run(async () =>
             {
+                EntityLists = new List<EntityClass>();
                 EntityLists = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, Convert.ToInt32(_selectedlist.EntityTypeID), Functions.UserFullName, _Viewtype);
             });
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
@@ -217,7 +207,8 @@ namespace StemmonsMobile.Views.Entity
 
         private async void List_entity_subtypes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new Entity_View(e.Item as EntityListMBView));
+            var obj = e.Item as EntityListMBView;
+            await Navigation.PushAsync(new Entity_View(obj));
         }
 
         private async void Menu_Del_entity_subtypes_Clicked(object sender, EventArgs e)
@@ -294,7 +285,7 @@ namespace StemmonsMobile.Views.Entity
                 mb.EntityDetails.EntityTypeID = _selectedlist.EntityTypeID;
                 mb.EntityDetails.EntityID = _selectedlist.EntityID;
                 Functions.IsEditEntity = false;
-                await Navigation.PushAsync(new CreateEntityPage(_selectedlist, mb));
+                await Navigation.PushAsync(new CreateEntityPage(_selectedlist.EntityTypeID, _selectedlist.EntityID, _selectedlist.NewEntityText, mb));
             }
             catch (Exception)
             {

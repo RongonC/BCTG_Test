@@ -56,7 +56,7 @@ namespace StemmonsMobile.Views.Entity
             if (btn.Name.ToLower().Contains("create new"))
             {
                 Functions.IsEditEntity = false;
-                await Navigation.PushAsync(new CreateEntityPage(Selected_Entity, null));
+                await Navigation.PushAsync(new CreateEntityPage(Selected_Entity.EntityTypeID, Selected_Entity.EntityID, Selected_Entity.NewEntityText, null));
             }
             else if (btn.Name != "Newest" && btn.Name != "Owner" && btn.Type_value != "0")
             {
@@ -69,7 +69,7 @@ namespace StemmonsMobile.Views.Entity
         private async void Btn_CreateEntity_Clicked(object sender, EventArgs e)
         {
             Functions.IsEditEntity = false;
-            await Navigation.PushAsync(new CreateEntityPage(Selected_Entity, null));
+            await Navigation.PushAsync(new CreateEntityPage(Selected_Entity.EntityTypeID, Selected_Entity.EntityID, Selected_Entity.NewEntityText, null));
         }
 
         private void btn_home_Clicked(object sender, EventArgs e)

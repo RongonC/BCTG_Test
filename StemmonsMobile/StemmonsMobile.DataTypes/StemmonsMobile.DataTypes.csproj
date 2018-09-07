@@ -199,6 +199,8 @@
     <Compile Include="DataType\Default\RequestToken.cs" />
     <Compile Include="DataType\Default\HomeScreenCountResponse.cs" />
     <Compile Include="DataType\Default\ResponseToken.cs" />
+    <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
+    <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListRequest.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListResponse.cs" />
     <Compile Include="DataType\Entity\GetEntityByAssingToSAMRequest.cs" />

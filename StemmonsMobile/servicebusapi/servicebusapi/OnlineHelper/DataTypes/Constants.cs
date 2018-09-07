@@ -221,6 +221,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetFilterQuery_Entity = "/api/v1/Entity/GetFilterQuery_Entity";
         public static string BoxerCentralHome_Entities_GetEntityList = "/api/v1/Entity/BoxerCentralHome_Entities_GetEntityList";
         public static string GetAllEntityRoleRelationshipByEmp = "/api/v1/Entity/GetAllEntityRoleRelationshipByEmp";
+        public static string EntityBasicDetails = "/api/v1/Entity/EntityBasicDetails";
         #endregion
 
         #region  Standarad APIs List       

@@ -20,12 +20,11 @@ namespace StemmonsMobile.Views.Entity
     public partial class EntityActivityLogPage : ContentPage
     {
         ObservableCollection<ActivityInstance> ls = new ObservableCollection<ActivityInstance>();
-        EntityListMBView SelectedEntityList;
-        public EntityActivityLogPage(EntityListMBView _select)
+        string EntityID = "0";
+        public EntityActivityLogPage(string eID="0")
         {
             InitializeComponent();
-            SelectedEntityList = _select;
-
+            EntityID = eID;
         }
 
         protected async override void OnAppearing()
@@ -39,7 +38,7 @@ namespace StemmonsMobile.Views.Entity
 
                     await Task.Run(() =>
                     {
-                        var ActivityApiCall = EntityAPIMethods.GetActivity(SelectedEntityList.EntityDetails.EntityID.ToString(), Functions.UserName);
+                        var ActivityApiCall = EntityAPIMethods.GetActivity(EntityID, Functions.UserName);
                         var apicallresponse = ActivityApiCall.GetValue("ResponseContent");
                         if (!string.IsNullOrEmpty(apicallresponse?.ToString()) && apicallresponse.ToString() != "[]")
                             ls = Newtonsoft.Json.JsonConvert.DeserializeObject<ObservableCollection<ActivityInstance>>(apicallresponse.ToString());

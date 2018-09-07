@@ -29,6 +29,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetTypeValuesByAssocCaseTypeExternalDSResponse;
+using static StemmonsMobile.DataTypes.DataType.Quest.GetSecurityDataResponse;
 
 namespace StemmonsMobile.Views.Cases
 {
@@ -63,15 +64,11 @@ namespace StemmonsMobile.Views.Cases
         public ViewCasePage(string CASEID, string CASETYPEID, string CASETITLE, string ToMe = "")
         {
             InitializeComponent();
-
-
             Casetitle = CASETITLE;
             CaseID = CASEID;
             Casetypeid = CASETYPEID;
             strTome = ToMe;
             CasesnotesGroups.Clear();
-            CasesnotesGroups.Clear();
-
             grd_warning.Children.Clear();
             CasesView_ControlStack.Children.Clear();
 
@@ -99,7 +96,6 @@ namespace StemmonsMobile.Views.Cases
             WarningLabel.GestureRecognizers.Add(tgr);
             WarningLabel.IsVisible = true;
             #endregion
-
 
             BindingContext = new CasesViewmodel(this);
         }
@@ -352,26 +348,26 @@ namespace StemmonsMobile.Views.Cases
 
                         for (int i = 0; i < AssignControlsmetadata.Count; i++)
                         {
-                            spi_MobileApp_GetTypesByCaseTypeResult item = AssignControlsmetadata[i];
+                            spi_MobileApp_GetTypesByCaseTypeResult ControlsItem = AssignControlsmetadata[i];
                             bool filedsecuritytype_update = false;
                             bool filedsecuritytype_read = false;
 
 
-                            if (!string.IsNullOrEmpty(item.ASSOC_SECURITY_TYPE) && item.ASSOC_SECURITY_TYPE.ToLower() != "c")
+                            if (!string.IsNullOrEmpty(ControlsItem.ASSOC_SECURITY_TYPE) && ControlsItem.ASSOC_SECURITY_TYPE.ToLower() != "c")
                             {
-                                if (!string.IsNullOrEmpty(item.ASSOC_SECURITY_TYPE) || item.ASSOC_SECURITY_TYPE.ToLower().Contains("r") || item.ASSOC_SECURITY_TYPE.ToLower() == "open")
+                                if (!string.IsNullOrEmpty(ControlsItem.ASSOC_SECURITY_TYPE) || ControlsItem.ASSOC_SECURITY_TYPE.ToLower().Contains("r") || ControlsItem.ASSOC_SECURITY_TYPE.ToLower() == "open")
                                 {
                                     filedsecuritytype_read = true;
-                                    if (item.ASSOC_SECURITY_TYPE.ToLower().Contains("u") || item.ASSOC_SECURITY_TYPE.ToLower() == "open")
+                                    if (ControlsItem.ASSOC_SECURITY_TYPE.ToLower().Contains("u") || ControlsItem.ASSOC_SECURITY_TYPE.ToLower() == "open")
                                     {
                                         filedsecuritytype_update = true;
                                     }
                                 }
 
-                                if (item.SYSTEM_CODE?.ToLower() == "title")
+                                if (ControlsItem.SYSTEM_CODE?.ToLower() == "title")
                                 {
-                                    _TitleFieldControlID = item.ASSOC_FIELD_TYPE + "_" + item.ASSOC_TYPE_ID;
-                                    Casetitle = metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+                                    _TitleFieldControlID = ControlsItem.ASSOC_FIELD_TYPE + "_" + ControlsItem.ASSOC_TYPE_ID;
+                                    Casetitle = metadatacollection?.Where(c => c.AssociatedTypeID == ControlsItem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
                                 }
 
                                 if (filedsecuritytype_read)
@@ -389,7 +385,7 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         VerticalOptions = LayoutOptions.Start
                                     };
-                                    Label1.Text = item.NAME;
+                                    Label1.Text = ControlsItem.NAME;
                                     Label1.HorizontalOptions = LayoutOptions.Start;
                                     Label1.FontSize = 16;
                                     Label1.WidthRequest = 200;
@@ -399,14 +395,14 @@ namespace StemmonsMobile.Views.Cases
 
                                     try
                                     {
-                                        switch (item.ASSOC_FIELD_TYPE.ToLower())
+                                        switch (ControlsItem.ASSOC_FIELD_TYPE.ToLower())
                                         {
                                             case "o":
                                             case "e":
 
                                                 Picker pk = new Picker();
                                                 pk.WidthRequest = 200;
-                                                pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
+                                                pk.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
                                                 try
                                                 {
                                                     pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
@@ -426,10 +422,10 @@ namespace StemmonsMobile.Views.Cases
                                                             var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
                                                             var AssocType = json.GetValue("ResponseContent");
                                                             AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
-                                                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == item.ASSOC_TYPE_ID).ToList();
+                                                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == ControlsItem.ASSOC_TYPE_ID).ToList();
                                                             if (assocChild.Count < 1)
                                                             {
-                                                                var result_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
+                                                                var result_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, ControlsItem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID));
                                                                 if (result_extdatasource.Result != null && result_extdatasource.Result.ToString() != "[]")
                                                                 {
                                                                     lst_extdatasource.AddRange(result_extdatasource.Result);
@@ -438,7 +434,7 @@ namespace StemmonsMobile.Views.Cases
                                                         }
                                                         else
                                                         {
-                                                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
+                                                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, ControlsItem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID));
 
                                                             temp_extdatasource.Wait();
                                                             if (temp_extdatasource.Result.Count > 0)
@@ -467,7 +463,7 @@ namespace StemmonsMobile.Views.Cases
                                             case "d":
                                                 Picker pkr = new Picker();
                                                 pkr.WidthRequest = 200;
-                                                pkr.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
+                                                pkr.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
 
                                                 try
                                                 {
@@ -485,10 +481,10 @@ namespace StemmonsMobile.Views.Cases
 
                                                     GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS Request = new GetTypeValuesByAssocCaseTypeExternalDSRequest.GetTypeValuesByAssocCaseTypeExternalDS();
 
-                                                    Request.assocCaseTypeID = item.ASSOC_TYPE_ID;
+                                                    Request.assocCaseTypeID = ControlsItem.ASSOC_TYPE_ID;
                                                     Request.caseTypeID = Convert.ToInt32(Casetypeid);
-                                                    Request.caseTypeDesc = item.DESCRIPTION;
-                                                    Request.systemCode = item.SYSTEM_CODE;
+                                                    Request.caseTypeDesc = ControlsItem.DESCRIPTION;
+                                                    Request.systemCode = ControlsItem.SYSTEM_CODE;
                                                     var result_extdatasource1 = CasesSyncAPIMethods.GetTypeValuesByAssocCaseType(Onlineflag, Request, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
                                                     result_extdatasource1.Wait();
                                                     if (result_extdatasource1.Result != null && result_extdatasource1.Result.ToString() != "[]")
@@ -505,7 +501,7 @@ namespace StemmonsMobile.Views.Cases
 
                                             case "x":
                                                 BorderEditor editor = new BorderEditor();
-                                                editor.StyleId = item.ASSOC_FIELD_TYPE + "_" + item.ASSOC_TYPE_ID;
+                                                editor.StyleId = ControlsItem.ASSOC_FIELD_TYPE + "_" + ControlsItem.ASSOC_TYPE_ID;
                                                 try
                                                 {
                                                     editor.HeightRequest = 100;
@@ -585,7 +581,7 @@ namespace StemmonsMobile.Views.Cases
                                                 txt_Date.WidthRequest = 175;
                                                 txt_Date.TextColor = Color.Gray;
                                                 txt_Date.Keyboard = Keyboard.Numeric;
-                                                txt_Date.StyleId = "a_" + item.ASSOC_TYPE_ID;
+                                                txt_Date.StyleId = "a_" + ControlsItem.ASSOC_TYPE_ID;
                                                 txt_Date.Text = "";
 
                                                 ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]?.Split('|')[0]);
@@ -596,7 +592,7 @@ namespace StemmonsMobile.Views.Cases
                                                 #endregion
 
                                                 Image im = new Image();
-                                                im.StyleId = "imgcl_" + item.ASSOC_TYPE_ID;
+                                                im.StyleId = "imgcl_" + ControlsItem.ASSOC_TYPE_ID;
                                                 im.Source = ImageSource.FromFile("Assets/erase-16.png");
 
                                                 #region date_pick
@@ -605,7 +601,7 @@ namespace StemmonsMobile.Views.Cases
                                                 date_pick.Format = "MM/dd/yyyy";
                                                 date_pick.WidthRequest = 200;
                                                 date_pick.TextColor = Color.Gray;
-                                                date_pick.StyleId = "dt_" + item.ASSOC_TYPE_ID;
+                                                date_pick.StyleId = "dt_" + ControlsItem.ASSOC_TYPE_ID;
                                                 #endregion
 
 
@@ -655,14 +651,13 @@ namespace StemmonsMobile.Views.Cases
                                                 else
                                                 {
                                                     date_pick.DateSelected += Date_pick_DateSelected;
-
                                                 }
                                                 break;
 
                                             case "t":
                                                 Entry entry = new Entry();
 
-                                                entry.StyleId = "t_" + item.ASSOC_TYPE_ID;
+                                                entry.StyleId = "t_" + ControlsItem.ASSOC_TYPE_ID;
 
                                                 try
                                                 {
@@ -687,7 +682,7 @@ namespace StemmonsMobile.Views.Cases
                                             case "c":
                                                 Entry _entry = new Entry();
 
-                                                _entry.StyleId = "c_" + item.ASSOC_TYPE_ID;
+                                                _entry.StyleId = "c_" + ControlsItem.ASSOC_TYPE_ID;
                                                 _entry.IsEnabled = false;
                                                 _entry.WidthRequest = 200;
                                                 _entry.FontSize = 16;
@@ -701,7 +696,7 @@ namespace StemmonsMobile.Views.Cases
                                                 entry_number.WidthRequest = 200;
                                                 entry_number.FontSize = 16;
                                                 entry_number.Keyboard = Keyboard.Numeric;
-                                                entry_number.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                                entry_number.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID;
 
                                                 try
                                                 {
@@ -1411,15 +1406,15 @@ namespace StemmonsMobile.Views.Cases
                             item.FirstOrDefault().ImageVisible = true;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                            item.FirstOrDefault().Note = item.FirstOrDefault().Note;
                         }
                         else
                         {
                             item.FirstOrDefault().ImageVisible = false;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                            item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
                         }
                         CasesnotesGroups.Add(item);
                     }

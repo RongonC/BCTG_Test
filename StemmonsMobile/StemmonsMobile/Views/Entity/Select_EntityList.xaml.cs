@@ -82,7 +82,9 @@ namespace StemmonsMobile.Views.Entity
                     });
 
                     Functions.IsEditEntity = false;
-                    await Navigation.PushAsync(new CreateEntityPage((e.Item as EntityOrgCenterList), mb));
+                    var eORG = (e.Item as EntityOrgCenterList);
+
+                    await Navigation.PushAsync(new CreateEntityPage(eORG.EntityTypeID, eORG.EntityID, eORG.NewEntityText, mb));
                 }
                 else
                 {

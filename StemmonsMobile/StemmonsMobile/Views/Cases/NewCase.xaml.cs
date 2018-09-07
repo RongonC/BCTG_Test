@@ -184,6 +184,8 @@ namespace StemmonsMobile.Views.Cases
                     {
                         if ((string.IsNullOrEmpty(item.ASSOC_SECURITY_TYPE) || item.ASSOC_SECURITY_TYPE.ToLower() == "c") && item.IS_REQUIRED.ToLower() == "y")
                         {
+                            await DisplayAlert("Alert!", "You do not have permission to create this page.", "Ok");
+                            await Navigation.PopAsync();
                             goto securityjump;
                         }
 
@@ -921,13 +923,14 @@ namespace StemmonsMobile.Views.Cases
                     if (App.Isonline)
                         setStaticCal(ContolrLst);
                 }
-
                 else
                 {
                     await DisplayAlert("Alert!", "You do not have permission to create this page.", "Ok");
                     await Navigation.PopAsync();
                 }
-                securityjump: int abc = 0;
+                securityjump:
+                int a = 0;
+
             }
             catch (Exception ex)
             {
@@ -1472,8 +1475,10 @@ namespace StemmonsMobile.Views.Cases
                                     var filterQuery = "" + filterQueryOrg;
 
                                     var cnt = 0;
-                                    if (filterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}")) cnt++;
-                                    if (filterQuery.Contains("'%BOXER_ENTITIES%'")) cnt++;
+                                    if (filterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
+                                        cnt++;
+                                    if (filterQuery.Contains("'%BOXER_ENTITIES%'"))
+                                        cnt++;
                                     try
                                     {
                                         for (int i = 0; i < cnt; i++)
@@ -2075,7 +2080,8 @@ namespace StemmonsMobile.Views.Cases
             {
                 //   
             }
-            requiredJump: int abc = 0;
+            requiredJump:
+            int abc = 0;
         }
 
         private object FindControls(string AssocID)

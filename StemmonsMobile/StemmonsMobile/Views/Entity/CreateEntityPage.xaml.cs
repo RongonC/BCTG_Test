@@ -28,8 +28,8 @@ namespace StemmonsMobile.Views.Entity
     {
         BorderEditor txt_EntNotes = new BorderEditor();
 
-        EntityOrgCenterList _selected;
-        EntityListMBView mbView = new EntityListMBView();
+        EntityOrgCenterList _selected1;
+        EntityListMBView EntitymbView = new EntityListMBView();
         EntityClass EntitySchemaLists = null;
         EntityClass EntityListsValues = null;
         List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
@@ -41,16 +41,20 @@ namespace StemmonsMobile.Views.Entity
         string CalTxtbox = string.Empty;
         List<KeyValuePair<List<AssociationField>, string>> calculationsFieldlist = new List<KeyValuePair<List<AssociationField>, string>>();
         List<Tuple<List<AssociationField>, string, string>> lstcalculationsFieldlist = new List<Tuple<List<AssociationField>, string, string>>();
-        public CreateEntityPage()
-        { }
-        public CreateEntityPage(EntityOrgCenterList value, EntityListMBView _mbView)
+        int EntityTypeID = 0;
+        int EntityID = 0;
+        public CreateEntityPage(int _etytypeid, int eid, string _title, EntityListMBView _mbView)
+        //  public CreateEntityPage(int _etytypeid, int eid, EntityOrgCenterList value, EntityListMBView _mbView)
         {
+
             InitializeComponent();
-            mbView = _mbView;
-            _selected = value;
+            EntitymbView = _mbView;
+            //_selected = value;
+            EntityTypeID = _etytypeid;
+            EntityID = eid;
             if (!Functions.IsEditEntity)
             {
-                Title = value.NewEntityText;
+                Title = _title;
             }
             else
                 Title = "Edit Entity";
@@ -59,36 +63,36 @@ namespace StemmonsMobile.Views.Entity
             {
                 var s = new FormattedString();
 
-                if (mbView != null)
+                if (EntitymbView != null)
                 {
-                    if (mbView.EntityDetails.EntityCreatedByFullName != null)
+                    if (EntitymbView.EntityDetails.EntityCreatedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = mbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(mbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_createname.FormattedText = s;
 
                     s = new FormattedString();
-                    if (mbView.EntityDetails.EntityAssignedToFullName != null)
+                    if (EntitymbView.EntityDetails.EntityAssignedToFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = mbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(mbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_assignto.FormattedText = s;
 
                     s = new FormattedString();
-                    if (mbView.EntityDetails.EntityOwnedByFullName != null)
+                    if (EntitymbView.EntityDetails.EntityOwnedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = mbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(mbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_ownername.FormattedText = s;
 
                     s = new FormattedString();
-                    if (mbView.EntityDetails.EntityModifiedByFullName != null)
+                    if (EntitymbView.EntityDetails.EntityModifiedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = mbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(mbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_modifiedname.FormattedText = s;
                 }
@@ -117,7 +121,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     try
                     {
-                        EntitySchemaLists = await EntitySyncAPIMethods.GetEntityTypeSchema(App.Isonline, ConstantsSync.EntityInstance, Convert.ToInt32(_selected.EntityTypeID), Functions.UserName, null, App.DBPath, Functions.IsEditEntity ? "U" : "C");
+                        EntitySchemaLists = await EntitySyncAPIMethods.GetEntityTypeSchema(App.Isonline, ConstantsSync.EntityInstance, Convert.ToInt32(EntityTypeID), Functions.UserName, null, App.DBPath, Functions.IsEditEntity ? "U" : "C");
                     }
                     catch (Exception)
                     {
@@ -126,7 +130,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         try
                         {
-                            EntityListsValues = await EntitySyncAPIMethods.GetEntityByEntityID(App.Isonline, _selected.EntityID.ToString(), Functions.UserName, Convert.ToString(_selected.EntityTypeID), App.DBPath);
+                            EntityListsValues = await EntitySyncAPIMethods.GetEntityByEntityID(App.Isonline, EntityID.ToString(), Functions.UserName, Convert.ToString(EntityTypeID), App.DBPath);
                         }
                         catch (Exception)
                         {
@@ -134,7 +138,7 @@ namespace StemmonsMobile.Views.Entity
 
                         try
                         {
-                            Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, mbView.EntityDetails.EntityID.ToString(), Functions.UserName, mbView.EntityDetails.EntityTypeID.ToString(), mbView.EntityDetails.EntityTypeName, App.DBPath);
+                            Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, EntityID.ToString(), Functions.UserName, EntityTypeID.ToString(), this.Title, App.DBPath);
 
                         }
                         catch (Exception)
@@ -368,7 +372,8 @@ namespace StemmonsMobile.Views.Entity
                                     {
                                     }
                                     if (!string.IsNullOrEmpty(ischeckcalControl))
-                                        ST.Unfocused += ST_Unfocused; ;
+                                        ST.Unfocused += ST_Unfocused;
+                                    ;
                                     break;
                                 #endregion
 
@@ -772,7 +777,7 @@ namespace StemmonsMobile.Views.Entity
                 #endregion
 
                 if (Functions.IsEditEntity)
-                    CommonConstants.UpdateEDSInfoList_Entity(App.Isonline, EntitySchemaLists, Convert.ToInt32(_selected.EntityTypeID), EntityInstance, Entity_Category_TypeDetails, INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    CommonConstants.UpdateEDSInfoList_Entity(App.Isonline, EntitySchemaLists, Convert.ToInt32(EntityTypeID), EntityInstance, Entity_Category_TypeDetails, INSTANCE_USER_ASSOC_ID, App.DBPath);
             }
             catch (Exception ex)
             {
@@ -1514,7 +1519,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     await Task.Run(async () =>
                      {
-                         recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, mbView.EntityDetails.EntityTypeID, mbView.EntityDetails.EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
+                         recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntityTypeID, EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
                      });
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
@@ -1538,11 +1543,8 @@ namespace StemmonsMobile.Views.Entity
 
                         txt_EntNotes.Text = "";
                         FormattedString s = new FormattedString();
-                        if (mbView.EntityDetails.EntityModifiedByFullName != null)
-                        {
-                            s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
-                            s.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-                        }
+                        s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
                         lbl_modifiedname.FormattedText = s;
                     }
                 }
@@ -1593,14 +1595,7 @@ namespace StemmonsMobile.Views.Entity
                             int result = await CreateEntitycall();
                             if (result > 0)
                             {
-                                mbView = new EntityListMBView();
-                                mbView.EntityDetails = new EntityClass();
-                                mbView.EntityDetails.EntityID = result;
-                                mbView.EntityDetails.EntityTypeID = EntitySchemaLists.EntityTypeID;
-                                mbView.Title = EntitySchemaLists.EntityTypeName;
-
                                 await Navigation.PopAsync();
-                                //await Navigation.PushAsync(new Entity_View(mbView));
                             }
                             break;
                         case "Save & Exit":
@@ -1654,7 +1649,7 @@ namespace StemmonsMobile.Views.Entity
                             int result = await CreateEntitycall();
                             if (result > 0)
                             {
-                                mbView = new EntityListMBView
+                                EntitymbView = new EntityListMBView
                                 {
                                     EntityDetails = new EntityClass
                                     {
@@ -1665,13 +1660,6 @@ namespace StemmonsMobile.Views.Entity
                                 };
                                 try
                                 {
-                                    //await Navigation.PushAsync(new Entity_View(mbView));
-
-                                    //var existingPages = this.Navigation.NavigationStack.ToList();
-                                    //var ph = existingPages[existingPages.Count - 1];
-                                    //this.Navigation.RemovePage(ph);
-
-
                                     var existingPages = this.Navigation.NavigationStack.ToList();
                                     // Get the page before Create Entity
                                     //              or
@@ -1681,7 +1669,7 @@ namespace StemmonsMobile.Views.Entity
 
                                     if (ph.GetType().Name.ToString().ToLower() == "entity_typedetails")
                                     {
-                                        await Navigation.PushAsync(new Entity_View(mbView));
+                                        await Navigation.PushAsync(new Entity_View(EntitymbView));
                                         Navigation.RemovePage(ph);// remove entity_typedetails() Page from Queue
 
                                         existingPages = this.Navigation.NavigationStack.ToList();
@@ -1690,8 +1678,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else
                                     {
-                                        //var Rph = existingPages[existingPages.Count - 1];
-                                        //this.Navigation.RemovePage(Rph);
+
                                         /// popout to the EntityDetailsSubtype() Page
                                         await Navigation.PopAsync();
                                     }
@@ -1887,7 +1874,8 @@ namespace StemmonsMobile.Views.Entity
                                     pick_Ext_datasrc = (Picker)cnt;
                                 }
                                 var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
-                                if (pick_value == null) break;
+                                if (pick_value == null)
+                                    break;
                                 AssociationMetaData Asso_metadata_value = new AssociationMetaData();
                                 Asso_metadata_value.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
                                 Asso_metadata_value.ExternalDatasourceObjectID = pick_value.ID.ToString();
@@ -2081,7 +2069,7 @@ namespace StemmonsMobile.Views.Entity
                         {
                             await Task.Run(async () =>
                             {
-                                str = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, mbView.EntityDetails.EntityTypeID, insertedRecordid.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", ((Enum.GetNames(typeof(ActionTypes)))[5] + "," + (Enum.GetNames(typeof(ActionTypes)))[1]), App.DBPath, Functions.UserFullName);
+                                str = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntitymbView.EntityDetails.EntityTypeID, insertedRecordid.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", ((Enum.GetNames(typeof(ActionTypes)))[5] + "," + (Enum.GetNames(typeof(ActionTypes)))[1]), App.DBPath, Functions.UserFullName);
                             });
                         }
                     }
@@ -2177,7 +2165,8 @@ namespace StemmonsMobile.Views.Entity
                         {
                             string sFieldType = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == subItem).FirstOrDefault().FieldType;
                             string sQuery = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == subItem).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.Query;
-                            if (string.IsNullOrEmpty(sQuery)) break;
+                            if (string.IsNullOrEmpty(sQuery))
+                                break;
                             string sExternalDatasourceName = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == subItem).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.DataSourceName;
                             var childAssocObject = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == subItem).ToList();
                             int? externalDatasourceIdChild = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == subItem).FirstOrDefault()?.ExternalDataSource?.ExternalDatasourceID;
@@ -2246,8 +2235,10 @@ namespace StemmonsMobile.Views.Entity
                                                 sFilterQuery = filterQueryChild;
 
                                                 var cnt = 0;
-                                                if (sFilterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}")) cnt++;
-                                                if (sFilterQuery.Contains("'%BOXER_ENTITIES%'")) cnt++;
+                                                if (sFilterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
+                                                    cnt++;
+                                                if (sFilterQuery.Contains("'%BOXER_ENTITIES%'"))
+                                                    cnt++;
                                                 try
                                                 {
                                                     for (int i = 0; i < cnt; i++)
