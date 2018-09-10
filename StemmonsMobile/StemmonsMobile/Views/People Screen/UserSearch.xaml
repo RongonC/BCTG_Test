@@ -15,9 +15,9 @@
 
             <StackLayout  AbsoluteLayout.LayoutFlags="PositionProportional">
                 <StackLayout>
-                    <Label x:Name="searchlabel"  Margin="10" Style="{StaticResource defaultLabelSize}" Text="Employee Search" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    <Label x:Name="searchlabel"  Margin="10" Style="{StaticResource defaultLabelSize_16}" Text="Employee Search" />
                     <StackLayout Orientation="Horizontal" Margin="10" >
-                        <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" />
                         <Button Text="Search"  x:Name="btn_search" TextColor="White" BackgroundColor="Orange" 
                     HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" />
                     </StackLayout>
@@ -40,10 +40,10 @@
 
                                             <Grid  Grid.Row="0" Grid.Column="0"  >
                                                 <Label  Text="{Binding DisplayName}"
-                                                            Style="{StaticResource defaultLabelSize}"
+                                                            Style="{StaticResource defaultLabelSize_16}"
                                                             Margin="10,-2,0,0"
                                                             HorizontalOptions="Start" 
-                                                            VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            VerticalOptions="Center" />
                                             </Grid>
 
                                             <Image Source="Assets/dropdowniconClose.png"  

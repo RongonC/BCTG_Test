@@ -58,10 +58,9 @@ namespace StemmonsMobile.Commonfiles
         {
             if (HTMLCode == null)
                 return "";
-            string trimChars = "<p>";
-            HTMLCode = HTMLCode.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray()).Replace("<p>", Environment.NewLine);
+
             // Remove new lines since they are not visible in HTML
-            HTMLCode = HTMLCode.Replace("\n", " ");
+            HTMLCode = HTMLCode.Replace("\n", Environment.NewLine);
 
             // Remove tab spaces
             HTMLCode = HTMLCode.Replace("\t", " ");
@@ -90,12 +89,10 @@ namespace StemmonsMobile.Commonfiles
             }
 
             // Check if there are line breaks (<br>) or paragraph (<p>)
-            sbHTML.Replace("<br>", "\n<br>");
-            sbHTML.Replace("<br ", "\n<br ");
-            sbHTML.Replace("<p ", "\n<p ");
-
-            sbHTML.Replace("<a", "\astart");
-            sbHTML.Replace("</a>", "\aEnd");
+            sbHTML.Replace("<br>", Environment.NewLine);
+            sbHTML.Replace("<br ", Environment.NewLine);
+            sbHTML.Replace("<p ", Environment.NewLine);
+            sbHTML.Replace("<p> ", Environment.NewLine);
 
             // Finally, remove all HTML tags and return plain text
             return System.Text.RegularExpressions.Regex.Replace(

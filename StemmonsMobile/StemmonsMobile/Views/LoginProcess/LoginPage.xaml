@@ -15,7 +15,7 @@
                     <StackLayout  HorizontalOptions="StartAndExpand">
 
                         <Label x:Name="lbl_title" Text="{Binding InstanceName}" FontAttributes="Italic" TextColor="Black"  
-                                 Margin="14,0,5,0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                 Margin="14,0,5,0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
                     </StackLayout>
 
                     <Button Text="Edit" TextColor="#FFD700"   FontAttributes="Italic" BackgroundColor="Transparent"
@@ -40,7 +40,7 @@
                 </StackLayout>
                 <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,-5,0,0"/>
 
-                <Label Text="Login Information" TextColor="Gray" Margin="20,40,0,0" FontSize="12" FontAttributes="Italic" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Label Text="Login Information" TextColor="Gray" Margin="20,40,0,0" FontSize="12" FontAttributes="Italic" />
                 <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0,0,0"/>
 
                 <Grid>
@@ -61,27 +61,27 @@
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
                     
-                    <Label x:Name="lbl_uname" Text="Username"    Style="{StaticResource defaultLabelSize}"
+                    <Label x:Name="lbl_uname" Text="Username"    Style="{StaticResource defaultLabelSize_16}"
                        Grid.Row="0" Grid.Column="1" 
-                       HorizontalOptions="Start" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                       HorizontalOptions="Start" VerticalOptions="Center" />
                     <Entry x:Name="txt_uname" Placeholder="Domain\Username"   
-                       Grid.Row="0" Grid.Column="3" Completed="txt_uname_Completed" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                       Grid.Row="0" Grid.Column="3" Completed="txt_uname_Completed" />
 
                     <Label BackgroundColor="#D0D0D0" HeightRequest="1" 
                        Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"/>
                     
-                    <Label Text="Password" Style="{StaticResource defaultLabelSize}" 
+                    <Label Text="Password" Style="{StaticResource defaultLabelSize_16}" 
                        Grid.Row="2" Grid.Column="1" 
-                       HorizontalOptions="Start" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                       HorizontalOptions="Start" VerticalOptions="Center" />
                     <Entry x:Name="txt_pwd" Placeholder="Password" IsPassword="true"   
-                       Grid.Row="2" Grid.Column="3" Completed="txt_pwd_Completed" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                       Grid.Row="2" Grid.Column="3" Completed="txt_pwd_Completed" />
 
                     <Label BackgroundColor="#D0D0D0"  
                        Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"/>
 
-                    <Label Text="Remember"  Style="{StaticResource defaultLabelSize}"
+                    <Label Text="Remember"  Style="{StaticResource defaultLabelSize_16}"
                        Grid.Row="4" Grid.Column="1" 
-                       HorizontalOptions="Start" VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                       HorizontalOptions="Start" VerticalOptions="Center" />
 
                     <Button x:Name="btn_remember" Image="Assets/Checked.png" 
                          Grid.Row="4" Grid.Column="3"  
@@ -108,11 +108,8 @@
                        HeightRequest="1"  />
                 </Grid>
                 <Button x:Name="LoginButton" Text="Login" FontSize="16" FontAttributes="Italic" 
-            HorizontalOptions="EndAndExpand" Margin="0,0,10,0" BackgroundColor="Transparent" Clicked="LoginButton_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            HorizontalOptions="EndAndExpand" Margin="0,0,10,0" BackgroundColor="Transparent" Clicked="LoginButton_Clicked" />
 
-                <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
-                    <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="False" VerticalOptions="Center" />
-                </StackLayout>-->
 
             </StackLayout>
 

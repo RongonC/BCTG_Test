@@ -19,10 +19,10 @@
                                     <ColumnDefinition Width="4*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Title}"  Style="{StaticResource defaultLabelSize_subtype}"  TextColor="Black" HorizontalOptions="StartAndExpand" 
-                            Margin="0,7,0,0" VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Text="{Binding Title}"  Style="{StaticResource defaultLabelSize_16}"  TextColor="Black" HorizontalOptions="StartAndExpand" 
+                            Margin="0,7,0,0" VerticalOptions="Center" />
                                 <Label Text="{Binding CountData}" TextColor="Black" FontSize="13" HorizontalOptions="End" VerticalOptions="CenterAndExpand" 
-                            Margin="0,8,0,0" Grid.Column="1"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            Margin="0,8,0,0" Grid.Column="1"/>
                                 <Button Image="{Binding Img}" Grid.Column="2" HorizontalOptions="End" 
                             Margin="0,5,8,0" VerticalOptions="Center" BackgroundColor="Transparent"/>
                             </Grid>

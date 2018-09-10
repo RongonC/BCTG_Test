@@ -64,7 +64,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
         }
         #endregion
 
-
         #region  GetBookList
         public async static Task<standards> GetBookList(bool _IsOnline, string Sys_Name, string username, string _DBPath)
         {
@@ -158,11 +157,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                 else
                 {
                     Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(Sys_Name, ConstantsSync.BookView, TypeId, _DBPath, null);
-                    //Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByNameTypeScreenInfo(Sys_Name, ConstantsSync.BookView, _DBPath);
                     result.Wait();
-
-                    //Task<EDSResultList> res = DBHelper.GetEDSResultListwithId(TypeId, result.Result.APP_TYPE_INFO_ID, _DBPath);
-                    //res.Wait();
                     if (result.Result != null)
                     {
                         Response = JsonConvert.DeserializeObject<standardsBookView>(result.Result.ASSOC_FIELD_INFO);
@@ -325,6 +320,41 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                 else
                 {
                     lstResult = CommonConstants.ReturnListResult<Grp_StandardDetails>(ConstantsSync.StandardInstance, "B1_GetAppCreatedByUserBasedOnSAM", _DBPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstResult;
+        }
+        #endregion
+
+        #region B1_Screen GetAppRelateToUserBasedOnSAM
+        public static async Task<List<Grp_StandardDetails>> GetAppRelateToUserBasedOnSAM(bool _IsOnline, string _UserName, int _InstanceUserAssocId, string _DBPath)
+        {
+            List<Grp_StandardDetails> lstResult = new List<Grp_StandardDetails>();
+            int id = CommonConstants.GetResultBySytemcode(ConstantsSync.StandardInstance, "B1_GetAppRelateToUserBasedOnSAM", _DBPath);
+
+            try
+            {
+                if (_IsOnline)
+                {
+                    var result = StandardsAPIMethods.GetAppRelateToUserBasedOnSAM(_UserName);
+                    var temp = result.GetValue("ResponseContent");
+
+                    if (temp != null && temp.ToString() != "[]")
+                    {
+                        lstResult = JsonConvert.DeserializeObject<List<Grp_StandardDetails>>(temp.ToString());
+                        if (lstResult.Count > 0)
+                        {
+                            var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), ConstantsSync.StandardInstance, "B1_GetAppRelateToUserBasedOnSAM", _InstanceUserAssocId, _DBPath, id, "", "M");
+                        }
+                    }
+                }
+                else
+                {
+                    lstResult = CommonConstants.ReturnListResult<Grp_StandardDetails>(ConstantsSync.StandardInstance, "B1_GetAppRelateToUserBasedOnSAM", _DBPath);
                 }
             }
             catch (Exception ex)

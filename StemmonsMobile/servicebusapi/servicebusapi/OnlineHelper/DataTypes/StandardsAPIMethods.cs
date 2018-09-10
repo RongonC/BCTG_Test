@@ -169,7 +169,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             #region API Details
             var API_value = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetPublishedAppByUserBasedOnSAM)
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetPublishedBookByUser)
             };
             #endregion
 
@@ -199,7 +199,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             #region API Details
             var API_value = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetAppCreatedByUserBasedOnSAM)
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetBookCreatedByUser)
             };
             #endregion
 
@@ -208,6 +208,35 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             {
                 new KeyValuePair<string, string>("sUserSAM", sUserSAM.ToString()),
              
+
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region GetAppRelateToUserBasedOnSAM
+        public static JObject GetAppRelateToUserBasedOnSAM(string sUserSAM)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetBookRelateToUser)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("sUserSAM", sUserSAM.ToString()),
+
 
             };
             #endregion

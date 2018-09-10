@@ -27,7 +27,7 @@
                                             <RowDefinition Height="auto" />
                                         </Grid.RowDefinitions>
                                         <Label  Text="{Binding Note}" Grid.Row="0"
-                                                                Style="{StaticResource defaultLabelSize}"
+                                                                Style="{StaticResource defaultLabelSize_16}"
                                                                 IsVisible="{Binding LabelVisible}"/>
 
                                         <Image  x:Name="App_Logo" Aspect="AspectFit"   Grid.Row="1"

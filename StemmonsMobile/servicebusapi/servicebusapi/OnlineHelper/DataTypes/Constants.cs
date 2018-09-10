@@ -230,10 +230,11 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string WebView = "/api/v1/Standards/GetAppMetadataByParentAppForUser_Sync";
         public static string BookView = "/api/v1/Standards/GetAppMetadataByParentAppForUser_BookView_Sync";
         public static string security_GetAllAppForUser = "/api/v1/Standards/security_GetAllAppForUser";
-        public static string GetAppCreatedByUserBasedOnSAM = "/api/v1/Standards/security_GetAppCreatedByUserBasedOnSAM";
-        public static string GetPublishedAppByUserBasedOnSAM = "/api/v1/Standards/security_GetPublishedAppByUserBasedOnSAM";
+        public static string GetBookCreatedByUser = "/api/v1/Standards/security_GetAppCreatedByUserBasedOnSAM";
+        public static string GetPublishedBookByUser = "/api/v1/Standards/security_GetPublishedAppByUserBasedOnSAM";
         public static string security_SearchMetadata = "/api/v1/Standards/security_SearchMetadata";
-        
+        public static string GetBookRelateToUser = "/api/v1/Standards/security_GetAppRelateToUserBasedOnSAM";
+
         #endregion
 
         #region  Login API      

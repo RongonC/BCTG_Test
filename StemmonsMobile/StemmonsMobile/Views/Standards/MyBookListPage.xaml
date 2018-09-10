@@ -21,12 +21,13 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <ViewCell.View>
-                                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                                        <StackLayout Orientation="Horizontal" HeightRequest="35">
                                             <StackLayout HorizontalOptions="StartAndExpand"  >
-                                                <Label  Text="{Binding NAME}" VerticalOptions="Center"  
-                                        Style="{StaticResource defaultLabelSize}" 
-                                                TextColor="Black"  Margin="5,4,0,0"
-                                                HorizontalOptions="End"  xmlns:local="clr-namespace:StemmonsMobile"/>
+                                                <Label  Text="{Binding NAME}" 
+                                                        VerticalOptions="StartAndExpand"  
+                                                        Style="{StaticResource defaultLabelSize_16}" 
+                                                        TextColor="Black"  Margin="5,0,0,0"
+                                                        HorizontalOptions="StartAndExpand" />
                                             </StackLayout>
                                             <Image Source="Assets/dropdowniconClose.png"  
                                            HorizontalOptions="End" 

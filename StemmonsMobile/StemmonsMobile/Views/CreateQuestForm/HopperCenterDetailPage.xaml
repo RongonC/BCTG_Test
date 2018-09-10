@@ -24,7 +24,7 @@
                                 </Grid.ColumnDefinitions>
                                
                         <Label Text="{Binding Category}"  HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                            Style="{StaticResource defaultLabelSize}" Grid.Column="0" Grid.Row="1" TextColor="Black" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            Style="{StaticResource defaultLabelSize_16}" Grid.Column="0" Grid.Row="1" TextColor="Black" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                         <Label Text="{Binding Details}" FontSize="12" 
                                 TextColor="{StaticResource DetailsColor}"
                                HorizontalOptions="End" VerticalOptions="Center" Grid.Column="1" Grid.Row="1" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>

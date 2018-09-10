@@ -37,7 +37,7 @@ namespace StemmonsMobile.Views.Standards
             {
                 await Task.Run(() =>
                 {
-                    Response = StandardsSyncAPIMethods.GetAppCreatedByUserBasedOnSAM(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    Response = StandardsSyncAPIMethods.GetAppRelateToUserBasedOnSAM(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                     Response.Wait();
                 });
                 if (Response.Result.Count > 0)

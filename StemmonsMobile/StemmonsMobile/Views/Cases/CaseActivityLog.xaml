@@ -27,20 +27,12 @@
                                             <ColumnDefinition Width="auto" />
                                             <ColumnDefinition Width="5" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="0" Style="{StaticResource defaultLabelSize}" />
+                                        <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="0" Style="{StaticResource defaultLabelSize_16}" />
                                         <Label Text="{Binding Description}" FontSize="11" Grid.Row="1" Grid.Column="0" LineBreakMode="WordWrap" />
-                                        <Label Text="{Binding CreatedByFullName}" Grid.Row="0" Grid.Column="2" TextColor="Orange" Style="{StaticResource defaultLabelSize}" HorizontalOptions="End" />
+                                        <Label Text="{Binding CreatedByFullName}" Grid.Row="0" Grid.Column="2" TextColor="Orange" Style="{StaticResource defaultLabelSize_16}" HorizontalOptions="End" />
                                         <Label Text="{Binding ModifiedDateTime}" Grid.Row="1" Grid.Column="2" FontSize="11" HorizontalOptions="End"  />
                                     </Grid>
-                                    <!-- <Grid Margin="5">
-                                        <StackLayout>
-                                            <Label Text="{Binding Note}" Style="{StaticResource defaultLabelSize_subtype}" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
-                                        </StackLayout>
-                                        <StackLayout Grid.Column="1" VerticalOptions="Center" Margin="0,0,5,0">
-                                            <Label Text="{Binding CreatedByFullName}" TextColor="Black" Style="{StaticResource defaultLabelSize_subtype}" HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
-                                            <Label Text="{Binding ModifiedDateTime}" TextColor="Black" Style="{StaticResource defaultLabelSize_subtype}" HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" LineBreakMode="TailTruncation" />
-                                        </StackLayout>
-                                    </Grid>-->
+                                    
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>

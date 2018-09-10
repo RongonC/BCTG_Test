@@ -16,12 +16,12 @@
                             <StackLayout Orientation="Horizontal" HeightRequest="30">
                                 <StackLayout HorizontalOptions="StartAndExpand"  >
                                     <Label  Text="{Binding Name}" VerticalOptions="Center" 
-                                        Style="{StaticResource defaultLabelSize}"  Margin="15,4,0,0"
+                                        Style="{StaticResource defaultLabelSize_16}"  Margin="15,4,0,0"
                                                 TextColor="Black"  
                                                 HorizontalOptions="End"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                 </StackLayout>
                                 <Label Text="{Binding Type_value}" HorizontalOptions="End" VerticalOptions="Center" 
-                            TextColor="Orange" Style="{StaticResource defaultLabelSize}"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            TextColor="Orange" Style="{StaticResource defaultLabelSize_16}"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                 <Image Source="{Binding Img}"  
                                            HorizontalOptions="End" VerticalOptions="Center" 
                                        Margin="0,0,10,0"/>

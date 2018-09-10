@@ -1401,24 +1401,40 @@ namespace StemmonsMobile.Views.Cases
 
                     foreach (var item in Temp)
                     {
+                        //if (item.FirstOrDefault().Note.Contains("<img"))
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = true;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                        //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
+                        //}
+                        //else
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = false;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
+                        //}
                         if (item.FirstOrDefault().Note.Contains("<img"))
                         {
                             item.FirstOrDefault().ImageVisible = true;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
-                            item.FirstOrDefault().Note = item.FirstOrDefault().Note;
+                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
                         }
                         else
                         {
                             item.FirstOrDefault().ImageVisible = false;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
+                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
                         }
+                      
                         CasesnotesGroups.Add(item);
                     }
-
+                 
                     gridCasesnotes.ItemsSource = null;
                     gridCasesnotes.ItemsSource = CasesnotesGroups;
                 }

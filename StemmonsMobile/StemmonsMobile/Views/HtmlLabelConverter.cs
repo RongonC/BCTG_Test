@@ -57,11 +57,9 @@ namespace StemmonsMobile
         public IList<StringSection> ProcessString(string rawText)
         {
             string trimChars = "<p>";
-            rawText = rawText.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray());
-            rawText = rawText.Replace("<p>", Environment.NewLine);
-            rawText = rawText.Replace("<br>", Environment.NewLine);
-            rawText = rawText.Replace("<p", Environment.NewLine);
-            rawText = rawText.Replace("<br", Environment.NewLine);
+            rawText.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray());
+            rawText.Replace("<p>", Environment.NewLine);
+
 
             string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;" };
             string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢" };
@@ -70,10 +68,19 @@ namespace StemmonsMobile
                 rawText = rawText.Replace(OldWords[i], NewWords[i]);
             }
 
-            rawText.Replace("\astart", "<a");
-            rawText.Replace("\aEnd", "</a>");
-            rawText.Replace("&amp;", "&");
-            rawText.Replace("&nbsp;", " ");
+            //rawText.Replace("\astart", "<a");
+            //rawText.Replace("\aEnd", "</a>");
+            //rawText.Replace("&amp;", "&");
+            //rawText.Replace("&nbsp;", " ");
+
+            //rawText.Replace("<br>", "\n<br>");
+            //rawText.Replace("<br ", "\n<br ");
+            //rawText.Replace("<p ", "\n<p ");
+
+            //rawText.Replace("<a", "\astart");
+            //rawText.Replace("</a>", "\aEnd");
+
+            //var tty = Functions.HTMLToText(rawText);
 
             //const string spanPattern = @"(<a.*?>.*?</a>)";
             const string spanPattern = @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?";
@@ -99,6 +106,7 @@ namespace StemmonsMobile
 
                 sections.Add(html);
             }
+            var t = System.Text.RegularExpressions.Regex.Replace(rawText, "<[^>]*>", "");
 
             sections.Add(new StringSection() { Text = rawText.Substring(lastIndex) });
 

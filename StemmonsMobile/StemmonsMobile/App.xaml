@@ -29,17 +29,17 @@
                 <Setter Property="FontSize" Value="16" />
             </Style>
 
-            <Style x:Key="defaultLabelSize" TargetType="Label">
+            <Style x:Key="defaultLabelSize_16" TargetType="Label">
                 <Setter Property="FontSize" Value="16" />
             </Style>
 
-            <Style x:Key="defaultLabelSize_setting" TargetType="Label">
+            <!--<Style x:Key="defaultLabelSize_setting" TargetType="Label">
                 <Setter Property="FontSize" Value="14" />
-            </Style>
+            </Style>-->
 
-            <Style x:Key="defaultLabelSize_subtype" TargetType="Label">
+            <!--<Style x:Key="defaultLabelSize_subtype" TargetType="Label">
                 <Setter Property="FontSize" Value="16" />
-            </Style>
+            </Style>-->
 
 
             <!-- Taken From Refrence Project -->
@@ -65,7 +65,7 @@
                 </ViewCell>
             </DataTemplate>
 
-            <DataTemplate x:Key="StandardBookListTemplate">
+            <!--<DataTemplate x:Key="StandardBookListTemplate">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
                         <Label Text="{Binding APP_ASSOC_META_DATA_ID}"  IsVisible="False" TextColor="Black"/>
@@ -75,17 +75,17 @@
                         <Label Text="{Binding APP_ID}"  IsVisible="False"/>
                         <Label Text="{Binding APP_NAME}" Margin="17,0,0,0" 
                                HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                               Style="{StaticResource defaultLabelSize}" TextColor="Black" />
+                               Style="{StaticResource defaultLabelSize_16}" TextColor="Black" />
                         <Label Text="{Binding IS_ACTIVE}"  IsVisible="False"/>
                         <Label Text="{Binding APP_ASSOC_META_DATA_ID}"  IsVisible="False"/>
                         <Button Image="Assets/dropdowniconClose.png"  BackgroundColor="Transparent"/>
                     </StackLayout>
                 </ViewCell>
-            </DataTemplate>
+            </DataTemplate>-->
 
-            <DataTemplate x:Key="GroupTemplateStandard">
+            <!--<DataTemplate x:Key="GroupTemplateStandard">
                 <ViewCell>
-                    <!-- HACK - work around https://bugzilla.xamarin.com/show_bug.cgi?id=42528 -->
+                    --><!-- HACK - work around https://bugzilla.xamarin.com/show_bug.cgi?id=42528 --><!--
                     <StackLayout Orientation="Horizontal" Margin="0,0,0,0">
                         <Button x:Name="buttonToggleExpand" 
                                 Image="{Binding IsExpanded, Converter={StaticResource isExpandedToImageConverter}}"
@@ -109,7 +109,7 @@
                         <Label Text="{Binding Heading}" VerticalOptions="Center" Style="{StaticResource Hint}" FontSize="18" TextColor="Black" Margin="5,0,0,0"/>
                     </StackLayout>
                 </ViewCell>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <DataTemplate x:Key="TypeAddTemplate">
                 <ViewCell>
@@ -122,8 +122,8 @@
             <DataTemplate x:Key="CaseDetailsTemplate">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding Category}"  HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                        <Label Text="{Binding Details}" FontSize="12" TextColor="{StaticResource DetailsColor}" HorizontalOptions="End" VerticalOptions="Center" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label Text="{Binding Category}"  HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize_16}"/>
+                        <Label Text="{Binding Details}" FontSize="12" TextColor="{StaticResource DetailsColor}" HorizontalOptions="End" VerticalOptions="Center"/>
                         <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" />
                     </StackLayout>
                 </ViewCell>
@@ -185,54 +185,8 @@
             <!-- End From Refrence Project  -->
             
             <!--  Vishal P -->
-            
-            <!--Moved to Select_EntityList-->
-            <!--<DataTemplate x:Key="EntityTypetemplate">
-                <ViewCell>
-                    <ViewCell.ContextActions>
-                        <MenuItem x:Name="Menu_Del"  Text="Delete" IsDestructive="True" 
-                                CommandParameter="{Binding .}" />
-                        <MenuItem x:Name="Menu_Details"  Text="Details"  
-                                CommandParameter="{Binding .}"/>
-                    </ViewCell.ContextActions>
-                    <ViewCell.View>
-                        <StackLayout Orientation="Horizontal" HeightRequest="30">
-                            <StackLayout HorizontalOptions="StartAndExpand"  >
-                                <Label  Text="{Binding EntityTypeName}" VerticalOptions="Center" FontSize="18" 
-                                                TextColor="Black"  Margin="15,4,0,0"
-                                                HorizontalOptions="End"  />
-                            </StackLayout>
-                            <Image Source="Assets/dropdowniconClose.png"  
-                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
-                        </StackLayout>
-                    </ViewCell.View>
-                </ViewCell>
-            </DataTemplate>-->
-            
-            <!--<DataTemplate x:Key="EntityTypeCategorytemplate">
-                <ViewCell>
-                    --><!--<ViewCell.ContextActions>
-                        <MenuItem x:Name="Menu_Del"  Text="Delete" IsDestructive="True" 
-                                CommandParameter="{Binding .}" />
-                        <MenuItem x:Name="Menu_Details"  Text="Details"  
-                                CommandParameter="{Binding .}"/>
-                    </ViewCell.ContextActions>--><!--
-                    <ViewCell.View>
-                        <StackLayout Orientation="Horizontal" HeightRequest="30">
-                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center">
-                                <Label  Text="{Binding EntityTypeCategoryName}" 
-                                        VerticalOptions="Center" TextColor="Black" 
-                                        Margin="15,0,0,0"
-                                        HorizontalOptions="End"  />
-                            </StackLayout>
-                            <Image Source="Assets/dropdowniconClose.png"  
-                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
-                        </StackLayout>
-                    </ViewCell.View>
-                </ViewCell>
-            </DataTemplate>-->
-            
-            <DataTemplate x:Key="HistoryTypetemplate">
+         
+            <!--<DataTemplate x:Key="HistoryTypetemplate">
                 <ViewCell>
                     <ViewCell.View>
                         <StackLayout>
@@ -249,10 +203,10 @@
                                         <ColumnDefinition Width="25" />
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                                        <Label Text="{Binding Name}" Grid.ColumnSpan="2" Style="{StaticResource defaultLabelSize}" Margin="10,-2,0,0" HorizontalOptions="Start" VerticalOptions="Center" />
+                                        <Label Text="{Binding Name}" Grid.ColumnSpan="2" Style="{StaticResource defaultLabelSize_16}" Margin="10,-2,0,0" HorizontalOptions="Start" VerticalOptions="Center" />
                                     </Grid>
                                     <Grid Grid.Row="0" Grid.Column="2">
-                                        <Label Text="{Binding Address}" Style="{StaticResource defaultLabelSize}" TextColor="Orange" HorizontalOptions="EndAndExpand" />
+                                        <Label Text="{Binding Address}" Style="{StaticResource defaultLabelSize_16}" TextColor="Orange" HorizontalOptions="EndAndExpand" />
                                     </Grid>
                                     <Grid Grid.Row="1" Grid.ColumnSpan="3">
                                         <Grid.ColumnDefinitions>
@@ -283,8 +237,9 @@
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
-            </DataTemplate>
-            <DataTemplate x:Key="EntityTypeDetailtemplate">
+            </DataTemplate>-->
+       
+            <!--<DataTemplate x:Key="EntityTypeDetailtemplate">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" HeightRequest="30">
                         <StackLayout HorizontalOptions="StartAndExpand">
@@ -294,23 +249,8 @@
                         <Image Source="{Binding Img}" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0" />
                     </StackLayout>
                 </ViewCell>
-            </DataTemplate>
-            <!--<DataTemplate x:Key="EntityRelatedAppTypetemplate">
-                <ViewCell>
-                    <ViewCell.View>
-                        <StackLayout Orientation="Horizontal" HeightRequest="30">
-                            <StackLayout HorizontalOptions="StartAndExpand"  >
-                                <Label  Text="{Binding Name}" VerticalOptions="Center"  
-                                        Style="{StaticResource defaultLabelSize}" 
-                                                TextColor="Black"  Margin="5,4,0,0"
-                                                HorizontalOptions="End"  />
-                            </StackLayout>
-                            <Image Source="Assets/dropdowniconClose.png"  
-                                           HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
-                        </StackLayout>
-                    </ViewCell.View>
-                </ViewCell>
             </DataTemplate>-->
+  
             <!-- End of Vishal P -->
             
             <!-- Bipin p - Code Migration- -->
@@ -325,16 +265,11 @@
                 <Setter Property="Image" Value="Assets/dropdownClose.png" />
             </Style>
             
-            
-            
             <DataTemplate x:Key="TypeAddTemplateA">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" HeightRequest="30">
                         <StackLayout HorizontalOptions="StartAndExpand">
                             <Label Text="{Binding Caseoptions}" VerticalOptions="Center" Margin="15,4,0,0" TextColor="Black" HorizontalOptions="End" />
-                        
-                        
-                        
                         </StackLayout>
                         <Label Text="{Binding Description}" VerticalOptions="Center" HorizontalOptions="End" TextColor="Orange" />
                         <Button x:Name="plus" Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" VerticalOptions="Center" Margin="0,0,3,0" />
@@ -349,7 +284,7 @@
                         <Label Text="{Binding ASSOC_TYPE_ID}" IsVisible="False" />
                         <Label Text="{Binding ASSOC_TYPE_SYSTEM_CODE}" IsVisible="False" />
                         <Label Text="{Binding ASSOC_TYPE_DESCRIPTION}" IsVisible="False" />
-                        <Label Text="{Binding ASSOC_TYPE_NAME}" Margin="17,0,0,0" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize}" />
+                        <Label Text="{Binding ASSOC_TYPE_NAME}" Margin="17,0,0,0" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Style="{StaticResource defaultLabelSize_16}" />
                         <Label Text="{Binding EXTERNAL_DATASOURCE_ID}" IsVisible="False" />
                         <Label Text="{Binding EXTERNAL_DATASOURCE_NAME}" IsVisible="False" />
                         <Label Text="{Binding EXTERNAL_DATASOURCE_DESCRIPTION}" IsVisible="False" />

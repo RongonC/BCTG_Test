@@ -17,11 +17,11 @@
 
                 <StackLayout  AbsoluteLayout.LayoutFlags="PositionProportional" Grid.Row="0">
                     <StackLayout Margin="10">
-                        <Label Text="" x:Name="searchlabel" Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label Text="" x:Name="searchlabel" Style="{StaticResource defaultLabelSize_16}"/>
                         <StackLayout Orientation="Horizontal">
-                            <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" Style="{StaticResource defaultLabelSize}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            <Entry x:Name="SearchText" HorizontalOptions="FillAndExpand"  Completed="btn_search_Clicked" Style="{StaticResource defaultLabelSize_16}" />
                             <Button Text="Search"  x:Name="btn_search" TextColor="White" BackgroundColor="Orange" 
-                    HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    HorizontalOptions="End" Clicked="btn_search_Clicked" Margin="0,0,10,0" />
                         </StackLayout>
 
                         <ListView x:Name="lstSearchitem" 
@@ -46,17 +46,17 @@
 
                                                     <Grid  Grid.Row="0" Grid.ColumnSpan="2"  >
                                                         <Label  Text="{Binding NAME}" Grid.ColumnSpan="2"   
-                                                            Style="{StaticResource defaultLabelSize}"
+                                                            Style="{StaticResource defaultLabelSize_16}"
                                                             Margin="10,-2,0,0"
                                                             HorizontalOptions="Start" 
-                                                            VerticalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            VerticalOptions="Center"/>
                                                     </Grid>
 
                                                     <Grid Grid.Row="0" Grid.Column="2"  >
                                                         <Label Text="{Binding LINK_ID}" 
-                                                           Style="{StaticResource defaultLabelSize}" 
+                                                           Style="{StaticResource defaultLabelSize_16}" 
                                                            TextColor="Orange"
-                                           HorizontalOptions="EndAndExpand" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                           HorizontalOptions="EndAndExpand" />
                                                     </Grid>
 
                                                     <Grid Grid.Row="1" Grid.ColumnSpan="3"   >
@@ -67,11 +67,11 @@
 
                                                         <Label Text="{Binding FIELD_VALUE}" FontSize="12"
                                                            LineBreakMode="TailTruncation"
-                                                           Grid.Column="0" HorizontalOptions="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="0" HorizontalOptions="Center" />
 
                                                         <Label Text="{Binding STATUS}"
                                                            LineBreakMode="TailTruncation" FontSize="12"
-                                                           Grid.Column="2"  HorizontalOptions="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="2"  HorizontalOptions="End"/>
                                                     </Grid>
 
                                                     <Image Source="Assets/dropdowniconClose.png"  

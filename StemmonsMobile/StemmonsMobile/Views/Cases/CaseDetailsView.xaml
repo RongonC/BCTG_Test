@@ -20,9 +20,9 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Text="{Binding Caseoptions}"  HorizontalOptions="StartAndExpand" 
-                            VerticalOptions="Center" TextColor="Black"  Style="{StaticResource defaultLabelSize_subtype}" Margin="0,5,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                            VerticalOptions="Center" TextColor="Black"  Style="{StaticResource defaultLabelSize_16}" Margin="0,5,0,0" />
                                 <Label Text="{Binding Description}" HorizontalOptions="End" VerticalOptions="CenterAndExpand" 
-                             Grid.Column="1" TextColor="Orange"  Style="{StaticResource defaultLabelSize_subtype}" Margin="0,5,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                             Grid.Column="1" TextColor="Orange"  Style="{StaticResource defaultLabelSize_16}" Margin="0,5,0,0"/>
                                 <Button Image="{Binding Icon}" Grid.Column="2" HorizontalOptions="End" 
                              VerticalOptions="Center" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25" Margin="0,5,0,0"/>
                             </Grid>

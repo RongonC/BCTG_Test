@@ -41,7 +41,7 @@
                                 <Label Text="{Binding strItemNAme}" 
                                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                        HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                       Style="{StaticResource defaultLabelSize}" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                       Style="{StaticResource defaultLabelSize_16}" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                 <Label Text="{Binding dcOverallScore}"
                                        Grid.Row="0" Grid.Column="2"
                                        HorizontalOptions="EndAndExpand" VerticalOptions="Center" 

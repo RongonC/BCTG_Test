@@ -206,8 +206,6 @@ namespace StemmonsMobile.Views.Cases
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.FontSize = 16;
                         Label1.WidthRequest = 200;
-                        Label1.FontFamily = "Soin Sans Neue";
-
 
                         LeftLayout.Children.Add(Label1);
                         Mainlayout.Children.Add(LeftLayout);
@@ -217,18 +215,7 @@ namespace StemmonsMobile.Views.Cases
                         pk.TextColor = Color.Gray;
 
 
-
-                        Entry entry = new Entry();
-                        entry.FontFamily = "Soin Sans Neue";
-
-                        BorderEditor entry_notes = new BorderEditor();
-                        entry_notes.HeightRequest = 100;
-                        entry_notes.FontSize = 16;
-                        entry_notes.BorderColor = Color.LightGray;
-                        entry_notes.BorderWidth = 1;
-                        entry_notes.CornerRadius = 5;
-                        entry_notes.WidthRequest = 200;
-                        entry_notes.FontFamily = "Soin Sans Neue";
+                       
 
                         Entry entry_number = new Entry();
                         entry_number.WidthRequest = 200;
@@ -241,7 +228,6 @@ namespace StemmonsMobile.Views.Cases
                         {
                             case "o":
                             case "e":
-
                                 pk.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID + "|" + item.EXTERNAL_DATASOURCE_ID;
 
                                 try
@@ -419,6 +405,10 @@ namespace StemmonsMobile.Views.Cases
                                 Mainlayout.Children.Add(pk);
                                 break;
                             case "x":
+                                BorderEditor entry_notes = new BorderEditor();
+                                entry_notes.HeightRequest = 100;
+                                entry_notes.BorderWidth = 1;
+                                entry_notes.CornerRadius = 5;
                                 entry_notes.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
                                 try
                                 {
@@ -480,7 +470,13 @@ namespace StemmonsMobile.Views.Cases
                                 txt_Date.StyleId = "a_" + item.ASSOC_TYPE_ID;
                                 txt_Date.Text = "";
 
-                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                try
+                                {
+                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                }
+                                catch (Exception)
+                                {
+                                }
 
                                 if (!string.IsNullOrEmpty(ischeckcalControl))
                                     txt_Date.TextChanged += DO_TextChanged;
@@ -499,7 +495,6 @@ namespace StemmonsMobile.Views.Cases
                                 date_pick.TextColor = Color.Gray;
                                 date_pick.StyleId = "dt_" + item.ASSOC_TYPE_ID;
                                 #endregion
-
 
                                 Mainlayout.Children.Add(txt_Date);
                                 Mainlayout.Children.Add(im);
@@ -522,8 +517,8 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                 };
 
-                                var tgr = new TapGestureRecognizer();
-                                tgr.Tapped += async (s, e) =>
+                                var clr_img_click = new TapGestureRecognizer();
+                                clr_img_click.Tapped += (s, e) =>
                                 {
                                     Entry C_ent = new Entry();
                                     try
@@ -538,7 +533,7 @@ namespace StemmonsMobile.Views.Cases
                                         C_ent.Text = "";
                                     }
                                 };
-                                im.GestureRecognizers.Add(tgr);
+                                im.GestureRecognizers.Add(clr_img_click);
 
                                 if (Device.RuntimePlatform == "iOS")
                                 {
@@ -547,24 +542,24 @@ namespace StemmonsMobile.Views.Cases
                                 else
                                 {
                                     date_pick.DateSelected += Date_pick_DateSelected;
-
                                 }
 
                                 break;
                             case "t":
-                                entry.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                Entry entry_tx = new Entry();
+                                entry_tx.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
 
                                 try
                                 {
-                                    entry.WidthRequest = 200;
-                                    entry.FontSize = 16;
-                                    entry.Keyboard = Keyboard.Default;
+                                    entry_tx.WidthRequest = 200;
+                                    entry_tx.FontSize = 16;
+                                    entry_tx.Keyboard = Keyboard.Default;
 
 
-                                    ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(entry.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls?.Where(v => v.AssocFieldType == 'C').ToList(), entry.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                    ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(entry_tx.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls?.Where(v => v.AssocFieldType == 'C').ToList(), entry_tx.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry_tx.StyleId?.Split('_')[1]?.Split('|')[0]);
                                     if (!string.IsNullOrEmpty(ischeckcalControl))
-                                        entry.Unfocused += Entry_Unfocused;
-                                    entry.Text = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
+                                        entry_tx.Unfocused += Entry_Unfocused;
+                                    entry_tx.Text = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
                                 }
                                 catch (Exception ex)
                                 {
@@ -573,20 +568,21 @@ namespace StemmonsMobile.Views.Cases
                                 }
 
 
-                                Mainlayout.Children.Add(entry);
+                                Mainlayout.Children.Add(entry_tx);
 
                                 break;
                             case "c":
-                                entry.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
+                                Entry entry_cl = new Entry();
+                                entry_cl.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
 
                                 try
                                 {
-                                    entry.WidthRequest = 200;
-                                    entry.IsEnabled = false;
-                                    entry.FontSize = 16;
-                                    entry.Keyboard = Keyboard.Default;
+                                    entry_cl.WidthRequest = 200;
+                                    entry_cl.IsEnabled = false;
+                                    entry_cl.FontSize = 16;
+                                    entry_cl.Keyboard = Keyboard.Default;
 
-                                    entry.Text = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
+                                    entry_cl.Text = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
                                 }
                                 catch (Exception ex)
                                 {
@@ -594,7 +590,7 @@ namespace StemmonsMobile.Views.Cases
                                     //   throw;
                                 }
 
-                                Mainlayout.Children.Add(entry);
+                                Mainlayout.Children.Add(entry_cl);
 
                                 break;
                             case "n":

@@ -203,7 +203,6 @@ namespace StemmonsMobile.Views.Entity
                                 Label1.Text = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
                                 Label1.HorizontalOptions = LayoutOptions.Start;
                                 Label1.FontSize = 16;
-                                Label1.FontFamily = "Soin Sans Neue";
                                 LeftLyout.Children.Add(Label1);
                                 Mainlayout.Children.Add(LeftLyout);
                             }
@@ -324,27 +323,127 @@ namespace StemmonsMobile.Views.Entity
                                 #region DO - DT
                                 case "DO":
                                 case "DT":
-                                    DatePicker DO = new DatePicker
+                                    #region txt_Date
+                                    Entry txt_Date = new Entry
                                     {
-                                        Format = "MM/dd/yyyy",
-                                        VerticalOptions = LayoutOptions.Start,
-                                        WidthRequest = 200,
-                                        Date = Convert.ToDateTime("01/01/1900"),
+                                        Placeholder = "Select Date",
+                                        WidthRequest = 175,
+                                        TextColor = Color.Gray,
+                                        Keyboard = Keyboard.Numeric,
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                        TextColor = Color.Gray
+                                        Text = ""
                                     };
-                                    RightLyout.Children.Add(DO);
-                                    if (!fieldLeveSecurity_Create)
-                                        DO.IsEnabled = false;
+
+                                    txt_Date.Focused += (sender, e) =>
+                                    {
+                                        try
+                                        {
+                                            var cnt = (Entry)sender;
+                                            //var sty_id = cnt.StyleId?.Split('_')[1];
+                                            var dt_c = FindEntityControl(cnt.StyleId, "DatePicker") as DatePicker;
+                                            Device.BeginInvokeOnMainThread(() =>
+                                            {
+                                                dt_c.Focus();
+                                            });
+                                        }
+                                        catch (Exception exs)
+                                        {
+                                        }
+                                    };
+
+
+                                    #region MyRegion
                                     try
                                     {
-                                        ischeckcalControl = SetCalControls(EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1])).ToList(), EntitySchemaLists.AssociationFieldCollection.Where(v => v.FieldType == "CL").ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]);
+                                        ischeckcalControl = SetCalControls(EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1])).ToList(), EntitySchemaLists.AssociationFieldCollection.Where(v => v.FieldType == "CL").ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]);
                                     }
                                     catch (Exception)
                                     {
                                     }
+
                                     if (!string.IsNullOrEmpty(ischeckcalControl))
-                                        DO.DateSelected += DO_DateSelected;
+                                        txt_Date.TextChanged += Txt_Date_TextChanged;
+
+
+                                    #endregion
+
+                                    #endregion
+
+                                    Image im = new Image
+                                    {
+                                        StyleId = "imgcl_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
+                                        Source = ImageSource.FromFile("Assets/erase-16.png")
+                                    };
+
+                                    #region date_pick
+                                    DatePicker date_pick = new DatePicker
+                                    {
+                                        IsVisible = false,
+                                        Format = "MM/dd/yyyy",
+                                        WidthRequest = 200,
+                                        StyleId = "dt_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID
+                                    };
+                                    #endregion
+                                    RightLyout.Orientation = StackOrientation.Horizontal;
+                                    RightLyout.Children.Add(txt_Date);
+                                    RightLyout.Children.Add(im);
+                                    RightLyout.Children.Add(date_pick);
+
+                                    var clr_img_click = new TapGestureRecognizer();
+                                    clr_img_click.Tapped += (s, e) =>
+                                    {
+                                        Entry C_ent = new Entry();
+                                        try
+                                        {
+                                            var ct = (Image)s;
+                                            C_ent = FindEntityControl(ct.StyleId.Split('_')[1]) as Entry;
+                                            C_ent.Text = "";
+                                        }
+                                        catch (Exception)
+                                        {
+                                            C_ent.Text = "";
+                                        }
+                                    };
+                                    im.GestureRecognizers.Add(clr_img_click);
+
+                                    if (Device.RuntimePlatform == "iOS")
+                                    {
+                                        date_pick.Unfocused += Date_pick_Unfocused;
+                                    }
+                                    else
+                                    {
+                                        date_pick.DateSelected += Date_pick_DateSelected;
+                                    }
+
+
+                                    if (!fieldLeveSecurity_Create)
+                                        txt_Date.IsEnabled = false;
+
+                                    #region OLD DT
+                                    //DatePicker DO = new DatePicker
+                                    //{
+                                    //    Format = "MM/dd/yyyy",
+                                    //    VerticalOptions = LayoutOptions.Start,
+                                    //    WidthRequest = 200,
+                                    //    Date = Convert.ToDateTime("01/01/1900"),
+                                    //    StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
+                                    //    TextColor = Color.Gray
+                                    //};
+                                    //RightLyout.Children.Add(DO);
+
+                                    //try
+                                    //{
+                                    //    ischeckcalControl = SetCalControls(EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == Convert.ToInt32(DO.StyleId?.Split('_')[1])).ToList(), EntitySchemaLists.AssociationFieldCollection.Where(v => v.FieldType == "CL").ToList(), DO.StyleId?.Split('_')[0]?.ToUpper() + "_" + DO.StyleId?.Split('_')[1]);
+                                    //}
+                                    //catch (Exception)
+                                    //{
+                                    //}
+                                    //if (!string.IsNullOrEmpty(ischeckcalControl))
+                                    //    DO.DateSelected += DO_DateSelected;
+
+                                    //if (!fieldLeveSecurity_Create)
+                                    //    DO.IsEnabled = false; 
+                                    #endregion
                                     break;
                                 #endregion
 
@@ -786,227 +885,8 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        private void Pk_Unfocused(object sender, FocusEventArgs e)
-        {
-            Pk_SelectedIndexChanged(sender, e);
-        }
-
-        #region Add Photo Assoc Wise
-        private async void Btn_Photo_Clicked(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-
-            var action = await this.DisplayActionSheet(null, "Cancel", null, "From Photo Gallery", "Take Photo");
-            switch (action)
-            {
-                case "From Photo Gallery":
-                    OpenGallery(btn.StyleId);
-                    break;
-
-                case "Take Photo":
-                    TakePhoto(btn.StyleId);
-                    break;
-
-            }
-        }
-
-        async void OpenGallery(string CurrentStyleID)
-        {
-            //if (Device.RuntimePlatform != Device.Android)
-            {
-                try
-                {
-                    string Current_Assoc = CurrentStyleID.Split('_')[1];
-
-                    await CrossMedia.Current.Initialize();
-
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
-                    {
-                        DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
-                        return;
-                    }
-
-                    var file = await CrossMedia.Current.PickPhotoAsync();
-
-                    if (file == null)
-                    {
-                        return;
-                    }
-
-                    //DisplayAlert("File Location", file.Path, "OK");
-
-                    long size = file.Path.Length;
-                    byte[] fileBytes = null;
-                    var bytesStream = file.GetStream();
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        bytesStream.CopyTo(memoryStream);
-                        fileBytes = memoryStream.ToArray();
-                    }
-
-
-                    AddPhotoGallaryOn_AssocField(Current_Assoc, file, fileBytes.Count(), fileBytes);
-
-
-                    try
-                    {
-                        if (Device.RuntimePlatform == Device.UWP)
-                        {
-                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                        }
-                        else
-                        {
-                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-        }
-        async void TakePhoto(string CurrentStyleID)
-        {
-            // if (Device.RuntimePlatform != Device.Android)
-            {
-                try
-                {
-                    string Current_Assoc = CurrentStyleID.Split('_')[1];
-
-                    await CrossMedia.Current.Initialize();
-
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                    {
-                        DisplayAlert("No Camera", ":( No camera available.", "OK");
-                        return;
-                    }
-
-                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                    {
-                        Directory = "Sample",
-                        DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
-                        PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                    });
-
-                    if (file == null)
-                        return;
-
-                    long size = file.Path.Length;
-                    byte[] fileBytes = null;
-                    var bytesStream = file.GetStream();
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        bytesStream.CopyTo(memoryStream);
-                        fileBytes = memoryStream.ToArray();
-                    }
-
-                    AddPhotoGallaryOn_AssocField(Current_Assoc, file, fileBytes.Count(), fileBytes);
-                }
-                catch (Exception ex)
-                {
-                }
-
-                try
-                {
-                    IFolder rootFolder = FileSystem.Current.LocalStorage;
-                    await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
-        private void AddPhotoGallaryOn_AssocField(string Current_Assoc, Plugin.Media.Abstractions.MediaFile file, long size, byte[] fileBytes)
-        {
-            try
-            {
-                string File_Name = string.Empty;
-
-                if (Device.RuntimePlatform == Device.UWP)
-                {
-                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                }
-                else
-                {
-                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
-                }
-
-                AddFileToEntityAssocTypeRequest addfile = new AddFileToEntityAssocTypeRequest();
-                addfile.ENTITY_ID = EntitySchemaLists._NEntityID;
-                addfile.DESCRIPTION = "";
-                addfile.FILE_DATE_TIME = DateTime.Now;
-                addfile.ENTITY_ASSOC_TYPE_ID = Convert.ToInt32(Current_Assoc);
-                addfile.FILE_NAME = File_Name;
-                addfile.FILE_SIZE_BYTES = Convert.ToInt32(size);
-                addfile.FILE_BLOB = fileBytes;
-                addfile.EXTERNAL_URI = "";
-                addfile.SHOW_INLINE_NOTES = 'Y';
-                addfile.SYSTEM_CODE = "";
-                addfile.IS_ACTIVE = 'Y';
-                addfile.CREATED_BY = Functions.UserName;
-
-                var AttachmentAPi = EntityAPIMethods.AddFileToEntityAssocType(addfile);
-
-                var response = AttachmentAPi.GetValue("ResponseContent");
-
-                if (!string.IsNullOrEmpty(response?.ToString()) && response.ToString() != "[]")
-                {
-                    for (int i = 0; i < EntitySchemaLists.AssociationFieldCollection.Count; i++)
-                    {
-                        var _field_type = EntitySchemaLists.AssociationFieldCollection[i].FieldType;
-
-                        var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
-                        if (cnt != null)
-                        {
-                            var cnt_type = cnt.GetType();
-                            if (cnt_type.Name.ToLower() == "image")
-                            {
-                                Image img = (Image)cnt;
-
-                                string styleid = img.StyleId;
-                                var stack = (StackLayout)img.Parent;
-
-                                if (EntitySchemaLists.AssociationFieldCollection[i].AssocMetaDataText.Count == 0)
-                                {
-                                    if (!styleid.Contains("|"))
-                                        stack.Children.Remove(img);
-                                }
-
-                                int imgCon = 0;
-
-                                foreach (var item in stack.Children)
-                                {
-                                    var type = item.GetType();
-                                    if (type.Name.ToLower() == "image")
-                                    {
-                                        imgCon++;
-                                    }
-                                }
-
-                                Image im = new Image();
-                                im.HeightRequest = 150;
-                                im.WidthRequest = 150;
-                                im.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID + "|" + (imgCon + 1) + "|" + response.ToString();
-
-                                im.Source = ImageSource.FromUri(new Uri("http://entities-s-15.boxerproperty.com/Download.aspx?FileID=" + response.ToString()));
-                                stack.Children.Add(im);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-
-        #endregion
-
+        Dictionary<string, string> assocFieldValues = new Dictionary<string, string>();
+        Dictionary<string, string> assocFieldTexts = new Dictionary<string, string>();
 
         #region Set Calculation For CalControls
         public string SetCalControls(List<AssociationField> sControls, List<AssociationField> sControlscal, string Id)
@@ -1387,17 +1267,48 @@ namespace StemmonsMobile.Views.Entity
         }
         #endregion
 
-        Dictionary<string, string> assocFieldValues = new Dictionary<string, string>();
-        Dictionary<string, string> assocFieldTexts = new Dictionary<string, string>();
+        private void Date_pick_Unfocused(object sender, FocusEventArgs e)
+        {
+            Date_pick_DateSelected(sender, null);
+        }
+
+        private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            Entry dtp = new Entry();
+            try
+            {
+                var cnt = (DatePicker)sender;
+                var sty_id = cnt.StyleId?.Split('_')[1];
+                var dt_Entry = FindEntityControl(cnt.StyleId.Split('_')[1]) as Entry;
+                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+            }
+            catch (Exception)
+            {
+                dtp.Text = "";
+            }
+        }
+
+        private void Txt_Date_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
+        }
+
+        private void Pk_Unfocused(object sender, FocusEventArgs e)
+        {
+            Pk_SelectedIndexChanged(sender, e);
+        }
+
         private void DO_DateSelected(object sender, DateChangedEventArgs e)
         {
             DyanmicSetCalc(((DatePicker)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
         }
+
         private void ST_Unfocused(object sender, FocusEventArgs e)
         {
             DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
 
         }
+
         private void Pk_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1509,6 +1420,222 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
+        #region Add Photo Assoc Wise
+        private async void Btn_Photo_Clicked(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            var action = await this.DisplayActionSheet(null, "Cancel", null, "From Photo Gallery", "Take Photo");
+            switch (action)
+            {
+                case "From Photo Gallery":
+                    OpenGallery(btn.StyleId);
+                    break;
+
+                case "Take Photo":
+                    TakePhoto(btn.StyleId);
+                    break;
+
+            }
+        }
+
+        async void OpenGallery(string CurrentStyleID)
+        {
+            //if (Device.RuntimePlatform != Device.Android)
+            {
+                try
+                {
+                    string Current_Assoc = CurrentStyleID.Split('_')[1];
+
+                    await CrossMedia.Current.Initialize();
+
+                    if (!CrossMedia.Current.IsPickPhotoSupported)
+                    {
+                        DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                        return;
+                    }
+
+                    var file = await CrossMedia.Current.PickPhotoAsync();
+
+                    if (file == null)
+                    {
+                        return;
+                    }
+
+                    //DisplayAlert("File Location", file.Path, "OK");
+
+                    long size = file.Path.Length;
+                    byte[] fileBytes = null;
+                    var bytesStream = file.GetStream();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        bytesStream.CopyTo(memoryStream);
+                        fileBytes = memoryStream.ToArray();
+                    }
+
+
+                    AddPhotoGallaryOn_AssocField(Current_Assoc, file, fileBytes.Count(), fileBytes);
+
+
+                    try
+                    {
+                        if (Device.RuntimePlatform == Device.UWP)
+                        {
+                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                        }
+                        else
+                        {
+                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+        async void TakePhoto(string CurrentStyleID)
+        {
+            // if (Device.RuntimePlatform != Device.Android)
+            {
+                try
+                {
+                    string Current_Assoc = CurrentStyleID.Split('_')[1];
+
+                    await CrossMedia.Current.Initialize();
+
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                    {
+                        DisplayAlert("No Camera", ":( No camera available.", "OK");
+                        return;
+                    }
+
+                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
+                        PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                    });
+
+                    if (file == null)
+                        return;
+
+                    long size = file.Path.Length;
+                    byte[] fileBytes = null;
+                    var bytesStream = file.GetStream();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        bytesStream.CopyTo(memoryStream);
+                        fileBytes = memoryStream.ToArray();
+                    }
+
+                    AddPhotoGallaryOn_AssocField(Current_Assoc, file, fileBytes.Count(), fileBytes);
+                }
+                catch (Exception ex)
+                {
+                }
+
+                try
+                {
+                    IFolder rootFolder = FileSystem.Current.LocalStorage;
+                    await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private void AddPhotoGallaryOn_AssocField(string Current_Assoc, Plugin.Media.Abstractions.MediaFile file, long size, byte[] fileBytes)
+        {
+            try
+            {
+                string File_Name = string.Empty;
+
+                if (Device.RuntimePlatform == Device.UWP)
+                {
+                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                }
+                else
+                {
+                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                }
+
+                AddFileToEntityAssocTypeRequest addfile = new AddFileToEntityAssocTypeRequest();
+                addfile.ENTITY_ID = EntitySchemaLists._NEntityID;
+                addfile.DESCRIPTION = "";
+                addfile.FILE_DATE_TIME = DateTime.Now;
+                addfile.ENTITY_ASSOC_TYPE_ID = Convert.ToInt32(Current_Assoc);
+                addfile.FILE_NAME = File_Name;
+                addfile.FILE_SIZE_BYTES = Convert.ToInt32(size);
+                addfile.FILE_BLOB = fileBytes;
+                addfile.EXTERNAL_URI = "";
+                addfile.SHOW_INLINE_NOTES = 'Y';
+                addfile.SYSTEM_CODE = "";
+                addfile.IS_ACTIVE = 'Y';
+                addfile.CREATED_BY = Functions.UserName;
+
+                var AttachmentAPi = EntityAPIMethods.AddFileToEntityAssocType(addfile);
+
+                var response = AttachmentAPi.GetValue("ResponseContent");
+
+                if (!string.IsNullOrEmpty(response?.ToString()) && response.ToString() != "[]")
+                {
+                    for (int i = 0; i < EntitySchemaLists.AssociationFieldCollection.Count; i++)
+                    {
+                        var _field_type = EntitySchemaLists.AssociationFieldCollection[i].FieldType;
+
+                        var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                        if (cnt != null)
+                        {
+                            var cnt_type = cnt.GetType();
+                            if (cnt_type.Name.ToLower() == "image")
+                            {
+                                Image img = (Image)cnt;
+
+                                string styleid = img.StyleId;
+                                var stack = (StackLayout)img.Parent;
+
+                                if (EntitySchemaLists.AssociationFieldCollection[i].AssocMetaDataText.Count == 0)
+                                {
+                                    if (!styleid.Contains("|"))
+                                        stack.Children.Remove(img);
+                                }
+
+                                int imgCon = 0;
+
+                                foreach (var item in stack.Children)
+                                {
+                                    var type = item.GetType();
+                                    if (type.Name.ToLower() == "image")
+                                    {
+                                        imgCon++;
+                                    }
+                                }
+
+                                Image im = new Image();
+                                im.HeightRequest = 150;
+                                im.WidthRequest = 150;
+                                im.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID + "|" + (imgCon + 1) + "|" + response.ToString();
+
+                                im.Source = ImageSource.FromUri(new Uri("http://entities-s-15.boxerproperty.com/Download.aspx?FileID=" + response.ToString()));
+                                stack.Children.Add(im);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+
+        #endregion
+
         private async void Btn_addnotes_Clicked(object sender, EventArgs e)
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -1559,29 +1686,83 @@ namespace StemmonsMobile.Views.Entity
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
-        public object FindEntityControl(string type)
+
+        public object FindEntityControl(string type, string controlType = "")
         {
-            foreach (StackLayout v in TextFieldsLayout.Children)
+            if (string.IsNullOrEmpty(controlType))
             {
-                foreach (StackLayout item in v.Children)
+                foreach (StackLayout v in TextFieldsLayout.Children)
                 {
-                    foreach (var subitem in item.Children)
+                    foreach (StackLayout item in v.Children)
                     {
-                        var xy = subitem.StyleId;
-                        if (xy != null)
+                        foreach (var subitem in item.Children)
                         {
-                            if (xy.Contains(type))
+                            var xy = subitem.StyleId;
+                            if (xy != null)
                             {
-                                var d = subitem.GetType();
-                                if ((subitem.GetType()).Name.ToLower() != "button")
-                                    return subitem;
+                                if (xy.Contains(type))
+                                {
+                                    var d = subitem.GetType();
+                                    if ((subitem.GetType()).Name.ToLower() != "button")
+                                        return subitem;
+                                }
                             }
                         }
                     }
                 }
             }
+            else if (controlType == "DatePicker")
+            {
+                foreach (StackLayout v in TextFieldsLayout.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name == "DatePicker")
+                                {
+                                    if (_styleId.Contains(type.Split('_')[1]))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (controlType == "Image")
+            {
+                foreach (StackLayout v in TextFieldsLayout.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name == "Image")
+                                {
+                                    if (_styleId.Contains(type.Split('_')[1]))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return null;
         }
+
         private async void Tool_Create_Clicked(object sender, EventArgs e)
         {
             try
@@ -1747,6 +1928,7 @@ namespace StemmonsMobile.Views.Entity
             }
             txt_EntNotes.Text = String.Empty;
         }
+
         public async Task<int> CreateEntitycall()
         {
             int insertedRecordid = -1;
@@ -2147,6 +2329,7 @@ namespace StemmonsMobile.Views.Entity
                 }
             }
         }
+
         private void FillEntityChildControl(int iAssocTypeID, string sSelectedValue)
         {
             string strconection = "";
@@ -2326,6 +2509,7 @@ namespace StemmonsMobile.Views.Entity
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
+
         public static string GetQueryStringWithParamaters(string query, string externalDsName, string value, string field = "", bool checkIn = false, bool checkLike = false)
         {
             string results = query;

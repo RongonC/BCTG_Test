@@ -30,7 +30,7 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout Orientation="Horizontal" Margin="10,0,10,0">
-                                        <Label Text="{Binding DisplayName}" HorizontalOptions="StartAndExpand" Style="{StaticResource defaultLabelSize}" VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="{Binding DisplayName}" HorizontalOptions="StartAndExpand" Style="{StaticResource defaultLabelSize_16}" VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                         <Button x:Name="lst_Assignuser" Text="{Binding ButtonName}" TextColor="{StaticResource ButtonTextColor}" HorizontalOptions="End" VerticalOptions="Center" Clicked="Lst_Assignuser_Clicked" BackgroundColor="Transparent"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                     </StackLayout>
                                 </ViewCell>

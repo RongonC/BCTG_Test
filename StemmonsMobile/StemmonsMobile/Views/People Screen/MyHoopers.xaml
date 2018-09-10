@@ -12,7 +12,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <SearchBar Placeholder="Search Case Hopper" Grid.Row="0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <SearchBar Placeholder="Search Case Hopper" Grid.Row="0" />
 
                 <StackLayout Grid.Row="1">
                     <ListView x:Name="HopperList">
@@ -29,8 +29,8 @@
                                             <ColumnDefinition Width="20*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="{Binding Name}" Style="{StaticResource defaultLabelSize}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" 
-                                Margin="0,15,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                        <Label Text="{Binding Name}" Style="{StaticResource defaultLabelSize_16}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" 
+                                Margin="0,15,0,0"/>
                                         <Button Image="Assets/dropdowniconClose.png" Grid.Column="1" HorizontalOptions="End" Margin="0,0,5,0"/>
 
                                     </Grid>

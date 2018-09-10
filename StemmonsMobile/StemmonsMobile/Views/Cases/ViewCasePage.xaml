@@ -53,7 +53,7 @@
                                                         <RowDefinition Height="auto" />
                                                     </Grid.RowDefinitions>
                                                     <Label  FormattedText="{Binding Note, Converter={StaticResource HtmlLabelConverter}}" Grid.Row="0"
-                                                                Style="{StaticResource defaultLabelSize}"
+                                                                Style="{StaticResource defaultLabelSize_16}"
                                                                 IsVisible="{Binding LabelVisible}"/>
 
                                                     <Image  x:Name="App_Logo" Aspect="AspectFit"   

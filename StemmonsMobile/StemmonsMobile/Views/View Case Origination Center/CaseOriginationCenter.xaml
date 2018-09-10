@@ -24,7 +24,7 @@
                                     <ViewCell.View>
                                         <StackLayout  Orientation="Horizontal" HeightRequest="30">
                                             <StackLayout  HorizontalOptions="StartAndExpand"  VerticalOptions="Center">
-                                                <Label Text="{Binding Name}"  Style="{StaticResource defaultLabelSize_subtype}" TextColor="Black" Margin="15,0,0,0" HorizontalOptions="End" XAlign="End" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                <Label Text="{Binding Name}"  Style="{StaticResource defaultLabelSize_16}" TextColor="Black" Margin="15,0,0,0" HorizontalOptions="End" XAlign="End" />
                                             </StackLayout>
                                             <Image x:Name="MyImage" Source="Assets/dropdowniconClose.png"   HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
                                         </StackLayout>
