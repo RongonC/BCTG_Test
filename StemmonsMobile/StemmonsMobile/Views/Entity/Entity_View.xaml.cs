@@ -71,7 +71,6 @@ namespace StemmonsMobile.Views.Entity
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             string EntityRelatedResponse = "";
-            ;
             try
             {
                 bool Onlineflag = false;

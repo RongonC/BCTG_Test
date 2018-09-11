@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:StemmonsMobile"
+             xmlns:local="clr-namespace:StemmonsMobile;assembly=StemmonsMobile"
              x:Class="StemmonsMobile.Views.Entity.CreateEntityPage">
     <ContentPage.ToolbarItems >
         <ToolbarItem x:Name="Tool_Create" Text="Create" Icon="Assets/Save.png" Clicked="Tool_Create_Clicked"/>
     </ContentPage.ToolbarItems>
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HtmlLabelConverter x:Key="HtmlLabelConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
@@ -43,7 +47,8 @@
                                                         <RowDefinition Height="auto" />
                                                         <RowDefinition Height="auto"/>
                                                     </Grid.RowDefinitions>
-                                                    <Label  Text="{Binding Note}"  Grid.Row="0"
+                                                    <Label FormattedText="{Binding Note, Converter={StaticResource HtmlLabelConverter}}"  
+                                                           Grid.Row="0"
                                                                     Style="{StaticResource defaultLabelSize_16}"
                                                                     IsVisible="{Binding LabelVisible}" />
 

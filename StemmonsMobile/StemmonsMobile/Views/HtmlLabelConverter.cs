@@ -11,6 +11,8 @@ using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.Views.Entity;
 using DataServiceBus.OfflineHelper.DataTypes;
 using Plugin.Connectivity;
+using StemmonsMobile.DataTypes.DataType.Default;
+using System.Linq;
 
 namespace StemmonsMobile
 {
@@ -128,7 +130,14 @@ namespace StemmonsMobile
                 int link_Nav_id = 0;
                 string u = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl.Split(new string[] { "/mobileapi" }, StringSplitOptions.None)[0] + "/";
 
-                if (url.Contains(u.ToLower()))
+                var tempU = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+
+                var Check = JsonConvert.DeserializeObject<List<MobileBranding>>(tempU.ASSOC_FIELD_INFO);
+
+                var validateURL = Check.Where(v => v.VALUE.ToLower().Contains(url)).FirstOrDefault().VALUE;
+
+                if (!string.IsNullOrEmpty(validateURL))
+                //if (url.Contains(u.ToLower()))
                 {
                     if (url.Contains("?caseid="))
                     {

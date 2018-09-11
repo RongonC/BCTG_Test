@@ -40,18 +40,19 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <Grid  Grid.Row="0" Grid.ColumnSpan="2"  >
-                                                        <Label  Text="{Binding Title}" Grid.ColumnSpan="2"   
+                                                        <Label  Text="{Binding Title}"
+                                                                Grid.ColumnSpan="2"   
                                                             Style="{StaticResource defaultLabelSize_16}"
                                                             Margin="10,-2,0,0"
                                                             HorizontalOptions="Start" 
-                                                            VerticalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                            VerticalOptions="Center"  />
                                                     </Grid>
 
                                                     <Grid Grid.Row="0" Grid.Column="2"  >
                                                         <Label Text="{Binding Ent_ListId}" 
                                                            Style="{StaticResource defaultLabelSize_16}" 
                                                            TextColor="Orange"
-                                           HorizontalOptions="EndAndExpand"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                               HorizontalOptions="EndAndExpand"  />
                                                     </Grid>
 
                                                     <Grid Grid.Row="1" Grid.ColumnSpan="3"   >
@@ -63,15 +64,15 @@
 
                                                         <Label Text="{Binding EntityCreatedByUserName}" FontSize="12"
                                                            LineBreakMode="TailTruncation"
-                                                           Grid.Column="0" HorizontalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="0" HorizontalOptions="Center" />
 
                                                         <Label Text="{Binding Field3}" FontSize="12" 
                                                            LineBreakMode="TailTruncation"
-                                                           Grid.Column="1" HorizontalOptions="Center"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="1" HorizontalOptions="Center" />
 
                                                         <Label Text="{Binding EntityCreatedDateTime}"
                                                            LineBreakMode="TailTruncation" FontSize="12"
-                                                           Grid.Column="2"  HorizontalOptions="End"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Grid.Column="2"  HorizontalOptions="End" />
                                                     </Grid>
 
                                                     <Image Source="Assets/dropdowniconClose.png" 

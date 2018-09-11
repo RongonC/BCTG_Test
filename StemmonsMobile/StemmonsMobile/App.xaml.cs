@@ -294,12 +294,12 @@ namespace StemmonsMobile
         public static string CasesImgURL = string.Empty;
         public static string StandardImgURL = string.Empty;
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             CreateDataBase();
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
-
+           
             //Crashes Report 
             AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
                 "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +

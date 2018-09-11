@@ -4938,6 +4938,9 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
     {
         public int? EntityID { get; set; }
         public int? ListID { get; set; }
+        public int? EntityTypeID { get; set; }
+        public string EntityTypeName { get; set; }
+        
         public string EntityCreatedByUserName { get; set; }
         public string EntityCreatedDateTime { get; set; }
 

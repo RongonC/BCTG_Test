@@ -1,4 +1,6 @@
 ﻿using Acr.UserDialogs;
+using DataServiceBus.OfflineHelper.DataTypes;
+using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -90,9 +92,12 @@ namespace StemmonsMobile.Commonfiles
 
             // Check if there are line breaks (<br>) or paragraph (<p>)
             sbHTML.Replace("<br>", Environment.NewLine);
+            sbHTML.Replace("<br/>", Environment.NewLine);
+            sbHTML.Replace("<br />", Environment.NewLine);
             sbHTML.Replace("<br ", Environment.NewLine);
+
+            sbHTML.Replace("<p>", Environment.NewLine);
             sbHTML.Replace("<p ", Environment.NewLine);
-            sbHTML.Replace("<p> ", Environment.NewLine);
 
             // Finally, remove all HTML tags and return plain text
             return System.Text.RegularExpressions.Regex.Replace(
@@ -202,6 +207,32 @@ namespace StemmonsMobile.Commonfiles
                             lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ToString());
                         }
                     }).Wait();
+
+                    var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                    AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
+
+                    if (Check == null)
+                        _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                    else
+                        _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
+
+                    _AppTypeInfoList = new AppTypeInfoList
+                    {
+                        ASSOC_FIELD_INFO = JsonConvert.SerializeObject(lst),
+                        LAST_SYNC_DATETIME = DateTime.Now,
+                        SYSTEM = "SYSTEMCODES",
+                        TYPE_ID = 0,
+                        ID = 0,
+                        CategoryId = 0,
+                        CategoryName = "",
+                        TransactionType = "M",
+                        TYPE_SCREEN_INFO = "SYSTEMCODES",
+                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                        IS_ONLINE = true
+                    };
+
+                    var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl);
+
                 }
                 catch (Exception)
                 {

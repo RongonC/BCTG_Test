@@ -482,11 +482,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         }
         #endregion
 
-        #region Search SYSTEM  == TYPE_SCREEN_INFO single Record
-        public static AppTypeInfoList UserScreenRetrive(string Name, string dbPath, string ScreenName)
+        #region Search SYSTEMName  == TYPE_SCREEN_INFO single Record
+        public static AppTypeInfoList UserScreenRetrive(string SYSTEMName, string dbPath, string ScreenName)
         {
             SQLiteConnection conn = new SQLiteConnection(dbPath);
-            AppTypeInfoList result = conn.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == Name.ToLower() && i.TYPE_SCREEN_INFO == ScreenName && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+            AppTypeInfoList result = conn.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToLower() == SYSTEMName.ToLower() && i.TYPE_SCREEN_INFO == ScreenName && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
             return result;
         }
