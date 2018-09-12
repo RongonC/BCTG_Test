@@ -58,17 +58,17 @@ namespace StemmonsMobile
 
         public IList<StringSection> ProcessString(string rawText)
         {
-            string trimChars = "<p>";
-            rawText.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray());
-            rawText.Replace("<p>", Environment.NewLine);
+            //string trimChars = "<p>";
+            //rawText.TrimStart(trimChars.ToCharArray()).TrimEnd(trimChars.ToCharArray());
+            //rawText.Replace("<p>", Environment.NewLine);
 
 
-            string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;" };
-            string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢" };
-            for (int i = 0; i < OldWords.Length; i++)
-            {
-                rawText = rawText.Replace(OldWords[i], NewWords[i]);
-            }
+            //string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;" };
+            //string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢" };
+            //for (int i = 0; i < OldWords.Length; i++)
+            //{
+            //    rawText = rawText.Replace(OldWords[i], NewWords[i]);
+            //}
 
             //rawText.Replace("\astart", "<a");
             //rawText.Replace("\aEnd", "</a>");
@@ -133,11 +133,32 @@ namespace StemmonsMobile
                 var tempU = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
 
                 var Check = JsonConvert.DeserializeObject<List<MobileBranding>>(tempU.ASSOC_FIELD_INFO);
+                List<string> ls = new List<string>();
+                foreach (var item in Check)
+                {
+                    MatchCollection collection = Regex.Matches(item.VALUE.ToLower(), @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?", RegexOptions.Singleline);
 
-                var validateURL = Check.Where(v => v.VALUE.ToLower().Contains(url)).FirstOrDefault().VALUE;
+                    foreach (Match itm in collection)
+                    {
+                        ls.Add(item.VALUE);
+                    }
+                }
 
-                if (!string.IsNullOrEmpty(validateURL))
-                //if (url.Contains(u.ToLower()))
+                bool isopenWeb = true;
+                foreach (var item in ls)
+                {
+                    if (url.Contains(item))
+                    {
+                        isopenWeb = false;
+                        break;
+                    }
+                    else
+                    {
+                        isopenWeb = true;
+                    }
+                }
+
+                if (!isopenWeb)
                 {
                     if (url.Contains("?caseid="))
                     {
@@ -244,7 +265,7 @@ namespace StemmonsMobile
                             }
                         }
 
-                        temp = url.Split(new string[] { "?itemid=" }, StringSplitOptions.None);
+                        temp = url.Split(new string[] { "&itemid=" }, StringSplitOptions.None);
                         foreach (var ite in temp[1].ToCharArray())
                         {
                             if (char.IsDigit(ite))
@@ -467,7 +488,7 @@ namespace StemmonsMobile
                     Device.OpenUri(new Uri(url));
                 }
             }
-            catch (Exception)
+            catch (Exception ty)
             {
             }
         });

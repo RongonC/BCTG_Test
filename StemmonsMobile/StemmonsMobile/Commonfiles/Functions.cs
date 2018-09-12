@@ -231,7 +231,7 @@ namespace StemmonsMobile.Commonfiles
                         IS_ONLINE = true
                     };
 
-                    var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl);
+                    var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, App.DBPath);
 
                 }
                 catch (Exception)

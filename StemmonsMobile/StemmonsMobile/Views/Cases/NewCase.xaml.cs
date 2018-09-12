@@ -215,7 +215,7 @@ namespace StemmonsMobile.Views.Cases
                         pk.TextColor = Color.Gray;
 
 
-                       
+
 
                         Entry entry_number = new Entry();
                         entry_number.WidthRequest = 200;
@@ -1013,6 +1013,7 @@ namespace StemmonsMobile.Views.Cases
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
                 dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+                dt_Entry.Unfocus();
             }
             catch (Exception)
             {
@@ -1025,6 +1026,8 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 Entry en = (Entry)sender;
+                if (en.Text.Length > 10)
+                    en.Text = e.OldTextValue;
 
                 DyanmicSetCalc(en.StyleId);
             }
