@@ -40,7 +40,7 @@
                             </StackLayout>
 
                             <ListView  x:Name="gridCasesnotes"  Grid.Row="1"   HasUnevenRows="True"
-                                ItemTapped="gridCasesnotes_ItemTapped" HeightRequest="700"
+                                ItemTapped="GridCasesnotes_ItemTapped" HeightRequest="700"
                                    IsGroupingEnabled="True" 
                                      >
                                 <ListView.ItemTemplate>

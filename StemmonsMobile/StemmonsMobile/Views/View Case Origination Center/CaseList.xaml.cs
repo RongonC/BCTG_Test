@@ -30,7 +30,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         ObservableCollection<GetCaseTypesResponse.BasicCase> BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>();
         List<string> TeamUserList = new List<string>();
         string parametername; string value; string searchvalue;
-        string Username = string.Empty;
+        string Team_Username = string.Empty;
         string sTitle = string.Empty;
         string scrnName = string.Empty;
         bool isOnlineCall = true;
@@ -43,7 +43,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             App.SetConnectionFlag();
             parametername = _parametername;
             value = _value;
-            Username = _uname;
+            Team_Username = _uname;
             searchvalue = _searchvalue;
             sTitle = _Titile == "" ? "Case List" : _Titile;
 
@@ -308,32 +308,19 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         break;
                 }
 
-                if (string.IsNullOrEmpty(Username))
+                if (string.IsNullOrEmpty(Team_Username))
                 {
                     Samusername = Functions.UserName;
                     saveRec = true;
                 }
                 else
                 {
-                    Samusername = Username;
+                    Samusername = Team_Username;
                     saveRec = false;
                 }
                 #endregion
 
-                if (!string.IsNullOrEmpty(OwnerSam))
-                {
-                    scrnName = "_OwnedByMe";
-                    isOnlineCall = false;
-                }
-                else if (!string.IsNullOrEmpty(AssgnSam))
-                {
-                    isOnlineCall = false;
-                }
-                else if (!string.IsNullOrEmpty(CreateBySam))
-                {
-                    isOnlineCall = false;
-                }
-                else if (!string.IsNullOrEmpty(AssgnSamTM))
+                if ((!string.IsNullOrEmpty(OwnerSam)) || (!string.IsNullOrEmpty(AssgnSam)) || (!string.IsNullOrEmpty(CreateBySam)) || (!string.IsNullOrEmpty(AssgnSamTM)))
                 {
                     isOnlineCall = false;
                 }
@@ -361,38 +348,64 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     });
                 });
 
-                if (_pageindex > 1)
+                if (BasicCase_lst.Count <= 0)
                 {
-                    for (int ind = 0; ind < _pageindex - 1; ind++)
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    try
                     {
-                        Task.Run(() =>
+                        isOnlineCall = App.Isonline;
+                        await Task.Run(() =>
                         {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                lstfooter_indicator.IsVisible = true;
-                            });
-                            var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, ind, _pagenumber);
+                            var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 1, _pagenumber);
                             result.Wait();
 
-
+                            BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                try
-                                {
-                                    lstfooter_indicator.IsVisible = false;
-                                    if (result.Result != null)
-                                        foreach (var ite in result.Result)
-                                        {
-                                            BasicCase_lst.Add(ite);
-                                        }
-                                }
-                                catch (Exception)
-                                {
-                                }
+                                listdata.IsRefreshing = true;
                             });
                         });
                     }
+                    catch (Exception)
+                    {
+                    }
                 }
+
+                #region To manage the Pageindex to get All data as we have in last
+                if (_pageindex > 1)
+                {
+                    //for (int ind = 0; ind < _pageindex - 1; ind++)
+                    //{
+                    //    Task.Run(() =>
+                    //    {
+                    //        Device.BeginInvokeOnMainThread(() =>
+                    //        {
+                    //            lstfooter_indicator.IsVisible = true;
+                    //        });
+                    //        var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, ind, _pagenumber);
+                    //        result.Wait();
+
+
+                    //        Device.BeginInvokeOnMainThread(() =>
+                    //        {
+                    //            try
+                    //            {
+                    //                lstfooter_indicator.IsVisible = false;
+                    //                if (result.Result != null)
+                    //                    foreach (var ite in result.Result)
+                    //                    {
+                    //                        BasicCase_lst.Add(ite);
+                    //                    }
+                    //            }
+                    //            catch (Exception)
+                    //            {
+                    //            }
+                    //        });
+                    //    });
+                    //}
+                }
+                #endregion
+
                 Device.StartTimer(TimeSpan.FromSeconds(2), () =>
                 {
                     listdata.IsRefreshing = false;

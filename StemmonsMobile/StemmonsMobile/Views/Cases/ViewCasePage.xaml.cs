@@ -512,7 +512,7 @@ namespace StemmonsMobile.Views.Cases
                                                     editor.WidthRequest = 200;
                                                     editor.Text = "";
 
-                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(editor.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), editor.StyleId?.Split('_')[0]?.ToUpper() + "_" + editor.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID)).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
                                                     if (!string.IsNullOrEmpty(ischeckcalControl))
                                                         editor.Unfocused += Entry_Unfocused;
                                                 }
@@ -584,7 +584,7 @@ namespace StemmonsMobile.Views.Cases
                                                 txt_Date.StyleId = "a_" + ControlsItem.ASSOC_TYPE_ID;
                                                 txt_Date.Text = "";
 
-                                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(txt_Date.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), txt_Date.StyleId?.Split('_')[0]?.ToUpper() + "_" + txt_Date.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID)).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
 
                                                 if (!string.IsNullOrEmpty(ischeckcalControl))
                                                     txt_Date.TextChanged += DO_TextChanged;
@@ -665,7 +665,7 @@ namespace StemmonsMobile.Views.Cases
                                                     {
                                                         entry.IsEnabled = false;
                                                     }
-                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(entry.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), entry.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                    ischeckcalControl = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID)).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
                                                     if (!string.IsNullOrEmpty(ischeckcalControl))
                                                         entry.Unfocused += Entry_Unfocused;
                                                     entry.Keyboard = Keyboard.Default;
@@ -708,7 +708,8 @@ namespace StemmonsMobile.Views.Cases
                                                     entry_number.FontSize = 16;
                                                     entry_number.Keyboard = Keyboard.Numeric;
                                                     entry_number.Text = "";
-                                                    ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(entry_number.StyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls?.Where(v => v.AssocFieldType == 'C').ToList(), entry_number.StyleId?.Split('_')[0]?.ToUpper() + "_" + entry_number.StyleId?.Split('_')[1]?.Split('|')[0]);
+                                                    ischeckcalControl = SetCalControls(sControls?.Where(v => v.AssocTypeID == Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID)).ToList(),
+                                                        sControls?.Where(v => v.AssocFieldType == 'C').ToList());
                                                     if (!string.IsNullOrEmpty(ischeckcalControl))
                                                         entry_number.Unfocused += entry_number_Unfocused;
                                                 }
@@ -891,7 +892,6 @@ namespace StemmonsMobile.Views.Cases
 
                                                             });
 
-                                                            //idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Sel_id));
                                                             control.ItemsSource = cnt_DataSource;
                                                             control.SelectedIndex = cnt_DataSource.Count - 1;
                                                         }
@@ -1239,7 +1239,7 @@ namespace StemmonsMobile.Views.Cases
             #endregion
 
             if (Onlineflag)
-                setStaticCal(ContolrLst);
+                SetStaticCal(ContolrLst);
 
             Device.StartTimer(TimeSpan.FromSeconds(2), () =>
              {
@@ -1251,8 +1251,6 @@ namespace StemmonsMobile.Views.Cases
                  }
                  return true; // True = Repeat again, False = Stop the timer
              });
-
-            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         private void SetBottomBarDetails()
@@ -1260,7 +1258,6 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 var spl = str_CaseFooter.Split('|').ToList();
-                //App.Isonline ? spl.Where(c => c.Contains("CASE_ASSGN_TO")).FirstOrDefault().ToString().Split('=')[1] :
                 if (_Casedata != null)
                 {
                     string CREATED_BY = spl?.Where(c => c.Contains("CREATED_BY"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
@@ -1431,10 +1428,10 @@ namespace StemmonsMobile.Views.Cases
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
                             item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
                         }
-                      
+
                         CasesnotesGroups.Add(item);
                     }
-                 
+
                     gridCasesnotes.ItemsSource = null;
                     gridCasesnotes.ItemsSource = CasesnotesGroups;
                 }
@@ -1710,8 +1707,12 @@ namespace StemmonsMobile.Views.Cases
                             var xy = subitem;
                             Type ty = xy.GetType();
                             if (ty.Name != "StackLayout")
-                                if (xy.StyleId.Contains(AssocID.ToString()))
+                            {
+                                var id = xy.StyleId.Contains("|") ? xy.StyleId.Split('|')[0] : xy.StyleId;
+
+                                if (id.Contains(AssocID.ToString()))
                                     return xy;
+                            }
                         }
                     }
                 }
@@ -1895,19 +1896,14 @@ namespace StemmonsMobile.Views.Cases
                                 lst_extdatasource.Add(cases_extedataSource);
 
                                 (control as Picker).ItemsSource = lst_extdatasource;
-
                             }
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
-
             }
-
-
         }
 
         public string GetQueryStringWithParamaters(string query, string field, string value, string externalDatasourceName)
@@ -2262,7 +2258,7 @@ namespace StemmonsMobile.Views.Cases
             return i = await CasesSyncAPIMethods.StoreAndUpdateCase(Onlineflag, Convert.ToInt32(Casetypeid), savecase, txt_CasNotes.Text, Functions.UserName, App.DBPath, createcase, null, obj, GetNoteTypeId(000001).ToString(), Isapproved, Isdecline, Functions.UserFullName, strTome);
         }
 
-        private async void gridCasesnotes_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void GridCasesnotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {
@@ -2277,142 +2273,13 @@ namespace StemmonsMobile.Views.Cases
                     await Navigation.PushAsync(new ViewAttachment
                     (notes.ImageURL));
                 }
-                else
-                {
-                    //string appname = string.Empty;
-                    //string nts = notes.Note;
-
-                    //var questlst = nts.Split(new string[] { url }, StringSplitOptions.None);
-                    //string link_Nav_id = string.Empty;
-                    //string link_Nav_Typeid = string.Empty;
-                    //string link_Nav_Listid = string.Empty;
-                    //foreach (var item in questlst)
-                    //{
-                    //    if (item.Contains("?CaseID="))
-                    //    {
-                    //        appname = "Cases";
-                    //        var eqsplit = item.Split(new string[] { "CaseID=" }, StringSplitOptions.None);
-                    //        foreach (var ite in eqsplit[1].ToCharArray())
-                    //        {
-
-                    //            if (char.IsDigit(ite))
-                    //            {
-                    //                link_Nav_id += ite;
-                    //            }
-                    //            else
-                    //            {
-                    //                link_Nav_id = "0";
-                    //                break;
-                    //            }
-                    //        }
-
-                    //    }
-                    //    if (item.Contains("?casetypeid=") && item.Contains("&listid="))
-                    //    {
-                    //        appname = "Cases";
-                    //        var eqsplit = item.Split(new string[] { "?casetypeid=" }, StringSplitOptions.None);
-                    //        foreach (var ite in eqsplit[1].ToCharArray())
-                    //        {
-                    //            if (char.IsDigit(ite))
-                    //            {
-                    //                link_Nav_Typeid += ite;
-                    //            }
-                    //            else
-                    //            {
-                    //                link_Nav_Typeid = "0";
-                    //                break;
-                    //            }
-                    //        }
-
-                    //        eqsplit = item.Split(new string[] { "&listid=" }, StringSplitOptions.None);
-                    //        foreach (var ite in eqsplit[1].ToCharArray())
-                    //        {
-                    //            if (char.IsDigit(ite))
-                    //            {
-                    //                link_Nav_Listid += ite;
-                    //            }
-                    //            else
-                    //            {
-                    //                link_Nav_Listid = "0";
-                    //                break;
-                    //            }
-                    //        }
-
-                    //        var result = CasesAPIMethods.GetCaseIDByCaseTypeIDAndListID(link_Nav_Typeid, link_Nav_Listid);
-                    //        link_Nav_id = result.GetValue("ResponseContent").ToString();
-                    //    }
-                    //    else if (item.Contains("?intItemInstanceTranID="))
-                    //    {
-                    //        appname = "Quest";
-                    //        var eqsplit = item.Split(new string[] { "?intItemInstanceTranID=" }, StringSplitOptions.None);
-                    //        foreach (var ite in eqsplit[1].ToCharArray())
-                    //        {
-                    //            if (char.IsDigit(ite))
-                    //            {
-                    //                link_Nav_id += ite;
-                    //            }
-                    //            else
-                    //            {
-                    //                link_Nav_id = "0";
-                    //                break;
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
-                    //if (Convert.ToInt32(link_Nav_id) > 0)
-                    //{
-                    //    if (appname == "Cases")
-                    //    {
-                    //        Case_List Cl_obj = null;
-                    //        try
-                    //        {
-                    //            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    //            await Task.Run(() =>
-                    //            {
-                    //                var result = CasesAPIMethods.GetCaseInfo(Functions.UserName, Convert.ToInt32(link_Nav_id));
-                    //                var cInfo = result.GetValue("ResponseContent").ToString();
-
-                    //                if (!string.IsNullOrEmpty(cInfo) && cInfo.ToString() != "[]")
-                    //                {
-                    //                    Cl_obj = new Case_List();
-                    //                    Cl_obj = JsonConvert.DeserializeObject<Case_List>(cInfo);
-                    //                }
-                    //            });
-                    //            if (Cl_obj != null)
-                    //                await Navigation.PushAsync(new ViewCasePage(Convert.ToString(Cl_obj.CaseID), Convert.ToString(Cl_obj.CaseTypeId), Cl_obj.CaseTypeName, ""));
-                    //        }
-                    //        catch (Exception)
-                    //        {
-                    //        }
-                    //        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    //    }
-                    //    else if (appname == "Quest")
-                    //    {
-                    //        GetSecurityDataResponse.ItemInstanceTranByIDViewForm Quest_obj = new GetSecurityDataResponse.ItemInstanceTranByIDViewForm();
-
-                    //        var result = QuestAPIMethods.GetSecurityData(link_Nav_id, Functions.UserName);
-                    //        var QInfo = result.GetValue("ResponseContent").ToString();
-
-                    //        if (!string.IsNullOrEmpty(QInfo) && QInfo.ToString() != "[]")
-                    //        {
-
-                    //            Quest_obj = new GetSecurityDataResponse.ItemInstanceTranByIDViewForm();
-                    //            Quest_obj = JsonConvert.DeserializeObject<GetSecurityDataResponse.ItemInstanceTranByIDViewForm>(QInfo);
-                    //        }
-
-                    //        //this.Navigation.PushAsync(new QuestItemDetailPage(Convert.ToString(Quest_obj.intItemID), Convert.ToString(Quest_obj.intItemInstanceTranID), "", "", "", Convert.ToBoolean(Quest_obj.blnIsEdit), Convert.ToString(Quest_obj.intAreaID)));
-
-                    //    }
-                    //}
-                }
             }
             catch (Exception ex)
             {
             }
         }
 
-        void emailLink(SaveCaseTypeRequest savecase)
+        void EmailLink(SaveCaseTypeRequest savecase)
         {
             try
             {
@@ -2440,7 +2307,7 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
-        async void copylink(SaveCaseTypeRequest _Casedataclass1)
+        void Copylink(SaveCaseTypeRequest _Casedataclass1)
         {
             try
             {
@@ -2452,7 +2319,7 @@ namespace StemmonsMobile.Views.Cases
         }
 
         #region Cases Calculation 
-        public string SetCalControls(List<GetCaseTypesResponse.ItemType> sControls, List<GetCaseTypesResponse.ItemType> sControlscal, string Id)
+        public string SetCalControls(List<GetCaseTypesResponse.ItemType> sControls, List<GetCaseTypesResponse.ItemType> sControlscal)
         {
             try
             {
@@ -2492,7 +2359,6 @@ namespace StemmonsMobile.Views.Cases
 
 
                         }
-
                     }
                 }
                 return sControl;
@@ -2753,24 +2619,25 @@ namespace StemmonsMobile.Views.Cases
                     if (x.Name == "Picker")
                     {
                         if (CurrentStyleId.Contains("d"))
-                            CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), CurrentStyleId?.Split('_')[0]?.ToUpper() + "_" + CurrentStyleId?.Split('_')[1]?.Split('|')[0]);
+                            CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
 
                         else
-                            CalTxtbox = SetCalControlsForExd(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), CurrentStyleId?.Split('_')[0]?.ToUpper() + "_" + CurrentStyleId?.Split('_')[1]?.Split('|')[0], (selectedId == "-1" ? "0|" + selectedname : selectedId + "|" + selectedname));
+                            CalTxtbox = SetCalControlsForExd(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(),
+                                sControls.Where(v => v.AssocFieldType == 'C').ToList(),
+                                CurrentStyleId?.Split('_')[0]?.ToUpper() + "_" + CurrentStyleId?.Split('_')[1]?.Split('|')[0], (selectedId == "-1" ? "0|" + selectedname : selectedId + "|" + selectedname));
                     }
                     else if (x.Name == "Entry")
                     {
-                        CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), CurrentStyleId?.Split('_')[0]?.ToUpper() + "_" + CurrentStyleId?.Split('_')[1]?.Split('|')[0]);
+                        CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
                     }
                     else if (x.Name == "DatePicker")
                     {
 
-                        CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList(), CurrentStyleId?.Split('_')[0]?.ToUpper() + "_" + CurrentStyleId?.Split('_')[1]?.Split('|')[0]);
+                        CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
                     }
 
                     if (!string.IsNullOrEmpty(CalTxtbox))
                     {
-
                         int cnt = 0;
                         string sCalId = string.Empty;
                         foreach (var item in calculationsFieldlist)
@@ -2944,7 +2811,7 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
-        public void setStaticCal(string ContolrLst)
+        public void SetStaticCal(string ContolrLst)
         {
             string calc = string.Empty;
             List<GetCaseTypesResponse.ItemType> calControls = new List<GetCaseTypesResponse.ItemType>();
@@ -3655,7 +3522,7 @@ namespace StemmonsMobile.Views.Cases
 
 
                     case "Email Link":
-                        emailLink(savecase);
+                        EmailLink(savecase);
                         break;
 
                     case "Add Attachment":

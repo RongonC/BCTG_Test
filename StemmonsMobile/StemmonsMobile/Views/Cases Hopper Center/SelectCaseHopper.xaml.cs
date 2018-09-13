@@ -42,28 +42,26 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
             {
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 lst = new List<GetCaseListByHopperResponse.HopperCenterData>();
-
+                string _showall = string.Empty;
+                if (_displayfor == "MyHopper")
+                {
+                    _showall = "N";
+                }
+                else
+                {
+                    _showall = "Y";
+                }
 
                 await Task.Run(() =>
                 {
-                    var result = CasesSyncAPIMethods.GetHopperCenterByUser(App.Isonline, _username, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    var result = CasesSyncAPIMethods.GetHopperCenterByUser(App.Isonline, _username, _showall, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                     lst = result.Result;
                 });
 
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-                if (lst != null && lst.Count > 0)
+                if (lst.Count > 0)
                 {
-                    if (_displayfor == "MyHopper")
-                    {
-                        lst = lst.Where(x => x.CaseTypeOwnerName != null && x.CaseTypeOwnerName.Contains(_username)).ToList();
-                    }
-
-                    if (lst == null || lst.Count == 0)
-                    {
-                        await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-                    }
-
                     HopperList.ItemsSource = lst;
                 }
                 else
@@ -149,7 +147,7 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
         }
 
 
-        void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {

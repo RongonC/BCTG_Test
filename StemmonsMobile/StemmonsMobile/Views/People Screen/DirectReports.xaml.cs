@@ -55,7 +55,7 @@ namespace StemmonsMobile.Views.PeopleScreen
             ListView lst = (ListView)sender;
             var data = (GetUserInfoResponse.UserInfo)lst.SelectedItem;
 
-            await Navigation.PushAsync(new UserDetail(data.SAMName));
+            await Navigation.PushAsync(new UserDetail(data.SAMName,"DirReport"));
         }
     }
 }

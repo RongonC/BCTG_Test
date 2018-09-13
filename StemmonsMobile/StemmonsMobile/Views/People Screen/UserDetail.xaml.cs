@@ -24,13 +24,14 @@ namespace StemmonsMobile.Views.People_Screen
         List<GetCaseTypesResponse.BasicCase> lst = new List<GetCaseTypesResponse.BasicCase>();
         GetUserInfoResponse.UserInfo User_Details = new GetUserInfoResponse.UserInfo();
         String UserName = string.Empty;
+        String navScreenNAme = string.Empty;
 
-        public UserDetail(String _userName)
+        public UserDetail(String _userName, string NavigationFrom = "")
         {
             InitializeComponent();
             User_Details = new GetUserInfoResponse.UserInfo();
             UserName = _userName;
-
+            navScreenNAme = NavigationFrom;
             //ProfileImg.Source = UriImageSource.FromUri(new Uri("http://services.boxerproperty.com/userphotos/DownloadPhoto.aspx?username=" + Functions.UserName));
 
             if (App.Isonline)
@@ -92,7 +93,6 @@ namespace StemmonsMobile.Views.People_Screen
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
-
         void OfficePhoneClick(object sender, System.EventArgs e)
         {
             try
@@ -129,7 +129,6 @@ namespace StemmonsMobile.Views.People_Screen
             }
         }
 
-
         void SendMail(object sender, System.EventArgs e)
         {
             try
@@ -145,7 +144,6 @@ namespace StemmonsMobile.Views.People_Screen
 
             }
         }
-
         void AttempPhoneCall(String Number)
         {
             try
@@ -171,7 +169,29 @@ namespace StemmonsMobile.Views.People_Screen
                 {
                     if (value.Category == "Assigned Cases")
                     {
-                        this.Navigation.PushAsync(new CaseList("caseAssgnSAM", User_Details.UserID, "", "", User_Details.UserID));
+                        string sNAME = string.Empty;
+
+                        if (string.IsNullOrEmpty(navScreenNAme))
+                        {
+                            //asssame
+                            sNAME = "caseAssgnSAM";
+                        }
+                        else
+                        {
+                            //assteam
+                            sNAME = "caseAssgnTM";
+                        }
+
+
+                        //if (Functions.UserName == User_Details.UserID)
+                        //{
+                        //    sNAME = "caseAssgnSAM";
+                        //}
+                        //else
+                        //{
+                        //    //                            sNAME="tm"
+                        //}
+                        this.Navigation.PushAsync(new CaseList(sNAME, User_Details.UserID, "", "", User_Details.UserID));
                     }
                     else if (value.Category == "Owned Cases")
                     {

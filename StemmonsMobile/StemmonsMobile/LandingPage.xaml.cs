@@ -1189,7 +1189,7 @@ namespace StemmonsMobile
                         break;
 
                     case "My Hoppers":
-                        await this.Navigation.PushAsync(new SelectCaseHopper(Functions.UserFullName, "MyHopper"));
+                        await this.Navigation.PushAsync(new SelectCaseHopper(Functions.UserName, "MyHopper"));
                         break;
 
                     default:
@@ -1515,7 +1515,6 @@ namespace StemmonsMobile
             {
                 await this.Navigation.PushAsync(new SelectQuestArea());
             }
-
         }
 
         public static bool IsCreateEntity = false;
@@ -1559,7 +1558,6 @@ namespace StemmonsMobile
             else if (!string.IsNullOrEmpty(SearchSystem))
                 await this.Navigation.PushAsync(new SearchPage(SearchSystem));
 
-            // await this.Navigation.PushAsync(new SearchList());Applicationlist
             Applicationlist.SelectedItem = null;
         }
 

@@ -2395,7 +2395,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                                     var OfflineResultset = DBHelper.GetAppTypeInfoList(CasesInstance, item.CaseID, item.CaseTypeID, "E2_GetCaseList" + screenName, _DBPath, tm_uname);
                                     OfflineResultset.Wait();
-
+                                 
                                     if (OfflineResultset?.Result == null)
                                     {
                                         /*For New Entry*/
