@@ -42,10 +42,10 @@ namespace StemmonsMobile.Views.Cases
         ObservableCollection<CasesNotesGroup> CasesnotesGroups = new ObservableCollection<CasesNotesGroup>();
         CaseData _Casedata;
 
-        public static string strTome = string.Empty;
-        public static string Casetitle = string.Empty;
-        public static string Casetypeid = string.Empty;
-        public static string CaseID = string.Empty;
+        public string strTome = string.Empty;
+        public string Casetitle = string.Empty;
+        public string Casetypeid = string.Empty;
+        public string CaseID = string.Empty;
 
         string _TitleFieldControlID = string.Empty;
         List<GetCaseTypesResponse.ItemType> sControls = new List<GetCaseTypesResponse.ItemType>();

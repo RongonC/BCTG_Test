@@ -140,14 +140,14 @@ namespace StemmonsMobile
 
                     foreach (Match itm in collection)
                     {
-                        ls.Add(item.VALUE);
+                        ls.Add(itm.Value);
                     }
                 }
 
                 bool isopenWeb = true;
                 foreach (var item in ls)
                 {
-                    if (url.Contains(item))
+                    if (url.Contains(item.ToLower()))
                     {
                         isopenWeb = false;
                         break;
