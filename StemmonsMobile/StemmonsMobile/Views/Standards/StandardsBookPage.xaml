@@ -51,7 +51,7 @@
 
             <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" IsClippedToBounds="True">
                 <Button Image="Assets/Home_Icon.png" HorizontalOptions="CenterAndExpand" x:Name="btn_home" Clicked="btn_home_Clicked" BackgroundColor="Transparent" />
-                <Button Image="Assets/menuicon.png" HorizontalOptions="CenterAndExpand"  BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                <Button Image="Assets/menuicon.png" HorizontalOptions="CenterAndExpand"  BackgroundColor="Transparent" x:Name="btn_more" Clicked="Btn_more_Clicked"/>
             </StackLayout>
         </Grid>
         <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"

@@ -7,6 +7,27 @@
     <Application.Resources>
         <ResourceDictionary>
 
+            <ControlTemplate x:Key="TealTemplate">
+                <Grid  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="52"/>
+                    </Grid.RowDefinitions>
+                    <ContentPresenter  Grid.Row="0" />
+
+                    <StackLayout x:Name="btm_stack" Grid.Row="1" Orientation="Horizontal"
+                                 HeightRequest="50" 
+                                 VerticalOptions="EndAndExpand"
+                                 IsClippedToBounds="True"   >
+                        <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeMenu_Click" />
+                        <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="Navigation_Click" />
+                    </StackLayout>
+                </Grid>
+            </ControlTemplate>
+
+
+
+
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="BlackBackground">#000000</Color>
             <Color x:Key="PrimaryDark">#1976D2</Color>
@@ -85,7 +106,9 @@
 
             <!--<DataTemplate x:Key="GroupTemplateStandard">
                 <ViewCell>
-                    --><!-- HACK - work around https://bugzilla.xamarin.com/show_bug.cgi?id=42528 --><!--
+                    -->
+            <!-- HACK - work around https://bugzilla.xamarin.com/show_bug.cgi?id=42528 -->
+            <!--
                     <StackLayout Orientation="Horizontal" Margin="0,0,0,0">
                         <Button x:Name="buttonToggleExpand" 
                                 Image="{Binding IsExpanded, Converter={StaticResource isExpandedToImageConverter}}"
@@ -128,7 +151,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="ItemTemplate">
                 <ViewCell>
                     <Grid Margin="15,0,0,0">
@@ -152,9 +175,9 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="CreateNewFooterTemplate">
-                
+
                 <Grid Margin="15,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1" />
@@ -170,22 +193,22 @@
                             Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </DataTemplate>
-            
+
             <Color x:FactoryMethod="FromHex" x:Key="DetailsColor">
                 <x:Arguments>
                     <x:String>#E5903D</x:String>
                 </x:Arguments>
             </Color>
-            
+
             <Color x:FactoryMethod="FromHex" x:Key="ButtonTextColor">
                 <x:Arguments>
                     <x:String>#ECBA3F</x:String>
                 </x:Arguments>
             </Color>
             <!-- End From Refrence Project  -->
-            
+
             <!--  Vishal P -->
-         
+
             <!--<DataTemplate x:Key="HistoryTypetemplate">
                 <ViewCell>
                     <ViewCell.View>
@@ -238,7 +261,7 @@
                     </ViewCell.View>
                 </ViewCell>
             </DataTemplate>-->
-       
+
             <!--<DataTemplate x:Key="EntityTypeDetailtemplate">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" HeightRequest="30">
@@ -250,21 +273,21 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>-->
-  
+
             <!-- End of Vishal P -->
-            
+
             <!-- Bipin p - Code Migration- -->
-            
+
             <local:IsExpandedToImageConverter x:Key="isExpandedToImageConverter" />
-            
+
             <Style x:Key="Plus1" TargetType="Button" BasedOn="{StaticResource Arrow}">
                 <Setter Property="Image" Value="Assets/plussign.png" />
             </Style>
-           
+
             <Style x:Key="Right_arrow" TargetType="Button" BasedOn="{StaticResource Arrow}">
                 <Setter Property="Image" Value="Assets/dropdownClose.png" />
             </Style>
-            
+
             <DataTemplate x:Key="TypeAddTemplateA">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal" HeightRequest="30">
@@ -307,8 +330,8 @@
                     <Button Image="Assets/plussign.png" BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" WidthRequest="25" HeightRequest="25" />
                 </Grid>
             </DataTemplate>
-            
-            
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

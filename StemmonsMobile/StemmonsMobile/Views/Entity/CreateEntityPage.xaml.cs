@@ -28,11 +28,10 @@ namespace StemmonsMobile.Views.Entity
     {
         BorderEditor txt_EntNotes = new BorderEditor();
 
-        EntityOrgCenterList _selected1;
         EntityListMBView EntitymbView = new EntityListMBView();
         EntityClass EntitySchemaLists = null;
         EntityClass EntityListsValues = null;
-        List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
+       //List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
 
         string ischeckcalControl = string.Empty;
         string ContolrLst = string.Empty;
@@ -49,7 +48,6 @@ namespace StemmonsMobile.Views.Entity
 
             InitializeComponent();
             EntitymbView = _mbView;
-            //_selected = value;
             EntityTypeID = _etytypeid;
             EntityID = eid;
             if (!Functions.IsEditEntity)
@@ -61,40 +59,45 @@ namespace StemmonsMobile.Views.Entity
 
             if (Functions.IsEditEntity)
             {
-                var s = new FormattedString();
+                btn_viewnotes.IsVisible = true;
+                var FrmtText = new FormattedString();
 
                 if (EntitymbView != null)
                 {
                     if (EntitymbView.EntityDetails.EntityCreatedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
+                        //FrmtText.Spans.Add(new Span { Text = "Created By : ", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_createname.FormattedText = s;
+                    lbl_createname.FormattedText = FrmtText;
 
-                    s = new FormattedString();
+                    FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityAssignedToFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
+                        //FrmtText.Spans.Add(new Span { Text = "Assigned  To : ", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_assignto.FormattedText = s;
+                    lbl_assignto.FormattedText = FrmtText;
 
-                    s = new FormattedString();
+                    FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityOwnedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
+                        //FrmtText.Spans.Add(new Span { Text = "Owner : ", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_ownername.FormattedText = s;
+                    lbl_ownername.FormattedText = FrmtText;
 
-                    s = new FormattedString();
+                    FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityModifiedByFullName != null)
                     {
-                        s.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
+                        //FrmtText.Spans.Add(new Span { Text = "Modified  By : ", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_modifiedname.FormattedText = s;
+                    lbl_modifiedname.FormattedText = FrmtText;
                 }
             }
         }
@@ -107,7 +110,6 @@ namespace StemmonsMobile.Views.Entity
         }
 
         private bool CanCreate = false;
-
 
         public async void DesignFormDynamic()
         {
@@ -136,14 +138,14 @@ namespace StemmonsMobile.Views.Entity
                         {
                         }
 
-                        try
-                        {
-                            Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, EntityID.ToString(), Functions.UserName, EntityTypeID.ToString(), this.Title, App.DBPath);
+                        //try
+                        //{
+                        //    Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, EntityID.ToString(), Functions.UserName, EntityTypeID.ToString(), this.Title, App.DBPath);
 
-                        }
-                        catch (Exception)
-                        {
-                        }
+                        //}
+                        //catch (Exception)
+                        //{
+                        //}
                     }
                 });
 
@@ -200,7 +202,14 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 var Label1 = new Label
                                 { VerticalOptions = LayoutOptions.Start };
-                                Label1.Text = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                                FormattedString Format = new FormattedString();
+                                Format.Spans.Add(new Span { Text = EntitySchemaLists.AssociationFieldCollection[i].AssocName + ":" });
+
+                                if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired.ToLower() == "y")
+                                    Format.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
+
+                                Label1.FormattedText = Format;
+                                //Label1.Text = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
                                 Label1.HorizontalOptions = LayoutOptions.Start;
                                 Label1.FontSize = 16;
                                 LeftLyout.Children.Add(Label1);
@@ -633,7 +642,6 @@ namespace StemmonsMobile.Views.Entity
                         Label11.Text = "Notes";
                         Label11.HorizontalOptions = LayoutOptions.Start;
                         Label11.FontSize = 16;
-                        Label11.FontFamily = "Soin Sans Neue";
 
                         var layout14 = new StackLayout();
                         layout14.Orientation = StackOrientation.Vertical;
@@ -648,7 +656,6 @@ namespace StemmonsMobile.Views.Entity
                         txt_EntNotes.BorderColor = Color.LightGray;
                         txt_EntNotes.BorderWidth = 1;
                         txt_EntNotes.CornerRadius = 5;
-                        txt_EntNotes.FontFamily = "Soin Sans Neue";
                         layout14.Children.Add(txt_EntNotes);
 
                         if (Functions.IsEditEntity)
@@ -660,7 +667,6 @@ namespace StemmonsMobile.Views.Entity
                                 BackgroundColor = Color.Transparent
                             };
                             btn_addnotes.Clicked += Btn_addnotes_Clicked;
-                            btn_addnotes.FontFamily = "Soin Sans Neue";
                             layout14.Children.Add(btn_addnotes);
                         }
                         layout1.Children.Add(Label11);
@@ -819,50 +825,50 @@ namespace StemmonsMobile.Views.Entity
                         #endregion
 
                         #region Get Entity notes
-                        if (Entity_NotesLists != null)
-                        {
-                            ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
-                            if (Entity_NotesLists != null)
-                            {
-                                for (int i = 0; i < Entity_NotesLists.Count; i++)
-                                {
-                                    string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
-                                    Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
-                                    {
-                                        new Entity_Notes { Note = Entity_NotesLists[i].Note }
-                                    });
-                                }
+                        //if (Entity_NotesLists != null)
+                        //{
+                        //    ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
+                        //    if (Entity_NotesLists != null)
+                        //    {
+                        //        for (int i = 0; i < Entity_NotesLists.Count; i++)
+                        //        {
+                        //            string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
+                        //            Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
+                        //            {
+                        //                new Entity_Notes { Note = Entity_NotesLists[i].Note }
+                        //            });
+                        //        }
 
-                                foreach (var item in Temp)
-                                {
-                                    if (item.FirstOrDefault().Note.Contains("<img"))
-                                    {
-                                        item.FirstOrDefault().ImageVisible = true;
-                                        item.FirstOrDefault().LabelVisible = true;
-                                        item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                                        item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                                    }
-                                    else
-                                    {
-                                        item.FirstOrDefault().ImageVisible = false;
-                                        item.FirstOrDefault().LabelVisible = true;
-                                        item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                                    }
-                                    NotesGroups.Add(item);
-                                }
-                            }
-                            gridEntitynotes.ItemsSource = NotesGroups;
-                        }
+                        //        foreach (var item in Temp)
+                        //        {
+                        //            if (item.FirstOrDefault().Note.Contains("<img"))
+                        //            {
+                        //                item.FirstOrDefault().ImageVisible = true;
+                        //                item.FirstOrDefault().LabelVisible = true;
+                        //                item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //                item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                        //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        //            }
+                        //            else
+                        //            {
+                        //                item.FirstOrDefault().ImageVisible = false;
+                        //                item.FirstOrDefault().LabelVisible = true;
+                        //                item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        //            }
+                        //            NotesGroups.Add(item);
+                        //        }
+                        //    }
+                        //    gridEntitynotes.ItemsSource = NotesGroups;
+                        //}
                         #endregion
                     }
                     else
                     {
                         Grd_Entity_userDetails.IsVisible = false;
-                        line_NotedHead.IsVisible = false;
+                        //line_NotedHead.IsVisible = false;
                     }
-                    gridEntitynotes.HeightRequest = NotesGroups.Count <= 0 ? 0 : 700;
+                    //gridEntitynotes.HeightRequest = NotesGroups.Count <= 0 ? 0 : 700;
                 }
                 else
                 {
@@ -1649,31 +1655,31 @@ namespace StemmonsMobile.Views.Entity
                          recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntityTypeID, EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
                      });
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
-                    {
-                        if (NotesGroups.Count != 0)
-                        {
-                            NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
-                            });
-                        }
-                        else
-                        {
-                            NotesGroups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                 new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
-                            });
+                    //if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
+                    //{
+                    //    if (NotesGroups.Count != 0)
+                    //    {
+                    //        NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        NotesGroups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //             new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                    //        });
 
-                        }
-                        gridEntitynotes.ItemsSource = NotesGroups;
+                    //    }
+                    //   // gridEntitynotes.ItemsSource = NotesGroups;
 
-                        txt_EntNotes.Text = "";
-                        FormattedString s = new FormattedString();
-                        s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-                        lbl_modifiedname.FormattedText = s;
-                    }
+                    txt_EntNotes.Text = "";
+                    FormattedString s = new FormattedString();
+                    s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                    s.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
+                    lbl_modifiedname.FormattedText = s;
+
                 }
                 else
                 {
@@ -1767,6 +1773,7 @@ namespace StemmonsMobile.Views.Entity
         {
             try
             {
+
                 if (Functions.IsEditEntity)
                 {
                     var action = await DisplayActionSheet(null, "Cancel", null, "Save", "Save & Exit");
@@ -1945,9 +1952,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         Type cnt_type = cnt.GetType();
                         var ent = new Entry();
-                        ent.FontFamily = "Soin Sans Neue";
                         var editor = new BorderEditor();
-                        editor.FontFamily = "Soin Sans Neue";
                         var img = new Image();
                         if (cnt_type.Name.ToLower() == "picker")
                         {
@@ -2575,19 +2580,24 @@ namespace StemmonsMobile.Views.Entity
 
         private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            try
-            {
-                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
-                if (notes.ImageVisible)
-                {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
-                }
-                gridEntitynotes.SelectedItem = null;
-            }
-            catch (Exception ex)
-            {
-            }
+            //try
+            //{
+            //    var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+            //    if (notes.ImageVisible)
+            //    {
+            //        await Navigation.PushAsync(new ViewAttachment
+            //        (notes.ImageURL));
+            //    }
+            //    gridEntitynotes.SelectedItem = null;
+            //}
+            //catch (Exception ex)
+            //{
+            //}
+        }
+
+        private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
         }
     }
 }

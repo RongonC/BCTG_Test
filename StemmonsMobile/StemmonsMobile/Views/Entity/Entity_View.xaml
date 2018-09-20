@@ -37,7 +37,7 @@
 
                                 <StackLayout x:Name="TextFieldsLayout" Grid.Row="1"/>
 
-                                <Grid   Grid.Row="2" >
+                                <!--<Grid   Grid.Row="2" >
                                     <ListView  x:Name="gridEntitynotes" HasUnevenRows="True" 
                                                ItemTapped="gridEntitynotes_ItemTapped" HeightRequest="700"
                                        IsGroupingEnabled="True">
@@ -88,9 +88,11 @@
                                             </DataTemplate>
                                         </ListView.GroupHeaderTemplate>
                                     </ListView>
-                                </Grid>
-
-                                <Label x:Name="line_relatedgrid" Grid.Row="3"  BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0"/>
+                                </Grid>-->
+                                
+                                <Button x:Name="btn_viewnotes" Grid.Row="2" Text="View Notes" 
+                                    Clicked="Btn_viewnotes_Clicked" BackgroundColor="Transparent"/>
+                                <Label x:Name="line_relatedgrid" Grid.Row="3"  BackgroundColor="#D0D0D0" HeightRequest="1" />
                                 <Grid Grid.Row="4" >
                                     <ListView  x:Name="GroupedView"  
                                    Header="{Binding Title}" 
@@ -141,7 +143,7 @@
                                     </ListView>
                                 </Grid>
 
-                                <Label Grid.Row="5" BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0"/>
+                                <Label Grid.Row="5" BackgroundColor="#D0D0D0" HeightRequest="1"/>
 
                                 <Grid Grid.Row="6" Margin="10,0,0,0"  HorizontalOptions="Fill">
                                     <Grid.RowDefinitions>

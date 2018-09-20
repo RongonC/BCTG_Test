@@ -1,15 +1,11 @@
 ﻿using StemmonsMobile.Views.LoginProcess;
 using Xamarin.Forms;
 using StemmonsMobile.Commonfiles;
-using PCLStorage;
 using Plugin.Connectivity;
 using System;
 using DataServiceBus.OfflineHelper.DataTypes;
-using DataServiceBus.OfflineHelper.DataTypes.Cases;
-using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using System.Threading.Tasks;
 using DataServiceBus.OfflineHelper.DataTypes.Common;
-using DataServiceBus.OfflineHelper.DataTypes.Quest;
 using System.Linq;
 using System.Globalization;
 using System.Text;
@@ -17,6 +13,7 @@ using Acr.UserDialogs;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using StemmonsMobile.Views.Cases;
 
 namespace StemmonsMobile
 {
@@ -36,6 +33,11 @@ namespace StemmonsMobile
             InitializeComponent();
 
             GetAppLocalData();
+
+            //MainPage = new ViewcasePage_New();
+
+            //return;
+
             if (Functions.IsPWDRemember && Functions.IsLogin)
             {
                 InstanceList inta = new InstanceList();
@@ -299,7 +301,7 @@ namespace StemmonsMobile
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             CreateDataBase();
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
-           
+
             //Crashes Report 
             AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
                 "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
@@ -566,6 +568,22 @@ namespace StemmonsMobile
             catch (Exception)
             {
             }
+        }
+
+        private void HomeMenu_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                App.GotoHome(Application.Current.MainPage);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void Navigation_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

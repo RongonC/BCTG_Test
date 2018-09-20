@@ -67,10 +67,8 @@ namespace StemmonsMobile.Views.Standards
 
                 if (!string.IsNullOrEmpty(Response.ToString()) && Response.ToString() != "[]")
                 {
-
-                    List<BookCollection> Details_List = new List<BookCollection>();
                     int i = 0;
-                    foreach (var item in Response)
+                    foreach (var Bookitem in Response)
                     {
                         var name = Enum.GetNames(typeof(BookCategoryTypes))[i];
                         i++;
@@ -106,19 +104,22 @@ namespace StemmonsMobile.Views.Standards
 
                         Group_Standards Bookitems = new Group_Standards(name);
 
-                        foreach (var collection in item)
+                        foreach (var collection in Bookitem)
                         {
-                            Details_List = new List<BookCollection>();
-
                             foreach (var Child in collection)
                             {
                                 Bookitems.Add(JsonConvert.DeserializeObject<BookCollection>(Child.ToString()));
                             }
                         }
-
                         try
                         {
-                            Master_list.Add(Bookitems);
+                            if (Bookitems.Count > 0)
+                                Master_list.Add(Bookitems);
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(Screenname))
+                                    await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -129,7 +130,7 @@ namespace StemmonsMobile.Views.Standards
                 }
                 else
                 {
-                    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+                    await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                 }
             }
             catch (Exception ex)
@@ -187,7 +188,6 @@ namespace StemmonsMobile.Views.Standards
                 }
                 else
                 {
-                    List<Grp_StandardDetails> Details_List = new List<Grp_StandardDetails>();
                     int i = 0;
                     foreach (var item in Master_list)
                     {
@@ -230,7 +230,7 @@ namespace StemmonsMobile.Views.Standards
             }
         }
 
-        private async void btn_more_Clicked(object sender, EventArgs e)
+        private void Btn_more_Clicked(object sender, EventArgs e)
         {
             try
             {

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Entity.ViewEntityNotes" Title="View Entity Notes">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HtmlLabelConverter x:Key="HtmlLabelConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <ListView  x:Name="gridEntitynotes" VerticalOptions="FillAndExpand"
+                           HasUnevenRows="True"
+                           IsGroupingEnabled="True" >
+                    <!-- IsGroupingEnabled it should always be True  -->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label FormattedText="{Binding Note, Converter={StaticResource HtmlLabelConverter}}"  
+                                                           Grid.Row="0"
+                                                                    Style="{StaticResource defaultLabelSize_16}"
+                                                                    IsVisible="{Binding LabelVisible}" />
+
+                                    <Image  x:Name="App_Logo" 
+                                                                    Aspect="AspectFit" 
+                                                                    HorizontalOptions="Center" 
+                                                                    Grid.Row="1" 
+                                                                    IsVisible="{Binding ImageVisible}"
+                                                                    HeightRequest="100" 
+                                                                    WidthRequest="100"
+                                                                    Source="{Binding ImageURL}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <StackLayout Orientation="Horizontal"
+                                                 HorizontalOptions="Fill" BackgroundColor="#DEE7F3" 
+                                                 VerticalOptions="Center"  HeightRequest="45" >
+                                        <StackLayout Orientation="Horizontal" 
+                                                     BackgroundColor="#DEE7F3"
+                                                     HorizontalOptions="CenterAndExpand" 
+                                                     VerticalOptions="Center">
+                                            <Label Text="Notes: " FontAttributes="Bold"  
+                                                   FontSize="14"  />
+                                            <Label FontSize="14" FontAttributes="Bold" 
+                                                   Text="{Binding CreatedDate}"  />
+                                            <Label FontSize="14" FontAttributes="Bold" 
+                                                   Text="{Binding Uname}" 
+                                                   Margin="10,0,0,0"  />
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                    <ListView.Footer>
+                        <StackLayout Orientation="Horizontal" />
+                    </ListView.Footer>
+                </ListView>
+                <!--<StackLayout x:Name="btm_stack" Orientation="Horizontal" VerticalOptions="EndAndExpand"
+                     IsClippedToBounds="True" Grid.Row="3" >
+                    <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeMenu_Click" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="Navigation_Click" />
+                </StackLayout>-->
+            </Grid>
+            
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

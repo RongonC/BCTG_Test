@@ -65,6 +65,7 @@ namespace StemmonsMobile.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::StemmonsMobile.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
 			global::PCLStorage.Resource.String.ApplicationName = global::StemmonsMobile.Droid.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::StemmonsMobile.Droid.Resource.String.Hello;
+			global::Splat.Resource.String.library_name = global::StemmonsMobile.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::StemmonsMobile.Droid.Resource.Attribute.actionBarSize;
 		}
 		

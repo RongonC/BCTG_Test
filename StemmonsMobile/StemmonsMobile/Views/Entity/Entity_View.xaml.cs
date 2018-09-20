@@ -34,7 +34,7 @@ namespace StemmonsMobile.Views.Entity
         BorderEditor txt_EntNotes = new BorderEditor();
         List<AssociationField> EntityAssocOrder = new List<AssociationField>();
         EntityClass EntityLists = new EntityClass();
-        List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
+       // List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
         string NavScreenname = string.Empty;// To manage Online and Offline View entity as per Screen name
         public static EntityListMBView _entityListMBView = new EntityListMBView();
 
@@ -88,13 +88,13 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    try
-                    {
-                        EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName, App.DBPath);
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    //try
+                    //{
+                    //    EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName, App.DBPath);
+                    //}
+                    //catch (Exception)
+                    //{
+                    //}
                     try
                     {
                         /*PHASE II Implementation*/
@@ -336,41 +336,41 @@ namespace StemmonsMobile.Views.Entity
 
                 #region Get Entity notes
 
-                ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
-                if (EntityListsNotes != null)
-                {
-                    for (int i = 0; i < EntityListsNotes.Count; i++)
-                    {
-                        string st = App.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
-                        Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
-                        {
-                            new Entity_Notes { Note = EntityListsNotes[i].Note }
-                        });
-                    }
+                //ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
+                //if (EntityListsNotes != null)
+                //{
+                //    for (int i = 0; i < EntityListsNotes.Count; i++)
+                //    {
+                //        string st = App.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
+                //        Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
+                //        {
+                //            new Entity_Notes { Note = EntityListsNotes[i].Note }
+                //        });
+                //    }
 
-                    foreach (var item in Temp)
-                    {
-                        if (item.FirstOrDefault().Note.Contains("<img"))
-                        {
-                            item.FirstOrDefault().ImageVisible = true;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-                        else
-                        {
-                            item.FirstOrDefault().ImageVisible = false;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-                        Groups.Add(item);
-                    }
-                }
+                //    foreach (var item in Temp)
+                //    {
+                //        if (item.FirstOrDefault().Note.Contains("<img"))
+                //        {
+                //            item.FirstOrDefault().ImageVisible = true;
+                //            item.FirstOrDefault().LabelVisible = true;
+                //            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                //            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                //        }
+                //        else
+                //        {
+                //            item.FirstOrDefault().ImageVisible = false;
+                //            item.FirstOrDefault().LabelVisible = true;
+                //            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                //        }
+                //        Groups.Add(item);
+                //    }
+                //}
 
-                gridEntitynotes.ItemsSource = Groups;
-                gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
+                //gridEntitynotes.ItemsSource = Groups;
+                //gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
                 #endregion
 
                 #region Get Entity Related Application
@@ -491,19 +491,19 @@ namespace StemmonsMobile.Views.Entity
 
         private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            try
-            {
-                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
-                if (notes.ImageVisible)
-                {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
-                }
-                gridEntitynotes.SelectedItem = null;
-            }
-            catch (Exception ex)
-            {
-            }
+            //try
+            //{
+            //    var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+            //    if (notes.ImageVisible)
+            //    {
+            //        await Navigation.PushAsync(new ViewAttachment
+            //        (notes.ImageURL));
+            //    }
+            //    gridEntitynotes.SelectedItem = null;
+            //}
+            //catch (Exception ex)
+            //{
+            //}
         }
 
         private async void Btn_addnotes_Clicked(object sender, EventArgs e)
@@ -539,83 +539,83 @@ namespace StemmonsMobile.Views.Entity
                 });
                 if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "-1")
                 {
-                    if (Groups.Count != 0)
-                    {
-                        if (EntityNotes.Contains("<img"))
-                        {
-                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                new Entity_Notes
-                                {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
-                                    ImageVisible = true,
-                                    LabelVisible = true
-                                }
-                            });
-                        }
-                        else
-                        {
-                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                new Entity_Notes
-                                {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    htmlNote = EntityNotes,
-                                    ImageVisible = false,
-                                    LabelVisible = true
-                                }
-                            });
-                        }
-                    }
-                    else
-                    {
-                        if (EntityNotes.Contains("<img"))
-                        {
-                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                new Entity_Notes
-                               {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
-                                    ImageVisible = true,
-                                    LabelVisible = true
-                                }
-                            });
-                        }
-                        else
-                        {
-                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                            {
-                                new Entity_Notes
-                                {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    htmlNote = EntityNotes,
-                                    ImageVisible = false,
-                                    LabelVisible = true
-                                }
-                            });
-                        }
+                    //if (Groups.Count != 0)
+                    //{
+                    //    if (EntityNotes.Contains("<img"))
+                    //    {
+                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //                Note = Functions.HTMLToText( EntityNotes ),
+                    //                ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                    //                ImageVisible = true,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //                Note = Functions.HTMLToText( EntityNotes ),
+                    //                htmlNote = EntityNotes,
+                    //                ImageVisible = false,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (EntityNotes.Contains("<img"))
+                    //    {
+                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //           {
+                    //                Note = Functions.HTMLToText( EntityNotes ),
+                    //                ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                    //                ImageVisible = true,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //                Note = Functions.HTMLToText( EntityNotes ),
+                    //                htmlNote = EntityNotes,
+                    //                ImageVisible = false,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
 
-                        gridEntitynotes.ItemsSource = Groups;
+                    //    gridEntitynotes.ItemsSource = Groups;
 
-                        FormattedString sa = new FormattedString();
-                        try
-                        {
-                            //if (EntityLists?.EntityModifiedByFullName != null)
-                            {
-                                sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                    //    FormattedString sa = new FormattedString();
+                    //    try
+                    //    {
+                    //        //if (EntityLists?.EntityModifiedByFullName != null)
+                    //        {
+                    //            sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
 
-                                sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-                            }
-                            EntityLists.EntityModifiedByFullName = Functions.UserFullName;
-                            EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        lbl_modifiedname.FormattedText = sa;
-                    }
+                    //            sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
+                    //        }
+                    //        EntityLists.EntityModifiedByFullName = Functions.UserFullName;
+                    //        EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
+                    //    }
+                    //    catch (Exception)
+                    //    {
+                    //    }
+                    //    lbl_modifiedname.FormattedText = sa;
+                    //}
                 }
             }
             catch (Exception)
@@ -624,10 +624,8 @@ namespace StemmonsMobile.Views.Entity
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-
-            gridEntitynotes.ItemsSource = Groups;
-            //gridEntitynotes.HeightRequest = (Groups.Count * 110);
-            gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
+            //gridEntitynotes.ItemsSource = Groups;
+            //gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
             return recID;
         }
 
@@ -995,6 +993,11 @@ namespace StemmonsMobile.Views.Entity
             {
             }
             ((ListView)sender).SelectedItem = null;
+        }
+
+        private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(_entityListMBView.EntityDetails.EntityID), Convert.ToString(_entityListMBView.EntityDetails.EntityTypeID)));
         }
     }
 }

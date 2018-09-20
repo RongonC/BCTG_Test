@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 
@@ -21,7 +22,20 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public int CaseNoteID { get; set; }
             public int CaseID { get; set; }
             public int NoteTypeID { get; set; }
-            public string Note { get; set; }
+            public string Note
+            {
+                get
+                {
+                    return _note;
+                }
+
+                set
+                {
+                    _note = value;
+                    OnPropertyChanged("Note");
+                }
+            }
+          
             public DateTime CreatedDateTime { get; set; }
             public string CreatedBy { get; set; }
             public string BColor { get; set; }
@@ -31,14 +45,61 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public UserInfo CreatedByUser { get; set; }
 
             private string _htmlNote;
-            public string htmlNote
+            private string _note;
+            private bool _imageVisible;
+            private bool _labelVisible;
+            private string _imageURL;
+
+            public string HtmlNote
             {
-                get { return _htmlNote; }
-                set { _htmlNote = Note; }
+                get
+                {
+                    return _htmlNote;
+                }
+                set
+                {
+                    _htmlNote = Note;
+                    OnPropertyChanged("HtmlNote");
+                }
             }
-            public bool ImageVisible { get; set; }
-            public bool LabelVisible { get; set; }
-            public string ImageURL { get; set; }
+            public bool ImageVisible
+            {
+                get { return _imageVisible; }
+                set
+                {
+                    _imageVisible = value;
+                    OnPropertyChanged("ImageVisible");
+                }
+            }
+            public bool LabelVisible
+            {
+                get { return _labelVisible; }
+                set
+                {
+                    _labelVisible = value;
+                    OnPropertyChanged("LabelVisible");
+                }
+            }
+            public string ImageURL
+            {
+                get { return _imageURL; }
+                set
+                {
+                    _imageURL = value;
+                    OnPropertyChanged("ImageURL");
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                var changed = PropertyChanged;
+                if (changed != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
         }
         #endregion
 
@@ -76,5 +137,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public string SupervisorSAM { get; set; }
         }
         #endregion
+
+
     }
 }

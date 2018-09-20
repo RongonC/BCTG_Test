@@ -60,7 +60,7 @@ namespace StemmonsMobile.Views.Cases
         BorderEditor txt_CasNotes = new BorderEditor();
         // Button btnIsRefresh = new Button();
         Label WarningLabel = new Label();
-
+        //StackLayout CasesView_ControlStack = new StackLayout();
         public ViewCasePage(string CASEID, string CASETYPEID, string CASETITLE, string ToMe = "")
         {
             InitializeComponent();
@@ -70,6 +70,8 @@ namespace StemmonsMobile.Views.Cases
             strTome = ToMe;
             CasesnotesGroups.Clear();
             grd_warning.Children.Clear();
+
+
             CasesView_ControlStack.Children.Clear();
 
             #region WarningLabel
@@ -107,7 +109,7 @@ namespace StemmonsMobile.Views.Cases
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Content = scrollView,
+                Content = Main_stack,
                 RefreshColor = Color.FromHex("#3498db")
             };
 
@@ -117,7 +119,7 @@ namespace StemmonsMobile.Views.Cases
             masterGrid.Children.Add(refreshView, 0, 2);
             masterGrid.Children.Add(btm_stack, 0, 3);
 
-            abs_layout.Children.Add(masterGrid);
+            abs_layout.Children.Add(refreshView);
             abs_layout.Children.Add(overlay);
             Content = abs_layout;
 
@@ -1242,22 +1244,26 @@ namespace StemmonsMobile.Views.Cases
                 SetStaticCal(ContolrLst);
 
             Device.StartTimer(TimeSpan.FromSeconds(2), () =>
-             {
-                 // Do something
-                 if (!IsModifiedDate_Same)
-                 {
-                     WarningLabel.IsVisible = false;
-                     grd_warning.Children.Remove(WarningLabel);
-                 }
-                 return true; // True = Repeat again, False = Stop the timer
-             });
+            {
+                // Do something
+                if (!IsModifiedDate_Same)
+                {
+                    WarningLabel.IsVisible = false;
+                    grd_warning.Children.Remove(WarningLabel);
+                }
+                return true; // True = Repeat again, False = Stop the timer
+            });
+
         }
 
         private void SetBottomBarDetails()
         {
             try
             {
+                StackLayout StkFoot = new StackLayout();
+
                 var spl = str_CaseFooter.Split('|').ToList();
+
                 if (_Casedata != null)
                 {
                     string CREATED_BY = spl?.Where(c => c.Contains("CREATED_BY"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
@@ -1270,7 +1276,7 @@ namespace StemmonsMobile.Views.Cases
                     string CASE_OWNER_DATETIME = spl?.Where(c => c.Contains("CASE_OWNER_DATETIME"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
 
 
-                    _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName == null ? _Casedata.CaseAssignedTo : _Casedata.CaseAssignedToDisplayName;
+                    _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName ?? _Casedata.CaseAssignedTo;
 
                     var s = new FormattedString();
                     if (_Casedata?.CreateByDisplayName != null)
@@ -1278,7 +1284,9 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_BY)) ? CREATED_BY + "\r\n" : _Casedata.CreateByDisplayName + "\r\n", FontSize = 14 });
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CREATED_DATETIME)) : (Convert.ToDateTime(_Casedata.CreateDateTime)).ToString(), FontSize = 14 });
                     }
+
                     lbl_createname.FormattedText = s;
+                    // StkFoot.Children.Add(lbl_createname);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseAssignedToDisplayName != null)
@@ -1287,7 +1295,10 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_ASSGN_DATETIME)) : Convert.ToString(_Casedata.CaseAssignedDateTime == default(DateTime) ? DateTime.Now : _Casedata.CaseAssignedDateTime), FontSize = 14 });
 
                     }
+
+                    // Label lbl_assignto = new Label();
                     lbl_assignto.FormattedText = s;
+                    // StkFoot.Children.Add(lbl_assignto);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseOwnerDisplayName != null)
@@ -1295,7 +1306,11 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER)) ? CASE_OWNER + "\r\n" : _Casedata.CaseOwnerDisplayName + "\r\n", FontSize = 14 });
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_OWNER_DATETIME)) : (Convert.ToDateTime(_Casedata.CaseOwnerDateTime)).ToString(), FontSize = 14 });
                     }
+
+                    //Label lbl_ownername = new Label();
                     lbl_ownername.FormattedText = s;
+                    // StkFoot.Children.Add(lbl_ownername);
+
 
                     s = new FormattedString();
                     if (_Casedata?.ModifiedByDisplayName != null)
@@ -1303,12 +1318,93 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_BY)) ? MODIFIED_BY + "\r\n" : _Casedata.ModifiedByDisplayName + "\r\n", FontSize = 14 });
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(MODIFIED_DATETIME)) : (Convert.ToDateTime(_Casedata.ModifiedDateTime)).ToString(), FontSize = 14 });
                     }
+
+                    // Label lbl_modifiedname = new Label();
                     lbl_modifiedname.FormattedText = s;
+                    // StkFoot.Children.Add(lbl_modifiedname);
                 }
+
+
             }
             catch (Exception)
             {
             }
+        }
+        public void ReloadNotesArea()
+        {
+            try
+            {
+                gridCasesnotes.ItemsSource = null;
+                CasesnotesGroups.Clear();
+
+                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                NotesResponse.Wait();
+                var Noteslist = NotesResponse?.Result;
+
+                ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
+                if (Noteslist?.Count > 0)
+                {
+                    for (int i = 0; i < Noteslist.Count; i++)
+                    {
+                        CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
+                            {
+                                new GetCaseNotesResponse.NoteData
+                                {
+                                    Note = Noteslist[i].Note
+                                }
+                            };
+                        Temp.Add(grp);
+                    }
+
+                    foreach (var item in Temp)
+                    {
+                        //if (item.FirstOrDefault().Note.Contains("<img"))
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = true;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                        //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
+                        //}
+                        //else
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = false;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
+                        //}
+                        if (item.FirstOrDefault().Note.Contains("<img"))
+                        {
+                            item.FirstOrDefault().ImageVisible = true;
+                            item.FirstOrDefault().LabelVisible = true;
+                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        }
+                        else
+                        {
+                            item.FirstOrDefault().ImageVisible = false;
+                            item.FirstOrDefault().LabelVisible = true;
+                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        }
+
+                        CasesnotesGroups.Add(item);
+                    }
+
+                    gridCasesnotes.ItemsSource = null;
+                    gridCasesnotes.ItemsSource = CasesnotesGroups;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            if (CasesnotesGroups.Count <= 0)
+            {
+                gridCasesnotes.HeightRequest = 0;
+            }
+            else
+                gridCasesnotes.HeightRequest = 700;
         }
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
@@ -1370,82 +1466,6 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
-        public void ReloadNotesArea()
-        {
-            try
-            {
-                gridCasesnotes.ItemsSource = null;
-                CasesnotesGroups.Clear();
-
-                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                NotesResponse.Wait();
-                var Noteslist = NotesResponse?.Result;
-
-                ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
-                if (Noteslist?.Count > 0)
-                {
-                    for (int i = 0; i < Noteslist.Count; i++)
-                    {
-                        CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
-                            {
-                                new GetCaseNotesResponse.NoteData
-                                {
-                                    Note = Noteslist[i].Note
-                                }
-                            };
-                        Temp.Add(grp);
-                    }
-
-                    foreach (var item in Temp)
-                    {
-                        //if (item.FirstOrDefault().Note.Contains("<img"))
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = true;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
-                        //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
-                        //}
-                        //else
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = false;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
-                        //}
-                        if (item.FirstOrDefault().Note.Contains("<img"))
-                        {
-                            item.FirstOrDefault().ImageVisible = true;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-                        else
-                        {
-                            item.FirstOrDefault().ImageVisible = false;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-
-                        CasesnotesGroups.Add(item);
-                    }
-
-                    gridCasesnotes.ItemsSource = null;
-                    gridCasesnotes.ItemsSource = CasesnotesGroups;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            if (CasesnotesGroups.Count <= 0)
-            {
-                gridCasesnotes.HeightRequest = 0;
-            }
-            else
-                gridCasesnotes.HeightRequest = 700;
-        }
 
         List<spi_MobileApp_GetTypesByCaseTypeResult> AssignControlsmetadata = new List<spi_MobileApp_GetTypesByCaseTypeResult>();
         StackLayout layout15 = new StackLayout();
@@ -3552,13 +3572,12 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 string[] buttons;
-                if (Functions.Platformtype != "Android")
-                    buttons = new string[] { "From Photo Gallery", "Take Photo" };
-                else
-                    buttons = new string[] { "From Photo Gallery" };
+                // if (Functions.Platformtype != "Android")
+                buttons = new string[] { "From Photo Gallery", "Take Photo" };
+                // else
+                //   buttons = new string[] { "From Photo Gallery" };
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
-
 
                 switch (action)
                 {

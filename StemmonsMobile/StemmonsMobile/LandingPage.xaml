@@ -141,21 +141,6 @@
                         </ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <!--<controls:CircleImage x:Name="btn_usericon" 
-                                          Source="Assets/userIcon.png" Aspect="AspectFill">
-                        <controls:CircleImage.WidthRequest>
-                            <OnPlatform x:TypeArguments="x:Double">
-                                <On Platform="Android, iOS">55</On>
-                                <On Platform="WinPhone">75</On>
-                            </OnPlatform>
-                        </controls:CircleImage.WidthRequest>
-                        <controls:CircleImage.HeightRequest>
-                            <OnPlatform x:TypeArguments="x:Double">
-                                <On Platform="Android, iOS">55</On>
-                                <On Platform="WinPhone">75</On>
-                            </OnPlatform>
-                        </controls:CircleImage.HeightRequest>
-                    </controls:CircleImage>-->
                     <Image x:Name="btn_usericon" Source="Assets/userIcon.png"   HeightRequest="120" WidthRequest="120"
                         Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"  
                     BackgroundColor="Transparent" Aspect="AspectFit"/>

@@ -34,11 +34,13 @@
 
                             <StackLayout Grid.Row="0" x:Name="TextFieldsLayout" Margin="0,10,10,10"/>
 
-                            <Label x:Name="line_NotedHead" Grid.Row="1" BackgroundColor="#D0D0D0" HeightRequest="0" Margin="10,0,0,0" />
+                            <!--<Label x:Name="line_NotedHead" Grid.Row="1" BackgroundColor="#D0D0D0" HeightRequest="0" Margin="10,0,0,0" />-->
 
-                            <Grid   Grid.Row="2" >
-                                <ListView  x:Name="gridEntitynotes" ItemTapped="gridEntitynotes_ItemTapped"   HasUnevenRows="True" HeightRequest="700"
-                                   IsGroupingEnabled="True" >
+                            <!--<Grid   Grid.Row="2" >
+                                <ListView  x:Name="gridEntitynotes" 
+                                           ItemTapped="gridEntitynotes_ItemTapped"
+                                           HasUnevenRows="True" HeightRequest="700"
+                                           IsGroupingEnabled="True" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
@@ -91,9 +93,11 @@
                                         <StackLayout Orientation="Horizontal" />
                                     </ListView.Footer>
                                 </ListView>
-                            </Grid>
+                            </Grid>-->
 
-                            <Label Grid.Row="3" BackgroundColor="#D0D0D0" HeightRequest="0" Margin="10,0,0,0"/>
+                            <Button x:Name="btn_viewnotes" Grid.Row="2" Text="View Notes" 
+                                    Clicked="Btn_viewnotes_Clicked" IsVisible="False"  BackgroundColor="Transparent"/>
+                            <Label Grid.Row="3" BackgroundColor="#D0D0D0" HeightRequest="0"  />
 
                             <Grid x:Name="Grd_Entity_userDetails" Grid.Row="4" Margin="10,10,0,15"  >
                                 <Grid.RowDefinitions>
@@ -112,27 +116,19 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Grid.Row="1" Grid.Column="0" 
-                               Text="Created By :" 
-                               FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="3" Grid.Column="0" 
-                               Text="Assigned  To :" 
-                               FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="5" Grid.Column="0" 
-                               Text="Owner :" 
-                               FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="7" Grid.Column="0" 
-                               Text="Modified  By :" 
-                               FontAttributes="Bold" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Grid.Row="1" Grid.Column="0" Text="Created By :" 
+                               FontAttributes="Bold" FontSize="14"  />
+                                <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" 
+                               FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="5" Grid.Column="0" Text="Owner :" 
+                               FontAttributes="Bold" FontSize="14"  />
+                                <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" 
+                               FontAttributes="Bold" FontSize="14" />
 
-                                <Label Grid.Row="1" Grid.Column="2" 
-                               FontSize="14" x:Name="lbl_createname"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
-                                <Label Grid.Row="3" Grid.Column="2" 
-                               FontSize="14" x:Name="lbl_assignto"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="5" Grid.Column="2" 
-                               FontSize="14" x:Name="lbl_ownername"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="7" Grid.Column="2"
-                               FontSize="14" x:Name="lbl_modifiedname"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Grid.Row="1" Grid.Column="2" FontSize="14" x:Name="lbl_createname" />
+                                <Label Grid.Row="3" Grid.Column="2" FontSize="14" x:Name="lbl_assignto" />
+                                <Label Grid.Row="5" Grid.Column="2" FontSize="14" x:Name="lbl_ownername"  />
+                                <Label Grid.Row="7" Grid.Column="2" FontSize="14" x:Name="lbl_modifiedname" />
                             </Grid>
                         </Grid>
                     </ScrollView>

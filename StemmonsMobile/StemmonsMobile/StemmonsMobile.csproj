@@ -59,7 +59,7 @@
     <Compile Include="LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Test\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityLog.cs" />
@@ -128,8 +128,14 @@
     <Compile Include="Views\Cases\SelectCaseType.xaml.cs">
       <DependentUpon>SelectCaseType.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Cases\ViewcaseNotes.xaml.cs">
+      <DependentUpon>ViewcaseNotes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Cases\ViewCasePage.xaml.cs">
       <DependentUpon>ViewCasePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cases\ViewcasePage_New.xaml.cs">
+      <DependentUpon>ViewcasePage_New.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateQuestForm\Attachment.xaml.cs">
       <DependentUpon>Attachment.xaml</DependentUpon>
@@ -201,6 +207,9 @@
     </Compile>
     <Compile Include="Views\Entity\Entity_AppList.xaml.cs">
       <DependentUpon>Entity_AppList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entity\ViewEntityNotes.xaml.cs">
+      <DependentUpon>ViewEntityNotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GestureRecognizerExtensions.cs" />
     <Compile Include="Views\INativeGestureRecognizer.cs" />
@@ -288,7 +297,7 @@
     <Compile Include="Views\HtmlLabelConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainPage.xaml">
+    <EmbeddedResource Include="Test\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -705,6 +714,24 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\cs\Microsoft.DependencyValidation.Analyzers.resources.dll" />
     <Analyzer Include="..\..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\Microsoft.DependencyValidation.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Cases\ViewcaseNotes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Entity\ViewEntityNotes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Cases\ViewcasePage_New.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -202,7 +202,14 @@ namespace StemmonsMobile.Views.Cases
                         {
                             VerticalOptions = LayoutOptions.Start
                         };
-                        Label1.Text = item.NAME;
+                        FormattedString frmtText = new FormattedString();
+                        frmtText.Spans.Add(new Span { Text = item.NAME+ ":" });
+
+                        if (item.IS_REQUIRED.ToLower() == "y")
+                            frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
+
+                        Label1.FormattedText = frmtText;
+
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.FontSize = 16;
                         Label1.WidthRequest = 200;
@@ -535,7 +542,7 @@ namespace StemmonsMobile.Views.Cases
                                 };
                                 im.GestureRecognizers.Add(clr_img_click);
 
-                                if (Device.RuntimePlatform == "iOS")
+                                if (Device.RuntimePlatform != "UWP")
                                 {
                                     date_pick.Unfocused += Date_pick_Unfocused;
                                 }
@@ -1013,7 +1020,7 @@ namespace StemmonsMobile.Views.Cases
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
                 dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
-                dt_Entry.Unfocus();
+                // dt_Entry.Unfocus();
             }
             catch (Exception)
             {

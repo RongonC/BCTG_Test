@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             x:Class="StemmonsMobile.Views.Cases.ViewcasePage_New" 
+              xmlns:androidSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             ControlTemplate="{StaticResource TealTemplate}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HtmlLabelConverter x:Key="HtmlLabelConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout  >
+                <Grid x:Name="grd_warning" Grid.Row="0" IsClippedToBounds="True"/>
+
+                <StackLayout x:Name="CasesView_ControlStack"
+                          Margin="0,10,10,10">
+                </StackLayout>
+
+                <ListView  x:Name="gridCasesnotes"  
+                          HasUnevenRows="True" 
+                           androidSpecific:ListView.IsFastScrollEnabled="True"
+                         ItemTapped="GridCasesnotes_ItemTapped"
+                          IsGroupingEnabled="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <ScrollView>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <Label  FormattedText="{Binding Note, Converter={StaticResource HtmlLabelConverter}}" 
+                                                        Grid.Row="0"    Style="{StaticResource defaultLabelSize_16}"
+                                                        IsVisible="{Binding LabelVisible}"/>
+
+                                            <Image  x:Name="App_Logo" Aspect="AspectFit"
+                                  Grid.Row="1"
+                                  HeightRequest="100" WidthRequest="100"
+                                  Source="{Binding ImageURL}"
+                                  IsVisible="{Binding ImageVisible}"/>
+                                        </Grid>
+                                    </ScrollView>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View >
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Fill"
+                                 BackgroundColor="#DEE7F3" VerticalOptions="Center" HeightRequest="45"  >
+                                        <StackLayout Orientation="Horizontal" BackgroundColor="#DEE7F3"
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
+                                            <Label Text="Notes: " FontAttributes="Bold"   FontSize="14"/>
+                                            <Label FontSize="14" FontAttributes="Bold" Text="{Binding CreatedDate}"   />
+                                            <Label FontSize="14" FontAttributes="Bold" Text="{Binding Uname}"
+                               Margin="10,0,0,0" />
+
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </ListView>
+
+            </StackLayout>
+            <!--<Grid   Margin="10,0,0,0" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition  Height="1"/>
+                                <RowDefinition  Height="auto"/>
+                                <RowDefinition Height="5" />
+                                <RowDefinition  Height="auto"/>
+                                <RowDefinition Height="5" />
+                                <RowDefinition  Height="auto"/>
+                                <RowDefinition Height="5" />
+                                <RowDefinition  Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14" />
+                            <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14"/>
+                            <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14" />
+                            <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14"/>
+
+
+                            <Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />
+
+                            <Label Grid.Row="1" Grid.Column="2" x:Name="lbl_createname" FontSize="14"  />
+                            <Label Grid.Row="3" Grid.Column="2" x:Name="lbl_assignto" FontSize="14" />
+                            <Label Grid.Row="5" Grid.Column="2" x:Name="lbl_ownername"  FontSize="14" />
+                            <Label Grid.Row="7" Grid.Column="2" x:Name="lbl_modifiedname" FontSize="14"  />
+                        </Grid>-->
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

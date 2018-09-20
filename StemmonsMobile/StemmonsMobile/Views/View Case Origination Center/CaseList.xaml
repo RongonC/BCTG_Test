@@ -10,6 +10,7 @@
 
     <ContentPage.Content>
         <AbsoluteLayout >
+           
             <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                   AbsoluteLayout.LayoutFlags="All" 
                   ColumnSpacing="1" RowSpacing="1" >
@@ -22,11 +23,7 @@
                     <SearchBar Placeholder="Search for a case in this list"
                x:Name="SearchCase" TextChanged="SearchCase_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
 
-                    <!--<StackLayout x:Name="Stack_indicator"  HeightRequest="10">
-                    <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
-                </StackLayout>-->
-                    <!--<Label x:Name="WarningLabel" Text="Checking for update... Click here to force." FontSize = "14" HorizontalOptions="Center"  LineBreakMode="WordWrap"></Label>
--->
+              
                     <ListView x:Name="listdata" ItemTapped="listdata_ItemTapped"  
                               IsPullToRefreshEnabled="True"
                                RefreshCommand="{Binding RefreshCommand}"
@@ -66,7 +63,8 @@
                         </ListView.ItemTemplate>
 
                         <ListView.Footer>
-                            <StackLayout x:Name="lstfooter_indicator"  Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False"
+                            <StackLayout x:Name="lstfooter_indicator"  Orientation="Horizontal"
+                                         VerticalOptions="CenterAndExpand" IsVisible="False"
                               HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
                                 <ActivityIndicator 
                                        IsRunning="True" IsVisible="True" Color="Black">

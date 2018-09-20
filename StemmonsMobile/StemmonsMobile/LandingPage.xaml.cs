@@ -490,7 +490,7 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
-                                   
+
                                     CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 
                                     string str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
@@ -1110,18 +1110,18 @@ namespace StemmonsMobile
                 var otheruserApicall = CasesAPIMethods.GetEmployeesBySearch(Username);
                 var responseData = otheruserApicall.GetValue("ResponseContent");
 
+                List<UserDataCall> d = new List<UserDataCall>();
+
                 if (responseData != null && responseData.ToString() != "[]")
                 {
                     UserDataCall userdata;
-                    List<UserDataCall> d = new List<UserDataCall>();
 
                     foreach (var item in responseData)
                     {
                         userdata = JsonConvert.DeserializeObject<UserDataCall>(item.ToString());
                         d.Add(userdata);
-                        project.Add(userdata.UserID);
+                        project.Add(userdata.DisplayName);
                     }
-
                 }
 
                 var count1 = project.Count();
@@ -1139,13 +1139,11 @@ namespace StemmonsMobile
                         SearchAgain(result.Text);
                     }
                 }
-                else if (userAction1 == "Cancel")
+                else if (userAction1 != "Cancel")
                 {
-                }
-                else
-                {
+                    var act = d.Where(v => v.DisplayName != null ? v.DisplayName.ToLower() == userAction1.ToLower() : v.UserID.ToLower() == userAction1.ToLower())?.FirstOrDefault().UserID;
 
-                    await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", userAction1, ""));
+                    await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", act, ""));
                 }
             }
             catch (Exception)

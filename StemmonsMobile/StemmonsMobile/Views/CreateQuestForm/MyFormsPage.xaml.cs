@@ -42,8 +42,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     lst = formdatacall?.Result;
                 });
 
-                //Result = JObject.Parse(objnew);
-                if (lst != null)
+                if (lst.Count > 0)
                 {
 
                     if (formtype == "Open")
@@ -60,7 +59,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     {
                         FormData.ItemsSource = lst;
                     }
-
                 }
                 else
                 {
