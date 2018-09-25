@@ -203,7 +203,7 @@ namespace StemmonsMobile.Views.Cases
                             VerticalOptions = LayoutOptions.Start
                         };
                         FormattedString frmtText = new FormattedString();
-                        frmtText.Spans.Add(new Span { Text = item.NAME+ ":" });
+                        frmtText.Spans.Add(new Span { Text = item.NAME + ":" });
 
                         if (item.IS_REQUIRED.ToLower() == "y")
                             frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
@@ -492,12 +492,12 @@ namespace StemmonsMobile.Views.Cases
 
                                 Image im = new Image();
                                 im.StyleId = "imgcl_" + item.ASSOC_TYPE_ID;
-                                im.Source = ImageSource.FromFile("Assets/erase-16.png");
+                                im.Source = ImageSource.FromFile("Assets/erase16.png");
 
                                 #region date_pick
                                 DatePicker date_pick = new DatePicker();
                                 date_pick.IsVisible = false;
-                                date_pick.Format = "MM/dd/yyyy";
+                                //date_pick.Format = "MM/dd/yyyy";
                                 date_pick.WidthRequest = 200;
                                 date_pick.TextColor = Color.Gray;
                                 date_pick.StyleId = "dt_" + item.ASSOC_TYPE_ID;
@@ -1019,7 +1019,8 @@ namespace StemmonsMobile.Views.Cases
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
-                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+                DateTime dt = cnt.Date;
+                dt_Entry.Text = dt.Date.ToString("d");
                 // dt_Entry.Unfocus();
             }
             catch (Exception)
@@ -1198,7 +1199,6 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         Entry entry = new Entry();
                                         entry = cnt as Entry;
-                                        entry.FontFamily = "Soin Sans Neue";
                                         entry.Text = Result.Result;
                                     }
                                     calc = "";
@@ -1634,8 +1634,9 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         if (en.StyleId == CurrentStyleId)
                                         {
-
-                                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), Convert.ToString(CurrentStyleId), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"), item.AssocTypeID);
+                                            var sDate = App.DateFormatStringToString(en.Date.ToString());
+                                            DateTime dt = Convert.ToDateTime(sDate);
+                                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), Convert.ToString(CurrentStyleId), dt.Date.ToString("MM/dd/yyyy"), item.AssocTypeID);
                                             cntrl = subitem;
                                         }
                                     }
@@ -1895,13 +1896,24 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                     else
                                     {
-                                        textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = en.Text });
+                                        if (!en.StyleId.Contains("a_"))
+                                        {
+                                            textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = en.Text });
+                                        }
+                                        else
+                                        {
+                                            var stDate = string.Empty;
+                                            if (!string.IsNullOrEmpty(en.Text))
+                                            {
+                                                var sDate = Convert.ToDateTime(en.Text);
+                                                stDate = sDate.Date.ToString("MM/dd/yyyy");
+                                            }
+                                            textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = stDate });
+                                        }
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-
-                                    // throw;
                                 }
                             }
                             else if (ty.Name.ToLower() == "picker")

@@ -39,7 +39,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         List<Add_Questions_MetadataRequest> CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
         List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId> lstcatbyitemid = new List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId>();
 
-        public NewQuestForm(int _itemid ,string arID = "")
+        public NewQuestForm(int _itemid, string arID = "")
         {
             InitializeComponent();
             itemid = _itemid;
@@ -105,13 +105,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         var layout = new StackLayout();
                         layout.Orientation = StackOrientation.Horizontal;
 
-
                         var layout1 = new StackLayout();
                         layout1.HorizontalOptions = LayoutOptions.Start;
                         layout1.WidthRequest = 200;
-
-
-
 
                         var Label1 = new Xamarin.Forms.Label
                         {
@@ -121,9 +117,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         Label1.Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc;//strItemInfoFieldName
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.FontSize = 16;
-                        Label1.FontFamily = "Soin Sans Neue";
-
-
 
                         layout1.Children.Add(Label1);
                         layout.Children.Add(layout1);
@@ -138,13 +131,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         DatePicker DO = new DatePicker();
                         DO.WidthRequest = 200;
                         DO.Date = Convert.ToDateTime("01/01/1900");
-                        DO.Format = "MM/dd/yyyy";
                         DO.TextColor = Color.Gray;
 
                         Entry ST = new Entry();
                         ST.WidthRequest = 200;
                         ST.FontSize = 16;
-                        ST.FontFamily = "Soin Sans Neue";
 
                         ST.Keyboard = Keyboard.Default;
 
@@ -152,13 +143,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         MN.WidthRequest = 200;
                         MN.FontSize = 16;
                         MN.Keyboard = Keyboard.Numeric;
-                        MN.FontFamily = "Soin Sans Neue";
 
                         Entry SN = new Entry();
                         SN.WidthRequest = 150;
                         SN.FontSize = 16;
                         SN.Keyboard = Keyboard.Numeric;
-                        SN.FontFamily = "Soin Sans Neue";
 
                         BorderEditor TA = new BorderEditor();
                         TA.HeightRequest = 100;
@@ -167,7 +156,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         TA.CornerRadius = 5;
                         TA.FontSize = 16;
                         TA.BorderColor = Color.LightGray;
-                        TA.FontFamily = "Soin Sans Neue";
 
                         TA.Keyboard = Keyboard.Default;
 
@@ -176,15 +164,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         ET.WidthRequest = 200;
                         ET.FontSize = 16;
                         ET.Keyboard = Keyboard.Default;
-                        ET.FontFamily = "Soin Sans Neue";
-
 
                         Entry CL = new Entry();
                         CL.WidthRequest = 200;
                         CL.FontSize = 16;
                         CL.IsEnabled = false;
-                        CL.FontFamily = "Soin Sans Neue";
-
 
                         switch (lst_NewQuestFormFields[i].strFieldType.ToLower())
                         {
@@ -791,7 +775,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 date_pick = (DatePicker)cnt;
                                 if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                 {
-                                    iValue.ItemInfoFieldText += App.DateFormatStringToString(date_pick.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                    iValue.ItemInfoFieldText += Convert.ToDateTime(App.DateFormatStringToString(date_pick.Date.ToString())).Date.ToString("MM/dd/yyyy");
                                     iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
                                     infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
                                 }

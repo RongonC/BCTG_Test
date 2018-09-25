@@ -117,9 +117,9 @@ namespace StemmonsMobile.Views.Cases
             refreshView.SetBinding<CasesViewmodel>(PullToRefreshLayout.RefreshCommandProperty, vm => vm.RefreshCommand);
 
             masterGrid.Children.Add(refreshView, 0, 2);
-            masterGrid.Children.Add(btm_stack, 0, 3);
+            //masterGrid.Children.Add(btm_stack, 0, 3);
 
-            abs_layout.Children.Add(refreshView);
+            // abs_layout.Children.Add(refreshView);
             abs_layout.Children.Add(overlay);
             Content = abs_layout;
 
@@ -595,12 +595,11 @@ namespace StemmonsMobile.Views.Cases
 
                                                 Image im = new Image();
                                                 im.StyleId = "imgcl_" + ControlsItem.ASSOC_TYPE_ID;
-                                                im.Source = ImageSource.FromFile("Assets/erase-16.png");
+                                                im.Source = ImageSource.FromFile("Assets/erase16.png");
 
                                                 #region date_pick
                                                 DatePicker date_pick = new DatePicker();
                                                 date_pick.IsVisible = false;
-                                                date_pick.Format = "MM/dd/yyyy";
                                                 date_pick.WidthRequest = 200;
                                                 date_pick.TextColor = Color.Gray;
                                                 date_pick.StyleId = "dt_" + ControlsItem.ASSOC_TYPE_ID;
@@ -657,9 +656,10 @@ namespace StemmonsMobile.Views.Cases
                                                 break;
 
                                             case "t":
+                                            case "h":
                                                 Entry entry = new Entry();
 
-                                                entry.StyleId = "t_" + ControlsItem.ASSOC_TYPE_ID;
+                                                entry.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID;
 
                                                 try
                                                 {
@@ -1145,11 +1145,11 @@ namespace StemmonsMobile.Views.Cases
                                                 if (!String.IsNullOrEmpty(Dateval))
                                                 {
                                                     var Str = App.DateFormatStringToString(Dateval);
-                                                    DO.Text = Str;
+                                                    DO.Text = Convert.ToDateTime(Str).Date.ToString("d");
 
                                                     Device.BeginInvokeOnMainThread(() =>
                                                     {
-                                                        dt_c.Date = Convert.ToDateTime(Dateval);
+                                                        dt_c.Date = Convert.ToDateTime(Str);
                                                     });
                                                 }
 
@@ -1178,7 +1178,6 @@ namespace StemmonsMobile.Views.Cases
                                             {
                                                 BorderEditor bd = cnt as BorderEditor;
                                                 bd.FontSize = 16;
-                                                bd.FontFamily = "Soin Sans Neue";
                                                 bd.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
                                             }
                                         }
@@ -1190,6 +1189,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "t":
                                     case "c":
                                     case "n":
+                                    case "h":
                                         try
                                         {
                                             var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
@@ -1198,7 +1198,6 @@ namespace StemmonsMobile.Views.Cases
                                                 Entry entry = new Entry();
                                                 entry.FontSize = 16;
                                                 entry = cnt as Entry;
-                                                entry.FontFamily = "Soin Sans Neue";
                                                 if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "c" && !Onlineflag)
                                                 {
                                                     entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
@@ -1358,36 +1357,36 @@ namespace StemmonsMobile.Views.Cases
 
                     foreach (var item in Temp)
                     {
-                        //if (item.FirstOrDefault().Note.Contains("<img"))
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = true;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
-                        //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
-                        //}
-                        //else
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = false;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
-                        //}
                         if (item.FirstOrDefault().Note.Contains("<img"))
                         {
                             item.FirstOrDefault().ImageVisible = true;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                            item.FirstOrDefault().Note = item.FirstOrDefault().Note;
                         }
                         else
                         {
                             item.FirstOrDefault().ImageVisible = false;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                            item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
                         }
+                        //if (item.FirstOrDefault().Note.Contains("<img"))
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = true;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                        //    item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        //}
+                        //else
+                        //{
+                        //    item.FirstOrDefault().ImageVisible = false;
+                        //    item.FirstOrDefault().LabelVisible = true;
+                        //    item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                        //    item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                        //}
 
                         CasesnotesGroups.Add(item);
                     }
@@ -1420,7 +1419,8 @@ namespace StemmonsMobile.Views.Cases
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
-                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+                DateTime dt = cnt.Date;
+                dt_Entry.Text = dt.Date.ToString("d");
             }
             catch (Exception)
             {
@@ -2008,7 +2008,20 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                     else
                                     {
-                                        textValues.Add(Key, en.Text);
+                                        if (!en.StyleId.Contains("a_"))
+                                        {
+                                            textValues.Add(Key, en.Text);
+                                        }
+                                        else
+                                        {
+                                            var stDate = string.Empty;
+                                            if (!string.IsNullOrEmpty(en.Text))
+                                            {
+                                                var sDate = Convert.ToDateTime(en.Text);
+                                                stDate = sDate.Date.ToString("MM/dd/yyyy");
+                                            }
+                                            textValues.Add(Key, stDate);
+                                        }
                                     }
                                 }
                                 catch (Exception ex)
@@ -2051,14 +2064,10 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                     else
                                     {
-
-                                        //GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue itemValue = (GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue)picker.SelectedItem;
-
                                         int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
                                         if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
                                         {
                                             savecase.caseTitle = itemValue.Name;
-
                                         }
                                         try
                                         {
@@ -2088,7 +2097,6 @@ namespace StemmonsMobile.Views.Cases
                                                 }
                                                 else
                                                 {
-                                                    //dropDownValues.Add(Key, <itemValue>.Na);
                                                     var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
                                                     ItemValue it = new ItemValue();
                                                     if (val != null)
@@ -2099,19 +2107,13 @@ namespace StemmonsMobile.Views.Cases
                                                         dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
                                                     }
                                                 }
-
                                             }
-
-
                                         }
                                         catch { }
-
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-
-                                    // throw;
                                 }
                             }
                             else if (ty.Name.ToLower() == "bordereditor")
@@ -2144,14 +2146,14 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 try
                                 {
-                                    var datepicker = (DatePicker)xy;
+                                    //var datepicker = (DatePicker)xy;
 
-                                    if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                    {
-                                        textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
-                                    }
-                                    else
-                                        textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
+                                    //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                    //{
+                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                    //}
+                                    //else
+                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
                                 }
                                 catch (Exception ex)
                                 {
@@ -2613,7 +2615,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                     assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
 
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), en.Date.Date.ToString("MM/dd/yyyy"));
 
                                                 }
                                                 else
@@ -2622,7 +2624,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                     assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
 
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = en.Date.Date.ToString("MM/dd/yyyy");
 
                                                 }
 
@@ -3573,7 +3575,7 @@ namespace StemmonsMobile.Views.Cases
             {
                 string[] buttons;
                 // if (Functions.Platformtype != "Android")
-                buttons = new string[] { "From Photo Gallery", "Take Photo" };
+                buttons = new string[] { "From Photo Gallery", "Camera" };
                 // else
                 //   buttons = new string[] { "From Photo Gallery" };
 
@@ -3584,7 +3586,7 @@ namespace StemmonsMobile.Views.Cases
                     case "From Photo Gallery":
                         OpenGallery();
                         break;
-                    case "Take Photo":
+                    case "Camera":
                         TakePhoto();
                         break;
 
@@ -3676,7 +3678,6 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
                             }
-                            gridCasesnotes.ItemsSource = CasesnotesGroups;
                             txt_CasNotes.Text = string.Empty;
                             try
                             {
@@ -3796,7 +3797,7 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
                             }
-                            gridCasesnotes.ItemsSource = CasesnotesGroups;
+
                             txt_CasNotes.Text = string.Empty;
                             try
                             {

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Plugin.Connectivity;
+using Plugin.DeviceInfo;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.DataTypes.DataType.Quest;
@@ -83,8 +84,8 @@ namespace StemmonsMobile.Commonfiles
             // Note: There are many more special characters, these are just
             // most common. You can add new characters in this arrays if needed
             string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
-   "&gt;", "&reg;", "&copy;", "&bull;", "&trade;"};
-            string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢" };
+   "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;"};
+            string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'" };
             for (int i = 0; i < OldWords.Length; i++)
             {
                 sbHTML.Replace(OldWords[i], NewWords[i]);
@@ -99,9 +100,9 @@ namespace StemmonsMobile.Commonfiles
             sbHTML.Replace("<p>", Environment.NewLine);
             sbHTML.Replace("<p ", Environment.NewLine);
 
+
             // Finally, remove all HTML tags and return plain text
-            return System.Text.RegularExpressions.Regex.Replace(
-              sbHTML.ToString(), "<[^>]*>", "");
+            return Regex.Replace(sbHTML.ToString(), "<[^>]*>", "");
         }
 
         public static void ShowtoastAlert(string Message)
@@ -287,7 +288,7 @@ namespace StemmonsMobile.Commonfiles
 
         #region Messages For Whole APp
 
-        public static string Appinfomsg = "Stemmons Central to Go\nCopyright © 2018 by Stemmons Enterprise LLC.";
+        public static string Appinfomsg = "Stemmons Central to Go (v" + CrossDeviceInfo.Current.AppVersion + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
         public static string Goonline_forFunc = "Please Go online to use this functionality!";
 
         public static string nRcrdOffline = "No Record Found.\nPlease go online to view full list.";

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.DeviceInfo</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.DeviceInfo.CrossDeviceInfo">
+            <summary>
+            Cross platform DeviceInfo implemenations
+            </summary>
+        </member>
+        <member name="P:Plugin.DeviceInfo.CrossDeviceInfo.IsSupported">
+            <summary>
+            Gets if the plugin is supported on the current platform.
+            </summary>
+        </member>
+        <member name="P:Plugin.DeviceInfo.CrossDeviceInfo.Current">
+            <summary>
+            Current plugin implementation to use
+            </summary>
+        </member>
+        <member name="T:Plugin.DeviceInfo.DeviceInfoImplementation">
+            <summary>
+            Implementation for Feature
+            </summary>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.Manufacturer">
+            <summary>
+            Get the name of the device
+            </summary>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.DeviceName">
+            <summary>
+            Get the name of the device
+            </summary>
+        </member>
+        <member name="M:Plugin.DeviceInfo.DeviceInfoImplementation.GenerateAppId(System.Boolean,System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.Model">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.Version">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.Platform">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.VersionNumber">
+            <inheritdoc/>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.AppVersion">
+            <summary>
+            Returns the current version of the app, as defined in the metadata, e.g. "4.3".
+            </summary>
+            <value>The current version.</value>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.AppBuild">
+            <summary>
+            Returns the current build of the app, as defined in the metadata, e.g. "4300".
+            </summary>
+            <value>The current build.</value>
+        </member>
+        <member name="P:Plugin.DeviceInfo.DeviceInfoImplementation.IsDevice">
+            <summary>
+            Checks whether this is a real device or an emulator/simulator
+            
+            Shamelessly taken from https://stackoverflow.com/a/13635166
+            </summary>
+        </member>
+    </members>
+</doc>

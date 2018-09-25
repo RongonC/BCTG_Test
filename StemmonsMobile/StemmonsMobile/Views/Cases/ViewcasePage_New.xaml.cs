@@ -585,7 +585,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                 Image im = new Image();
                                                 im.StyleId = "imgcl_" + ControlsItem.ASSOC_TYPE_ID;
-                                                im.Source = ImageSource.FromFile("Assets/erase-16.png");
+                                                im.Source = ImageSource.FromFile("Assets/erase16.png");
 
                                                 #region date_pick
                                                 DatePicker date_pick = new DatePicker();

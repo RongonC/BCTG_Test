@@ -14,6 +14,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using StemmonsMobile.Views.Cases;
+using Plugin.DeviceInfo;
 
 namespace StemmonsMobile
 {
@@ -33,6 +34,8 @@ namespace StemmonsMobile
             InitializeComponent();
 
             GetAppLocalData();
+
+
 
             //MainPage = new ViewcasePage_New();
 
@@ -337,9 +340,18 @@ namespace StemmonsMobile
                 //    }
                 //}
 
-                CultureInfo ci = new CultureInfo("en-US");
-                var tdt = Convert.ToDateTime(inputDate);
-                sOutPut = tdt.ToString("MM/dd/yyyy", ci);
+                //CultureInfo ci = new CultureInfo("en-US");
+                //var tdt = Convert.ToDateTime(inputDate);
+                //sOutPut = tdt.ToString("MM/dd/yyyy", ci);
+                DateTime Dout = new DateTime();
+                DateTime.TryParse(inputDate, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
+
+                sOutPut = Dout.Date.ToString();
+
+                // DateTime dateTime16 = DateTime.ParseExact(inputDate, new string[] { "MM.dd.yyyy", "MM-dd-yyyy", "MM/dd/yyyy" }, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None);
+                // string json = null;
+
+                // DateTime dt2 = DateTime.ParseExact(inputDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
 
                 //inputDate = SeperatorValueReplace(inputDate);
@@ -491,7 +503,7 @@ namespace StemmonsMobile
                             }
                             break;
                         case "About":
-                            pg.DisplayAlert("App info", Functions.Appinfomsg, "Ok");
+                            pg.DisplayAlert("App Info", Functions.Appinfomsg, "Ok");
                             break;
                         case "Logout":
                             Logout(pg);
@@ -502,7 +514,7 @@ namespace StemmonsMobile
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception rt)
             {
             }
         }

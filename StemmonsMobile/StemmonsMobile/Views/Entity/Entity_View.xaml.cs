@@ -34,7 +34,7 @@ namespace StemmonsMobile.Views.Entity
         BorderEditor txt_EntNotes = new BorderEditor();
         List<AssociationField> EntityAssocOrder = new List<AssociationField>();
         EntityClass EntityLists = new EntityClass();
-       // List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
+        // List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
         string NavScreenname = string.Empty;// To manage Online and Offline View entity as per Screen name
         public static EntityListMBView _entityListMBView = new EntityListMBView();
 
@@ -901,7 +901,7 @@ namespace StemmonsMobile.Views.Entity
                                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                                         await Task.Run(() =>
                                         {
-                                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", DateTime.Now.ToString("MM/dd/yyyy"), File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+                                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", DateTime.Now.Date.ToString("MM/dd/yyyy"), File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
 
                                             FileId = d.GetValue("ResponseContent").ToString();
                                         });

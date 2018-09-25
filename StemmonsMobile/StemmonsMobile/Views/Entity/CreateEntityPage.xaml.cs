@@ -31,7 +31,7 @@ namespace StemmonsMobile.Views.Entity
         EntityListMBView EntitymbView = new EntityListMBView();
         EntityClass EntitySchemaLists = null;
         EntityClass EntityListsValues = null;
-       //List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
+        List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
 
         string ischeckcalControl = string.Empty;
         string ContolrLst = string.Empty;
@@ -59,7 +59,7 @@ namespace StemmonsMobile.Views.Entity
 
             if (Functions.IsEditEntity)
             {
-                btn_viewnotes.IsVisible = true;
+                // btn_viewnotes.IsVisible = true;
                 var FrmtText = new FormattedString();
 
                 if (EntitymbView != null)
@@ -138,14 +138,13 @@ namespace StemmonsMobile.Views.Entity
                         {
                         }
 
-                        //try
-                        //{
-                        //    Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, EntityID.ToString(), Functions.UserName, EntityTypeID.ToString(), this.Title, App.DBPath);
-
-                        //}
-                        //catch (Exception)
-                        //{
-                        //}
+                        try
+                        {
+                            Entity_NotesLists = await EntitySyncAPIMethods.GetNotes(App.Isonline, EntityID.ToString(), Functions.UserName, EntityTypeID.ToString(), this.Title, App.DBPath);
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 });
 
@@ -381,14 +380,13 @@ namespace StemmonsMobile.Views.Entity
                                     Image im = new Image
                                     {
                                         StyleId = "imgcl_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                        Source = ImageSource.FromFile("Assets/erase-16.png")
+                                        Source = ImageSource.FromFile("Assets/erase16.png")
                                     };
 
                                     #region date_pick
                                     DatePicker date_pick = new DatePicker
                                     {
                                         IsVisible = false,
-                                        Format = "MM/dd/yyyy",
                                         WidthRequest = 200,
                                         StyleId = "dt_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID
                                     };
@@ -696,27 +694,14 @@ namespace StemmonsMobile.Views.Entity
                                 if (cnt != null)
                                 {
                                     var cnt_type = cnt.GetType();
-                                    var date_pick = new DatePicker();
-                                    date_pick.TextColor = Color.Gray;
-                                    var ent = new Entry();
-                                    ent.FontFamily = "Soin Sans Neue";
-                                    ent.FontSize = 16;
-                                    var edit = new BorderEditor();
-                                    edit.FontFamily = "Soin Sans Neue";
-                                    edit.FontSize = 16;
-                                    var _checkbox = new Switch();
-                                    var pick_Ext_datasrc = new Picker();
-                                    pick_Ext_datasrc.TextColor = Color.Gray;
-                                    var lbl = new Label();
-                                    lbl.FontSize = 16;
-                                    lbl.FontFamily = "Soin Sans Neue";
-                                    var img = new Image();
 
                                     if (cnt_type.Name.ToLower() == "datepicker")
                                     {
+                                        var date_pick = new DatePicker();
                                         date_pick = (DatePicker)cnt;
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaDataText;
                                         if (data.Count != 0)
+                                        {
                                             if (data[0].TextValue != "")
                                             {
                                                 try
@@ -732,9 +717,11 @@ namespace StemmonsMobile.Views.Entity
                                             }
                                             else
                                                 date_pick.Date = DateTime.Now;
+                                        }
                                     }
                                     else if (cnt_type.Name.ToLower() == "entry")
                                     {
+                                        var ent = new Entry();
                                         ent = (Entry)cnt;
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaDataText;
                                         if (data.Count != 0)
@@ -742,6 +729,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else if (cnt_type.Name.ToLower() == "label")
                                     {
+                                        var lbl = new Label();
                                         lbl = (Label)cnt;
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaDataText;
                                         if (data.Count != 0)
@@ -757,6 +745,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else if (cnt_type.Name.ToLower() == "bordereditor")
                                     {
+                                        var edit = new BorderEditor();
                                         edit = (BorderEditor)cnt;
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaDataText;
                                         if (data.Count != 0)
@@ -764,6 +753,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else if (cnt_type.Name.ToLower() == "switch")
                                     {
+                                        var _checkbox = new Switch();
                                         _checkbox = (Switch)cnt;
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaDataText;
                                         if (data.Count != 0)
@@ -776,6 +766,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else if (cnt_type.Name.ToLower() == "picker")
                                     {
+                                        var pick_Ext_datasrc = new Picker();
                                         var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
                                         int j = 0;
                                         pick_Ext_datasrc = (Picker)cnt;
@@ -790,6 +781,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     else if (cnt_type.Name.ToLower() == "image")
                                     {
+                                        var img = new Image();
                                         img = (Image)cnt;
                                         string styleid = img.StyleId;
                                         var stack = (StackLayout)img.Parent;
@@ -813,7 +805,6 @@ namespace StemmonsMobile.Views.Entity
                                     else
                                     {
                                         DisplayAlert(_field_type, "Not Found", "cancel");
-                                        //http://entities-s-15.boxerproperty.com/EntityList.aspx?EntityTypeID=1050
                                     }
                                 }
                             }
@@ -825,50 +816,50 @@ namespace StemmonsMobile.Views.Entity
                         #endregion
 
                         #region Get Entity notes
-                        //if (Entity_NotesLists != null)
-                        //{
-                        //    ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
-                        //    if (Entity_NotesLists != null)
-                        //    {
-                        //        for (int i = 0; i < Entity_NotesLists.Count; i++)
-                        //        {
-                        //            string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
-                        //            Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
-                        //            {
-                        //                new Entity_Notes { Note = Entity_NotesLists[i].Note }
-                        //            });
-                        //        }
+                        if (Entity_NotesLists != null)
+                        {
+                            ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
+                            if (Entity_NotesLists != null)
+                            {
+                                for (int i = 0; i < Entity_NotesLists.Count; i++)
+                                {
+                                    string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
+                                    Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
+                                    {
+                                        new Entity_Notes { Note = Entity_NotesLists[i].Note }
+                                    });
+                                }
 
-                        //        foreach (var item in Temp)
-                        //        {
-                        //            if (item.FirstOrDefault().Note.Contains("<img"))
-                        //            {
-                        //                item.FirstOrDefault().ImageVisible = true;
-                        //                item.FirstOrDefault().LabelVisible = true;
-                        //                item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //                item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                        //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        //            }
-                        //            else
-                        //            {
-                        //                item.FirstOrDefault().ImageVisible = false;
-                        //                item.FirstOrDefault().LabelVisible = true;
-                        //                item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        //            }
-                        //            NotesGroups.Add(item);
-                        //        }
-                        //    }
-                        //    gridEntitynotes.ItemsSource = NotesGroups;
-                        //}
+                                foreach (var item in Temp)
+                                {
+                                    if (item.FirstOrDefault().Note.Contains("<img"))
+                                    {
+                                        item.FirstOrDefault().ImageVisible = true;
+                                        item.FirstOrDefault().LabelVisible = true;
+                                        item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                                        item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                                    }
+                                    else
+                                    {
+                                        item.FirstOrDefault().ImageVisible = false;
+                                        item.FirstOrDefault().LabelVisible = true;
+                                        item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                                    }
+                                    NotesGroups.Add(item);
+                                }
+                            }
+                            gridEntitynotes.ItemsSource = NotesGroups;
+                        }
                         #endregion
                     }
                     else
                     {
                         Grd_Entity_userDetails.IsVisible = false;
-                        //line_NotedHead.IsVisible = false;
+                        line_NotedHead.IsVisible = false;
                     }
-                    //gridEntitynotes.HeightRequest = NotesGroups.Count <= 0 ? 0 : 700;
+                    gridEntitynotes.HeightRequest = NotesGroups.Count <= 0 ? 0 : 700;
                 }
                 else
                 {
@@ -1098,8 +1089,9 @@ namespace StemmonsMobile.Views.Entity
                                     {
                                         if (en.StyleId == CurrentStyleId)
                                         {
-
-                                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.ToUpper(), Convert.ToString(CurrentStyleId), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"), item.AssocTypeID);
+                                            var sDate = App.DateFormatStringToString(en.Date.ToString());
+                                            DateTime dt = Convert.ToDateTime(sDate);
+                                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.ToUpper(), Convert.ToString(CurrentStyleId), dt.Date.ToString("MM/dd/yyyy"), item.AssocTypeID);
                                             cntrl = subitem;
                                         }
                                     }
@@ -1284,9 +1276,8 @@ namespace StemmonsMobile.Views.Entity
             try
             {
                 var cnt = (DatePicker)sender;
-                var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindEntityControl(cnt.StyleId.Split('_')[1]) as Entry;
-                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+                dt_Entry.Text = cnt.Date.Date.ToString("d");
             }
             catch (Exception)
             {
@@ -1655,24 +1646,25 @@ namespace StemmonsMobile.Views.Entity
                          recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntityTypeID, EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
                      });
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    //if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
-                    //{
-                    //    if (NotesGroups.Count != 0)
-                    //    {
-                    //        NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //            new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
-                    //        });
-                    //    }
-                    //    else
-                    //    {
-                    //        NotesGroups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //             new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
-                    //        });
+                    if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
+                    {
+                        if (NotesGroups.Count != 0)
+                        {
+                            NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                            });
+                        }
+                        else
+                        {
+                            NotesGroups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                 new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                            });
 
-                    //    }
-                    //   // gridEntitynotes.ItemsSource = NotesGroups;
+                        }
+                    }
+                    gridEntitynotes.ItemsSource = NotesGroups;
 
                     txt_EntNotes.Text = "";
                     FormattedString s = new FormattedString();
@@ -2131,7 +2123,7 @@ namespace StemmonsMobile.Views.Entity
                                         date_pick = (DatePicker)cnt;
                                         if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                         {
-                                            Assoc_metatext.TextValue = App.DateFormatStringToString(date_pick.Date.ToString());
+                                            Assoc_metatext.TextValue = Convert.ToDateTime(App.DateFormatStringToString(date_pick.Date.ToString())).Date.ToString("MM/dd/yyyy");
                                         }
                                         else
                                         {
@@ -2182,17 +2174,7 @@ namespace StemmonsMobile.Views.Entity
                                     else if (cnt_type.Name.ToLower() == "switch")
                                     {
                                         _checkbox = (Switch)cnt;
-                                        //var data = EntitySchemaLists.AssociationFieldCollection[i].AssocMetaDataText;
-                                        //if (data.Count != 0)
-                                        {
-                                            Assoc_metatext.TextValue = _checkbox.IsToggled == true ? "Y" : "N";
-                                            //if (_checkbox.IsToggled)
-                                            //{
-                                            //    Assoc_metatext.TextValue = "Y";
-                                            //}
-                                            //else
-                                            //    Assoc_metatext.TextValue = "N";
-                                        }
+                                        Assoc_metatext.TextValue = _checkbox.IsToggled == true ? "Y" : "N";
                                     }
 
                                     Assoc_metatext.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
@@ -2580,19 +2562,19 @@ namespace StemmonsMobile.Views.Entity
 
         private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            //try
-            //{
-            //    var notes = gridEntitynotes.SelectedItem as Entity_Notes;
-            //    if (notes.ImageVisible)
-            //    {
-            //        await Navigation.PushAsync(new ViewAttachment
-            //        (notes.ImageURL));
-            //    }
-            //    gridEntitynotes.SelectedItem = null;
-            //}
-            //catch (Exception ex)
-            //{
-            //}
+            try
+            {
+                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+                if (notes.ImageVisible)
+                {
+                    await Navigation.PushAsync(new ViewAttachment
+                    (notes.ImageURL));
+                }
+                gridEntitynotes.SelectedItem = null;
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private async void Btn_viewnotes_Clicked(object sender, EventArgs e)

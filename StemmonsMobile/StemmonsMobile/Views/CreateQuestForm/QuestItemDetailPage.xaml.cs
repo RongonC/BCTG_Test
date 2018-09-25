@@ -134,7 +134,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 record.blnHidePoints = itm.blnHidePoints;
                                 record.blnIsEdit = itm.strIsActive.ToUpper() == "Y" ? true : false;
                                 record.blnSuppressAlert = itm.blnSuppressAlert;
-                                //record.dtFormCreatedDatetime = Convert.ToDateTime(itm.strCreateCaseOnSaveForm);
                                 record.FIELD_SECURITY = itm.FIELD_SECURITY;
                                 record.intAreaID = itm.intItemID;
                                 record.intExternalDatasourceID = itm.intExternalDatasourceID;
@@ -316,9 +315,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                             if (ControlsValues[i].strItemInfoFieldValue != "")
                                             {
                                                 string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                                string Date = App.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                                string Date = App.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue);
                                                 DateTime sd = Convert.ToDateTime(Date);
-                                                DO.Date = Convert.ToDateTime(Date);
+                                                DO.Date = sd.Date;
                                             }
                                             if (!(bool)ControlSchema[i].blnIsEdit && (ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("R") || !ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("U")))
                                             {
@@ -1102,7 +1101,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
                                         striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
-                                        striteminfoFieldsValues += Convert.ToString(App.DateFormatStringToString(date_pick.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy")) + ",";
+                                        var sDate = Convert.ToString(App.DateFormatStringToString(date_pick.Date.ToString()));
+                                        DateTime dt = Convert.ToDateTime(sDate);
+                                        striteminfoFieldsValues += dt.Date.ToString("MM/dd/yyyy") + ",";
                                     }
                                     else
                                     {

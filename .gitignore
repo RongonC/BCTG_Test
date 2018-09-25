@@ -25,3 +25,13 @@
 /StemmonsMobile/StemmonsMobile/Test
 /StemmonsMobile/StemmonsMobile.Android/Renderers
 *.zip
+/StemmonsMobile/servicebusapi/servicebusapi/bin/Release
+/StemmonsMobile/StemmonsMobile/bin/Release
+/StemmonsMobile/servicebusapi/servicebusapi/obj/Release
+*.rar
+/StemmonsMobile/StemmonsMobile.Android/bin/Release
+/StemmonsMobile/StemmonsMobile.DataTypes/bin/Release
+/StemmonsMobile/StemmonsMobile.DataTypes/obj/Release
+/StemmonsMobile/StemmonsMobile/obj/Release
+/StemmonsMobile/StemmonsMobile/Views/Cases/SelectCaseType.xaml - Copy.cs
+/StemmonsMobile/StemmonsMobile/Views/Cases/SelectCaseType - Copy.xaml

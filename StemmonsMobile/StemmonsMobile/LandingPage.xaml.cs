@@ -53,7 +53,6 @@ namespace StemmonsMobile
                     var result = DefaultAPIMethod.GetLogo();
                     var urlString = result.GetValue("ResponseContent");
                     App_Logo.Source = ImageSource.FromUri(new Uri(Convert.ToString(urlString)));
-                    // App_Logo.Source = ImageSource.FromUri(new Uri("" + Functions.UserName));
                 }
                 else
                 {
@@ -68,6 +67,7 @@ namespace StemmonsMobile
             btn_usericon.GestureRecognizers.Add(new TapGestureRecognizer(img_profile_OnTap));
 
             cm = new ApplicationListViewModel();
+
             if (Functions.Platformtype == "UWP")
             {
                 if (this.Width <= 320)
@@ -86,7 +86,6 @@ namespace StemmonsMobile
                     cm.appdata[3].ApplicationIcon = "Assets/320/standardsblack.png";
                     cm.appdata[4].ApplicationIcon = "Assets/320/Questblack_1.png";
                 }
-
             }
 
             Applicationlist.ItemsSource = cm.appdata;
@@ -1021,6 +1020,7 @@ namespace StemmonsMobile
                 btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
             }
 
+           // btn_usericon.Source = ImageSource.FromFile("Assets/deletebutton.png");
             project = new List<string>();
             if (App.IsLoginCall)
             {

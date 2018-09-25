@@ -45,11 +45,11 @@ namespace StemmonsMobile.Views.Entity
                 {
                     for (int i = 0; i < Entity_NotesLists.Count; i++)
                     {
-                        string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
-                        Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
-                                    {
-                                        new Entity_Notes { Note = Entity_NotesLists[i].Note }
-                                    });
+                        var st = Convert.ToDateTime(App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime));
+                        Temp.Add(new EntityNotesGroup("", st.ToString("d"), Entity_NotesLists[i].CreatedBy)
+                        {
+                            new Entity_Notes { Note = Entity_NotesLists[i].Note }
+                        });
                     }
 
                     foreach (var item in Temp)

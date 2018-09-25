@@ -71,7 +71,7 @@ namespace StemmonsMobile.Views.Standards
         private static string GetBasePathWithURL(string InPutString)
         {
             try
-             {
+            {
                 string result = string.Empty;
 
                 string sFilePath1 = "src=\"Download.aspx?FileID=";
@@ -95,8 +95,17 @@ namespace StemmonsMobile.Views.Standards
                 string sFilePath7 = "src=\"/Download.aspx?FileID=";
                 string sFilePath7_new = "src=\"" + App.StandardImgURL + "/download.aspx?fileid=";
 
+                string sFilePath8 = "src=\"../Images/mswordIcon.jpg";
+                string sFilePath8_new = "src=\"" + App.StandardImgURL + "/Images/mswordIcon.jpg";
 
-                result = InPutString.Replace(sFilePath1, sFilePath1_new).Replace(sFilePath2, sFilePath2_new).Replace(sFilePath3, sFilePath3_new).Replace(sFilePath4, sFilePath4_new).Replace(sFilePath5, sFilePath5_new).Replace(sFilePath6, sFilePath6_new).Replace(sFilePath7, sFilePath7_new);
+                string sFilePath9 = "src=\"../Images/pdfIcon.jpg";
+                string sFilePath9_new = "src=\"" + App.StandardImgURL + "/Images/pdfIcon.jpg";
+
+                string sFilePath10 = "src=\"../Images/msExcel.jpg";
+                string sFilePath10_new = "src=\"" + App.StandardImgURL + "/Images/msExcel.jpg";
+
+
+                result = InPutString.Replace(sFilePath1, sFilePath1_new).Replace(sFilePath2, sFilePath2_new).Replace(sFilePath3, sFilePath3_new).Replace(sFilePath4, sFilePath4_new).Replace(sFilePath5, sFilePath5_new).Replace(sFilePath6, sFilePath6_new).Replace(sFilePath7, sFilePath7_new).Replace(sFilePath8, sFilePath8_new).Replace(sFilePath9, sFilePath9_new).Replace(sFilePath10, sFilePath10_new);
 
                 return result;
             }
@@ -108,7 +117,7 @@ namespace StemmonsMobile.Views.Standards
 
         private async void Topics_Clicked(object sender, EventArgs e)
         {
-           await Navigation.PopAsync();
+            await Navigation.PopAsync();
         }
     }
 }
