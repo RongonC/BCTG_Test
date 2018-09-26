@@ -1,36 +1,20 @@
 ﻿<Properties StartupConfiguration="{5FA6E21B-A52E-4287-A31A-D0886DCFA21B}|Default" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workbench ActiveDocument="StemmonsCentralToGo Status">
     <Files>
-      <File FileName="StemmonsMobile/StemmonsMobile/Views/HtmlLabelConverter.cs" Line="61" Column="115" />
-      <File FileName="StemmonsMobile/StemmonsMobile/Views/Cases/ViewCasePage.xaml" Line="43" Column="70" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/HtmlLabelConverter.cs" Line="80" Column="30" />
+      <File FileName="StemmonsMobile/StemmonsMobile/Views/Cases/ViewCasePage.xaml" Line="352" Column="1" />
       <File FileName="StemmonsMobile/StemmonsMobile/Views/Cases/ViewCasePage.xaml.cs" Line="1422" Column="78" />
       <File FileName="StemmonsMobile/StemmonsMobile/Commonfiles/Functions.cs" Line="97" Column="41" />
+      <File FileName="StemmonsMobile/StemmonsMobile.iOS/Info.plist" />
       <File FileName="StemmonsCentralToGo Status" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="StemmonsMobile" expanded="True">
-            <Node name="StemmonsMobile" expanded="True">
-              <Node name="Commonfiles" expanded="True" />
-              <Node name="Views" expanded="True">
-                <Node name="Cases" expanded="True">
-                  <Node name="ViewCasePage.xaml" expanded="True" />
-                </Node>
-                <Node name="HtmlLabelConverter.cs" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="AppStore|iPhone" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.ItemProperties.StemmonsMobile.Android PreferredExecutionTarget="Android.Android_Accelerated_Oreo" AndroidDesignerPreferredTheme="Theme.DeviceDefault.NoActionBar.Fullscreen" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.StemmonsMobile.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.702a85aa6cf3ee9e62b0465104bd8686dae78412" />
+  <MonoDevelop.Ide.ItemProperties.StemmonsMobile.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.bbfc9da971ed0bc730359a50bec3bee68380755a" automaticSigning="False" />
 </Properties>

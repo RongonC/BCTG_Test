@@ -60,9 +60,6 @@
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Group_CaseType.cs" />
-    <Compile Include="Test\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ApplicationList.cs" />
     <Compile Include="Models\Case.cs" />
@@ -298,10 +295,6 @@
     <Compile Include="Views\HtmlLabelConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Test\MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
