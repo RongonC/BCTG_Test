@@ -13,6 +13,7 @@ using DataServiceBus.OfflineHelper.DataTypes;
 using Plugin.Connectivity;
 using StemmonsMobile.DataTypes.DataType.Default;
 using System.Linq;
+using System.Text;
 
 namespace StemmonsMobile
 {
@@ -58,144 +59,129 @@ namespace StemmonsMobile
 
         public IList<StringSection> ProcessString(string rawText)
         {
-            //         // Remove HEAD tag
-            //         rawText = Regex.Replace(rawText, "<head.*?</head>", ""
-            //                             , RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
-            //         // Remove any JavaScript
-            //         rawText = Regex.Replace(rawText, "<script.*?</script>", ""
-            //           , RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
-            //         string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
-            //"&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;"};
-            //         string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'" };
-            //         for (int i = 0; i < OldWords.Length; i++)
-            //         {
-            //             rawText.Replace(OldWords[i], NewWords[i]);
-            //         }
-
-            //         //rawText.Replace("\astart", "<a");
-            //         //rawText.Replace("\aEnd", "</a>");
-            //         //rawText.Replace("&amp;", "&");
-            //         //rawText.Replace("&nbsp;", " ");
-
-            //         rawText = rawText.Replace("<br>", Environment.NewLine);
-            //         rawText = rawText.Replace("<br/>", Environment.NewLine);
-            //         rawText = rawText.Replace("<br />", Environment.NewLine);
-            //         rawText = rawText.Replace("<br ", Environment.NewLine);
-
-            //         rawText = rawText.Replace("\n", Environment.NewLine);
-
-            //         rawText = rawText.Replace("<p>", Environment.NewLine);
-            //         rawText = rawText.Replace("<p ", Environment.NewLine);
-
-            //         //rawText.Replace("<a", "\astart");
-            //         //rawText.Replace("</a>", "\aEnd");
-
-            //         //var tty = Functions.HTMLToText(rawText);
-
-            rawText = rawText.Replace("<p>", Environment.NewLine);
-            rawText = rawText.Replace("&nbsp;", " ");
-
-
-            List<StringSection> list = new List<StringSection>();
-            const string spanPattern = @"(<a.*?>.*?</a>)";
-            const string spanPattern1 = @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?";
-
-            MatchCollection collection1 = Regex.Matches(rawText, spanPattern1, RegexOptions.Singleline);
-
-
-            MatchCollection collection = Regex.Matches(rawText, spanPattern, RegexOptions.Singleline);
-
-
-            // 1.
-            // Find all matches in file.
-            MatchCollection m1 = Regex.Matches(rawText, @"(<a.*?>.*?</a>)",
-                RegexOptions.Singleline);
-
-            // 2.
-            // Loop over each match.
-            foreach (Match m in m1)
+            var sections = new List<StringSection>();
+            try
             {
-                string value = m.Groups[1].Value;
-                StringSection i = new StringSection();
+                rawText = rawText.Replace("<p>", Environment.NewLine);
+                rawText = rawText.Replace("&nbsp;", " ");
+                rawText = rawText.Replace("&amp;", "&");
 
-                // 3.
-                // Get href attribute.
-                Match m2 = Regex.Match(value, @"href=\""(.*?)\""",
-                RegexOptions.Singleline);
-                if (m2.Success)
+                StringBuilder sbHTML = new StringBuilder(rawText);
+                string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
+   "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;"};
+                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'" };
+                for (int i = 0; i < OldWords.Length; i++)
                 {
-                    i.Link = m2.Groups[1].Value;
+                    sbHTML.Replace(OldWords[i], NewWords[i]);
+                }
+                rawText = sbHTML.ToString();
+
+                List<StringSection> list = new List<StringSection>();
+                const string spanPattern = @"(<a.*?>.*?</a>)";
+                const string spanPattern1 = @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?";
+
+                MatchCollection collection1 = Regex.Matches(rawText, spanPattern1, RegexOptions.Singleline);
+
+                MatchCollection collection = Regex.Matches(rawText, spanPattern, RegexOptions.Singleline);
+
+
+                #region MyRegion
+                //// 1.
+                //// Find all matches in file.
+                //MatchCollection m1 = Regex.Matches(rawText, spanPattern, RegexOptions.Singleline);
+
+                //// 2.
+                //// Loop over each match.
+                //foreach (Match m in m1)
+                //{
+                //    string value = m.Groups[1].Value;
+                //    StringSection i = new StringSection();
+
+                //    // 3.
+                //    // Get href attribute.
+                //    Match m2 = Regex.Match(value, @"href=\""(.*?)\""",
+                //    RegexOptions.Singleline);
+                //    if (m2.Success)
+                //    {
+                //        i.Link = m2.Groups[1].Value;
+                //    }
+
+                //    // 4.
+                //    // Remove inner tags from text.
+                //    string ta = Regex.Replace(value, @"\s*<.*?>\s*", "",
+                //    RegexOptions.Singleline);
+                //    i.Text = ta;
+
+                //    list.Add(i);
+
+                //} 
+                #endregion
+
+
+                var lastIndex = 0;
+                bool Isadded = false;
+                foreach (Match item in collection)
+                {
+                    Isadded = true;
+                    var foundText = item.Value;
+                    sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
+                    lastIndex = item.Index + item.Length;
+
+                    MatchCollection mC2 = Regex.Matches(item.Value, @"(<a.*?>.*?</a>)",
+                    RegexOptions.Singleline);
+                    // Get HTML href 
+                    var html = new StringSection()
+                    {
+                        Link = Regex.Match(item.Value, spanPattern1).Value,
+                        Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
+                    };
+
+                    foreach (Match m in mC2)
+                    {
+                        string value = m.Groups[1].Value;
+                        StringSection i = new StringSection();
+
+                        // 3.
+                        // Get href attribute.
+                        Match m2 = Regex.Match(value, @"href=\""(.*?)\""",
+                        RegexOptions.Singleline);
+                        if (m2.Success)
+                        {
+                            html.Link = m2.Groups[1].Value;
+                        }
+                    }
+
+                    sections.Add(html);
                 }
 
-                // 4.
-                // Remove inner tags from text.
-                string ta = Regex.Replace(value, @"\s*<.*?>\s*", "",
-                RegexOptions.Singleline);
-                i.Text = ta;
-
-                list.Add(i);
-
-            }
-
-            var sections = new List<StringSection>();
-
-            var lastIndex = 0;
-
-            foreach (Match item in collection)
-            {
-                var foundText = item.Value;
-                sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
-                lastIndex = item.Index + item.Length;
-
-                MatchCollection mC2 = Regex.Matches(item.Value, @"(<a.*?>.*?</a>)",
-                RegexOptions.Singleline);
-                // Get HTML href 
-                var html = new StringSection()
+                if (!Isadded)
                 {
-                    Link = Regex.Match(item.Value, spanPattern1).Value,
-                    Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
-                };
-
-                foreach (Match m in mC2)
-                {
-                    string value = m.Groups[1].Value;
-                    StringSection i = new StringSection();
-
-                    // 3.
-                    // Get href attribute.
-                    Match m2 = Regex.Match(value, @"href=\""(.*?)\""",
-                    RegexOptions.Singleline);
-                    if (m2.Success)
+                    lastIndex = 0;
+                    foreach (Match item in collection1)
                     {
-                        html.Link = m2.Groups[1].Value;
+                        var foundText = item.Value;
+                        sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
+                        lastIndex = item.Index + item.Length;
+
+                        // Get HTML href 
+                        var html = new StringSection()
+                        {
+                            Link = Regex.Match(item.Value, spanPattern1).Value,
+                            Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
+                        };
+
+                        sections.Add(html);
                     }
                 }
+                sections.Add(new StringSection() { Text = Functions.HTMLToText(rawText.Substring(lastIndex)) });
 
-                sections.Add(html);
+                return sections;
+
             }
-
-            foreach (Match item in collection1)
+            catch (Exception)
             {
-                var foundText = item.Value;
-                sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
-                lastIndex = item.Index + item.Length;
-
-                // Get HTML href 
-                var html = new StringSection()
-                {
-                    Link = Regex.Match(item.Value, spanPattern1).Value,
-                    Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
-                };
-
-                sections.Add(html);
             }
-
-
-            sections.Add(new StringSection() { Text = Functions.HTMLToText(rawText.Substring(lastIndex)) });
-            //var nHTML = Functions.HTMLToText(rawText.Substring(lastIndex));
-            //list.Add(new StringSection() { Text = nHTML });
+            sections.Add(new StringSection() { Text = Functions.HTMLToText(rawText.Substring(0)) });
 
             return sections;
         }
@@ -402,7 +388,6 @@ namespace StemmonsMobile
                         Functions.IsEditEntity = false;
                         await Application.Current.MainPage.Navigation.PushAsync(new CreateEntityPage(System.Convert.ToInt32(entitytypeid), 0, "Create Entity", null));
                     }
-
 
                     #region View Case/Quest/Entity Page From Notes URL
                     if (appname == "ViewCases")

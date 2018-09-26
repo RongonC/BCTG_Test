@@ -1349,7 +1349,8 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 new GetCaseNotesResponse.NoteData
                                 {
-                                    Note = Noteslist[i].Note
+                                    //User Uploaded File: <a href="/DownloadFile.aspx?CaseFileID=4569">IMG_20180920_233442.jpg</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src="/DownloadFile.aspx?CaseFileID=4569" alt="" style="max-width: {PXWIDE};" />
+                                    Note = Noteslist[i].Note.Replace("href=\"/DownloadFile.aspx?CaseFileID=","href=\""+App.CasesImgURL+"/DownloadFile.aspx?CaseFileID=")
                                 }
                             };
                         Temp.Add(grp);
@@ -1362,7 +1363,7 @@ namespace StemmonsMobile.Views.Cases
                             item.FirstOrDefault().ImageVisible = true;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                            item.FirstOrDefault().ImageURL =/* App.CasesImgURL + "/" +*/ item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
                             item.FirstOrDefault().Note = item.FirstOrDefault().Note;
                         }
                         else
