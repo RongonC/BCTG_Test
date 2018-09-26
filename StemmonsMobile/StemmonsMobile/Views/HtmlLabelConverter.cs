@@ -65,6 +65,15 @@ namespace StemmonsMobile
                 rawText = rawText.Replace("<p>", Environment.NewLine);
                 rawText = rawText.Replace("&nbsp;", " ");
                 rawText = rawText.Replace("&amp;", "&");
+                rawText = rawText.Replace("<br>", Environment.NewLine);
+                rawText = rawText.Replace("</br>", Environment.NewLine);
+                rawText = rawText.Replace("<br/>", Environment.NewLine);
+                rawText = rawText.Replace("<br ", Environment.NewLine);
+                rawText = rawText.Replace("<br />", Environment.NewLine);
+
+                rawText = rawText.Replace("<p>", Environment.NewLine);
+                rawText = rawText.Replace("<p ", Environment.NewLine);
+
 
                 StringBuilder sbHTML = new StringBuilder(rawText);
                 string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
@@ -204,21 +213,21 @@ namespace StemmonsMobile
                 var tempU = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
 
                 var Check = JsonConvert.DeserializeObject<List<MobileBranding>>(tempU.ASSOC_FIELD_INFO);
-                List<string> ls = new List<string>();
+                List<string> URLlist = new List<string>();
                 foreach (var item in Check)
                 {
                     MatchCollection collection = Regex.Matches(item.VALUE.ToLower(), @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?", RegexOptions.Singleline);
 
                     foreach (Match itm in collection)
                     {
-                        ls.Add(itm.Value);
+                        URLlist.Add(itm.Value);
                     }
                 }
 
                 bool isopenWeb = true;
-                foreach (var item in ls)
+                foreach (var tURL in URLlist)
                 {
-                    if (url.Contains(item.ToLower()))
+                    if (url.Replace("https://", "").Replace("http://", "").Contains(tURL.Replace("https://", "").Replace("http://", "").ToLower()))
                     {
                         isopenWeb = false;
                         break;
@@ -228,6 +237,10 @@ namespace StemmonsMobile
                         isopenWeb = true;
                     }
                 }
+
+                //This condition is for Boxer Property only
+                if (url.Contains("http://mobileservices.boxerproperty.com/mobileservice"))
+                    isopenWeb = true;
 
                 if (!isopenWeb)
                 {
