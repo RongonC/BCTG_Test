@@ -63,13 +63,15 @@ namespace StemmonsMobile.Commonfiles
                 return "";
 
             // Remove new lines since they are not visible in HTML
+            HTMLCode = HTMLCode.Replace("\r\n", Environment.NewLine);
+            HTMLCode = HTMLCode.Replace("\r", Environment.NewLine);
             HTMLCode = HTMLCode.Replace("\n", Environment.NewLine);
 
             // Remove tab spaces
             HTMLCode = HTMLCode.Replace("\t", " ");
 
             // Remove multiple white spaces from HTML
-            HTMLCode = Regex.Replace(HTMLCode, "\\s+", " ");
+            //HTMLCode = Regex.Replace(HTMLCode, "\\s+", " ");
 
             // Remove HEAD tag
             HTMLCode = Regex.Replace(HTMLCode, "<head.*?</head>", ""
@@ -95,10 +97,11 @@ namespace StemmonsMobile.Commonfiles
             sbHTML.Replace("<br>", Environment.NewLine);
             sbHTML.Replace("<br/>", Environment.NewLine);
             sbHTML.Replace("<br />", Environment.NewLine);
-            sbHTML.Replace("<br ", Environment.NewLine);
+            //sbHTML.Replace("<br ", Environment.NewLine);
 
             sbHTML.Replace("<p>", Environment.NewLine);
-            sbHTML.Replace("<p ", Environment.NewLine);
+            sbHTML.Replace("<p/>", Environment.NewLine);
+            // sbHTML.Replace("<p ", Environment.NewLine);
 
 
             // Finally, remove all HTML tags and return plain text

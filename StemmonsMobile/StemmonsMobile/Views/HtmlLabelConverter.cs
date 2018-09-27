@@ -68,20 +68,20 @@ namespace StemmonsMobile
                 rawText = rawText.Replace("<br>", Environment.NewLine);
                 rawText = rawText.Replace("</br>", Environment.NewLine);
                 rawText = rawText.Replace("<br/>", Environment.NewLine);
-                rawText = rawText.Replace("<br ", Environment.NewLine);
                 rawText = rawText.Replace("<br />", Environment.NewLine);
+                // rawText = rawText.Replace("<br ", Environment.NewLine);
 
                 rawText = rawText.Replace("<p>", Environment.NewLine);
-                rawText = rawText.Replace("<p ", Environment.NewLine);
+                rawText = rawText.Replace("</p>", Environment.NewLine);
+                // rawText = rawText.Replace("<p ", Environment.NewLine);
 
 
                 StringBuilder sbHTML = new StringBuilder(rawText);
-                string[] OldWords = {"&nbsp;", "&amp;", "&quot;", "&lt;",
-   "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;"};
-                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'" };
+                string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;", "&rsquo;", "&lsquo;" };
+                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'", "’", "‘" };
                 for (int i = 0; i < OldWords.Length; i++)
                 {
-                    sbHTML.Replace(OldWords[i], NewWords[i]);
+                    sbHTML = sbHTML.Replace(OldWords[i], NewWords[i]);
                 }
                 rawText = sbHTML.ToString();
 
@@ -133,7 +133,7 @@ namespace StemmonsMobile
                 {
                     Isadded = true;
                     var foundText = item.Value;
-                    sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
+                    sections.Add(new StringSection() { Text = Functions.HTMLToText(rawText.Substring(lastIndex, item.Index - lastIndex)) });
                     lastIndex = item.Index + item.Length;
 
                     MatchCollection mC2 = Regex.Matches(item.Value, @"(<a.*?>.*?</a>)",
@@ -169,7 +169,7 @@ namespace StemmonsMobile
                     foreach (Match item in collection1)
                     {
                         var foundText = item.Value;
-                        sections.Add(new StringSection() { Text = rawText.Substring(lastIndex, item.Index - lastIndex) });
+                        sections.Add(new StringSection() { Text = Functions.HTMLToText(rawText.Substring(lastIndex, item.Index - lastIndex)) });
                         lastIndex = item.Index + item.Length;
 
                         // Get HTML href 

@@ -5,7 +5,7 @@
              x:Class="StemmonsMobile.Views.LoginProcess.CreateNewInstance"
              Title="Create New Instance">
 
-    <ContentPage.Resources>
+    <!--<ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="16" />
@@ -16,7 +16,8 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-    </ContentPage.Resources>
+    </ContentPage.Resources>-->
+    
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid x:Name="masterGrid" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" ColumnSpacing="1" RowSpacing="1">
@@ -24,11 +25,11 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <StackLayout Grid.Row="0">
-                    <Label Text="Instance Name" FontSize="13" Margin="5,30,0,0" TextColor="Gray"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                    <Entry x:Name="txt_instancename" Text="{Binding InstanceName}" Placeholder="The name of the instance to connect to" Style="{StaticResource defaultLabelSize_16}" Margin="5,0,5,0" Completed="txt_instancename_Completed" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                    <Label Text="Instance URL" FontSize="13" Margin="5,30,0,0" TextColor="Gray" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                    <Entry x:Name="txt_instanceurl" Text="{Binding InstanceUrl}" Placeholder="Example: http://home.mysite.com/mysite" Style="{StaticResource defaultLabelSize_16}" TextChanged="Handle_TextChanged" Margin="5,0,5,0" Completed="txt_instanceurl_Completed" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
-                    <Button x:Name="Createbtn" Text="Create" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="18" Margin="0,0,10,0" FontAttributes="Italic" Clicked="Createbtn_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                    <Label Text="Instance Name" FontSize="13" Margin="5,30,0,0" TextColor="Gray" />
+                    <Entry x:Name="txt_instancename" Text="{Binding InstanceName}" Placeholder="The name of the instance to connect to" Style="{StaticResource defaultLabelSize_16}" Margin="5,0,5,0" Completed="txt_instancename_Completed" />
+                    <Label Text="Instance URL" FontSize="13" Margin="5,30,0,0" TextColor="Gray" />
+                    <Entry x:Name="txt_instanceurl" Text="{Binding InstanceUrl}" Placeholder="Example: http://home.mysite.com/mysite" Style="{StaticResource defaultLabelSize_16}" TextChanged="Handle_TextChanged" Margin="5,0,5,0" Completed="txt_instanceurl_Completed" />
+                    <Button x:Name="Createbtn" Text="Create" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="18" Margin="0,0,10,0" FontAttributes="Italic" Clicked="Createbtn_Clicked"/>
                 </StackLayout>
             </Grid>
             <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" IsVisible="False" AbsoluteLayout.LayoutFlags="All" BackgroundColor="Transparent">
