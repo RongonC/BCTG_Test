@@ -580,7 +580,7 @@ namespace StemmonsMobile.Views.Cases
                                                 #region txt_Date
                                                 Entry txt_Date = new Entry();
                                                 txt_Date.Placeholder = "Select Date";
-                                                txt_Date.WidthRequest = 175;
+                                                txt_Date.WidthRequest = 170;
                                                 txt_Date.TextColor = Color.Gray;
                                                 txt_Date.Keyboard = Keyboard.Numeric;
                                                 txt_Date.StyleId = "a_" + ControlsItem.ASSOC_TYPE_ID;
@@ -593,9 +593,16 @@ namespace StemmonsMobile.Views.Cases
 
                                                 #endregion
 
-                                                Image im = new Image();
-                                                im.StyleId = "imgcl_" + ControlsItem.ASSOC_TYPE_ID;
-                                                im.Source = ImageSource.FromFile("Assets/erase16.png");
+                                                Image img_clr = new Image();
+                                                img_clr.StyleId = "imgcl_" + ControlsItem.ASSOC_TYPE_ID;
+                                                if (Device.RuntimePlatform == Device.Android)
+                                                    img_clr.Source = ImageSource.FromFile("erase16.png");
+                                                else
+                                                    img_clr.Source = ImageSource.FromFile("Assets/erase16.png");
+
+                                                img_clr.HeightRequest = 25;
+                                                img_clr.WidthRequest = 25;
+
 
                                                 #region date_pick
                                                 DatePicker date_pick = new DatePicker();
@@ -607,7 +614,7 @@ namespace StemmonsMobile.Views.Cases
 
 
                                                 Mainlayout.Children.Add(txt_Date);
-                                                Mainlayout.Children.Add(im);
+                                                Mainlayout.Children.Add(img_clr);
                                                 Mainlayout.Children.Add(date_pick);
 
                                                 txt_Date.Focused += (sender, e) =>
@@ -617,8 +624,16 @@ namespace StemmonsMobile.Views.Cases
                                                         var cnt = (Entry)sender;
                                                         var sty_id = cnt.StyleId?.Split('_')[1];
                                                         var dt_c = FindCasesControls(Convert.ToInt32(sty_id), "DatePicker") as DatePicker;
+                                                        try
+                                                        {
+                                                            cnt.Unfocus();
+                                                        }
+                                                        catch (Exception)
+                                                        {
+                                                        }
                                                         Device.BeginInvokeOnMainThread(() =>
                                                         {
+                                                            cnt.Unfocus();
                                                             dt_c.Focus();
                                                         });
                                                     }
@@ -627,8 +642,8 @@ namespace StemmonsMobile.Views.Cases
                                                     }
                                                 };
 
-                                                var tgr = new TapGestureRecognizer();
-                                                tgr.Tapped += async (s, e) =>
+                                                var img_trgr = new TapGestureRecognizer();
+                                                img_trgr.Tapped += (s, e) =>
                                                 {
                                                     Entry C_ent = new Entry();
                                                     try
@@ -637,13 +652,14 @@ namespace StemmonsMobile.Views.Cases
                                                         var sty_id = ct.StyleId?.Split('_')[1];
                                                         C_ent = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
                                                         C_ent.Text = "";
+                                                        C_ent.Unfocus();
                                                     }
                                                     catch (Exception)
                                                     {
-                                                        C_ent.Text = "";
+                                                        //C_ent.Text = "";
                                                     }
                                                 };
-                                                im.GestureRecognizers.Add(tgr);
+                                                img_clr.GestureRecognizers.Add(img_trgr);
 
                                                 if (Device.RuntimePlatform == "iOS")
                                                 {
@@ -1152,17 +1168,6 @@ namespace StemmonsMobile.Views.Cases
                                                         dt_c.Date = Convert.ToDateTime(Str);
                                                     });
                                                 }
-
-                                                //DatePicker DO = new DatePicker();
-                                                //DO = cnt as DatePicker;
-                                                //DO.TextColor = Color.Gray;
-                                                //string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                //if (!String.IsNullOrEmpty(Dateval))
-                                                //{
-                                                //    var Str = App.DateFormatStringToString(Dateval);
-                                                //    DateTime dt = Convert.ToDateTime(Str);
-                                                //    DO.Date = dt;
-                                                //}
                                             }
                                         }
                                         catch (Exception)
@@ -1255,6 +1260,7 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
+       
         private void SetBottomBarDetails()
         {
             try
@@ -1274,7 +1280,6 @@ namespace StemmonsMobile.Views.Cases
                     string CASE_OWNER = spl?.Where(c => c.Contains("CASE_OWNER"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
                     string CASE_OWNER_DATETIME = spl?.Where(c => c.Contains("CASE_OWNER_DATETIME"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
 
-
                     _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName ?? _Casedata.CaseAssignedTo;
 
                     var s = new FormattedString();
@@ -1285,7 +1290,6 @@ namespace StemmonsMobile.Views.Cases
                     }
 
                     lbl_createname.FormattedText = s;
-                    // StkFoot.Children.Add(lbl_createname);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseAssignedToDisplayName != null)
@@ -1295,9 +1299,7 @@ namespace StemmonsMobile.Views.Cases
 
                     }
 
-                    // Label lbl_assignto = new Label();
                     lbl_assignto.FormattedText = s;
-                    // StkFoot.Children.Add(lbl_assignto);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseOwnerDisplayName != null)
@@ -1306,10 +1308,7 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_OWNER_DATETIME)) : (Convert.ToDateTime(_Casedata.CaseOwnerDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    //Label lbl_ownername = new Label();
                     lbl_ownername.FormattedText = s;
-                    // StkFoot.Children.Add(lbl_ownername);
-
 
                     s = new FormattedString();
                     if (_Casedata?.ModifiedByDisplayName != null)
@@ -1318,12 +1317,10 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(MODIFIED_DATETIME)) : (Convert.ToDateTime(_Casedata.ModifiedDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    // Label lbl_modifiedname = new Label();
                     lbl_modifiedname.FormattedText = s;
-                    // StkFoot.Children.Add(lbl_modifiedname);
                 }
 
-
+                Grd_Footer.IsVisible = true;
             }
             catch (Exception)
             {
@@ -1349,7 +1346,6 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 new GetCaseNotesResponse.NoteData
                                 {
-                                    //User Uploaded File: <a href="/DownloadFile.aspx?CaseFileID=4569">IMG_20180920_233442.jpg</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src="/DownloadFile.aspx?CaseFileID=4569" alt="" style="max-width: {PXWIDE};" />
                                     Note = Noteslist[i].Note.Replace("href=\"/DownloadFile.aspx?CaseFileID=","href=\""+App.CasesImgURL+"/DownloadFile.aspx?CaseFileID=")
                                 }
                             };

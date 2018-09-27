@@ -244,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datalayer.cs" />
+    <Compile Include="DroidKeyboardHelper.cs" />
     <Compile Include="ImageCircleRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />
@@ -442,9 +443,6 @@
     <AndroidResource Include="Resources\drawable\Assets\boxerlogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Assets\Cars.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\Assets\Casesblack.png" />
   </ItemGroup>
   <ItemGroup>
@@ -518,9 +516,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Assets\Home_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Assets\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Assets\icon_book.png" />
@@ -1062,7 +1057,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\boxer_icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Assets\boxer_icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\boxer_icon.png" />
-    <AndroidResource Include="Resources\drawable\Assets\new_boxerlogo.png" />
     <AndroidResource Include="Resources\drawable\new_boxerlogo.png" />
     <AndroidResource Include="Resources\drawable-hdpi\Assets\new_boxerlogo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\Assets\new_boxerlogo.png" />
@@ -1075,7 +1069,10 @@
     <AndroidResource Include="Resources\xml\file_paths.xml" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\drawable\erase16.png" />
+    <AndroidResource Include="Resources\drawable\erase16.png">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\Assets\erasedate.png" />
@@ -1094,14 +1091,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\Assets\deletebutton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Assets\deletebutton.png">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Assets\ic_cancel.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\Assets\ic_cancel.png" />

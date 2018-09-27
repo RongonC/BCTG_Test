@@ -490,9 +490,14 @@ namespace StemmonsMobile.Views.Cases
 
                                 #endregion
 
-                                Image im = new Image();
-                                im.StyleId = "imgcl_" + item.ASSOC_TYPE_ID;
-                                im.Source = ImageSource.FromFile("Assets/erase16.png");
+                                Image img_clr = new Image();
+                                img_clr.StyleId = "imgcl_" + item.ASSOC_TYPE_ID;
+                                if (Device.RuntimePlatform == Device.Android)
+                                    img_clr.Source = ImageSource.FromFile("erase16.png");
+                                else
+                                    img_clr.Source = ImageSource.FromFile("Assets/erase16.png");
+                                img_clr.HeightRequest = 25;
+                                img_clr.WidthRequest = 25;
 
                                 #region date_pick
                                 DatePicker date_pick = new DatePicker();
@@ -504,7 +509,7 @@ namespace StemmonsMobile.Views.Cases
                                 #endregion
 
                                 Mainlayout.Children.Add(txt_Date);
-                                Mainlayout.Children.Add(im);
+                                Mainlayout.Children.Add(img_clr);
                                 Mainlayout.Children.Add(date_pick);
 
                                 txt_Date.Focused += (sender, e) =>
@@ -514,8 +519,16 @@ namespace StemmonsMobile.Views.Cases
                                         var cnt = (Entry)sender;
                                         var sty_id = cnt.StyleId?.Split('_')[1];
                                         var dt_c = FindCasesControls(Convert.ToInt32(sty_id), "DatePicker") as DatePicker;
+                                        try
+                                        {
+                                            cnt.Unfocus();
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
                                         Device.BeginInvokeOnMainThread(() =>
                                         {
+                                            cnt.Unfocus();
                                             dt_c.Focus();
                                         });
                                     }
@@ -540,9 +553,9 @@ namespace StemmonsMobile.Views.Cases
                                         C_ent.Text = "";
                                     }
                                 };
-                                im.GestureRecognizers.Add(clr_img_click);
+                                img_clr.GestureRecognizers.Add(clr_img_click);
 
-                                if (Device.RuntimePlatform != "UWP")
+                                if (Device.RuntimePlatform == "iOS")
                                 {
                                     date_pick.Unfocused += Date_pick_Unfocused;
                                 }

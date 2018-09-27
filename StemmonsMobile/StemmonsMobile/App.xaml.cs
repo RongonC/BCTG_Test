@@ -34,9 +34,6 @@ namespace StemmonsMobile
             InitializeComponent();
 
             GetAppLocalData();
-
-
-
             //MainPage = new ViewcasePage_New();
 
             //return;

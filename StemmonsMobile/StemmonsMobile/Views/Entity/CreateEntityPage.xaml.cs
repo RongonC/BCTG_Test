@@ -349,8 +349,16 @@ namespace StemmonsMobile.Views.Entity
                                             var cnt = (Entry)sender;
                                             //var sty_id = cnt.StyleId?.Split('_')[1];
                                             var dt_c = FindEntityControl(cnt.StyleId, "DatePicker") as DatePicker;
+                                            try
+                                            {
+                                                cnt.Unfocus();
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
                                             Device.BeginInvokeOnMainThread(() =>
                                             {
+                                                cnt.Unfocus();
                                                 dt_c.Focus();
                                             });
                                         }
@@ -377,11 +385,16 @@ namespace StemmonsMobile.Views.Entity
 
                                     #endregion
 
-                                    Image im = new Image
-                                    {
-                                        StyleId = "imgcl_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                        Source = ImageSource.FromFile("Assets/erase16.png")
-                                    };
+                                    Image img_clr = new Image();
+                                    img_clr.StyleId = "imgcl_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
+
+                                    if (Device.RuntimePlatform == Device.Android)
+                                        img_clr.Source = ImageSource.FromFile("erase16.png");
+                                    else
+                                        img_clr.Source = ImageSource.FromFile("Assets/erase16.png");
+                                    img_clr.HeightRequest = 25;
+                                    img_clr.WidthRequest = 25;
+
 
                                     #region date_pick
                                     DatePicker date_pick = new DatePicker
@@ -391,9 +404,10 @@ namespace StemmonsMobile.Views.Entity
                                         StyleId = "dt_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID
                                     };
                                     #endregion
+
                                     RightLyout.Orientation = StackOrientation.Horizontal;
                                     RightLyout.Children.Add(txt_Date);
-                                    RightLyout.Children.Add(im);
+                                    RightLyout.Children.Add(img_clr);
                                     RightLyout.Children.Add(date_pick);
 
                                     var clr_img_click = new TapGestureRecognizer();
@@ -411,7 +425,7 @@ namespace StemmonsMobile.Views.Entity
                                             C_ent.Text = "";
                                         }
                                     };
-                                    im.GestureRecognizers.Add(clr_img_click);
+                                    img_clr.GestureRecognizers.Add(clr_img_click);
 
                                     if (Device.RuntimePlatform == "iOS")
                                     {

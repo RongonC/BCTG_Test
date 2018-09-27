@@ -69,7 +69,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.Footer>
-                            <Grid Grid.Row="3" Margin="10,0,0,0"  HorizontalOptions="Fill">
+                            <Grid x:Name="Grd_Footer" Grid.Row="3" Margin="10,0,0,0" IsVisible="False" HorizontalOptions="Fill" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition  Height="1"/>
                                     <RowDefinition  Height="auto"/>
@@ -86,16 +86,16 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
-                                <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14" />
+                                <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14" />
 
                                 <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
-                                <Label Grid.Row="1" Grid.Column="2" x:Name="lbl_createname" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="3" Grid.Column="2" x:Name="lbl_assignto" FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="5" Grid.Column="2" x:Name="lbl_ownername"  FontSize="14" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                <Label Grid.Row="7" Grid.Column="2" x:Name="lbl_modifiedname" FontSize="14"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                <Label Grid.Row="1" Grid.Column="2" x:Name="lbl_createname" FontSize="14"/>
+                                <Label Grid.Row="3" Grid.Column="2" x:Name="lbl_assignto" FontSize="14"/>
+                                <Label Grid.Row="5" Grid.Column="2" x:Name="lbl_ownername"  FontSize="14" />
+                                <Label Grid.Row="7" Grid.Column="2" x:Name="lbl_modifiedname" FontSize="14" />
                             </Grid>
                         </ListView.Footer>
                         <ListView.GroupHeaderTemplate>
@@ -106,13 +106,10 @@
                                                          BackgroundColor="#DEE7F3" VerticalOptions="Center" HeightRequest="45"  >
                                             <StackLayout Orientation="Horizontal" BackgroundColor="#DEE7F3"
                                                              HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
-                                                <Label Text="Notes: " FontAttributes="Bold"   FontSize="14" 
-                                                           FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                                <Label FontSize="14" FontAttributes="Bold" Text="{Binding CreatedDate}" 
-                                                           FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                <Label Text="Notes: " FontAttributes="Bold"   FontSize="14"/>
+                                                <Label FontSize="14" FontAttributes="Bold" Text="{Binding CreatedDate}"/>
                                                 <Label FontSize="14" FontAttributes="Bold" Text="{Binding Uname}"
-                                                           Margin="10,0,0,0"
-                                                           FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                           Margin="10,0,0,0"/>
 
                                             </StackLayout>
                                         </StackLayout>
