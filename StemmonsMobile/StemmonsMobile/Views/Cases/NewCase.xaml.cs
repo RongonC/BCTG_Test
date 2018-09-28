@@ -221,14 +221,10 @@ namespace StemmonsMobile.Views.Cases
                         pk.WidthRequest = 200;
                         pk.TextColor = Color.Gray;
 
-
-
-
                         Entry entry_number = new Entry();
                         entry_number.WidthRequest = 200;
                         entry_number.FontSize = 16;
                         entry_number.Keyboard = Keyboard.Numeric;
-                        entry_number.FontFamily = "Soin Sans Neue";
 
 
                         switch (item.ASSOC_FIELD_TYPE.ToLower())
@@ -394,7 +390,7 @@ namespace StemmonsMobile.Views.Cases
                                         int j = lst_SSsource.FindIndex(v => v.ID == records?.ID);
 
                                         pk.SelectedIndex = j == -1 ? 0 : j;
-                                        if (j != null && j > 0)
+                                        if (j > 0)
                                         {
                                             pk.IsEnabled = false;
                                         }
@@ -405,8 +401,6 @@ namespace StemmonsMobile.Views.Cases
                                 }
                                 catch (Exception ex)
                                 {
-
-                                    //  throw;
                                 }
 
                                 Mainlayout.Children.Add(pk);
@@ -422,13 +416,10 @@ namespace StemmonsMobile.Views.Cases
                                     entry_notes.WidthRequest = 200;
                                     entry_notes.FontSize = 16;
                                     entry_notes.Keyboard = Keyboard.Default;
-
                                     entry_notes.Text = metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
                                 }
                                 catch (Exception ex)
                                 {
-
-                                    //  throw;
                                 }
                                 Mainlayout.Children.Add(entry_notes);
                                 break;
@@ -502,7 +493,6 @@ namespace StemmonsMobile.Views.Cases
                                 #region date_pick
                                 DatePicker date_pick = new DatePicker();
                                 date_pick.IsVisible = false;
-                                //date_pick.Format = "MM/dd/yyyy";
                                 date_pick.WidthRequest = 200;
                                 date_pick.TextColor = Color.Gray;
                                 date_pick.StyleId = "dt_" + item.ASSOC_TYPE_ID;

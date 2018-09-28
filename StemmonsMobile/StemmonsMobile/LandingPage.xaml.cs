@@ -261,9 +261,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.Title = "Case Types Sync Operation " + 2 + " of " + itemCount + " in Progress";
-                                                    });
+                                {
+                                    dlg.Title = "Case Types Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -1020,7 +1020,7 @@ namespace StemmonsMobile
                 btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
             }
 
-           // btn_usericon.Source = ImageSource.FromFile("Assets/deletebutton.png");
+            // btn_usericon.Source = ImageSource.FromFile("Assets/deletebutton.png");
             project = new List<string>();
             if (App.IsLoginCall)
             {

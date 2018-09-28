@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -99,7 +100,7 @@ namespace StemmonsMobile.Views.Cases
             WarningLabel.IsVisible = true;
             #endregion
 
-            BindingContext = new CasesViewmodel(this);
+            BindingContext = new CasesPulltorefreshViewmodel(this);
         }
 
         protected async override void OnAppearing()
@@ -113,13 +114,11 @@ namespace StemmonsMobile.Views.Cases
                 RefreshColor = Color.FromHex("#3498db")
             };
 
-            refreshView.SetBinding<CasesViewmodel>(PullToRefreshLayout.IsRefreshingProperty, vm => vm.IsBusy, BindingMode.OneWay);
-            refreshView.SetBinding<CasesViewmodel>(PullToRefreshLayout.RefreshCommandProperty, vm => vm.RefreshCommand);
+            refreshView.SetBinding<CasesPulltorefreshViewmodel>(PullToRefreshLayout.IsRefreshingProperty, vm => vm.IsBusy, BindingMode.OneWay);
+            refreshView.SetBinding<CasesPulltorefreshViewmodel>(PullToRefreshLayout.RefreshCommandProperty, vm => vm.RefreshCommand);
 
             masterGrid.Children.Add(refreshView, 0, 2);
-            //masterGrid.Children.Add(btm_stack, 0, 3);
 
-            // abs_layout.Children.Add(refreshView);
             abs_layout.Children.Add(overlay);
             Content = abs_layout;
 
@@ -388,6 +387,17 @@ namespace StemmonsMobile.Views.Cases
                                         VerticalOptions = LayoutOptions.Start
                                     };
                                     Label1.Text = ControlsItem.NAME;
+
+                                    FormattedString Format = new FormattedString();
+                                    Format.Spans.Add(new Span { Text = ControlsItem.NAME + ":" });
+
+                                    if (ControlsItem.IS_REQUIRED.ToLower() == "y")
+                                        Format.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
+
+                                    Label1.FormattedText = Format;
+
+
+
                                     Label1.HorizontalOptions = LayoutOptions.Start;
                                     Label1.FontSize = 16;
                                     Label1.WidthRequest = 200;
@@ -1260,7 +1270,6 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
-       
         private void SetBottomBarDetails()
         {
             try
@@ -3127,51 +3136,56 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         break;
 
+                    #region Return to Last Assignee
                     case "Return to Last Assignee":
                         Task<int> ReturnToLastAssignee = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                         try
                         {
                             await Task.Run(() =>
-                            {
-                                ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
-                                ReturnToLastAssignee.Wait();
-                                if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
-                                {
-                                    ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
-                                    {
-                                        caseID = Convert.ToInt32(CaseID),
-                                        username = Functions.UserName
-                                    };
-                                    Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
-                                    if (offlinerecord == null)
-                                    {
-                                        offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
-                                    }
+                          {
+                              ReturnToLastAssignee = SaveAndUpdate(savecase, createcase, null);
+                              ReturnToLastAssignee.Wait();
+                              if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
+                              {
+                                  ReturnCaseToLastAssigneeRequest objReturnCaseToLastAssignee = new ReturnCaseToLastAssigneeRequest()
+                                  {
+                                      caseID = Convert.ToInt32(CaseID),
+                                      username = Functions.UserName
+                                  };
+                                  Task<AppTypeInfoList> offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "T", tm_uname);
+                                  if (offlinerecord == null)
+                                  {
+                                      offlinerecord = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ConstantsSync.CasesInstance, Convert.ToInt32(CaseID), App.DBPath, "E2_GetCaseList" + strTome, "M", tm_uname);
+                                  }
 
-                                    offlinerecord.Wait();
-                                    BasicCase objview = new BasicCase();
-                                    if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
-                                    {
-                                        try
-                                        {
-                                            var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                            objview = objviewtemp?.FirstOrDefault();
-                                            if (objview == null)
-                                            {
-                                                objview = objviewtemp.FirstOrDefault();
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
-                                        }
-                                    }
+                                  offlinerecord.Wait();
+                                  BasicCase objview = new BasicCase();
+                                  if (!string.IsNullOrEmpty(offlinerecord.Result?.ASSOC_FIELD_INFO))
+                                  {
+                                      try
+                                      {
+                                          var objviewtemp = JsonConvert.DeserializeObject<List<BasicCase>>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                          objview = objviewtemp?.FirstOrDefault();
+                                          if (objview == null)
+                                          {
+                                              objview = objviewtemp.FirstOrDefault();
+                                          }
+                                      }
+                                      catch
+                                      {
+                                          objview = JsonConvert.DeserializeObject<BasicCase>(offlinerecord?.Result?.ASSOC_FIELD_INFO);
+                                      }
+                                  }
 
 
-                                    CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
-                                }
-                            });
+                                  CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+
+                                   // To manage the footer for Return To Functionality Only
+                                   HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+
+                              }
+                          });
 
                             if (ReturnToLastAssignee != null && ReturnToLastAssignee?.Result > 0)
                             {
@@ -3189,7 +3203,9 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
+                    #endregion
 
+                    #region Return to Last Assigner
                     case "Return to Last Assigner":
                         Task<int> ReturnToLastAssigner = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -3247,6 +3263,10 @@ namespace StemmonsMobile.Views.Cases
                                     }
 
                                     CasesSyncAPIMethods.storeReturnToLastAssigner(Onlineflag, objReturnCaseToLastAssigner, Convert.ToInt32(Casetypeid), _caseid, Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, strTome);
+
+                                    // To manage the footer for Return To Functionality Only
+                                    HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+
                                 }
                             });
 
@@ -3266,7 +3286,9 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
+                    #endregion
 
+                    #region Approve and Return
                     case "Approve and Return":
                         Task<int> ApproveAndReturn = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -3339,12 +3361,16 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
+                    #endregion
 
+                    #region Approve and Assign
                     case "Approve and Assign":
                         await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, true, false, strTome, Onlineflag));
                         txt_CasNotes.Text = string.Empty;
                         break;
+                    #endregion
 
+                    #region Decline and Return
                     case "Decline and Return":
                         Task<int> DeclineAndReturn = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -3409,13 +3435,18 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
+                    #endregion
+
+                    #region Decline and Assign
                     case "Decline and Assign":
 
                         await this.Navigation.PushAsync(new AssignCase(Convert.ToString(CaseID), Casetypeid, createcase, txt_CasNotes.Text, Functions.UserName, "U", savecase, false, true, strTome, Onlineflag));
 
                         txt_CasNotes.Text = string.Empty;
                         break;
+                    #endregion
 
+                    #region Close Case
                     case "Close Case":
                         Task<int> Close = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -3503,7 +3534,9 @@ namespace StemmonsMobile.Views.Cases
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
 
+                    #endregion
 
+                    #region Take Ownership
                     case "Take Ownership":
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                         try
@@ -3538,6 +3571,7 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
+                    #endregion
 
 
                     case "Email Link":
@@ -3829,21 +3863,15 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
-
     }
 
-
-
-
-
-    public class CasesViewmodel : INotifyPropertyChanged
+    public class CasesPulltorefreshViewmodel : INotifyPropertyChanged
     {
         public ObservableCollection<string> Items { get; set; }
         Page page;
-        public CasesViewmodel(Page page)
+        public CasesPulltorefreshViewmodel(Page page)
         {
             this.page = page;
-
         }
 
         bool isBusy;

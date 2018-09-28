@@ -85,6 +85,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public int INSTANCE_ID { get; set; }
         public string USER { get; set; }
         public string HOME_SCREEN_INFO { get; set; }
+        //public blobl User_ProfilePic { get; set; }
     }
 
     //public class ActivityDetails

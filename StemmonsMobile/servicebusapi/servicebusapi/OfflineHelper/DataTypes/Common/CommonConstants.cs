@@ -925,6 +925,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     GetAppTypeInfo.Wait();
                     if (GetAppTypeInfo?.Result == null)
                     {
+                        // Find for Record With M type
+                        /*VishalPr*/
                         GetAppTypeInfo = DBHelper.GetAppTypeInfoIdTransTypeSyscode(ApplicationName, _TypeID, AppTypeinfoId, _DBPath, sscreenName, "M");
                         GetAppTypeInfo.Wait();
                         if (GetAppTypeInfo?.Result != null)
@@ -950,14 +952,21 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                         }
                         else if (GetAppTypeInfo?.Result == null)
                         {
+
                             _Mode = "UC";
-                            GetAppTypeInfo = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ApplicationName, AppTypeinfoId, _DBPath, sscreenName, "T");
+                            GetAppTypeInfo = DBHelper.GetAppTypeInfoIdTransTypeSyscode(ApplicationName, _TypeID, AppTypeinfoId, _DBPath, sscreenName, "T");
                             GetAppTypeInfo.Wait();
                             if (GetAppTypeInfo?.Result == null)
                             {
-                                GetAppTypeInfo = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ApplicationName, AppTypeinfoId, _DBPath, scondaryScreenName, "M");
+                                GetAppTypeInfo = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ApplicationName, AppTypeinfoId, _DBPath, sscreenName, "T");
                                 GetAppTypeInfo.Wait();
+                                if (GetAppTypeInfo?.Result == null)
+                                {
+                                    GetAppTypeInfo = DBHelper.GetAppTypeInfoByTransTypeSyscodewithouttypeid(ApplicationName, AppTypeinfoId, _DBPath, scondaryScreenName, "M");
+                                    GetAppTypeInfo.Wait();
+                                }
                             }
+
                             var temp = GetAppTypeInfo.Result as AppTypeInfoList;
 
                             if (temp.IS_ONLINE == true)
@@ -971,7 +980,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                     {
                                         strsystemcode = "C1_C2_CASES_CASETYPELIST";
                                     }
-
                                     else if (temp.SYSTEM.ToUpper() == "QUEST")
                                     {
                                         strsystemcode = "H1_H2_H3_QUEST_AREA_FORM";
@@ -989,7 +997,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                         GetAppTypeInfo = DBHelper.GetItemTranInfoListByProcessIdappid(0, Convert.ToInt32(id), _DBPath);
                                         GetAppTypeInfo.Wait();
                                     }
-
                                 }
 
                                 _Mode = "U";
