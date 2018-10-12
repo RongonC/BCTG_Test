@@ -86,7 +86,10 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
-                await LoadEntityList(1, pageSize);
+                for (int i = 1; i <= _pageindex; i++)
+                {
+                    await LoadEntityList(i, pageSize);
+                }
             }
             catch (Exception ex)
             {

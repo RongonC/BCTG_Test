@@ -77,8 +77,8 @@ namespace StemmonsMobile
 
 
                 StringBuilder sbHTML = new StringBuilder(rawText);
-                string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;", "&rsquo;", "&lsquo;" };
-                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "â€¢", "â„¢", "'", "’", "‘" };
+                string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;", "&rsquo;", "&lsquo;", "&sbquo;", "&ldquo;", "&rdquo;", "&bdquo;", "&frasl;" };
+                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "•", "™", "'", "’", "‘", "‚", "“", "”", "„", "⁄" };
                 for (int i = 0; i < OldWords.Length; i++)
                 {
                     sbHTML = sbHTML.Replace(OldWords[i], NewWords[i]);
@@ -212,9 +212,9 @@ namespace StemmonsMobile
 
                 var tempU = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
 
-                var Check = JsonConvert.DeserializeObject<List<MobileBranding>>(tempU.ASSOC_FIELD_INFO);
+                var CheckList = JsonConvert.DeserializeObject<List<MobileBranding>>(tempU.ASSOC_FIELD_INFO);
                 List<string> URLlist = new List<string>();
-                foreach (var item in Check)
+                foreach (var item in CheckList)
                 {
                     MatchCollection collection = Regex.Matches(item.VALUE.ToLower(), @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?", RegexOptions.Singleline);
 

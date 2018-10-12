@@ -1246,79 +1246,79 @@ namespace StemmonsMobile.Views.Cases
         }
         public void ReloadNotesArea()
         {
-            try
-            {
-                gridCasesnotes.ItemsSource = null;
-                CasesnotesGroups.Clear();
+            //try
+            //{
+            //    gridCasesnotes.ItemsSource = null;
+            //    CasesnotesGroups.Clear();
 
-                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                NotesResponse.Wait();
-                var Noteslist = NotesResponse?.Result;
+            //    Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+            //    NotesResponse.Wait();
+            //    var Noteslist = NotesResponse?.Result;
 
-                ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
-                if (Noteslist?.Count > 0)
-                {
-                    for (int i = 0; i < Noteslist.Count; i++)
-                    {
-                        CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
-                            {
-                                new GetCaseNotesResponse.NoteData
-                                {
-                                    Note = Noteslist[i].Note
-                                }
-                            };
-                        Temp.Add(grp);
-                    }
+            //    ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
+            //    if (Noteslist?.Count > 0)
+            //    {
+            //        for (int i = 0; i < Noteslist.Count; i++)
+            //        {
+            //            CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
+            //                {
+            //                    new GetCaseNotesResponse.NoteData
+            //                    {
+            //                        Note = Noteslist[i].Note
+            //                    }
+            //                };
+            //            Temp.Add(grp);
+            //        }
 
-                    foreach (var item in Temp)
-                    {
-                        //if (item.FirstOrDefault().Note.Contains("<img"))
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = true;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
-                        //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
-                        //}
-                        //else
-                        //{
-                        //    item.FirstOrDefault().ImageVisible = false;
-                        //    item.FirstOrDefault().LabelVisible = true;
-                        //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                        //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
-                        //}
-                        if (item.FirstOrDefault().Note.Contains("<img"))
-                        {
-                            item.FirstOrDefault().ImageVisible = true;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-                        else
-                        {
-                            item.FirstOrDefault().ImageVisible = false;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
+            //        foreach (var item in Temp)
+            //        {
+            //            //if (item.FirstOrDefault().Note.Contains("<img"))
+            //            //{
+            //            //    item.FirstOrDefault().ImageVisible = true;
+            //            //    item.FirstOrDefault().LabelVisible = true;
+            //            //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+            //            //    item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+            //            //    item.FirstOrDefault().Note = item.FirstOrDefault().Note;
+            //            //}
+            //            //else
+            //            //{
+            //            //    item.FirstOrDefault().ImageVisible = false;
+            //            //    item.FirstOrDefault().LabelVisible = true;
+            //            //    item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+            //            //    item.FirstOrDefault().Note = (item.FirstOrDefault().Note);
+            //            //}
+            //            if (item.FirstOrDefault().Note.Contains("<img"))
+            //            {
+            //                item.FirstOrDefault().ImageVisible = true;
+            //                item.FirstOrDefault().LabelVisible = true;
+            //                item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+            //                item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+            //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+            //            }
+            //            else
+            //            {
+            //                item.FirstOrDefault().ImageVisible = false;
+            //                item.FirstOrDefault().LabelVisible = true;
+            //                item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+            //                item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+            //            }
 
-                        CasesnotesGroups.Add(item);
-                    }
+            //            CasesnotesGroups.Add(item);
+            //        }
 
-                    gridCasesnotes.ItemsSource = null;
-                    gridCasesnotes.ItemsSource = CasesnotesGroups;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            if (CasesnotesGroups.Count <= 0)
-            {
-                gridCasesnotes.HeightRequest = 0;
-            }
-            else
-                gridCasesnotes.HeightRequest = 700;
+            //        gridCasesnotes.ItemsSource = null;
+            //        gridCasesnotes.ItemsSource = CasesnotesGroups;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //}
+            //if (CasesnotesGroups.Count <= 0)
+            //{
+            //    gridCasesnotes.HeightRequest = 0;
+            //}
+            //else
+            //    gridCasesnotes.HeightRequest = 700;
         }
 
         private object FindPickerControls(int AssocID)

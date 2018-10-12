@@ -46,7 +46,8 @@ namespace StemmonsMobile.DataTypes.DataType.Quest
             {
                 get
                 {
-                    return $"{"Points Earned:"} {"0"}";
+                    string val = string.IsNullOrEmpty(strEarned) ? "0" : strEarned;
+                    return $"{"Points Earned:"} {val}";
                 }
             }
 
@@ -54,7 +55,8 @@ namespace StemmonsMobile.DataTypes.DataType.Quest
             {
                 get
                 {
-                    return $"{"Section Score:"} {"0%"}";
+                    string val = string.IsNullOrEmpty(strScore) ? "0" : strScore;
+                    return $"{"Section Score:"} {val + "%"}";
                 }
             }
         }

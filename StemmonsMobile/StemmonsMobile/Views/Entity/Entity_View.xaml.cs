@@ -34,9 +34,9 @@ namespace StemmonsMobile.Views.Entity
         BorderEditor txt_EntNotes = new BorderEditor();
         List<AssociationField> EntityAssocOrder = new List<AssociationField>();
         EntityClass EntityLists = new EntityClass();
-        // List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
+        List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
         string NavScreenname = string.Empty;// To manage Online and Offline View entity as per Screen name
-        public static EntityListMBView _entityListMBView = new EntityListMBView();
+        public EntityListMBView _entityListMBView = new EntityListMBView();
 
         /// <summary>  Main Required Para is Below for this page Work
         ///     _entityListMBView.EntityDetails.EntityTypeID;
@@ -88,13 +88,13 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    //try
-                    //{
-                    //    EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName, App.DBPath);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //}
+                    try
+                    {
+                        EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName, App.DBPath);
+                    }
+                    catch (Exception)
+                    {
+                    }
                     try
                     {
                         /*PHASE II Implementation*/
@@ -115,7 +115,6 @@ namespace StemmonsMobile.Views.Entity
                     lbl.FontSize = 22;
                     lbl.Margin = new Thickness(0, 10, 0, 0);
                     lbl.FontAttributes = FontAttributes.Bold;
-                    lbl.FontFamily = "Soin Sans Neue";
 
                     var Mainlayout = new StackLayout();
                     Mainlayout.Orientation = StackOrientation.Horizontal;
@@ -272,7 +271,7 @@ namespace StemmonsMobile.Views.Entity
 
                     TextFieldsLayout.Children.Add(layout);
 
-                    var s = new FormattedString();
+                    FormattedString s = new FormattedString();
                     try
                     {
                         if (EntityLists?.EntityCreatedByFullName != null)
@@ -336,41 +335,41 @@ namespace StemmonsMobile.Views.Entity
 
                 #region Get Entity notes
 
-                //ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
-                //if (EntityListsNotes != null)
-                //{
-                //    for (int i = 0; i < EntityListsNotes.Count; i++)
-                //    {
-                //        string st = App.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
-                //        Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
-                //        {
-                //            new Entity_Notes { Note = EntityListsNotes[i].Note }
-                //        });
-                //    }
+                ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
+                if (EntityListsNotes != null)
+                {
+                    for (int i = 0; i < EntityListsNotes.Count; i++)
+                    {
+                        string st = App.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
+                        Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
+                        {
+                            new Entity_Notes { Note = EntityListsNotes[i].Note }
+                        });
+                    }
 
-                //    foreach (var item in Temp)
-                //    {
-                //        if (item.FirstOrDefault().Note.Contains("<img"))
-                //        {
-                //            item.FirstOrDefault().ImageVisible = true;
-                //            item.FirstOrDefault().LabelVisible = true;
-                //            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                //            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                //        }
-                //        else
-                //        {
-                //            item.FirstOrDefault().ImageVisible = false;
-                //            item.FirstOrDefault().LabelVisible = true;
-                //            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                //        }
-                //        Groups.Add(item);
-                //    }
-                //}
+                    foreach (var item in Temp)
+                    {
+                        if (item.FirstOrDefault().Note.Contains("<img"))
+                        {
+                            item.FirstOrDefault().ImageVisible = true;
+                            item.FirstOrDefault().LabelVisible = true;
+                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                            item.FirstOrDefault().Note = item.FirstOrDefault().Note;//Functions.HTMLToText(item.FirstOrDefault().Note);
+                        }
+                        else
+                        {
+                            item.FirstOrDefault().ImageVisible = false;
+                            item.FirstOrDefault().LabelVisible = true;
+                            item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
+                            item.FirstOrDefault().Note = item.FirstOrDefault().Note;//Functions.HTMLToText(item.FirstOrDefault().Note);
+                        }
+                        Groups.Add(item);
+                    }
+                }
 
-                //gridEntitynotes.ItemsSource = Groups;
-                //gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
+                gridEntitynotes.ItemsSource = Groups;
+                gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
                 #endregion
 
                 #region Get Entity Related Application
@@ -397,7 +396,7 @@ namespace StemmonsMobile.Views.Entity
                     UpdateListContent();
                 }
 
-                GroupedView.HeightRequest = (counter * 90);
+                List_RelationalGrid.HeightRequest = (counter * 90);
                 line_relatedgrid.IsVisible = (counter * 90) <= 0 ? false : true;
                 #endregion
             }
@@ -405,6 +404,7 @@ namespace StemmonsMobile.Views.Entity
             {
             }
 
+            grd_footer.IsVisible = true;
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
@@ -439,14 +439,11 @@ namespace StemmonsMobile.Views.Entity
                     }
                     _expandedGroups.Add(newGroup);
                 }
-                GroupedView.ItemsSource = _expandedGroups;
+                List_RelationalGrid.ItemsSource = _expandedGroups;
             }
             catch (Exception)
             {
             }
-            //int heightRowLista = 110;
-            //int iqa = (_allGroups.Count * heightRowLista);
-            //GroupedView.HeightRequest = iqa;
         }
 
         void EmailLink(EntityListMBView saveentity)
@@ -972,7 +969,7 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        private async void GroupedView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void List_RelationalGrid_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {
@@ -995,9 +992,9 @@ namespace StemmonsMobile.Views.Entity
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(_entityListMBView.EntityDetails.EntityID), Convert.ToString(_entityListMBView.EntityDetails.EntityTypeID)));
-        }
+        //private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
+        //{
+        //    await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(_entityListMBView.EntityDetails.EntityID), Convert.ToString(_entityListMBView.EntityDetails.EntityTypeID)));
+        //}
     }
 }

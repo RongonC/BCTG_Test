@@ -102,7 +102,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     if (ViewCount == 0)
                     {
-
                         if (!App.Isonline)
                         {
                             var Appinfo = DBHelper.GetAppTypeInfoListByTypeIdTransTypeSyscode(ConstantsSync.QuestInstance, Convert.ToInt32(itemid), App.DBPath, "H1_H2_H3_QUEST_AREA_FORM", "M");
@@ -162,22 +161,21 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         try
                         {
                             await Task.Run(() =>
-                             {
-                                 var result = QuestSyncAPIMethods.GetItemInfoFieldMetaData(App.Isonline, Convert.ToString(Iteminstancetranid), "", "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid, Functions.UserName, Convert.ToInt32(scatid));
-                                 result.Wait();
-                                 ControlsValues = result.Result;
+                            {
+                                var result = QuestSyncAPIMethods.GetItemInfoFieldMetaData(App.Isonline, Convert.ToString(Iteminstancetranid), "", "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid, Functions.UserName, Convert.ToInt32(scatid));
+                                result.Wait();
+                                ControlsValues = result.Result;
 
 
-                                 var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Iteminstancetranid);
-                                 lstItemInfoDependancy = getInfoDepeResult.Result;
+                                var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Iteminstancetranid);
+                                lstItemInfoDependancy = getInfoDepeResult.Result;
 
-                                 var apicall = QuestSyncAPIMethods.GetItemQuestionMetaData(App.Isonline, Convert.ToString(Iteminstancetranid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid, "", scatid);
+                                var apicall = QuestSyncAPIMethods.GetItemQuestionMetaData(App.Isonline, Convert.ToString(Iteminstancetranid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid, "", scatid);
 
-                                 lst = apicall?.Result;
-                             });
+                                lst = apicall?.Result;
+                            });
                         }
                         catch (Exception ex) { }
-
 
                         try
                         {
@@ -192,10 +190,18 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                 var Label1 = new Label
                                 { VerticalOptions = LayoutOptions.Start };
-                                Label1.Text = ControlSchema[i].strItemInfoFieldName;
+
+                                FormattedString frmtText = new FormattedString();
+                                frmtText.Spans.Add(new Span { Text = ControlSchema[i].strItemInfoFieldName + ":" });
+
+                                if (ControlSchema[i]._IS_REQUIRED.ToLower() == "y")
+                                    frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
+
+                                Label1.FormattedText = frmtText;
+
+                                //Label1.Text = ControlSchema[i].strItemInfoFieldName;
                                 Label1.HorizontalOptions = LayoutOptions.Start;
                                 Label1.FontSize = 16;
-                                Label1.FontFamily = "Soin Sans Neue";
 
                                 layout1.Children.Add(Label1);
                                 layout.Children.Add(layout1);
@@ -203,38 +209,29 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 var Rightlayout = new StackLayout();
                                 Rightlayout.HorizontalOptions = LayoutOptions.Start;
 
-                                Picker pk = new Picker();
-                                pk.HorizontalOptions = LayoutOptions.Start;
-                                pk.WidthRequest = 200;
-                                pk.TextColor = Color.Gray;
-
-                                DatePicker DO = new DatePicker();
-                                DO.Date = Convert.ToDateTime("01/01/1900");
-                                DO.HorizontalOptions = LayoutOptions.Start;
-                                DO.WidthRequest = 200;
-                                DO.Format = "MM/dd/yyyy";
-                                DO.TextColor = Color.Gray;
-
                                 Entry ST = new Entry();
                                 ST.WidthRequest = 200;
                                 ST.FontSize = 16;
                                 ST.HorizontalOptions = LayoutOptions.Start;
                                 ST.Keyboard = Keyboard.Default;
-                                ST.FontFamily = "Soin Sans Neue";
+
+                                Entry HL = new Entry();
+                                HL.WidthRequest = 200;
+                                HL.FontSize = 16;
+                                HL.FontFamily = "Soin Sans Neue";
+                                HL.Keyboard = Keyboard.Default;
 
                                 Entry MN = new Entry();
                                 MN.WidthRequest = 200;
                                 MN.FontSize = 16;
                                 MN.Keyboard = Keyboard.Numeric;
                                 MN.HorizontalOptions = LayoutOptions.Start;
-                                MN.FontFamily = "Soin Sans Neue";
 
                                 Entry SN = new Entry();
                                 SN.WidthRequest = 200;
                                 SN.FontSize = 16;
                                 SN.Keyboard = Keyboard.Numeric;
                                 SN.HorizontalOptions = LayoutOptions.Start;
-                                SN.FontFamily = "Soin Sans Neue";
 
                                 BorderEditor TA = new BorderEditor();
                                 TA.HeightRequest = 100;
@@ -244,20 +241,23 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 TA.CornerRadius = 5;
                                 TA.WidthRequest = 200;
                                 TA.Keyboard = Keyboard.Default;
-                                TA.FontFamily = "Soin Sans Neue";
 
                                 Entry CL = new Entry();
                                 CL.WidthRequest = 150;
                                 CL.FontSize = 16;
                                 CL.IsEnabled = false;
                                 CL.HorizontalOptions = LayoutOptions.Start;
-                                CL.FontFamily = "Soin Sans Neue";
 
                                 switch (ControlSchema[i].strFieldType.ToLower())
                                 {
+                                    #region SE -- EL -- ME
                                     case "se":
                                     case "el":
                                     case "me":
+                                        Picker pk = new Picker();
+                                        pk.HorizontalOptions = LayoutOptions.Start;
+                                        pk.WidthRequest = 200;
+                                        pk.TextColor = Color.Gray;
                                         pk.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
                                         Rightlayout.Children.Add(pk);
                                         pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
@@ -303,33 +303,136 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         {
 
                                         }
-
-
-
                                         break;
 
+                                    #endregion
+
+                                    #region DO -- DT
                                     case "do":
-                                        DO.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
-                                        try
-                                        {
-                                            if (ControlsValues[i].strItemInfoFieldValue != "")
-                                            {
-                                                string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                                string Date = App.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue);
-                                                DateTime sd = Convert.ToDateTime(Date);
-                                                DO.Date = sd.Date;
-                                            }
-                                            if (!(bool)ControlSchema[i].blnIsEdit && (ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("R") || !ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("U")))
-                                            {
-                                                DO.IsEnabled = false;
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
+                                    case "dt":
+                                        #region OLD
+                                        //DO.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
+                                        //try
+                                        //{
+                                        //    if (ControlsValues[i].strItemInfoFieldValue != "")
+                                        //    {
+                                        //        string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+                                        //        string Date = App.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                        //        DateTime sd = Convert.ToDateTime(Date);
+                                        //        DO.Date = Convert.ToDateTime(Date);
+                                        //    }
+                                        //    if (!(bool)ControlSchema[i].blnIsEdit && (ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("R") || !ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("U")))
+                                        //    {
+                                        //        DO.IsEnabled = false;
+                                        //    }
+                                        //}
+                                        //catch (Exception ex)
+                                        //{
 
+                                        //}
+                                        //Rightlayout.Children.Add(DO);
+
+                                        #endregion
+
+                                        #region txt_Date
+                                        Entry txt_Date = new Entry();
+                                        txt_Date.Placeholder = "Select Date";
+                                        txt_Date.WidthRequest = 170;
+                                        txt_Date.TextColor = Color.Gray;
+                                        txt_Date.Keyboard = Keyboard.Numeric;
+
+                                        txt_Date.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
+
+                                        #endregion
+
+                                        Image im = new Image();
+                                        im.StyleId = "imgdo_" + ControlSchema[i].intItemInfoFieldID;
+                                        im.Source = ImageSource.FromFile("Assets/erase16.png");
+                                        im.HeightRequest = 25;
+                                        im.WidthRequest = 25;
+
+                                        #region date_pick
+                                        DatePicker date_pick = new DatePicker();
+                                        date_pick.IsVisible = false;
+                                        date_pick.Format = "MM/dd/yyyy";
+                                        date_pick.WidthRequest = 200;
+                                        date_pick.TextColor = Color.Gray;
+                                        date_pick.StyleId = "do_" + ControlSchema[i].intItemInfoFieldID;
+                                        #endregion
+
+                                        Rightlayout.Orientation = StackOrientation.Horizontal;
+                                        Rightlayout.Children.Add(txt_Date);
+                                        Rightlayout.Children.Add(im);
+                                        Rightlayout.Children.Add(date_pick);
+
+                                        //if (ControlsValues[i].strItemInfoFieldValue != "")
+                                        //{
+                                        //    string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+                                        //    string Date = App.DateFormatStringToString(ControlsValues[i - 1].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                        //    DateTime sd = Convert.ToDateTime(Date);
+                                        //    var dt_c = FindQuestControl(Convert.ToString(ControlsValues[i - 1].intItemInfoFieldID), "DatePicker") as DatePicker;
+                                        //    if (!String.IsNullOrEmpty(Date))
+                                        //    {
+                                        //        var Str = App.DateFormatStringToString(Date);
+                                        //        txt_Date.Text = Str;
+
+                                        //        Device.BeginInvokeOnMainThread(() =>
+                                        //        {
+                                        //            dt_c.Date = Convert.ToDateTime(Date);
+                                        //        });
+                                        //    }
+                                        //    //DO.Date = Convert.ToDateTime(Date);
+                                        //}
+
+                                        txt_Date.Focused += (sender, e) =>
+                                        {
+                                            try
+                                            {
+                                                var cnt = (Entry)sender;
+                                                var sty_id = cnt.StyleId?.Split('_')[1];
+                                                var dt_c = FindQuestControl(sty_id, "DatePicker") as DatePicker;
+                                                cnt.Unfocus();
+                                                Device.BeginInvokeOnMainThread(() =>
+                                                {
+                                                    cnt.Unfocus();
+                                                    dt_c.Focus();
+                                                });
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        };
+
+                                        var tgr = new TapGestureRecognizer();
+                                        tgr.Tapped += async (s, e) =>
+                                        {
+                                            Entry C_ent = new Entry();
+                                            try
+                                            {
+                                                var ct = (Image)s;
+                                                var sty_id = ct.StyleId?.Split('_')[1];
+                                                C_ent = FindQuestControl(Convert.ToString(sty_id)) as Entry;
+                                                C_ent.Text = "";
+                                            }
+                                            catch (Exception)
+                                            {
+                                                C_ent.Text = "";
+                                            }
+                                        };
+                                        im.GestureRecognizers.Add(tgr);
+
+                                        if (Device.RuntimePlatform == "iOS")
+                                        {
+                                            date_pick.Unfocused += Date_pick_Unfocused;
                                         }
-                                        Rightlayout.Children.Add(DO);
+                                        else
+                                        {
+                                            date_pick.DateSelected += Date_pick_DateSelected;
+                                        }
+
                                         break;
+                                    #endregion
+
                                     case "et":
                                         TA.Text = ControlsValues[i].strItemInfoFieldValue == ",0" ? "" : ControlsValues[i].strItemInfoFieldValue;
                                         try
@@ -340,14 +443,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                                 TA.IsEnabled = false;
                                             }
                                         }
-                                        catch (Exception ex)
-                                        {
-
-                                        }
+                                        catch (Exception ex) { }
 
                                         Rightlayout.Children.Add(TA);
                                         break;
                                     case "st":
+                                    case "hl":
                                         if (string.IsNullOrEmpty(ControlsValues[i].strItemInfoFieldValue))
                                         {
                                             ST.Text = " ";
@@ -365,8 +466,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                         Rightlayout.Children.Add(ST);
                                         break;
-                                    case "mn":
 
+                                    case "mn":
+                                    case "sn":
                                         MN.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
                                         try
                                         {
@@ -375,38 +477,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                             {
                                                 MN.IsEnabled = false;
                                             }
-
                                         }
-                                        catch (Exception ex)
-                                        {
-
-                                        }
+                                        catch (Exception ex) { }
 
                                         Rightlayout.Children.Add(MN);
                                         break;
-                                    case "dt":
-                                        DO.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
-                                        try
-                                        {
-                                            if (ControlsValues[i].strItemInfoFieldValue != "")
-                                            {
-                                                DO.Date = Convert.ToDateTime(ControlsValues[i].strItemInfoFieldValue);
-                                            }
-
-                                            if (!(bool)ControlSchema[i].blnIsEdit && (ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("R") || !ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("U")))
-                                            {
-                                                DO.IsEnabled = false;
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-
-                                        }
-                                        Rightlayout.Children.Add(DO);
-                                        break;
                                     case "ta":
                                         TA.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
-
                                         try
                                         {
                                             if (ControlsValues[i].strItemInfoFieldValue != "")
@@ -425,26 +502,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         }
                                         Rightlayout.Children.Add(TA);
                                         break;
-                                    case "sn":
-
-                                        SN.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
-
-                                        try
-                                        {
-                                            SN.Text = ControlsValues[i].strItemInfoFieldValue;
-                                            if (!(bool)ControlSchema[i].blnIsEdit && (ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("R") || !ControlSchema[i].FIELD_SECURITY.ToUpper().Contains("U")))
-                                            {
-                                                SN.IsEnabled = false;
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-
-                                        }
-
-                                        Rightlayout.Children.Add(SN);
-                                        break;
-
                                     case "cl":
                                         CL.StyleId = ControlSchema[i].strFieldType.ToLower() + "_" + ControlSchema[i].intItemInfoFieldID;
 
@@ -459,15 +516,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         }
                                         catch (Exception ex)
                                         {
-
                                         }
-
 
                                         Rightlayout.Children.Add(CL);
                                         break;
                                     default:
-                                        //        if (EntityLists.AssocType[i].AssocMetaDataText.Count != 0)
-                                        //            Label2.Text = EntityLists.AssocType[i].AssocMetaDataText[0].TextValue;
                                         break;
                                 }
                                 layout.Children.Add(Rightlayout);
@@ -476,18 +529,18 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         }
                         catch (Exception ex)
                         {
-
                         }
 
                         try
                         {
-                            for (int i = 0; i < ControlSchema.Count(); i++)
+                            for (int i = 0; i < ControlsValues.Count(); i++)
                             {
-                                switch (ControlSchema[i].strFieldType.ToLower())
+                                switch (ControlsValues[i]?.strFieldType.ToLower())
                                 {
                                     case "se":
                                     case "el":
                                     case "me":
+
                                         Picker Pick = FindQuestControl(Convert.ToString(ControlsValues[i]?.intItemInfoFieldID)) as Picker;
                                         var view = Pick.ItemsSource as List<GetExternalDatasourceByIDResponse.ExternalDataSource>;
 
@@ -504,7 +557,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                             {
                                                 string str = ControlsValues[i].strItemInfoFieldValue;
 
-                                                var rec = view.Where(v => v.strName.ToLower().Trim() == ControlsValues[i].strItemInfoFieldValue.ToLower().Trim()).FirstOrDefault();
+                                                var rec = view.Where(v => v.strName.ToLower().Trim() == ControlSchema[i].strItemInfoFieldValue.ToLower().Trim()).FirstOrDefault();
                                                 if (rec != null)
                                                 {
                                                     index = view.FindIndex(v => v.strObjectID == rec?.strObjectID);
@@ -530,9 +583,60 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                             }
                                             Pick.SelectedIndex = index;
-
                                         }
 
+                                        break;
+
+                                    case "do":
+                                    case "dt":
+                                        try
+                                        {
+                                            var cnt = FindQuestControl(Convert.ToString(ControlsValues[i].intItemInfoFieldID));
+                                            if (cnt != null)
+                                            {
+                                                Entry DO = new Entry();
+                                                DO = cnt as Entry;
+                                                if (ControlsValues[i].strItemInfoFieldValue != "")
+                                                {
+
+                                                    DO.Text = ControlsValues[i].strItemInfoFieldValue;
+
+                                                    //string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+                                                    //string Date = App.DateFormatStringToString(ControlSchema[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                                    //DateTime sd = Convert.ToDateTime(Date);
+                                                    //var dt_c = FindQuestControl(Convert.ToString(ControlsValues[i].intItemInfoFieldID), "DatePicker") as DatePicker;
+                                                    //if (!String.IsNullOrEmpty(Date))
+                                                    //{
+                                                    //    var Str = App.DateFormatStringToString(Date);
+                                                    //    DO.Text = Str;
+
+                                                    //    Device.BeginInvokeOnMainThread(() =>
+                                                    //    {
+                                                    //        dt_c.Date = Convert.ToDateTime(Date);
+                                                    //    });
+                                                    //}
+                                                    //DO.Date = Convert.ToDateTime(Date);
+                                                }
+                                                //string Dateval = (ControlSchema?.Where(c => c.intItemInfoFieldID == ControlsValues[i].intItemInfoFieldID)?.FirstOrDefault()?.strItemInfoFieldValue);
+                                                //var dt_c = FindQuestControl(Convert.ToString(ControlsValues[i].intItemInfoFieldID), "DatePicker") as DatePicker;
+
+
+
+                                                //DatePicker DO = new DatePicker();
+                                                //DO = cnt as DatePicker;
+                                                //DO.TextColor = Color.Gray;
+                                                //string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                                //if (!String.IsNullOrEmpty(Dateval))
+                                                //{
+                                                //    var Str = App.DateFormatStringToString(Dateval);
+                                                //    DateTime dt = Convert.ToDateTime(Str);
+                                                //    DO.Date = dt;
+                                                //}
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
                                         break;
                                 }
                             }
@@ -599,8 +703,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 FinalScore = "0";
                             }
 
-                            var avc = new QuestionDisplay(Convert.ToString(sd[i].intItemCategoryID), lstMetadatid[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(), sd[i].strItemCategoryName, lstCategoryPointsAvail[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(),
-                                                          lstCategoryPointsEarned[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(), FinalScore);
+                            var avc = new QuestionDisplay(Convert.ToString(sd[i].intItemCategoryID), lstMetadatid[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(), sd[i].strItemCategoryName, lstCategoryPointsAvail[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(), lstCategoryPointsEarned[Convert.ToInt32(sd[i].intItemCategoryID)].ToString(), FinalScore);
                             Questionlst.Add(avc);
                         }
 
@@ -631,10 +734,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
                     else
                     {
-                        if (App.Isonline)
-                        {
-                        }
-                        else
+                        if (!App.Isonline)
                         {
                             TextFieldsLayout.Children.Clear();
                             await DisplayAlert("Alert", "Please Go Online To View Form!", "Ok");
@@ -644,18 +744,15 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
                 else
                 {
-
-                    await DisplayAlert("Security", "You dont have any rights to view this form!", "Ok");
+                    await DisplayAlert("Security", "You don't have any rights to view this form!", "Ok");
                     await this.Navigation.PopAsync();
                 }
-
             }
             catch (Exception ex)
             {
             }
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-            masterGrid.Opacity = 1;
         }
 
 
@@ -672,7 +769,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     {
                         if (cnt.ItemsSource.Count > 0)
                         {
-
                             if (cnt.SelectedItem != null)
                             {
                                 RefreshDropDownsAndLookUp(Convert.ToInt32(cnt.StyleId.Split('_')[1]));
@@ -680,16 +776,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 {
                                     if (Convert.ToInt32((cnt.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource).strObjectID) > 0)
                                     {
-                                        //RefreshDropDownsAndLookUp(Convert.ToInt32(cnt.StyleId.Split('_')[1]));
                                         fillchildControl(cnt.StyleId);
                                     }
-
                                 }
                                 else
                                 {
                                     if (Convert.ToInt32((cnt.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource).strObjectID) > 0)
                                     {
-                                        // RefreshDropDownsAndLookUp(Convert.ToInt32(cnt.StyleId.Split('_')[1]));
                                         fillchildControl(cnt.StyleId);
                                     }
                                 }
@@ -715,7 +808,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     Picker drp = FindQuestControl(item.intItemInfoFieldIDChild.ToString()) as Picker;
                     if (drp != null)
                     {
-
                         List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource> l = new List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource>();
 
                         GetExternalDatasourceInfoByIDResponse.ExternalDataSource ed = new GetExternalDatasourceInfoByIDResponse.ExternalDataSource
@@ -756,9 +848,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         Picker drp = FindQuestControl(item.intItemInfoFieldIDChild.ToString()) as Picker;
 
                         var Response = QuestSyncAPIMethods.GetExternalDatasourceInfoByID(App.Isonline, item.intExternalDatasourceIDChild.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid);
-                        //var getitemcategoriesResult = Response.GetValue("ResponseContent");
-
-                        //List<ExternalDatasourceInfo> ls = JsonConvert.DeserializeObject<List<ExternalDatasourceInfo>>(getitemcategoriesResult.ToString());
                         List<ExternalDatasourceInfo> ls = Response.Result;
 
                         string sConnectionString = string.Empty;
@@ -770,8 +859,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             sQuery = ls?.FirstOrDefault()?._QUERY;
 
                             var res = QuestSyncAPIMethods.GetFilterQuery_Quest(App.Isonline, item.intExternalDatasourceIDChild.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, itemid);
-                            //var resu = res.GetValue("ResponseContent");
-                            //var d = JsonConvert.DeserializeObject<List<ConnectionStringCls>>(resu.ToString());
                             var d = res.Result;
                             filterQueryOrg = d[0]._FILTER_QUERY;
 
@@ -784,9 +871,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 {
                                     string value = "-1";
                                     Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent.ToString()) as Picker;
-
-                                    //Picker drpParent1 = FindQuestControl("23") as Picker;
-
 
                                     if (drpParent.SelectedItem != null)
                                     {
@@ -819,8 +903,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             try
                             {
                                 var qUesponse = QuestSyncAPIMethods.GetExternalDatasourceByQuery(App.Isonline, sQuery, Functions.GetDecodeConnectionString(sConnectionString), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);//API Need
-                                //var qResult = qUesponse.GetValue("ResponseContent");
-                                //List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource>>(qResult.ToString());
                                 List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = qUesponse.Result;
                                 GetExternalDatasourceByIDResponse.ExternalDataSource ed = new GetExternalDatasourceByIDResponse.ExternalDataSource();
                                 ed.strObjectID = "-1";
@@ -837,7 +919,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
                 catch (Exception ex)
                 {
-
                 }
             }
         }
@@ -853,7 +934,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        private async void btn_more_Clicked(object sender, EventArgs e)
+        private void btn_more_Clicked(object sender, EventArgs e)
         {
             try
             {
@@ -897,7 +978,27 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        public object FindQuestControl(string type)
+        private void Date_pick_Unfocused(object sender, FocusEventArgs e)
+        {
+            Date_pick_DateSelected(sender, null);
+        }
+
+        private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            Entry dtp = new Entry();
+            try
+            {
+                var cnt = (DatePicker)sender;
+                var sty_id = cnt.StyleId?.Split('_')[1];
+                var dt_Entry = FindQuestControl(sty_id) as Entry;
+                dt_Entry.Text = cnt.Date.ToString("MM/dd/yyyy");
+            }
+            catch (Exception)
+            {
+                dtp.Text = "";
+            }
+        }
+        public object FindQuestControl(string type, string cntType = "")
         {
             foreach (StackLayout v in TextFieldsLayout.Children)
             {
@@ -905,18 +1006,32 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     foreach (var subitem in item.Children)
                     {
-                        var xy = subitem.StyleId;
+                        var xy = subitem;
+                        Type ty = xy.GetType();
 
-                        if (xy != null)
+                        if (ty.Name != "StackLayout")
                         {
-                            if (xy.Contains(type))
+                            if (xy.StyleId != null)
                             {
-                                return subitem;
+                                if (xy.StyleId.Contains(type))
+                                {
+                                    if (cntType == "DatePicker")
+                                    {
+                                        if (ty.Name == "DatePicker")
+                                        {
+                                            return subitem;
+                                        }
+                                    }
+                                    else
+                                        return subitem;
+                                }
                             }
                         }
                     }
                 }
             }
+
+
             return null;
         }
 
@@ -931,7 +1046,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
                 else
                 {
-                    // action = await DisplayActionSheet("Select Option", "Cancel", null, "Save", "Save & Finalize");
                     await DisplayAlert("Form Finalized", "Form is finalized,You can not update it.", "Ok");
                     this.Navigation.PopAsync();
                 }
@@ -939,22 +1053,16 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 switch (action)
                 {
                     case "Save & Edit Later":
-
                         CreateJsonforUpdateForm(Iteminstancetranid, true);
-
                         break;
 
                     case "Save & Finalize":
-
                         CreateJsonforUpdateForm(Iteminstancetranid, false);
                         break;
 
                     default:
                         break;
-
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -968,7 +1076,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
             {
                 ListView l = (ListView)sender;
                 var sd = (QuestionDisplay)l.SelectedItem;
-                //this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID));
                 bool iseditable = true;
                 if (ControlSchema.Count > 0)
                 {
@@ -1006,7 +1113,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 string striteminfoFieldsIds = string.Empty;
                 string striteminfoFieldsValues = string.Empty;
                 dynamic picker_value;
-                //AddFormRequest.ItemInfoFieldInfo infoobj = new AddFormRequest.ItemInfoFieldInfo();
                 UpdateFormRequest UpdateForm = new UpdateFormRequest()
                 {
                     itemInstanceTranId = Convert.ToInt32(Iteminstancetranid),
@@ -1023,10 +1129,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     notes = "",
                     modifiedBy = Functions.UserName
                 };
-
-
-
-                //infoobj.ItemInfoFieldData = new AddFormRequest.InfoFieldValues();
 
                 for (int i = 0; i < ControlSchema.Count(); i++)
                 {
@@ -1078,6 +1180,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         case "do":
                         case "st":
+                        case "hl":
                         case "mn":
                         case "dt":
                         case "ta":
@@ -1101,9 +1204,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
                                         striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
-                                        var sDate = Convert.ToString(App.DateFormatStringToString(date_pick.Date.ToString()));
-                                        DateTime dt = Convert.ToDateTime(sDate);
-                                        striteminfoFieldsValues += dt.Date.ToString("MM/dd/yyyy") + ",";
+                                        striteminfoFieldsValues += Convert.ToString(App.DateFormatStringToString(date_pick.Date.Date.ToString("MM/dd/yyyy"))) + ",";
                                     }
                                     else
                                     {
@@ -1206,9 +1307,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 iValueinfo.ItemInfoFieldData = iValue;
                                 LValue.Add(iValueinfo);
                                 break;
-
                             }
-
                         }
                     }
 
@@ -1289,103 +1388,26 @@ namespace StemmonsMobile.Views.CreateQuestForm
             foreach (StackLayout v in TextFieldsLayout.Children)
             {
                 foreach (StackLayout item in v.Children)
-
                 {
-
                     foreach (var subitem in item.Children)
-
                     {
-
                         var xy = subitem.StyleId;
 
                         if (xy != null)
-
                         {
-
                             if (xy.Contains(type))
-
                             {
-
                                 return subitem;
-
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
             return null;
-
-        }
-
-
-    }
-    public class QuestQuestionData
-    {
-        public string intItemInstanceTranID { get; set; }
-
-        public string intItemID { get; set; }
-        public string strItemName { get; set; }
-        public string strOtherComments { get; set; }
-        public string intItemQuestionMetadataID { get; set; }
-        public string intItemQuestionFieldID { get; set; }
-        public string strQuestion { get; set; }
-        public string strMeetsStandards { get; set; }
-        public string strPointsAvailable { get; set; }
-        public string strPointsEarned { get; set; }
-        public string strWeight { get; set; }
-        public string strNotes { get; set; }
-        public string intCaseID { get; set; }
-        public string intTrainingID { get; set; }
-        public string intItemCategoryID { get; set; }
-        public string strItemCategoryName { get; set; }
-        public string intListID { get; set; }
-        public string blnIsEdit { get; set; }
-        public string intAreaID { get; set; }
-        public string blnIsAutoCase { get; set; }
-        public string strIsCaseRequested { get; set; }
-        public string blnIsHighlightRow { get; set; }
-        public string strAreaName { get; set; }
-        public string strSupervisorEmail { get; set; }
-        public string blnSuppressAlert { get; set; }
-        public string blnHidePoints { get; set; }
-
-
-        public string PointsAvail
-        {
-            get
-            {
-                return $"{"Points Available:"} {strPointsAvailable}";
-            }
-        }
-
-        public string PointsEarned
-        {
-            get
-            {
-                return $"{"Earned:"}{strPointsEarned}";
-            }
-        }
-
-        public string Score
-        {
-            get
-            {
-                Double points1 = (Convert.ToDouble(strPointsAvailable));
-                Double points2 = (Convert.ToDouble(strPointsEarned));
-                Double totalpercentage = (points2 / points1) * 100;
-                totalpercentage = Math.Truncate(totalpercentage);
-                return Convert.ToString(totalpercentage);
-            }
         }
     }
     public class QuestionDisplay
     {
-
         public string QuestionCategoryId { get; set; }
         public string QuestionMetadatId { get; set; }
         public string QuestionCategoryName { get; set; }

@@ -70,7 +70,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
             catch (Exception ex)
             {
-
             }
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
@@ -110,7 +109,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
             SearchBar sh = (SearchBar)sender;
             try
             {
-
                 if (string.IsNullOrEmpty(e.NewTextValue.Trim()))
                 {
                     FormData.ItemsSource = lst;
@@ -119,10 +117,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
                 else
                 {
-
-
                     FormData.ItemsSource = lst.FindAll(x => x.strAreaName.ToLower().Contains(e.NewTextValue.ToLower()));
-
                 }
             }
             catch (Exception ex)
@@ -154,51 +149,5 @@ namespace StemmonsMobile.Views.CreateQuestForm
             {
             }
         }
-    }
-
-    public class MyFormData
-    {
-        public string intItemInstanceTranID { get; set; }
-        public string intItemID { get; set; }
-        public string intListID { get; set; }
-        public string blnIsEdit { get; set; }
-        public string strItemName { get; set; }
-        public string strOtherComments { get; set; }
-        public string intItemInstanceTranCaseID { get; set; }
-        public string strNotes { get; set; }
-        public string intCaseID { get; set; }
-        public string intAreaID { get; set; }
-        public string strAreaName { get; set; }
-        public string strInstanceUser { get; set; }
-        public string strInstanceUserMGR { get; set; }
-        public string dcOverAllScore { get; set; }
-        public string intItemThresholdID { get; set; }
-        public string intThresholdTypeID { get; set; }
-        public string dcPointsEarnedThreshold { get; set; }
-        public string strAssignCaseTo { get; set; }
-        public string blnIsUserCreatedCMECase { get; set; }
-        public string blnIsContinueWithRules { get; set; }
-        public string intOrderPriority { get; set; }
-        public string strType { get; set; }
-        public string strManager { get; set; }
-        public string strLead { get; set; }
-        public string strPropID { get; set; }
-        public string strProperty { get; set; }
-        public string strPropCode { get; set; }
-        public string strMarketID { get; set; }
-        public string strMarket { get; set; }
-        public string strInspectedBy { get; set; }
-        public string strInspectedBySam { get; set; }
-        public string strSuite { get; set; }
-        public string Date { get; set; }
-        public string Overall { get; set; }
-        public string CreatedDatetime { get; set; }
-        public string strCreatedBy { get; set; }
-        public string intQuarter { get; set; }
-        public string intYear { get; set; }
-        public string intTenantId { get; set; }
-        public string strTenantName { get; set; }
-        public string CreatedDateTime { get; set; }
-        public string strIsLock { get; set; }
     }
 }

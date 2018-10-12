@@ -204,43 +204,68 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         {
             List<ItemInfoField> lstResult = new List<ItemInfoField>();
             ItemInfoField getypeResult = new ItemInfoField();
-            var GetAppTypeInfo = CommonConstants.GetResultBySytemcodeList(QuestInstance, "H6_AssignControlsAsync", _DBPath);
-            GetAppTypeInfo.Wait();
+
             try
             {
-                if (_IsOnline)
+                var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(_intItemID), _DBPath, null);
+                GetAppTypeInfo.Wait();
+                if (!string.IsNullOrEmpty(GetAppTypeInfo?.Result?.ASSOC_FIELD_INFO))
                 {
-                    var result = QuestAPIMethods.GetItemInfoFieldsByItemID(_intItemID, _strShowOnPage);
-                    var temp = result.GetValue("ResponseContent");
-
-                    if (temp != null && temp.ToString() != "[]")
-                    {
-                        lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(temp.ToString());
-                        if (lstResult.Count > 0)
-                        {
-                            //var inserted = CommonConstants.AddRecordOfflineStore(JsonConvert.SerializeObject(lstResult), QuestInstance, "H15_GetItemQuestionMetaData", _InstanceUserAssocId, _DBPath, 0, _intItemID, "M");
-                        }
-                    }
+                    lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(GetAppTypeInfo.Result.ASSOC_FIELD_INFO);
                 }
                 else
                 {
+                    if (_IsOnline)
+                    {
+                        var result = QuestAPIMethods.GetItemInfoFieldsByItemID(_intItemID, _strShowOnPage);
+                        var temp = result.GetValue("ResponseContent");
 
-                    if (GetAppTypeInfo.Result != null)
-                    {
-                    }
-                    else
-                    {
-                        GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(_intItemID), _DBPath, null);
-                        GetAppTypeInfo.Wait();
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(GetAppTypeInfo?.Result)))
-                    {
-                        if (!string.IsNullOrEmpty(GetAppTypeInfo?.Result?.ASSOC_FIELD_INFO))
+                        if (temp != null && temp.ToString() != "[]")
                         {
-                            lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(GetAppTypeInfo.Result.ASSOC_FIELD_INFO);
+                            lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(temp.ToString());
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
+                //if (_IsOnline)
+                //{
+                //    var result = QuestAPIMethods.GetItemInfoFieldsByItemID(_intItemID, _strShowOnPage);
+                //    var temp = result.GetValue("ResponseContent");
+
+                //    if (temp != null && temp.ToString() != "[]")
+                //    {
+                //        lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(temp.ToString());
+                //        if (lstResult.Count > 0)
+                //        {
+                //            //var inserted = CommonConstants.AddRecordOfflineStore(JsonConvert.SerializeObject(lstResult), QuestInstance, "H15_GetItemQuestionMetaData", _InstanceUserAssocId, _DBPath, 0, _intItemID, "M");
+                //        }
+                //    }
+                //}
+                //else
+                //{
+
+                //    if (GetAppTypeInfo.Result != null)
+                //    {
+                //    }
+                //    else
+                //    {
+                //        GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(_intItemID), _DBPath, null);
+                //        GetAppTypeInfo.Wait();
+                //    }
+                //    if (!string.IsNullOrEmpty(Convert.ToString(GetAppTypeInfo?.Result)))
+                //    {
+                //        if (!string.IsNullOrEmpty(GetAppTypeInfo?.Result?.ASSOC_FIELD_INFO))
+                //        {
+                //            lstResult = JsonConvert.DeserializeObject<List<ItemInfoField>>(GetAppTypeInfo.Result.ASSOC_FIELD_INFO);
+                //        }
+                //    }
+                //}
 
             }
             catch (Exception ex)

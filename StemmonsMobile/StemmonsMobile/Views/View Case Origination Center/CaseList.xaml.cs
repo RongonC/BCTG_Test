@@ -439,7 +439,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     else
                     {
                         var rt = BasicCase_lst.Where(v => v.CaseTitle != null).ToList();
-                        var list = rt.Where(x => x.CaseTitle != null && x.CaseTitle.Contains(e.NewTextValue)).ToList();
+                        var list = rt.Where(x => x.CaseTitle != null && x.CaseTitle.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
                         if (list.Count > 0)
                         {
                             listdata.ItemsSource = list;

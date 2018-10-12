@@ -17,6 +17,8 @@ using DataServiceBus.OfflineHelper.DataTypes.Common;
 using Newtonsoft.Json.Linq;
 using StemmonsMobile.Views.LoginProcess;
 using System.Globalization;
+using static StemmonsMobile.DataTypes.DataType.Quest.GetItemCategoriesByItemIDResponse;
+using static StemmonsMobile.DataTypes.DataType.Quest.GetItemQuestionFieldsByItemCategoryID_ViewScoresResponse;
 
 namespace StemmonsMobile.Views.CreateQuestForm
 {
@@ -90,6 +92,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 try
                 {
+                    // List<ItemCategoryByItemId> itemCatList = new List<ItemCategoryByItemId>();
                     await Task.Run(action: () =>
                     {
                         var result = QuestSyncAPIMethods.AssignControlsAsync(App.Isonline, Convert.ToString(itemid), Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
@@ -98,6 +101,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, "0");
                         lstItemInfoDependancy = getInfoDepeResult.Result;
+
+                        var getitemcategoryCall = QuestSyncAPIMethods.GetItemCategoriesByItemID(App.Isonline, Convert.ToString(itemid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, aredID);
+                        getitemcategoryCall.Wait();
+                        lstcatbyitemid = getitemcategoryCall.Result;
                     });
 
                     for (int i = 0; i < lst_NewQuestFormFields.Count; i++)
@@ -112,9 +119,17 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         var Label1 = new Xamarin.Forms.Label
                         {
                             VerticalOptions = LayoutOptions.Start,
-
                         };
-                        Label1.Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc;//strItemInfoFieldName
+
+                        FormattedString frmtText = new FormattedString();
+                        frmtText.Spans.Add(new Span { Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc + ":" });
+
+                        if (lst_NewQuestFormFields[i].strIsRequired.ToLower() == "y")
+                            frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
+
+                        Label1.FormattedText = frmtText;
+
+                        // Label1.Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc;//strItemInfoFieldName
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.FontSize = 16;
 
@@ -124,68 +139,20 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         var Rightlayout = new StackLayout();
                         Rightlayout.HorizontalOptions = LayoutOptions.Start;
 
-                        Picker pk = new Picker();
-                        pk.WidthRequest = 200;
-                        pk.TextColor = Color.Gray;
-
-                        DatePicker DO = new DatePicker();
-                        DO.WidthRequest = 200;
-                        DO.Date = Convert.ToDateTime("01/01/1900");
-                        DO.TextColor = Color.Gray;
-
-                        Entry ST = new Entry();
-                        ST.WidthRequest = 200;
-                        ST.FontSize = 16;
-
-                        ST.Keyboard = Keyboard.Default;
-
-                        Entry MN = new Entry();
-                        MN.WidthRequest = 200;
-                        MN.FontSize = 16;
-                        MN.Keyboard = Keyboard.Numeric;
-
-                        Entry SN = new Entry();
-                        SN.WidthRequest = 150;
-                        SN.FontSize = 16;
-                        SN.Keyboard = Keyboard.Numeric;
-
-                        BorderEditor TA = new BorderEditor();
-                        TA.HeightRequest = 100;
-                        TA.WidthRequest = 200;
-                        TA.BorderWidth = 1;
-                        TA.CornerRadius = 5;
-                        TA.FontSize = 16;
-                        TA.BorderColor = Color.LightGray;
-
-                        TA.Keyboard = Keyboard.Default;
-
-                        BorderEditor ET = new BorderEditor();
-                        ET.HeightRequest = 100;
-                        ET.WidthRequest = 200;
-                        ET.FontSize = 16;
-                        ET.Keyboard = Keyboard.Default;
-
-                        Entry CL = new Entry();
-                        CL.WidthRequest = 200;
-                        CL.FontSize = 16;
-                        CL.IsEnabled = false;
-
                         switch (lst_NewQuestFormFields[i].strFieldType.ToLower())
                         {
+                            #region -- SE -- EL -- ME --
                             case "se":
                             case "el":
                             case "me":
+                                Picker pk = new Picker();
+                                pk.WidthRequest = 200;
                                 List<GetExternalDatasourceByIDResponse.ExternalDataSource> view = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
                                 GetExternalDatasourceByIDResponse.ExternalDataSource dt = new GetExternalDatasourceByIDResponse.ExternalDataSource();
                                 dt.strObjectID = "-1";
                                 dt.strName = "-- Select Item --";
                                 dt.strDescription = "-- Select Item --";
 
-
-                                //var ExternalCall = QuestAPIMethods.GetExternalDatasourceByID(Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID));
-                                //var ExternalResponse = ExternalCall.GetValue("ResponseContent");
-                                //view = JsonConvert.DeserializeObject<List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource>>(ExternalResponse.ToString());
-                                //var ExternalCall = QuestAPIMethods.GetExternalDatasourceByID(Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID));
                                 if (App.Isonline)
                                 {
                                     List<GetItemInfoDependencyResponse.ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy?.Where(t => t.intItemInfoFieldIDChild == lst_NewQuestFormFields[i].intItemInfoFieldID).ToList();
@@ -212,27 +179,109 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
                                 Rightlayout.Children.Add(pk);
                                 break;
+                            #endregion
 
+                            #region -- DO -- DT --
                             case "do":
-                                DO.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                            case "dt":
+                                Entry txt_Date = new Entry();
+                                txt_Date.Placeholder = "Select Date";
+                                txt_Date.WidthRequest = 170;
+                                txt_Date.TextColor = Color.Gray;
+                                txt_Date.Keyboard = Keyboard.Numeric;
+                                txt_Date.Text = "";
+                                txt_Date.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+
+                                Image img_clr = new Image();
+                                img_clr.StyleId = "imgdo_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                img_clr.Source = ImageSource.FromFile("Assets/erase16.png");
+                                img_clr.WidthRequest = 25;
+                                img_clr.HeightRequest = 25;
+                                #region date_pick
+                                DatePicker date_pick = new DatePicker();
+                                date_pick.IsVisible = false;
+                                date_pick.Format = "MM/dd/yyyy";
+                                date_pick.WidthRequest = 200;
+                                date_pick.TextColor = Color.Gray;
+                                date_pick.StyleId = "do_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                #endregion
+
                                 try
                                 {
 
                                     if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
-                                        DO.IsEnabled = false;
+                                        txt_Date.IsEnabled = false;
                                     }
                                 }
                                 catch (Exception ex)
                                 {
 
                                 }
+                                Rightlayout.Orientation = StackOrientation.Horizontal;
+                                Rightlayout.Children.Add(txt_Date);
+                                Rightlayout.Children.Add(img_clr);
+                                Rightlayout.Children.Add(date_pick);
+                                txt_Date.Focused += (sender, e) =>
+                                {
+                                    try
+                                    {
+                                        var cnt = (Entry)sender;
+                                        var sty_id = cnt.StyleId?.Split('_')[1];
+                                        var dt_c = FindQuestControl(sty_id, "DatePicker") as DatePicker;
+                                        cnt.Unfocus();
+                                        Device.BeginInvokeOnMainThread(() =>
+                                        {
+                                            cnt.Unfocus();
+                                            dt_c.Focus();
+                                        });
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                };
 
-                                Rightlayout.Children.Add(DO);
+                                var clear_triger = new TapGestureRecognizer();
+                                clear_triger.Tapped += (s, e) =>
+                                {
+                                    Entry C_ent = new Entry();
+                                    try
+                                    {
+                                        var ct = (Image)s;
+                                        var sty_id = ct.StyleId?.Split('_')[1];
+                                        C_ent = FindQuestControl(sty_id) as Entry;
+                                        C_ent.Text = "";
+                                    }
+                                    catch (Exception)
+                                    {
+                                        C_ent.Text = "";
+                                    }
+                                };
+                                img_clr.GestureRecognizers.Add(clear_triger);
+
+                                if (Device.RuntimePlatform == "iOS")
+                                {
+                                    date_pick.Unfocused += Date_pick_Unfocused;
+                                }
+                                else
+                                {
+                                    date_pick.DateSelected += Date_pick_DateSelected;
+                                }
                                 break;
-                            case "et":
-                                TA.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                            #endregion
 
+                            #region -- TA -- ET --
+                            case "et":
+                            case "ta":
+                                BorderEditor TA = new BorderEditor();
+                                TA.HeightRequest = 100;
+                                TA.WidthRequest = 200;
+                                TA.BorderWidth = 1;
+                                TA.CornerRadius = 5;
+                                TA.FontSize = 16;
+                                TA.Keyboard = Keyboard.Default;
+
+                                TA.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
                                 try
                                 {
                                     if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
@@ -247,7 +296,22 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                 Rightlayout.Children.Add(TA);
                                 break;
+                            #endregion
+
+                            #region -- ST -- HL -- MN -- SN --
                             case "st":
+                            case "hl":
+                            case "mn":
+                            case "sn":
+                                Entry ST = new Entry();
+                                ST.WidthRequest = 200;
+                                ST.FontSize = 16;
+
+                                if (lst_NewQuestFormFields[i].strFieldType.ToLower() == "st" || lst_NewQuestFormFields[i].strFieldType.ToLower() == "hl")
+                                    ST.Keyboard = Keyboard.Default;
+                                else
+                                    ST.Keyboard = Keyboard.Numeric;
+
                                 ST.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
                                 try
                                 {
@@ -258,82 +322,23 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 }
                                 catch (Exception ex)
                                 {
-
                                 }
-
                                 Rightlayout.Children.Add(ST);
                                 break;
-                            case "mn":
-                                MN.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                try
-                                {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
-                                    {
-                                        MN.IsEnabled = false;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
+                            #endregion
 
-                                }
-
-                                Rightlayout.Children.Add(MN);
-                                break;
-                            case "dt":
-                                DO.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                try
-                                {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
-                                    {
-                                        DO.IsEnabled = false;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-
-                                Rightlayout.Children.Add(DO);
-                                break;
-                            case "ta":
-                                TA.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                try
-                                {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
-                                    {
-                                        TA.IsEnabled = false;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-
-                                Rightlayout.Children.Add(TA);
-                                break;
-                            case "sn":
-                                SN.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                try
-                                {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
-                                    {
-                                        DO.IsEnabled = false;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-
-                                Rightlayout.Children.Add(SN);
-                                break;
+                            #region -- CL --
                             case "cl":
+                                Entry CL = new Entry();
+                                CL.WidthRequest = 200;
+                                CL.FontSize = 16;
+                                CL.IsEnabled = false;
                                 CL.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
                                 try
                                 {
                                     if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
-                                        DO.IsEnabled = false;
+                                        CL.IsEnabled = false;
                                     }
                                 }
                                 catch (Exception ex)
@@ -343,54 +348,123 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                                 Rightlayout.Children.Add(CL);
                                 break;
+                            #endregion
+
                             default:
-                                //        if (EntityLists.AssocType[i].AssocMetaDataText.Count != 0)
-                                //            Label2.Text = EntityLists.AssocType[i].AssocMetaDataText[0].TextValue;
                                 break;
                         }
                         layout.Children.Add(Rightlayout);
                         DynamicFields.Children.Add(layout);
                     }
 
-                    List<Getitemcategory> itemcategories = new List<Getitemcategory>();
-                    var getitemcategoryCall = QuestSyncAPIMethods.GetItemCategoriesByItemID(App.Isonline, Convert.ToString(itemid), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, aredID);
-                    getitemcategoryCall.Wait();
-
-                    var tempgetitemcategory = getitemcategoryCall.Result;
-                    GetItemCategoriesByItemIDResponse.ItemCategoryByItemId itm = new GetItemCategoriesByItemIDResponse.ItemCategoryByItemId();
-                    int ii = 0;
-                    if (getitemcategoryCall.Result != null)
+                    //int ii = 0;
+                    for (int i = 0; i < lstcatbyitemid.Count; i++)
                     {
-                        foreach (var item in getitemcategoryCall?.Result)
+                        ItemCategoryByItemId itemCatByid = lstcatbyitemid[i];
+
+                        List<ItemQuestionField_ViewScoresModel> itemcategoryscroreList = new List<ItemQuestionField_ViewScoresModel>();
+                        await Task.Run(() =>
+                         {
+                             var getitemcategoryscrore = QuestSyncAPIMethods.GetItemQuestionFieldsByItemCategoryIDviewscores(App.Isonline, Convert.ToString(itemCatByid.intItemCategoryID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                             var tempscores = getitemcategoryscrore.Result;
+                             getitemcategoryscrore.Wait();
+                             itemcategoryscroreList = getitemcategoryscrore.Result;
+                         });
+
+                        if (itemcategoryscroreList != null)
                         {
-                            var getitemcategoryscrore = QuestSyncAPIMethods.GetItemQuestionFieldsByItemCategoryIDviewscores(App.Isonline, Convert.ToString(item.intItemCategoryID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                            var tempscores = getitemcategoryscrore.Result;
-                            getitemcategoryscrore.Wait();
+                            itemCatByid.strAvaliablePoints = Convert.ToString(itemcategoryscroreList.Where(a => a.intItemCategoryID == itemCatByid.intItemCategoryID).Sum(v => v.dcPointsAvailable));
 
-                            if (getitemcategoryscrore.Result != null)
-                            {
-                                getitemcategoryCall.Result[ii++].strAvaliablePoints = Convert.ToString(getitemcategoryscrore.Result.Where(a => a.intItemCategoryID == item.intItemCategoryID).Sum(v => v.dcPointsAvailable));
-
-                                avpoints += Convert.ToDouble(getitemcategoryscrore.Result.Where(a => a.intItemCategoryID == item.intItemCategoryID).Sum(v => v.dcPointsAvailable));
-                            }
+                            avpoints += Convert.ToDouble(itemcategoryscroreList.Where(a => a.intItemCategoryID == itemCatByid.intItemCategoryID).Sum(v => v.dcPointsAvailable));
                         }
-                        listdata.ItemsSource = getitemcategoryCall.Result;
-                        lstcatbyitemid = getitemcategoryCall.Result;
-                        overallpoints.Text = "Overall Points Available:-" + Convert.ToString(avpoints);
-                        StaticFooter.IsVisible = true;
-
-                        int heightRowList = 90;
-                        int iq = (getitemcategoryCall.Result.Count * heightRowList);
-                        listdata.HeightRequest = iq;
                     }
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
+                    listQuesCategorydata.ItemsSource = lstcatbyitemid;
+
+                    overallpoints.Text = "Overall Points Available:-" + Convert.ToString(avpoints);
+                    StaticFooter.IsVisible = true;
+
+                    int heightRowList = 90;
+                    int iq = (lstcatbyitemid.Count * heightRowList);
+                    listQuesCategorydata.HeightRequest = iq;
 
                 }
                 catch (Exception ex)
                 {
 
                 }
+            }
+            else
+            {
+                try
+                {
+
+                    var availpoints = Functions.questObjectData.pPOINTS_AVAILABLE.Split(',');
+                    decimal Aval = 0;
+                    foreach (var _item in availpoints)
+                    {
+                        Aval += Convert.ToInt32(_item);
+
+                    }
+
+                    var Earnedpoints = Functions.questObjectData.pPOINTS_EARNED.Split(',');
+                    decimal Earn = 0;
+                    foreach (var _item in Earnedpoints)
+                    {
+                        Earn += Convert.ToInt32(_item);
+                    }
+
+                    decimal totalpercentage = Math.Round((Earn == 0 && Aval == 0) ? 0 : ((Earn / Aval) * 100), 0);
+
+                    List<ItemCategoryByItemId> tem = new List<ItemCategoryByItemId>();
+
+                    foreach (var item in lstcatbyitemid)
+                    {
+                        if (item.intItemCategoryID == Convert.ToInt32(clickedCategoryId))
+                        {
+                            item.strAvaliablePoints = Convert.ToString(Aval);
+                            item.strEarned = Convert.ToString(Earn);
+                            item.strScore = Convert.ToString(totalpercentage);
+                        }
+                        tem.Add(item);
+                    }
+
+                    listQuesCategorydata.ItemsSource = tem;
+
+                    var totaval = Convert.ToDecimal(lstcatbyitemid.Sum(v => Convert.ToDecimal(v.strAvaliablePoints)));
+                    overallpoints.Text = "Overall Points Available:-" + Convert.ToString(totaval);
+                    var totEarn = Convert.ToDecimal(lstcatbyitemid.Sum(v => Convert.ToDecimal(v.strEarned)));
+                    txtEarnedpoints.Text = "Earned:-" + totEarn;
+
+                    decimal totdalpercentage = Math.Round((totEarn == 0 && totaval == 0) ? 0 : (totEarn / totaval * 100), 2);
+
+                    txtScore.Text = "Score:-" + totdalpercentage;
+                }
+                catch (Exception)
+                {
+                }
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private void Date_pick_Unfocused(object sender, FocusEventArgs e)
+        {
+            Date_pick_DateSelected(sender, null);
+        }
+
+        private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
+        {
+            Entry dtp = new Entry();
+            try
+            {
+                var cnt = (DatePicker)sender;
+                var sty_id = cnt.StyleId?.Split('_')[1];
+                var dt_Entry = FindQuestControl(sty_id) as Entry;
+                dt_Entry.Text = cnt.Date.ToString("d");
+            }
+            catch (Exception)
+            {
+                dtp.Text = "";
             }
         }
 
@@ -399,7 +473,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Picker cnt = (Picker)sender;
             if (App.Isonline)
             {
-                listdata.IsEnabled = false;
+                listQuesCategorydata.IsEnabled = false;
 
                 try
                 {
@@ -439,7 +513,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     throw eq;
                 }
 
-                listdata.IsEnabled = true;
+                listQuesCategorydata.IsEnabled = true;
 
             }
         }
@@ -618,7 +692,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
 
 
-        public object FindQuestControl(string type)
+        public object FindQuestControl(string type, string cntType = "")
         {
             foreach (StackLayout v in DynamicFields.Children)
             {
@@ -626,18 +700,32 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     foreach (var subitem in item.Children)
                     {
-                        var xy = subitem.StyleId;
+                        var xy = subitem;
+                        Type ty = xy.GetType();
 
-                        if (xy != null)
+                        if (ty.Name != "StackLayout")
                         {
-                            if (xy.Contains(type))
+                            if (xy.StyleId != null)
                             {
-                                return subitem;
+                                if (xy.StyleId.Contains(type))
+                                {
+                                    if (cntType == "DatePicker")
+                                    {
+                                        if (ty.Name == "DatePicker")
+                                        {
+                                            return subitem;
+                                        }
+                                    }
+                                    else
+                                        return subitem;
+                                }
                             }
                         }
                     }
                 }
             }
+
+
             return null;
         }
 
@@ -756,6 +844,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         case "do":
                         case "st":
+                        case "hl":
                         case "mn":
                         case "dt":
                         case "ta":
@@ -765,13 +854,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                             cnt = FindQuestControl((_field_type) + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID);
                             cnt_type = cnt.GetType();
-                            var date_pick = new DatePicker();
-                            var ent = new Entry();
-                            ent.FontSize = 16;
-                            var edit = new BorderEditor();
-                            edit.FontSize = 16;
                             if (cnt_type.Name.ToLower() == "datepicker")
                             {
+                                var date_pick = new DatePicker();
                                 date_pick = (DatePicker)cnt;
                                 if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                 {
@@ -782,11 +867,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             }
                             else if (cnt_type.Name.ToLower() == "entry")
                             {
+                                var ent = new Entry();
                                 ent = (Entry)cnt;
 
                                 if (lst_NewQuestFormFields[i].strIsRequired == "Y")
                                 {
-
                                     if (string.IsNullOrEmpty(ent.Text))
                                     {
                                         DisplayAlert("Field Required.", "Please enter valid data in " + lst_NewQuestFormFields[i].strItemInfoFieldName, "OK");
@@ -809,9 +894,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             }
                             else if (cnt_type.Name.ToLower() == "bordereditor")
                             {
+                                var edit = new BorderEditor();
                                 edit = (BorderEditor)cnt;
-
-
                                 if (lst_NewQuestFormFields[i].strIsRequired == "Y")
                                 {
 
@@ -839,13 +923,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                             break;
                         default:
-                            //        if (EntityLists.AssocType[i].AssocMetaDataText.Count != 0)
-                            //            Label2.Text = EntityLists.AssocType[i].AssocMetaDataText[0].TextValue;
                             break;
-
                     }
-
-
                     infoobj.ItemInfoFieldData = iValue;
                     addForm.ItemInfoFieldValues.Add(infoobj);
                 }
@@ -859,7 +938,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                     await Task.Run(async () =>
                     {
-                        var ApiCallAddForm = QuestSyncAPIMethods.StoreAndcreate(App.Isonline, int.Parse(itemid), addForm, "", Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, listdata.ItemsSource);
+                        var ApiCallAddForm = QuestSyncAPIMethods.StoreAndcreate(App.Isonline, int.Parse(itemid), addForm, "", Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, listQuesCategorydata.ItemsSource);
                         ApiCallResponse = ApiCallAddForm.Result;
                         ItemInstanceTranId = Convert.ToString(ApiCallAddForm.Result);
                     });
@@ -941,15 +1020,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
 
                 }
-
             }
             catch (Exception ex)
             {
-                this.Navigation.PopAsync();
+
             }
         }
 
-        void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        void ListQuesCategorydata_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
             try
             {

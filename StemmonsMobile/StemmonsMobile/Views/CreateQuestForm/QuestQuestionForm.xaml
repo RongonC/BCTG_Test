@@ -24,7 +24,7 @@
                 </Grid.RowDefinitions>
 
 
-                <StackLayout x:Name="stk" BackgroundColor="#696969" Grid.Row="0" HeightRequest="80">
+                <StackLayout x:Name="stk" BackgroundColor="#696969" Grid.Row="0" HeightRequest="80" IsClippedToBounds="True">
                     <Grid  Margin="0,30,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -34,11 +34,11 @@
                             <ColumnDefinition Width="7*"/>
                         </Grid.ColumnDefinitions>
                          
-                        <Button Image="Assets/back_icon.png" Text="Back" FontAttributes="Bold" TextColor="White" BackgroundColor="Transparent"  HorizontalOptions="Start" Grid.Row="0" Margin="0,9,0,0" Grid.Column="0" Clicked="Save_Clicked" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Button Image="Assets/back_icon.png" Text="Back" FontAttributes="Bold" TextColor="White" BackgroundColor="Transparent"  HorizontalOptions="Start" Grid.Row="0" Margin="0,9,0,0" Grid.Column="0" Clicked="Save_Clicked"/>
 
-                        <Label Text="New form"  Grid.Row="0" Grid.Column="1" TextColor="White" FontAttributes="Bold" FontSize="16" Margin="50,20,0,0" FontFamily="{local1:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label Text="New form"  Grid.Row="0" Grid.Column="1" TextColor="White" FontAttributes="Bold" FontSize="16" Margin="50,20,0,0"/>
                     </Grid>
-                </StackLayout>
+                </StackLayout >
 
                 <StackLayout x:Name="stk1" VerticalOptions="FillAndExpand" Grid.Row="1">
                     <ScrollView>
@@ -47,7 +47,7 @@
                     </ScrollView>
                 </StackLayout>
 
-                <StackLayout x:Name="stk2" Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                <StackLayout x:Name="stk2" Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" IsClippedToBounds="True">
                     <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home"  Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
 
                     <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>

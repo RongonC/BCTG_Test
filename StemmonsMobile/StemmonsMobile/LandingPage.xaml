@@ -51,6 +51,8 @@
                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
                        VerticalOptions="Center" Margin="20,0,0,0" Source="Assets/boxerlogo.png" />
 
+
+                 
                     <Button x:Name="btn_setting" Clicked="Setting_Clicked"
                             Grid.Row="0" Grid.Column="2"
                             Image="Assets/setting.png" 
@@ -505,6 +507,8 @@
                     </ListView>
                 </ScrollView>
 
+
+                
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" IsVisible="False"
                          IsClippedToBounds="True" Grid.ColumnSpan="3" Grid.Row="6" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" >
 

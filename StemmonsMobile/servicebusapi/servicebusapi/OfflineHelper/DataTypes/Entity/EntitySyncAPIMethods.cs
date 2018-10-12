@@ -282,7 +282,28 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                             i.TransactionType = "M";
                             return i;
                         }).ToList();
-                        Task<int> inserted = DBHelper.UpdateAppTypeInfoList(_AppTypeInfoList, _DBPath);
+
+                        /*VishalPr*/
+                        Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
+                        record.Wait();
+                        // Check if record is Exist or not
+                        var ischeck = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
+
+                        if (ischeck == null)
+                        {
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                        }
+                        else
+                        {
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
+                            //Existing Record Convert to list
+                            var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(ischeck.ASSOC_FIELD_INFO);
+                            entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
+                            _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
+                        }
+
+                        Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                        //Task<int> inserted = DBHelper.UpdateAppTypeInfoList(_AppTypeInfoList, _DBPath);
                         inserted.Wait();
                     }
                 }
@@ -345,14 +366,16 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         else
                             ListEntity = json;
                     }
-                    return ListEntity.OrderByDescending(lst => lst.ListID).ToList(); ;
+                    return ListEntity.OrderByDescending(lst => lst.ListID).ToList();
+                    ;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return ListEntity.OrderByDescending(lst => lst.ListID).ToList(); ;
+            return ListEntity.OrderByDescending(lst => lst.ListID).ToList();
+            ;
         }
         #endregion
 
@@ -362,19 +385,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             EntityClass EntityList = new EntityClass();
             try
             {
-                if (_IsOnline)
-                {
-                    var Result = EntityAPIMethods.GetEntityTypeSchemaByEntityTypeID(Entity_TypeID.ToString(), username);
+                //if (_IsOnline)
+                //{
 
-                    var ResponseValue = Result.GetValue("ResponseContent");
-
-                    if (!string.IsNullOrEmpty(ResponseValue?.ToString()) && ResponseValue.ToString() != "[]")
-                    {
-                        EntityList = JsonConvert.DeserializeObject<EntityClass>(ResponseValue.ToString());
-                    }
-                }
-                else
+                //}
+                //else
                 {
+                    //First Go for the SQLite Data Existance
                     dynamic lstResult = null;
                     lstResult = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(Sys_Name, Entity_Category_TypeDetails, Entity_TypeID, _DBPath, null);
                     lstResult = lstResult.Result as AppTypeInfoList;
@@ -398,6 +415,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                                 else
                                     EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<EXTERNAL_DATASOURCE1>();
                             }
+                        }
+                    }
+
+
+                    if (EntityList == null && _IsOnline)
+                    {
+                        // if not than go for the SQL Call
+                        var Result = EntityAPIMethods.GetEntityTypeSchemaByEntityTypeID(Entity_TypeID.ToString(), username);
+
+                        var ResponseValue = Result.GetValue("ResponseContent");
+
+                        if (!string.IsNullOrEmpty(ResponseValue?.ToString()) && ResponseValue.ToString() != "[]")
+                        {
+                            EntityList = JsonConvert.DeserializeObject<EntityClass>(ResponseValue.ToString());
                         }
                     }
                 }
@@ -1064,7 +1095,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 //var JResult = EntityAPIMethods.BoxerCentralHome_Entities_GetEntityList(username, null);
                 //string jsonValue = Convert.ToString(JResult.GetValue("ResponseContent"));
 
-               // var Rew = JsonConvert.DeserializeObject<List<BoxerCentralHomePage_EntityList_Mob>>(jsonValue);
+                // var Rew = JsonConvert.DeserializeObject<List<BoxerCentralHomePage_EntityList_Mob>>(jsonValue);
 
                 //    int TypeID = 0;
                 //    AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();

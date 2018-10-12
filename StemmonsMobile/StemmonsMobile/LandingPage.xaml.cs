@@ -1,4 +1,5 @@
 ﻿using Acr.UserDialogs;
+using DataServiceBus.OfflineHelper.DataTypes;
 using DataServiceBus.OfflineHelper.DataTypes.Cases;
 using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OfflineHelper.DataTypes.Entity;
@@ -6,6 +7,7 @@ using DataServiceBus.OfflineHelper.DataTypes.Quest;
 using DataServiceBus.OfflineHelper.DataTypes.Standards;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
+using PCLStorage;
 using Plugin.Connectivity;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
@@ -25,10 +27,13 @@ using StemmonsMobile.Views.View_Case_Origination_Center;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace StemmonsMobile
@@ -38,6 +43,7 @@ namespace StemmonsMobile
     {
         ApplicationListViewModel cm;
         List<string> project = new List<string>();
+
         public LandingPage()
         {
             InitializeComponent();
@@ -45,24 +51,7 @@ namespace StemmonsMobile
             this.SizeChanged += LandingPage_SizeChanged;
 
             LandingPageCountDisplay();
-            // For App_Logo 
-            try
-            {
-                if (App.Isonline)
-                {
-                    var result = DefaultAPIMethod.GetLogo();
-                    var urlString = result.GetValue("ResponseContent");
-                    App_Logo.Source = ImageSource.FromUri(new Uri(Convert.ToString(urlString)));
-                }
-                else
-                {
-                    App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
-                }
-            }
-            catch (Exception)
-            {
-                App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
-            }
+
 
             btn_usericon.GestureRecognizers.Add(new TapGestureRecognizer(img_profile_OnTap));
 
@@ -158,6 +147,7 @@ namespace StemmonsMobile
             }
         }
 
+        //Master API Call
         public async void SyncAllRecorsToSQLite()
         {
             try
@@ -1006,19 +996,11 @@ namespace StemmonsMobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            try
-            {
-                if (App.Isonline)
-                {
-                    btn_usericon.Source = ImageSource.FromUri(new Uri(DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName));
-                }
-                else
-                    btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
-            }
-            catch (Exception)
-            {
-                btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
-            }
+
+            // For App_Logo 
+            SetCompanyLogo();
+
+            SetUserPicture();
 
             // btn_usericon.Source = ImageSource.FromFile("Assets/deletebutton.png");
             project = new List<string>();
@@ -1028,6 +1010,96 @@ namespace StemmonsMobile
                 App.IsLoginCall = false;
             }
             HomePageCount();
+        }
+
+        private void SetUserPicture()
+        {
+            try
+            {
+                if (App.Isonline)
+                {
+                    var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    UPro.Wait();
+                    string urlString = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName;
+
+
+                    ImageHelperClass iHeleper = new ImageHelperClass();
+                    var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
+                    Src.Wait();
+
+                    UPro.Result.Profile_Picture = Src.Result;
+
+                    DBHelper.SaveInstanceUserAssoc(UPro.Result, App.DBPath).Wait();
+
+                    btn_usericon.Source = ImageSource.FromUri(new Uri(urlString));
+                }
+                else
+                {
+                    var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    UPro.Wait();
+
+                    byte[] byt = UPro.Result.Profile_Picture as byte[];
+
+                    Image image = new Image();
+                    Stream stream = new MemoryStream(byt);
+                    btn_usericon.Source = ImageSource.FromStream(() => { return stream; });
+
+                    //btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
+                }
+            }
+            catch (Exception)
+            {
+                btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
+            }
+        }
+
+        private void SetCompanyLogo()
+        {
+            try
+            {
+                if (App.Isonline)
+                {
+                    var result = DefaultAPIMethod.GetLogo();
+                    var urlString = result.GetValue("ResponseContent");
+
+                    ImageHelperClass iHeleper = new ImageHelperClass();
+                    var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
+                    Src.Wait();
+
+                    var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
+                    itm.Wait();
+                    InstanceList ils = new InstanceList();
+                    byte[] byt = Src.Result as byte[];
+
+                    Image image = new Image();
+                    Stream stream = new MemoryStream(byt);
+                    App_Logo.Source = ImageSource.FromStream(() => { return stream; });
+
+                    ils.Instance_Logo = byt;
+                    ils.InstanceID = itm.Result.InstanceID;
+                    ils.InstanceName = itm.Result.InstanceName;
+                    ils.InstanceUrl = itm.Result.InstanceUrl;
+
+                    DBHelper.SaveInstance(ils, App.DBPath).ConfigureAwait(false);
+
+                }
+                else
+                {
+                    var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
+                    itm.Wait();
+                    InstanceList ils = new InstanceList();
+                    byte[] byt = itm.Result.Instance_Logo as byte[];
+
+                    Image image = new Image();
+                    Stream stream = new MemoryStream(byt);
+                    App_Logo.Source = ImageSource.FromStream(() => { return stream; });
+                    //App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
+                }
+            }
+            catch (Exception)
+            {
+                App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
+            }
         }
 
         private async void GetBaseURLFromSQLServer()
@@ -1391,7 +1463,7 @@ namespace StemmonsMobile
             try
             {
 
-                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "Logout");
+                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout");
 
                 if (action.ToLower().Contains("offline"))
                     action = "offline";
@@ -1403,7 +1475,9 @@ namespace StemmonsMobile
                     case "Logout":
                         App.Logout(this);
                         break;
-
+                    case "About":
+                        DisplayAlert("App Info", Functions.Appinfomsg, "Ok") ;
+                        break;
                     case "Setting":
                         await Navigation.PushAsync(new Settings());
                         break;

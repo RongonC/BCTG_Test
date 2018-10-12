@@ -27,7 +27,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string Encrypt = "/api/v1/default/Encrypt";
         public static string HomeScreenCount = "/api/v1/default/HomeScreenCount";
         public static string AddLog = "/api/v1/Cases/AddLog";
-        
+
 
 
         #region Cases API Lists
@@ -107,8 +107,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetItemValueFromQueryExd = "/api/v1/Cases/GetItemValueFromQueryExd";
         public static string GetCaseModifiedDate = "/api/v1/Cases/GetCaseModifiedDate";
         public static string GetCaseInfo = "/api/v1/Cases/GetCaseInfo";
-
-        
         #endregion
 
         #region Quest API Lists
@@ -166,7 +164,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetQuestItemByStatus = "/api/v1/Quest/GetQuestItemByStatus";
         public static string GenerateCaseQueue = "/api/v1/Quest/GenerateCaseQueue";
 
-        
+
         #endregion
 
         #region Entity API Lists

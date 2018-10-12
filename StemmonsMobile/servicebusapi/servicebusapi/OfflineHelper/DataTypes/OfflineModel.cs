@@ -13,6 +13,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public int InstanceID { get; set; }
         public string InstanceName { get; set; }
         public string InstanceUrl { get; set; }
+
+        public byte[] Instance_Logo { get; set; }
     }
 
     public class AppTypeInfoList
@@ -85,7 +87,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public int INSTANCE_ID { get; set; }
         public string USER { get; set; }
         public string HOME_SCREEN_INFO { get; set; }
-        //public blobl User_ProfilePic { get; set; }
+
+        public byte[] Profile_Picture { get; set; }
     }
 
     //public class ActivityDetails

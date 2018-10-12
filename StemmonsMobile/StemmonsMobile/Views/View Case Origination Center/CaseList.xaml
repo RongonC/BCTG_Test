@@ -21,7 +21,7 @@
                 </Grid.RowDefinitions>
                 <StackLayout x:Name="main_stack" Grid.Row="0">
                     <SearchBar Placeholder="Search for a case in this list"
-               x:Name="SearchCase" TextChanged="SearchCase_TextChanged" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+               x:Name="SearchCase" TextChanged="SearchCase_TextChanged"/>
 
               
                     <ListView x:Name="listdata" ItemTapped="listdata_ItemTapped"  

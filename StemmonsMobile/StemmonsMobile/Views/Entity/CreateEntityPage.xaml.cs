@@ -159,9 +159,8 @@ namespace StemmonsMobile.Views.Entity
 
                 if (EntitySchemaLists.AssociationFieldCollection != null)
                 {
-                    var assocFieldColl = EntitySchemaLists.AssociationFieldCollection.Where(field => field.IsExternalEntityAssocType == false)
-                                                         .OrderBy(x => x.ItemDesktopPriorityValue == null)
-                                                         .ThenBy(x => x.ItemDesktopPriorityValue);
+                    var assocFieldColl = EntitySchemaLists.AssociationFieldCollection.Where(field => field.IsExternalEntityAssocType == false).OrderBy(x => x.ItemDesktopPriorityValue == null)
+                        .ThenBy(x => x.ItemDesktopPriorityValue);
                     if (!Functions.IsEditEntity)
                         CanCreate = assocFieldColl.Where(w => w.IsRequired == "Y").All(x => x.SecurityType != null && (x.SecurityType.ToLowerInvariant().Contains("c") || x.SecurityType.ToLowerInvariant().Equals("open")));
                     else
@@ -230,8 +229,10 @@ namespace StemmonsMobile.Views.Entity
                                         WidthRequest = 200,
                                         TextColor = Color.Gray
                                     };
+
                                     if (Functions.IsEditEntity)
                                     {
+                                        // for Entity View only
                                         pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
                                     }
                                     else
@@ -335,7 +336,7 @@ namespace StemmonsMobile.Views.Entity
                                     Entry txt_Date = new Entry
                                     {
                                         Placeholder = "Select Date",
-                                        WidthRequest = 175,
+                                        WidthRequest = 170,
                                         TextColor = Color.Gray,
                                         Keyboard = Keyboard.Numeric,
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
@@ -838,9 +839,14 @@ namespace StemmonsMobile.Views.Entity
                                 for (int i = 0; i < Entity_NotesLists.Count; i++)
                                 {
                                     string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
+                                    var tp = Entity_NotesLists[i].Note.ToLower().Replace("download.aspx?", "/download.aspx?");
+                                    tp = tp.ToLower().Replace("/download.aspx?", "/download.aspx?");
+                                    tp = tp.ToLower().Replace("/download.aspx?", App.EntityImgURL.ToLower() + "/download.aspx?");
+
                                     Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
                                     {
-                                        new Entity_Notes { Note = Entity_NotesLists[i].Note }
+                                        //<a href='Download.aspx?FileID=3285&EntityId=397' ><img class='entity_note_image' src='Download.aspx?FileID=3285&EntityId=397'/></a>
+                                        new Entity_Notes { Note = tp }
                                     });
                                 }
 
@@ -851,15 +857,15 @@ namespace StemmonsMobile.Views.Entity
                                         item.FirstOrDefault().ImageVisible = true;
                                         item.FirstOrDefault().LabelVisible = true;
                                         item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                                        item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                                        item.FirstOrDefault().ImageURL = /*App.EntityImgURL + "/" + */item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
+                                        item.FirstOrDefault().Note = /*Functions.HTMLToText(*/item.FirstOrDefault().Note;
                                     }
                                     else
                                     {
                                         item.FirstOrDefault().ImageVisible = false;
                                         item.FirstOrDefault().LabelVisible = true;
                                         item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                                        item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                                        item.FirstOrDefault().Note = /*Functions.HTMLToText*/(item.FirstOrDefault().Note);
                                     }
                                     NotesGroups.Add(item);
                                 }
@@ -887,11 +893,13 @@ namespace StemmonsMobile.Views.Entity
                 #endregion
 
                 if (Functions.IsEditEntity)
+                {
                     CommonConstants.UpdateEDSInfoList_Entity(App.Isonline, EntitySchemaLists, Convert.ToInt32(EntityTypeID), EntityInstance, Entity_Category_TypeDetails, INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    Stack_Footer.IsVisible = true;
+                }
             }
             catch (Exception ex)
             {
-
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
@@ -1703,9 +1711,9 @@ namespace StemmonsMobile.Views.Entity
         {
             if (string.IsNullOrEmpty(controlType))
             {
-                foreach (StackLayout v in TextFieldsLayout.Children)
+                foreach (StackLayout infofield in TextFieldsLayout.Children)
                 {
-                    foreach (StackLayout item in v.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
                         foreach (var subitem in item.Children)
                         {
@@ -1725,9 +1733,9 @@ namespace StemmonsMobile.Views.Entity
             }
             else if (controlType == "DatePicker")
             {
-                foreach (StackLayout v in TextFieldsLayout.Children)
+                foreach (StackLayout infofield in TextFieldsLayout.Children)
                 {
-                    foreach (StackLayout item in v.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
                         foreach (var subitem in item.Children)
                         {
@@ -1749,9 +1757,9 @@ namespace StemmonsMobile.Views.Entity
             }
             else if (controlType == "Image")
             {
-                foreach (StackLayout v in TextFieldsLayout.Children)
+                foreach (StackLayout infofield in TextFieldsLayout.Children)
                 {
-                    foreach (StackLayout item in v.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
                         foreach (var subitem in item.Children)
                         {
@@ -2508,7 +2516,6 @@ namespace StemmonsMobile.Views.Entity
             catch (Exception ex)
             {
             }
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         public static string GetQueryStringWithParamaters(string query, string externalDsName, string value, string field = "", bool checkIn = false, bool checkLike = false)

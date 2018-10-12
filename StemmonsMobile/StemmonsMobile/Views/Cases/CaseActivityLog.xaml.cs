@@ -26,13 +26,11 @@ namespace StemmonsMobile.Views.Cases
         bool Onlineflag = true;
         public CaseActivityLog(string caseid, int _CaseTypeID, bool _onlineflag)
         {
-
             InitializeComponent();
             Onlineflag = _onlineflag;
             App.SetConnectionFlag();
             CaseTypeID = _CaseTypeID;
             CASEID = caseid;
-
         }
 
         protected async override void OnAppearing()
@@ -43,7 +41,7 @@ namespace StemmonsMobile.Views.Cases
                 try
                 {
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         CasesSyncAPIMethods.GetCaseActivity(App.Isonline, CASEID, CaseTypeID, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                     });

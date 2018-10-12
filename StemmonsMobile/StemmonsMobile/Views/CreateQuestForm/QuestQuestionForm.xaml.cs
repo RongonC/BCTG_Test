@@ -132,7 +132,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         QuestionString.Margin = new Thickness(10, 0, 10, 0);
                         QuestionString.Text = QuestionList[i].strItemQuestionFieldName;
                         QuestionString.StyleId = "STL_" + QuestionList[i].intItemQuestionFieldID;
-                        QuestionString.FontFamily = "Soin Sans Neue";
                         QuestionLayout.Children.Add(QuestionString);
 
 
@@ -140,7 +139,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         selectlabel.Margin = new Thickness(10, 0, 10, 0);
                         selectlabel.Text = "Select Choice:";
                         selectlabel.FontSize = 12;
-                        selectlabel.FontFamily = "Soin Sans Neue";
                         QuestionLayout.Children.Add(selectlabel);
 
                         if (removeComment == 0)
@@ -161,8 +159,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         standardMeet = new List<ItemQuestionDecode>();
                         Picker pk = new Picker();
 
-                        //var AnswerApiCall = QuestAPIMethods.GetItemQuestionDecodeByFieldID(Convert.ToString(QuestionList[i].intItemQuestionFieldID));
-                        //var Result = AnswerApiCall.GetValue("ResponseContent");
                         await Task.Run(() =>
                          {
                              var AnswerApiCall = QuestSyncAPIMethods.GetItemQuestionDecodeByFieldID(App.Isonline, Convert.ToString(QuestionList[i].intItemQuestionFieldID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(ItemID), iteminstancetranid, Convert.ToString(QuestionList[i].intItemCategoryID), scatid);
@@ -182,7 +178,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         var pointslabel = new Label();
                         pointslabel.FontSize = 16;
-                        pointslabel.FontFamily = "Soin Sans Neue";
                         pointslabel.Margin = new Thickness(10, 0, 10, 0);
                         string pointsEarned = "";
 
@@ -199,7 +194,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             points = "Points Available:" + "0" + " Earned:" + pointsEarned;
                         }
 
-                        // string points = "Points Available:" + standardMeet[0].dcPointsAvailable + " Earned:" + pointsEarned;
                         pointslabel.Text = points;
                         pointslabel.FontSize = 12;
                         pointslabel.StyleId = "lb_" + QuestionList[i].intItemQuestionFieldID;
@@ -212,7 +206,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         TA.Margin = new Thickness(10, 0, 10, 0);
                         TA.FontSize = 16;
                         TA.Placeholder = "Write Note..";
-                        TA.FontFamily = "Soin Sans Neue";
 
                         if (CommentsListId.Contains(Convert.ToString(QuestionList[i].intItemQuestionFieldID)))
                         {
@@ -248,7 +241,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         MakeCase.TextColor = Color.Blue;
                         MakeCase.FontSize = 13;
                         MakeCase.Text = "Make Case";
-                        MakeCase.FontFamily = "Soin Sans Neue";
                         MakeCase.Image = "Assets/Unchecked.png";
                         MakeCase.StyleId = "makecase_" + QuestionList[i].intItemQuestionFieldID;
                         MakeCase.Clicked += MakeCase_Clicked;
@@ -260,7 +252,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         Attachment.BackgroundColor = Color.Transparent;
                         Attachment.TextColor = Color.Blue;
                         Attachment.Text = "Attachment";
-                        Attachment.FontFamily = "Soin Sans Neue";
                         Attachment.Clicked += Attachment_Clicked;
                         Attachment.CommandParameter = QuestionList[i];
                         grid.Children.Add(Attachment, 1, 0);
@@ -290,18 +281,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 Label ExtraNotes = new Label();
                                 ExtraNotes.Text = pNOTES[i];
                                 ExtraNotes.FontSize = 16;
-                                ExtraNotes.FontFamily = "Soin Sans Neue";
                                 ExtraNotes.Margin = new Thickness(10, 5, 5, 0);
                                 QuestionLayout.Children.Add(ExtraNotes);
-
-                                //CommentsListId.Add(Convert.ToString(listdata[i].intItemQuestionFieldID));
-                                //CommentsList.Add(listdata[i].strNotes);
 
                                 Button ExtraViewCase = new Button();
                                 ExtraViewCase.BackgroundColor = Color.Transparent;
                                 ExtraViewCase.TextColor = Color.Blue;
                                 ExtraViewCase.Text = "ViewCase";
-                                ExtraViewCase.FontFamily = "Soin Sans Neue";
                                 ExtraViewCase.FontSize = 13;
                                 ExtraViewCase.IsEnabled = false;
                                 //  ExtraViewCase.Clicked += ExtraViewCase_Clicked;
@@ -315,7 +301,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 ExtraAttachment.TextColor = Color.Blue;
                                 ExtraAttachment.Text = "Attachment";
                                 ExtraAttachment.FontSize = 13;
-                                ExtraAttachment.FontFamily = "Soin Sans Neue";
                                 ExtraViewCase.IsEnabled = false;
                                 ExtraAttachment.Margin = new Thickness(20, 0, 0, 0);
                                 ExtraAttachment.HorizontalOptions = LayoutOptions.CenterAndExpand;
@@ -328,7 +313,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 ExtraRemove.BackgroundColor = Color.Transparent;
                                 ExtraRemove.TextColor = Color.Blue;
                                 ExtraRemove.Text = "Remove";
-                                ExtraRemove.FontFamily = "Soin Sans Neue";
                                 ExtraRemove.FontSize = 13;
                                 ExtraRemove.IsEnabled = true;
                                 ExtraRemove.Margin = new Thickness(0, 0, 15, 0);
@@ -337,8 +321,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 ExtraRemove.CommandParameter = QuestionList[i];
 
                                 AttachmentDLayout.Children.Add(ExtraRemove);
-
-
 
                                 AttachmentDLayout.Orientation = StackOrientation.Horizontal;
                                 AttachmentDLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
@@ -998,11 +980,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         pick_Ext_datasrc = (Picker)cnt1;
                     }
 
-
-
                     var picker_value = pick_Ext_datasrc.SelectedItem as ItemQuestionDecode;
-
-
 
                     var cnt2 = findControl("TA_" + QuestionList[i].intItemQuestionFieldID);
 
@@ -1025,7 +1003,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             meetvalue = picker_value.strMeetsStandards;
                         }
 
-
                         standardmeets = meetvalue;
 
                         if (string.IsNullOrEmpty(meetvalue))
@@ -1035,13 +1012,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         }
                         else
                         {
-
-
                             pointsearned = pointsReturn("Earned", meetvalue, Convert.ToString(QuestionList[0].intItemQuestionFieldID));
                             pointsavailable = pointsReturn("Avail", meetvalue, Convert.ToString(QuestionList[0].intItemQuestionFieldID));
                         }
-
-
 
                         if (MakeCaseId.Contains(Convert.ToString(QuestionList[0].intItemQuestionFieldID)))
                         {
@@ -1064,6 +1037,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             AddedMakeCaseId.Add(QuestionList[0].intItemQuestionFieldID);
                             goto NextPage1;
                         }
+
                         NextPage1:
                         int a1 = 0;
 
@@ -1191,7 +1165,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 };
 
                 JObject Body = (JObject)JToken.FromObject(obj);
-                var jsonBody = JObject.Parse(Convert.ToString(Body));
+                //var jsonBody = JObject.Parse(Convert.ToString(Body));
 
 
                 Functions.questObjectData = obj;

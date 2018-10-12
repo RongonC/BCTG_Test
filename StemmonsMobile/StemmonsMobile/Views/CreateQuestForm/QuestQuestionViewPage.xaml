@@ -22,7 +22,7 @@
                 </Grid.RowDefinitions>
 
 
-                <StackLayout BackgroundColor="#696969" Grid.Row="0" HeightRequest="80">
+                <StackLayout BackgroundColor="#696969" Grid.Row="0" HeightRequest="80" IsClippedToBounds="True">
                     <Grid Margin="0,30,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -49,8 +49,7 @@
                     </StackLayout>
                 </ScrollView>
 
-
-                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" IsClippedToBounds="True">
                     <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home"  Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
 
                     <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>

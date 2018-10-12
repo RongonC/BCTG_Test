@@ -30,60 +30,60 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                gridCasesnotes.ItemsSource = null;
-                CasesnotesGroups.Clear();
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                List<GetCaseNotesResponse.NoteData> Noteslist = new List<GetCaseNotesResponse.NoteData>();
-                await Task.Run(() =>
-                {
-                    Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                    NotesResponse.Wait();
-                    Noteslist = NotesResponse?.Result;
-                });
+                //gridCasesnotes.ItemsSource = null;
+                //CasesnotesGroups.Clear();
+                //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                //List<GetCaseNotesResponse.NoteData> Noteslist = new List<GetCaseNotesResponse.NoteData>();
+                //await Task.Run(() =>
+                //{
+                //    Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                //    NotesResponse.Wait();
+                //    Noteslist = NotesResponse?.Result;
+                //});
 
-                ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
-                if (Noteslist?.Count > 0)
-                {
-                    for (int i = 0; i < Noteslist.Count; i++)
-                    {
-                        CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
-                            {
-                                new GetCaseNotesResponse.NoteData
-                                {
-                                    Note = Noteslist[i].Note
-                                }
-                            };
-                        Temp.Add(grp);
-                    }
+                //ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
+                //if (Noteslist?.Count > 0)
+                //{
+                //    for (int i = 0; i < Noteslist.Count; i++)
+                //    {
+                //        CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
+                //            {
+                //                new GetCaseNotesResponse.NoteData
+                //                {
+                //                    Note = Noteslist[i].Note
+                //                }
+                //            };
+                //        Temp.Add(grp);
+                //    }
 
-                    foreach (var item in Temp)
-                    {
-                        if (item.FirstOrDefault().Note.Contains("<img"))
-                        {
-                            item.FirstOrDefault().ImageVisible = true;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
-                        else
-                        {
-                            item.FirstOrDefault().ImageVisible = false;
-                            item.FirstOrDefault().LabelVisible = true;
-                            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
-                        }
+                //    foreach (var item in Temp)
+                //    {
+                //        if (item.FirstOrDefault().Note.Contains("<img"))
+                //        {
+                //            item.FirstOrDefault().ImageVisible = true;
+                //            item.FirstOrDefault().LabelVisible = true;
+                //            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                //            item.FirstOrDefault().ImageURL = App.CasesImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                //        }
+                //        else
+                //        {
+                //            item.FirstOrDefault().ImageVisible = false;
+                //            item.FirstOrDefault().LabelVisible = true;
+                //            item.FirstOrDefault().HtmlNote = item.FirstOrDefault().Note;
+                //            item.FirstOrDefault().Note = Functions.HTMLToText(item.FirstOrDefault().Note);
+                //        }
 
-                        CasesnotesGroups.Add(item);
-                    }
+                //        CasesnotesGroups.Add(item);
+                //    }
 
-                    gridCasesnotes.ItemsSource = CasesnotesGroups;
-                }
-                else
-                {
-                    await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-                    await Navigation.PopAsync();
-                }
+                //    gridCasesnotes.ItemsSource = CasesnotesGroups;
+                //}
+                //else
+                //{
+                //    await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+                //    await Navigation.PopAsync();
+                //}
             }
             catch (Exception ex)
             {

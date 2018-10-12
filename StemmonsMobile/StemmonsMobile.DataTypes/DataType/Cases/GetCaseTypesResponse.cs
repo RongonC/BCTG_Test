@@ -178,7 +178,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                 {
                     string debug = string.Empty;
 
-                    if (DebugMode) debug = "&Debug=Y";
+                    if (DebugMode)
+                        debug = "&Debug=Y";
 
                     if (CaseTitle != null && CaseTitle.Length > 40)
                     {
@@ -202,7 +203,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
                     string debug = string.Empty;
 
-                    if (DebugMode) debug = "&Debug=Y";
+                    if (DebugMode)
+                        debug = "&Debug=Y";
                     if (!string.IsNullOrEmpty(this.CaseDisplayFormat))
                     {
                         if (CaseTitle != null && CaseTitle.Length > 50)
@@ -333,7 +335,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
             public string CaseTitleModal { get; set; }
 
-            // Will display ListID as {CaseTypeID}-{ListID} instead of {ListID} Jay Patele (10/31/2012)
+            // Will display ListID as {CaseTypeID}-{ListID} instead of {ListID} Jay Patel (10/31/2012)
             public string DisplayListID
             {
                 get
@@ -1214,6 +1216,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
             public bool DebugMode { get; set; }
 
+            public bool IsClosed { get; set; }
+
             public string CaseTitle
             {
                 get
@@ -1250,7 +1254,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                             {
                                 string debug = string.Empty;
 
-                                if (DebugMode) debug = "&Debug=Y";
+                                if (DebugMode)
+                                    debug = "&Debug=Y";
 
                                 if (item.TextValue != null && item.TextValue.Length > 40)
                                 {
@@ -1656,5 +1661,5 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         #endregion
     }
 
-   
+
 }

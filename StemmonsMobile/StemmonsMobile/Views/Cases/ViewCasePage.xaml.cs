@@ -7,9 +7,7 @@ using PCLStorage;
 using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
-using StemmonsMobile.DataTypes.DataType.Quest;
 using StemmonsMobile.Models;
-using StemmonsMobile.Views.CreateQuestForm;
 using StemmonsMobile.Views.View_Case_Origination_Center;
 using System;
 using System.Collections.Generic;
@@ -17,11 +15,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 //using Plugin.Clipboard;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -30,7 +26,6 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetTypeValuesByAssocCaseTypeExternalDSResponse;
-using static StemmonsMobile.DataTypes.DataType.Quest.GetSecurityDataResponse;
 
 namespace StemmonsMobile.Views.Cases
 {
@@ -1342,7 +1337,7 @@ namespace StemmonsMobile.Views.Cases
                 gridCasesnotes.ItemsSource = null;
                 CasesnotesGroups.Clear();
 
-                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, _Casedata.NewestNoteOnTop);
                 NotesResponse.Wait();
                 var Noteslist = NotesResponse?.Result;
 
@@ -2899,10 +2894,32 @@ namespace StemmonsMobile.Views.Cases
                     sb.Append("Offline Mode");
                 else
                     sb.Append("Online Mode");
+                //   _Casedata.CaseOwner
 
                 string[] buttons;
-                buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee","Approve and Return", "Approve and Assign","Decline and Return", "Decline and Assign",
-                                                           "Close Case", "Take Ownership", "Email Link","Add Attachment","Activity Log", "Logout" };
+
+                if (_Casedata.CaseOwner.ToLower() == Functions.UserName && _Casedata.CaseAssignedTo.ToLower() == Functions.UserName)
+                {
+                    //if Case Owner and CaseAssignedTo to the Current User
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                }
+                else if (_Casedata.CaseOwner.ToLower() == Functions.UserName)
+                {
+                    //if Case Owner is Current User
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                }
+                else if (_Casedata.CaseAssignedTo.ToLower() == Functions.UserName)
+                {
+                    //if CaseAssignedTo is Current User
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                }
+                else
+                {
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                }
+
+
+
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
                 if (action.ToLower().Contains("offline"))
@@ -3181,8 +3198,8 @@ namespace StemmonsMobile.Views.Cases
 
                                   CasesSyncAPIMethods.storeReturnToLastAssignee(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
 
-                                   // To manage the footer for Return To Functionality Only
-                                   HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+                                  // To manage the footer for Return To Functionality Only
+                                  HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
 
                               }
                           });
@@ -3492,6 +3509,8 @@ namespace StemmonsMobile.Views.Cases
                                         }
                                     }
                                     CasesSyncAPIMethods.storeClose(Onlineflag, objClose, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+
+
                                 }
                             });
 
@@ -3534,6 +3553,59 @@ namespace StemmonsMobile.Views.Cases
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
 
+                    #endregion      
+
+                    #region Assigned To Me
+                    case "Assigned To Me":
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                        try
+                        {
+                            AcceptCaseRequest obj = new AcceptCaseRequest()
+                            {
+                                CaseId = Convert.ToInt32(CaseID),
+                                caseOwnerSAM = Functions.UserName,
+                                username = Functions.UserName
+                            };
+                            GetUserInfoResponse.UserInfo userInfo = new GetUserInfoResponse.UserInfo();
+                            userInfo.SAMName = Functions.UserName;
+                            userInfo.DisplayName = Functions.UserFullName;
+                            int Assigntome = 0;
+
+                            try
+                            {
+                                await Task.Run(async () =>
+                                {
+                                    Assigntome = await CasesSyncAPIMethods.StoreAndUpdateCase(Onlineflag, Convert.ToInt32(Casetypeid), savecase, txt_CasNotes.Text, Functions.UserName, App.DBPath, createcase, userInfo, null, "19", false, false, Functions.UserFullName, strTome);
+                                });
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            //await Task.Run(() =>
+                            //{
+                            //    Assigntome = SaveAndUpdate(savecase, createcase, obj);
+                            //    Assigntome.Wait();
+                            //});
+
+                            if (Assigntome > 0)
+                            {
+                                Functions.ShowtoastAlert("You have Successfully Assinged this case.");
+                            }
+                            else
+                            {
+                                Functions.ShowtoastAlert("Case Assignment Operation has not been Success. Please try again later");
+                            }
+                            this.OnAppearing();
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                        txt_CasNotes.Text = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                        break; 
                     #endregion
 
                     #region Take Ownership

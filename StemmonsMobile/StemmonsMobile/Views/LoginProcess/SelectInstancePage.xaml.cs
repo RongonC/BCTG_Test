@@ -38,7 +38,7 @@ namespace StemmonsMobile.Views.LoginProcess
         void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var value = e.Item as InstanceList;
-            //  Constants.Selected_Instance = value.InstanceId;
+            Functions.Selected_Instance = value.InstanceID;
             this.Navigation.PushAsync(new LoginPage(value) { BindingContext = value });
             InstanceList.SelectedItem = null;
         }

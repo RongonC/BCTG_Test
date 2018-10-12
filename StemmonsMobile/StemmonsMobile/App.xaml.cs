@@ -177,7 +177,7 @@ namespace StemmonsMobile
             try
             {
                 DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
-
+                
                 //Required To create Database
                 DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
             }
@@ -263,8 +263,6 @@ namespace StemmonsMobile
                 else
                     Functions.AppStartCount = 1;
 
-
-
                 if (Current.Properties.ContainsKey("Selected_Instance"))
                 {
                     if (Application.Current.Properties["Selected_Instance"] != null)
@@ -296,7 +294,7 @@ namespace StemmonsMobile
         public static string CasesImgURL = string.Empty;
         public static string StandardImgURL = string.Empty;
 
-        protected async override void OnStart()
+        protected override void OnStart()
         {
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             CreateDataBase();

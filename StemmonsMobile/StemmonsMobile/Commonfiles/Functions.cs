@@ -13,7 +13,9 @@ using StemmonsMobile.DataTypes.DataType.Quest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -115,23 +117,22 @@ namespace StemmonsMobile.Commonfiles
             UserDialogs.Instance.Toast(t);
         }
 
-
+  
 
         public static async Task DownloadImageFile(string Url)
         {
             try
             {
-                //Uri url = new Uri(Url);
-                //var client = new HttpClient();
+                Uri url = new Uri(Url);
+                var client = new HttpClient();
 
-                //var fol = await App.rootFolder.GetFolderAsync("Entity");
-                //IFile file = await App.rootFolder.CreateFileAsync(UserName + ".png", CreationCollisionOption.ReplaceExisting);
-                //using (var fileHandler = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
-                //{
-                //    var httpResponse = await client.GetAsync(url);
-                //    byte[] dataBuffer = await httpResponse.Content.ReadAsByteArrayAsync();
-                //    await fileHandler.WriteAsync(dataBuffer, 0, dataBuffer.Length);
-                //}
+                IFile file = await FileSystem.Current.LocalStorage.CreateFileAsync(UserName + ".png", CreationCollisionOption.ReplaceExisting);
+                using (var fileHandler = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
+                {
+                    var httpResponse = await client.GetAsync(url);
+                    byte[] dataBuffer = await httpResponse.Content.ReadAsByteArrayAsync();
+                    await fileHandler.WriteAsync(dataBuffer, 0, dataBuffer.Length);
+                }
             }
             catch (Exception ex)
             {

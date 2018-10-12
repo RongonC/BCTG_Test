@@ -462,7 +462,7 @@ namespace StemmonsMobile.Views.Cases
                                 #region txt_Date
                                 Entry txt_Date = new Entry();
                                 txt_Date.Placeholder = "Select Date";
-                                txt_Date.WidthRequest = 175;
+                                txt_Date.WidthRequest = 170;
                                 txt_Date.TextColor = Color.Gray;
                                 txt_Date.Keyboard = Keyboard.Numeric;
                                 txt_Date.StyleId = "a_" + item.ASSOC_TYPE_ID;
@@ -556,6 +556,7 @@ namespace StemmonsMobile.Views.Cases
 
                                 break;
                             case "t":
+                            case "h":
                                 Entry entry_tx = new Entry();
                                 entry_tx.StyleId = item.ASSOC_FIELD_TYPE.ToLower() + "_" + item.ASSOC_TYPE_ID;
 
@@ -906,13 +907,13 @@ namespace StemmonsMobile.Views.Cases
                                     case "t":
                                     case "c":
                                     case "n":
+                                    case "h":
                                         cnt = FindCasesControls(iitem.ASSOC_TYPE_ID);
                                         if (cnt != null)
                                         {
                                             Entry entry = new Entry();
                                             entry = cnt as Entry;
                                             entry.FontSize = 16;
-                                            entry.FontFamily = "Soin Sans Neue";
                                             entry.Text = metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
                                         }
                                         break;

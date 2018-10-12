@@ -38,12 +38,24 @@
                                                 <ColumnDefinition Width="3*" />
                                                 <ColumnDefinition Width="1*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Text="{Binding QuestionCategoryName}" Style="{StaticResource defaultLabelSize_16}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" />
-                                            <Label Text="Complete" FontSize="10" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Grid.Column="3" />
-                                            <Label Text="{Binding QuestionAvailblePoints}" FontSize="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
-                                            <Label Text="{Binding QuestionEarnedPoints}" FontSize="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
-                                            <Label Text="{Binding QuestionOveralscore}" FontSize="10" Grid.Column="3" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
-                                            <Button Image="Assets/dropdowniconClose.png" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" />
+                                            <Label Text="{Binding QuestionCategoryName}" Style="{StaticResource defaultLabelSize_16}" 
+                                                   HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                                   Grid.ColumnSpan="3" Grid.Row="0" 
+                                                   Grid.Column="0" />
+                                            <Label Text="Complete" FontSize="10" HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                                   Grid.Column="3" />
+                                            <Label Text="{Binding QuestionAvailblePoints}" FontSize="10" 
+                                                   Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" 
+                                                   HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
+                                            <Label Text="{Binding QuestionEarnedPoints}"
+                                                   FontSize="10" Grid.Column="2" Grid.Row="1" 
+                                                   HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
+                                            <Label Text="{Binding QuestionOveralscore}" 
+                                                   FontSize="10" Grid.Column="3" Grid.Row="1" 
+                                                   HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                                            <Button Image="Assets/dropdowniconClose.png" HorizontalOptions="End" VerticalOptions="Center" 
+                                                    BackgroundColor="Transparent" 
+                                                    Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" />
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
