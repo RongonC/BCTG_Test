@@ -178,7 +178,7 @@ namespace StemmonsMobile.Views.Cases
                         break;
                 }
 
-                this.Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(CaseDetails.CaseTypeID), seacrchvalue));
+                 this.Navigation.PushAsync(new CaseList("casetypeid", Convert.ToString(CaseDetails.CaseTypeID), seacrchvalue));
             }
             catch (Exception ex)
             {

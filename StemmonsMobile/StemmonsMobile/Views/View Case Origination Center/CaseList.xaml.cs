@@ -238,6 +238,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                 break;
                             case "caseDetailClosedByMe":
                                 caseClosebySam = Functions.UserName;
+                                showOpenClosetype = "y";
                                 break;
                             case "caseDetailClosesCases":
                                 showOpenClosetype = "C";

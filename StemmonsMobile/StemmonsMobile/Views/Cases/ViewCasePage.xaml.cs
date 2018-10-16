@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 //using Plugin.Clipboard;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -54,9 +55,19 @@ namespace StemmonsMobile.Views.Cases
         List<Tuple<List<GetCaseTypesResponse.ItemType>, string, string>> lstcalculationsFieldlist = new List<Tuple<List<GetCaseTypesResponse.ItemType>, string, string>>();
         List<AssocCascadeInfo> AssocTypeCascades = new List<AssocCascadeInfo>();
         BorderEditor txt_CasNotes = new BorderEditor();
-        // Button btnIsRefresh = new Button();
         Label WarningLabel = new Label();
-        //StackLayout CasesView_ControlStack = new StackLayout();
+
+        int iSelectedItemlookupId = 0;
+
+        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lstexternaldatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+        Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>> lstextdatasourceHistory = new Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>>();
+
+
+
+        public static ObservableCollection<string> Exditems { get; set; }
+        List<MetaData> metadatacollection = new List<MetaData>();
+
         public ViewCasePage(string CASEID, string CASETYPEID, string CASETITLE, string ToMe = "")
         {
             InitializeComponent();
@@ -113,8 +124,13 @@ namespace StemmonsMobile.Views.Cases
             refreshView.SetBinding<CasesPulltorefreshViewmodel>(PullToRefreshLayout.RefreshCommandProperty, vm => vm.RefreshCommand);
 
             masterGrid.Children.Add(refreshView, 0, 2);
+            //masterGrid.Children.Add(btm_stack, 0, 3);
 
+            //abs_layout.Children.Add(refreshView);
+
+            // abs_layout.Children.Add(popupLT);
             abs_layout.Children.Add(overlay);
+
             Content = abs_layout;
 
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -368,9 +384,14 @@ namespace StemmonsMobile.Views.Cases
 
                                 if (filedsecuritytype_read)
                                 {
-                                    var Mainlayout = new StackLayout();
-                                    Mainlayout.Orientation = StackOrientation.Horizontal;
-                                    Mainlayout.Margin = new Thickness(10, 0, 0, 0);
+                                    var MainLayout = new StackLayout();
+                                    MainLayout.Orientation = StackOrientation.Horizontal;
+                                    MainLayout.Margin = new Thickness(10, 0, 0, 0);
+
+                                    var RightLayout = new StackLayout();
+                                    RightLayout.HorizontalOptions = LayoutOptions.Start;
+                                    RightLayout.VerticalOptions = LayoutOptions.Center;
+                                    RightLayout.Orientation = StackOrientation.Horizontal;
 
                                     var LeftLayout = new StackLayout();
                                     LeftLayout.HorizontalOptions = LayoutOptions.Start;
@@ -398,7 +419,7 @@ namespace StemmonsMobile.Views.Cases
                                     Label1.WidthRequest = 200;
 
                                     LeftLayout.Children.Add(Label1);
-                                    Mainlayout.Children.Add(LeftLayout);
+                                    MainLayout.Children.Add(LeftLayout);
 
                                     try
                                     {
@@ -407,7 +428,110 @@ namespace StemmonsMobile.Views.Cases
                                             case "o":
                                             case "e":
 
+
+
                                                 Picker pk = new Picker();
+                                                pk.WidthRequest = 200;
+                                                pk.IsVisible = false;
+
+
+                                                Button pk_button = new Button();
+                                                pk_button.WidthRequest = 200;
+                                                pk_button.TextColor = Color.Gray;
+                                                pk_button.BackgroundColor = Color.White;
+                                                if (Device.RuntimePlatform == "Android")
+                                                {
+                                                    pk_button.Margin = new Thickness(0, 0, 0, 1);
+                                                    pk_button.CornerRadius = 0;
+                                                }
+                                                if (Device.RuntimePlatform == "iOS")
+                                                {
+                                                    pk_button.BorderWidth = 1;
+                                                    pk_button.CornerRadius = 5;
+                                                    pk_button.BorderColor = Color.Gray;
+                                                    pk_button.CornerRadius = 5;
+                                                    //  pk_button.Co
+                                                }
+
+                                                pk_button.IsVisible = true;
+
+                                                pk.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
+
+
+
+                                                pk_button.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
+
+                                                try
+                                                {
+                                                    //    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+
+                                                    //    {
+                                                    //        GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                    //        {
+                                                    //            NAME = "-- Select Item --",
+                                                    //            DESCRIPTION = "-- Select Item --",
+                                                    //            ID = 0
+                                                    //        };
+
+                                                    //        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                                                    //        if (Onlineflag)
+                                                    //        {
+                                                    //            var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
+                                                    //            var AssocType = json.GetValue("ResponseContent");
+                                                    //            AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+                                                    //            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == ControlsItem.ASSOC_TYPE_ID).ToList();
+                                                    //            if (assocChild.Count < 1)
+                                                    //            {
+                                                    //                var result_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, ControlsItem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID));
+                                                    //                if (result_extdatasource.Result != null && result_extdatasource.Result.ToString() != "[]")
+                                                    //                {
+                                                    //                    lst_extdatasource.AddRange(result_extdatasource.Result);
+                                                    //                }
+                                                    //            }
+                                                    //        }
+                                                    //        else
+                                                    //        {
+                                                    //            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(Onlineflag, ControlsItem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(ControlsItem.ASSOC_TYPE_ID));
+
+                                                    //            temp_extdatasource.Wait();
+                                                    //            if (temp_extdatasource.Result.Count > 0)
+                                                    //            {
+                                                    //                lst_extdatasource.AddRange(temp_extdatasource.Result);
+                                                    //            }
+                                                    //        }
+
+                                                    //        lst_extdatasource.Insert(0, cases_extedataSource);
+
+
+                                                    //        pk.ItemsSource = lst_extdatasource;
+                                                    //        pk.ItemDisplayBinding = new Binding("NAME");
+                                                    //    }
+                                                    //    if (!filedsecuritytype_update)
+                                                    //    {
+                                                    //        pk.IsEnabled = false;
+                                                    //    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                }
+
+                                                try
+                                                {
+                                                    pk_button.StyleId = ControlsItem.ASSOC_TYPE_ID.ToString();
+                                                    pk_button.Clicked += Pk_button_Clicked;
+                                                    pk_button.Text = "-- Select Item --";
+                                                    pk_button.WidthRequest = 200;
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+
+                                                RightLayout.BackgroundColor = Color.Gray;
+                                                RightLayout.Children.Add(pk_button);
+
+                                                #region old Picker code
+                                                /*Picker pk = new Picker();
                                                 pk.WidthRequest = 200;
                                                 pk.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
                                                 try
@@ -464,7 +588,8 @@ namespace StemmonsMobile.Views.Cases
                                                 catch (Exception ex)
                                                 {
                                                 }
-                                                Mainlayout.Children.Add(pk);
+                                                RightLayout.Children.Add(pk); */
+                                                #endregion
                                                 break;
 
                                             case "d":
@@ -503,7 +628,7 @@ namespace StemmonsMobile.Views.Cases
                                                 catch (Exception ex)
                                                 {
                                                 }
-                                                Mainlayout.Children.Add(pkr);
+                                                RightLayout.Children.Add(pkr);
                                                 break;
 
                                             case "x":
@@ -526,7 +651,7 @@ namespace StemmonsMobile.Views.Cases
                                                 catch (Exception ex)
                                                 {
                                                 }
-                                                Mainlayout.Children.Add(editor);
+                                                RightLayout.Children.Add(editor);
                                                 break;
 
                                             case "a":
@@ -618,9 +743,9 @@ namespace StemmonsMobile.Views.Cases
                                                 #endregion
 
 
-                                                Mainlayout.Children.Add(txt_Date);
-                                                Mainlayout.Children.Add(img_clr);
-                                                Mainlayout.Children.Add(date_pick);
+                                                RightLayout.Children.Add(txt_Date);
+                                                RightLayout.Children.Add(img_clr);
+                                                RightLayout.Children.Add(date_pick);
 
                                                 txt_Date.Focused += (sender, e) =>
                                                 {
@@ -700,7 +825,7 @@ namespace StemmonsMobile.Views.Cases
                                                 }
                                                 entry.WidthRequest = 200;
                                                 entry.FontSize = 16;
-                                                Mainlayout.Children.Add(entry);
+                                                RightLayout.Children.Add(entry);
                                                 break;
                                             case "c":
                                                 Entry _entry = new Entry();
@@ -711,7 +836,7 @@ namespace StemmonsMobile.Views.Cases
                                                 _entry.FontSize = 16;
                                                 _entry.Keyboard = Keyboard.Default;
                                                 _entry.Text = "";
-                                                Mainlayout.Children.Add(_entry);
+                                                RightLayout.Children.Add(_entry);
 
                                                 break;
                                             case "n":
@@ -739,7 +864,7 @@ namespace StemmonsMobile.Views.Cases
                                                 catch (Exception ex)
                                                 {
                                                 }
-                                                Mainlayout.Children.Add(entry_number);
+                                                RightLayout.Children.Add(entry_number);
                                                 break;
                                             default:
                                                 break;
@@ -748,7 +873,9 @@ namespace StemmonsMobile.Views.Cases
                                     catch (Exception ex)
                                     {
                                     }
-                                    CasesView_ControlStack.Children.Add(Mainlayout);
+
+                                    MainLayout.Children.Add(RightLayout);
+                                    CasesView_ControlStack.Children.Add(MainLayout);
                                 }
                             }
                         }
@@ -865,264 +992,286 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     case "o":
                                     case "e":
+                                        var controlbtn = FindPickerControls(Metaitem.ASSOC_TYPE_ID);
 
-                                        var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
-                                        if (control != null)
+                                        if (controlbtn != null)
                                         {
-                                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> cnt_DataSource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-
-                                            cnt_DataSource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
-
-                                            try
+                                            Button btn = controlbtn as Button;
+                                            btn.FontSize = 16;
+                                            var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
+                                            if (!string.IsNullOrEmpty(SelItmname))
                                             {
-                                                int idd = 0;
-                                                if (Onlineflag)
-                                                {
-                                                    if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
-                                                    {
-                                                        int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (id > 0)
-                                                        {
-                                                            idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == id));
-                                                        }
-                                                    }
-                                                    else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    {
-                                                        int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (id > 0)
-                                                        {
-                                                            idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == id));
-                                                        }
-                                                    }
-                                                    control.SelectedIndex = idd;
-                                                }
-                                                else
-                                                {
-                                                    if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
-                                                    {
-                                                        int Sel_id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (Sel_id > 0)
-                                                        {
-                                                            idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Sel_id));
-                                                        }
-                                                        else if (Sel_id != -1 && Sel_id != 0)
-                                                        {
-                                                            var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
-                                                            cnt_DataSource.Add(new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                            {
-                                                                ID = Sel_id,
-                                                                NAME = SelItmname
+                                                btn.Text = SelItmname;
+                                            }
+                                            else
+                                            {
+                                                btn.Text = "-- Select Item --";
+                                            }
+                                            break;
 
-                                                            });
+                                            #region Old Picker Code
+                                            /*
+                                            var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
+                                            if (control != null)
+                                            {
+                                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> cnt_DataSource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
 
-                                                            control.ItemsSource = cnt_DataSource;
-                                                            control.SelectedIndex = cnt_DataSource.Count - 1;
-                                                        }
-                                                    }
-                                                    else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                cnt_DataSource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
+
+                                                try
+                                                {
+                                                    int idd = 0;
+                                                    if (Onlineflag)
                                                     {
-                                                        int Ext_Objid = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
-                                                        if (Ext_Objid > 0)
+                                                        if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
                                                         {
-                                                            idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Ext_Objid));
-                                                        }
-                                                        else if (Ext_Objid != -1 && Ext_Objid != 0)
-                                                        {
-                                                            var F_Value = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
-                                                            if (!string.IsNullOrEmpty(F_Value))
+                                                            int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                            if (id > 0)
                                                             {
+                                                                idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == id));
+                                                            }
+                                                        }
+                                                        else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                        {
+                                                            int id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                            if (id > 0)
+                                                            {
+                                                                idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == id));
+                                                            }
+                                                        }
+                                                        control.SelectedIndex = idd;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                                        {
+                                                            int Sel_id = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                            if (Sel_id > 0)
+                                                            {
+                                                                idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Sel_id));
+                                                            }
+                                                            else if (Sel_id != -1 && Sel_id != 0)
+                                                            {
+                                                                var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
                                                                 cnt_DataSource.Add(new GetExternalDataSourceByIdResponse.ExternalDatasource()
                                                                 {
-                                                                    ID = Ext_Objid,
-                                                                    NAME = F_Value
+                                                                    ID = Sel_id,
+                                                                    NAME = SelItmname
+
                                                                 });
-                                                                idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Ext_Objid));
+
                                                                 control.ItemsSource = cnt_DataSource;
+                                                                control.SelectedIndex = cnt_DataSource.Count - 1;
                                                             }
-                                                            control.SelectedIndex = idd;
                                                         }
+                                                        else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                        {
+                                                            int Ext_Objid = Convert.ToInt32(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.ExternalDatasourceObjectID);
+                                                            if (Ext_Objid > 0)
+                                                            {
+                                                                idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Ext_Objid));
+                                                            }
+                                                            else if (Ext_Objid != -1 && Ext_Objid != 0)
+                                                            {
+                                                                var F_Value = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
+                                                                if (!string.IsNullOrEmpty(F_Value))
+                                                                {
+                                                                    cnt_DataSource.Add(new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                                    {
+                                                                        ID = Ext_Objid,
+                                                                        NAME = F_Value
+                                                                    });
+                                                                    idd = cnt_DataSource.IndexOf(cnt_DataSource.Single(v => v.ID == Ext_Objid));
+                                                                    control.ItemsSource = cnt_DataSource;
+                                                                }
+                                                                control.SelectedIndex = idd;
+                                                            }
+                                                        }
+                                                        control.SelectedIndex = idd;
+
+
+                                                        #region old Selection Code
+                                                        //if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                                        //{
+                                                        //    string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                                        //    if (!string.IsNullOrEmpty(sTextvalue))
+                                                        //    {
+                                                        //        try
+                                                        //        {
+                                                        //            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue?.ToLower()?.Trim()).FirstOrDefault());
+                                                        //        }
+                                                        //        catch
+                                                        //        {
+                                                        //            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                        //            var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                        //            if (rec != null)
+                                                        //            {
+                                                        //                if (lst_extdatasource == null)
+                                                        //                {
+                                                        //                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                        //                    {
+                                                        //                        NAME = "-- Select Item --",
+                                                        //                        DESCRIPTION = "-- Select Item --",
+                                                        //                        ID = 0
+                                                        //                    };
+                                                        //                    lst_extdatasource1.Add(lst);
+                                                        //                    lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        //                    {
+                                                        //                        DESCRIPTION = rec.TextValue,
+                                                        //                        NAME = rec.TextValue,
+                                                        //                        ID = rec.AssociatedTypeID
+                                                        //                    };
+                                                        //                    lst_extdatasource1.Add(lst);
+                                                        //                    control.ItemsSource = null;
+                                                        //                    control.ItemsSource = lst_extdatasource1;
+                                                        //                    idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                        //                }
+                                                        //            }
+                                                        //        }
+                                                        //        control.SelectedIndex = idd;
+                                                        //    }
+                                                        //    else
+                                                        //    {
+                                                        //        string sTextvalues = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
+                                                        //        if (!string.IsNullOrEmpty(sTextvalues))
+                                                        //        {
+                                                        //            try
+                                                        //            {
+                                                        //                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues?.ToLower()?.Trim()).FirstOrDefault());
+                                                        //            }
+                                                        //            catch
+                                                        //            {
+                                                        //                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                        //                var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                        //                if (rec != null)
+                                                        //                {
+                                                        //                    if (lst_extdatasource == null)
+                                                        //                    {
+                                                        //                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                        //                        {
+                                                        //                            NAME = "-- Select Item --",
+                                                        //                            DESCRIPTION = "-- Select Item --",
+                                                        //                            ID = 0
+                                                        //                        };
+                                                        //                        lst_extdatasource1.Add(lst);
+                                                        //                        lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        //                        {
+                                                        //                            DESCRIPTION = rec.TextValue,
+                                                        //                            NAME = rec.TextValue,
+                                                        //                            ID = rec.AssociatedTypeID
+                                                        //                        };
+                                                        //                        lst_extdatasource1.Add(lst);
+                                                        //                        control.ItemsSource = null;
+                                                        //                        control.ItemsSource = lst_extdatasource1;
+                                                        //                        idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                        //                    }
+                                                        //                }
+                                                        //            }
+                                                        //        }
+                                                        //        control.SelectedIndex = idd;
+                                                        //    }
+                                                        //}
+                                                        //else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                                        //{
+                                                        //    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                                        //    var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                                        //    if (rec != null)
+                                                        //    {
+                                                        //        if (lst_extdatasource == null)
+                                                        //        {
+
+                                                        //            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                                        //            {
+                                                        //                NAME = "-- Select Item --",
+                                                        //                DESCRIPTION = "-- Select Item --",
+                                                        //                ID = 0
+                                                        //            };
+                                                        //            lst_extdatasource1.Add(lst);
+                                                        //            lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        //            {
+                                                        //                DESCRIPTION = rec.TextValue,
+                                                        //                NAME = rec.TextValue,
+                                                        //                ID = rec.AssociatedTypeID
+                                                        //            };
+                                                        //            lst_extdatasource1.Add(lst);
+                                                        //            control.ItemsSource = null;
+                                                        //            control.ItemsSource = lst_extdatasource1;
+                                                        //            idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
+                                                        //        }
+                                                        //        else
+                                                        //        {
+                                                        //            string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
+                                                        //            if (!string.IsNullOrEmpty(sTextvalue))
+                                                        //            {
+                                                        //                try
+                                                        //                {
+                                                        //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
+                                                        //                    if (idd == -1)
+                                                        //                    {
+                                                        //                        var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        //                        {
+                                                        //                            DESCRIPTION = rec.TextValue,
+                                                        //                            NAME = rec.TextValue,
+                                                        //                            ID = rec.AssociatedTypeID
+                                                        //                        };
+                                                        //                        lst_extdatasource.Add(lst);
+                                                        //                        control.ItemsSource = null;
+                                                        //                        control.ItemsSource = lst_extdatasource;
+                                                        //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
+                                                        //                    }
+                                                        //                }
+                                                        //                catch
+                                                        //                {
+
+                                                        //                }
+                                                        //            }
+                                                        //            else
+                                                        //            {
+                                                        //                string sTextvalues1 = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
+                                                        //                if (!string.IsNullOrEmpty(sTextvalues1))
+                                                        //                {
+                                                        //                    try
+                                                        //                    {
+                                                        //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
+                                                        //                        if (idd == -1)
+                                                        //                        {
+                                                        //                            var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                                        //                            {
+                                                        //                                DESCRIPTION = rec.FieldValue,
+                                                        //                                NAME = rec.FieldValue,
+                                                        //                                ID = rec.AssociatedTypeID
+                                                        //                            };
+                                                        //                            lst_extdatasource.Add(lst);
+                                                        //                            control.ItemsSource = null;
+                                                        //                            control.ItemsSource = lst_extdatasource;
+                                                        //                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
+                                                        //                        }
+                                                        //                    }
+                                                        //                    catch
+                                                        //                    {
+
+                                                        //                    }
+                                                        //                }
+                                                        //            }
+                                                        //        }
+                                                        //    }
+                                                        //}
+                                                        //control.SelectedIndex = idd; 
+                                                        #endregion
                                                     }
-                                                    control.SelectedIndex = idd;
-
-                                                    #region old
-                                                    //if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "e")
-                                                    //{
-                                                    //    string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                    //    if (!string.IsNullOrEmpty(sTextvalue))
-                                                    //    {
-                                                    //        try
-                                                    //        {
-                                                    //            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue?.ToLower()?.Trim()).FirstOrDefault());
-                                                    //        }
-                                                    //        catch
-                                                    //        {
-                                                    //            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                    //            var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                    //            if (rec != null)
-                                                    //            {
-                                                    //                if (lst_extdatasource == null)
-                                                    //                {
-                                                    //                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                    //                    {
-                                                    //                        NAME = "-- Select Item --",
-                                                    //                        DESCRIPTION = "-- Select Item --",
-                                                    //                        ID = 0
-                                                    //                    };
-                                                    //                    lst_extdatasource1.Add(lst);
-                                                    //                    lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                    //                    {
-                                                    //                        DESCRIPTION = rec.TextValue,
-                                                    //                        NAME = rec.TextValue,
-                                                    //                        ID = rec.AssociatedTypeID
-                                                    //                    };
-                                                    //                    lst_extdatasource1.Add(lst);
-                                                    //                    control.ItemsSource = null;
-                                                    //                    control.ItemsSource = lst_extdatasource1;
-                                                    //                    idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
-                                                    //                }
-                                                    //            }
-                                                    //        }
-                                                    //        control.SelectedIndex = idd;
-                                                    //    }
-                                                    //    else
-                                                    //    {
-                                                    //        string sTextvalues = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
-                                                    //        if (!string.IsNullOrEmpty(sTextvalues))
-                                                    //        {
-                                                    //            try
-                                                    //            {
-                                                    //                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues?.ToLower()?.Trim()).FirstOrDefault());
-                                                    //            }
-                                                    //            catch
-                                                    //            {
-                                                    //                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                    //                var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                    //                if (rec != null)
-                                                    //                {
-                                                    //                    if (lst_extdatasource == null)
-                                                    //                    {
-                                                    //                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                    //                        {
-                                                    //                            NAME = "-- Select Item --",
-                                                    //                            DESCRIPTION = "-- Select Item --",
-                                                    //                            ID = 0
-                                                    //                        };
-                                                    //                        lst_extdatasource1.Add(lst);
-                                                    //                        lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                    //                        {
-                                                    //                            DESCRIPTION = rec.TextValue,
-                                                    //                            NAME = rec.TextValue,
-                                                    //                            ID = rec.AssociatedTypeID
-                                                    //                        };
-                                                    //                        lst_extdatasource1.Add(lst);
-                                                    //                        control.ItemsSource = null;
-                                                    //                        control.ItemsSource = lst_extdatasource1;
-                                                    //                        idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
-                                                    //                    }
-                                                    //                }
-                                                    //            }
-                                                    //        }
-                                                    //        control.SelectedIndex = idd;
-                                                    //    }
-                                                    //}
-                                                    //else if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    //{
-                                                    //    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource1 = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-                                                    //    var rec = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                    //    if (rec != null)
-                                                    //    {
-                                                    //        if (lst_extdatasource == null)
-                                                    //        {
-
-                                                    //            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource
-                                                    //            {
-                                                    //                NAME = "-- Select Item --",
-                                                    //                DESCRIPTION = "-- Select Item --",
-                                                    //                ID = 0
-                                                    //            };
-                                                    //            lst_extdatasource1.Add(lst);
-                                                    //            lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                    //            {
-                                                    //                DESCRIPTION = rec.TextValue,
-                                                    //                NAME = rec.TextValue,
-                                                    //                ID = rec.AssociatedTypeID
-                                                    //            };
-                                                    //            lst_extdatasource1.Add(lst);
-                                                    //            control.ItemsSource = null;
-                                                    //            control.ItemsSource = lst_extdatasource1;
-                                                    //            idd = lst_extdatasource1.IndexOf(lst_extdatasource1.Single(v => v.ID == Metaitem.ASSOC_TYPE_ID));
-                                                    //        }
-                                                    //        else
-                                                    //        {
-                                                    //            string sTextvalue = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
-                                                    //            if (!string.IsNullOrEmpty(sTextvalue))
-                                                    //            {
-                                                    //                try
-                                                    //                {
-                                                    //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
-                                                    //                    if (idd == -1)
-                                                    //                    {
-                                                    //                        var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                    //                        {
-                                                    //                            DESCRIPTION = rec.TextValue,
-                                                    //                            NAME = rec.TextValue,
-                                                    //                            ID = rec.AssociatedTypeID
-                                                    //                        };
-                                                    //                        lst_extdatasource.Add(lst);
-                                                    //                        control.ItemsSource = null;
-                                                    //                        control.ItemsSource = lst_extdatasource;
-                                                    //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalue.ToLower()?.Trim()).FirstOrDefault());
-                                                    //                    }
-                                                    //                }
-                                                    //                catch
-                                                    //                {
-
-                                                    //                }
-                                                    //            }
-                                                    //            else
-                                                    //            {
-                                                    //                string sTextvalues1 = Convert.ToString(metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue);
-                                                    //                if (!string.IsNullOrEmpty(sTextvalues1))
-                                                    //                {
-                                                    //                    try
-                                                    //                    {
-                                                    //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
-                                                    //                        if (idd == -1)
-                                                    //                        {
-                                                    //                            var lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                    //                            {
-                                                    //                                DESCRIPTION = rec.FieldValue,
-                                                    //                                NAME = rec.FieldValue,
-                                                    //                                ID = rec.AssociatedTypeID
-                                                    //                            };
-                                                    //                            lst_extdatasource.Add(lst);
-                                                    //                            control.ItemsSource = null;
-                                                    //                            control.ItemsSource = lst_extdatasource;
-                                                    //                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION?.ToLower()?.Trim() == sTextvalues1.ToLower()?.Trim()).FirstOrDefault());
-                                                    //                        }
-                                                    //                    }
-                                                    //                    catch
-                                                    //                    {
-
-                                                    //                    }
-                                                    //                }
-                                                    //            }
-                                                    //        }
-                                                    //    }
-                                                    //}
-                                                    //control.SelectedIndex = idd; 
-                                                    #endregion
                                                 }
-                                            }
-                                            catch (Exception ex)
-                                            {
+                                                catch (Exception ex)
+                                                {
 
-                                            }
+                                                }
+                                            } 
+                                            */
+                                            #endregion
                                         }
                                         break;
 
                                     case "d":
-                                        control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
+                                        var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
                                         if (control != null)
                                         {
                                             List<ItemValue> lst_SSsource = new List<ItemValue>();
@@ -1265,6 +1414,276 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
+
+        private async void Pk_button_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var btn = sender as Button;
+                iSelectedItemlookupId = int.Parse(btn.StyleId);
+                var pickercntrl = FindPickerControls(iSelectedItemlookupId) as Picker;
+                dynamic Exditemslst = null;
+
+                if (pickercntrl == null)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    foreach (var item in AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId))
+                    {
+                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                        {
+                            NAME = "-- Select Item --",
+                            DESCRIPTION = "-- Select Item --",
+                            ID = 0
+                        };
+
+                        lst_extdatasource.Add(cases_extedataSource);
+
+                        string fieldName = string.Empty;
+
+                        if (App.Isonline)
+                        {
+                            await Task.Run(() =>
+                            {
+                                var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
+                                var AssocType = json.GetValue("ResponseContent");
+                                AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+                            });
+
+                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == item.ASSOC_TYPE_ID).ToList();
+                            if (assocChild.Count < 1)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(App.Isonline, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+
+                                    temp_extdatasource.Wait();
+                                    if (temp_extdatasource.Result.Count > 0)
+                                    {
+                                        lst_extdatasource.AddRange(temp_extdatasource.Result);
+                                    }
+                                });
+                            }
+                        }
+                        else
+                        {
+                            await Task.Run(() =>
+                            {
+                                var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(App.Isonline, item.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Convert.ToInt32(item.ASSOC_TYPE_ID));
+
+                                temp_extdatasource.Wait();
+                                if (temp_extdatasource.Result.Count > 0)
+                                {
+                                    lst_extdatasource.AddRange(temp_extdatasource.Result);
+                                }
+                            });
+                        }
+
+                        lstexternaldatasource = lst_extdatasource;
+                        //if (lstexternaldatasource.Count == 1 && pickercntrl.ItemsSource != null)
+                        if (lstexternaldatasource.Count == 1)
+                        {
+                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == item.ASSOC_TYPE_ID).ToList();
+                            if (assocChild.Count <= 1)
+                            {
+                                FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
+                            }
+
+                            if (lstexternaldatasource != null)
+                                Exditemslst = lstexternaldatasource.Select(v => v.NAME);
+                            else
+                            {
+                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSourcee = new GetExternalDataSourceByIdResponse.ExternalDatasource
+                                {
+                                    NAME = "-- Select Item --",
+                                    DESCRIPTION = "-- Select Item --",
+                                    ID = 0
+                                };
+
+                                lst_extdatasourcee.Add(cases_extedataSource);
+                                lstexternaldatasource = lst_extdatasourcee;
+                            }
+                            Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
+                        }
+                        else
+                        {
+                            Exditemslst = lst_extdatasource.Select(v => v.NAME);
+                        }
+                        Exditems = new ObservableCollection<string>(Exditemslst);
+
+
+
+                        lstView.WidthRequest = 350;
+                        lstView.IsPullToRefreshEnabled = true;
+                        lstView.Refreshing += OnRefresh;
+                        lstView.ItemSelected += OnSelection;
+                        lstView.ItemsSource = Exditems;
+                        lstView.BackgroundColor = Color.White;
+
+                        SearchBar ext_search = new SearchBar();
+                        ext_search.TextChanged += ext_serch;
+                        ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+
+                        Button btn_cancel = new Button()
+                        {
+                            Text = "Cancel",
+                            WidthRequest = 100,
+                            HeightRequest = 40,
+                            TextColor = Color.Accent,
+                            BackgroundColor = Color.Transparent,
+                            HorizontalOptions = LayoutOptions.Center,
+                        };
+
+                        btn_cancel.Clicked += Btn_cancel_Clicked;
+
+
+                        var temp = new DataTemplate(typeof(TextViewCell));
+                        lstView.ItemTemplate = temp;
+
+                        popupLT.Children.Clear();
+                        popupLT.Children.Add(new StackLayout
+                        {
+                            Children =
+                            {
+                                new StackLayout
+                                {
+                                     VerticalOptions =LayoutOptions.FillAndExpand,
+                                      HorizontalOptions =LayoutOptions.FillAndExpand,
+                                    Children=
+                                    {
+                                        ext_search
+                                    }
+                                },
+                                new StackLayout
+                                {
+                                    VerticalOptions =LayoutOptions.Center,
+                                    HorizontalOptions =LayoutOptions.Center,
+                                    Children =
+                                    {
+                                        lstView
+                                    }
+                                },
+
+                                new StackLayout
+                                {
+                                    HorizontalOptions =LayoutOptions.EndAndExpand,
+                                    VerticalOptions =LayoutOptions.Center,
+                                    Margin = new Thickness(0,0,1,10),
+                                    Children =
+                                    {
+                                        btn_cancel
+                                    }
+                                }
+                            }
+                        });
+                        Stack_Popup.IsVisible = true;
+                        masterGrid.IsVisible = false;
+
+
+                        Stack_Popup.HeightRequest = this.Height - 20;
+                        Stack_Popup.WidthRequest = this.Width - 20;
+
+                    }
+
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+        }
+        ListView lstView = new ListView();
+
+        private void ext_serch(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (Exditems.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(e.NewTextValue))
+                    {
+                        //  lstView.ItemsSource = Exditems.Select(v => v.Na);
+
+                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
+
+                    }
+                    else
+                    {
+                        var list = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(e.NewTextValue.ToString())).ToList();
+                        if (list.Count > 0)
+                        {
+                            lstView.ItemsSource = list.Select(v => v.NAME).ToList();
+                        }
+                        else
+                        {
+                            lstView.ItemsSource = null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+        private async void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem == null)
+            {
+                return;
+            }
+
+
+
+            var ctrl = FindPickerControls(iSelectedItemlookupId);
+            if (ctrl != null)
+            {
+                Button btn = ctrl as Button;
+                btn.FontSize = 16;
+                btn.Text = e.SelectedItem.ToString();
+
+                var lst = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(btn.Text.ToLower())).ToList();
+                if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
+                    lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
+                else
+                    lstextdatasourceHistory[iSelectedItemlookupId] = lst;
+
+                ClearChildControl(iSelectedItemlookupId, sControls);
+
+                //await Task.Run(() =>
+                //    {
+                //    });
+                DyanmicSetCalcexd(Convert.ToString(iSelectedItemlookupId), sControls.Where(v => (v.AssocFieldType == 'E' || v.AssocFieldType == 'O') && v.AssocTypeID == Convert.ToInt32(iSelectedItemlookupId)).ToList(), sControls.Where(v => (v.AssocFieldType == 'C')).ToList());
+
+
+            }
+
+
+            this.Stack_Popup.IsVisible = false;
+            //this.popupLT.IsVisible = false;
+            this.masterGrid.IsVisible = true;
+            // this.masterGrid.IsEnabled = false;
+        }
+
+
+        private void Btn_cancel_Clicked(object sender, EventArgs e)
+        {
+            //Bor_popupLT.IsVisible = false;
+            Stack_Popup.IsVisible = false;
+            masterGrid.IsVisible = true;
+        }
+
+        private void OnRefresh(object sender, EventArgs e)
+        {
+            var list = (ListView)sender;
+            list.IsRefreshing = false;
+        }
+
         private void SetBottomBarDetails()
         {
             try
@@ -1325,6 +1744,10 @@ namespace StemmonsMobile.Views.Cases
                 }
 
                 Grd_Footer.IsVisible = true;
+
+                lbl_line.IsVisible = _Casedata.IsClosed;
+                lbl_Casestatus.IsVisible = _Casedata.IsClosed;
+                lbl_Casestatus.Text = "Closed By " + _Casedata.CaseClosedByDisplayName + " at " + App.DateFormatStringToString(Convert.ToString(_Casedata.CaseClosedDateTime));
             }
             catch (Exception)
             {
@@ -1495,8 +1918,43 @@ namespace StemmonsMobile.Views.Cases
                             ID = 0
                         };
                         lst_extdatasource.Add(cases_extedataSource);
-                        (control as Picker).ItemsSource = lst_extdatasource;
-                        (control as Picker).SelectedIndex = 0;
+
+                        //(control as Picker).ItemsSource = lst_extdatasource;
+                        //(control as Picker).SelectedIndex = 0;
+
+                        var ctrl = FindControls(child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), "button");
+                        if (ctrl != null)
+                        {
+                            Button btn = ctrl as Button;
+                            btn.FontSize = 16;
+                            btn.Text = "-- Select Item --";
+
+
+                            //List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(btn.StyleId))?.FirstOrDefault().Value;
+                            //try
+                            //{
+                            //    //selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
+                            //    string selectedId = Convert.ToString(lst?.FirstOrDefault().ID);
+                            //    string selectedname = Convert.ToString(btn.Text);
+
+                            //    var aTypeFiled = sControls.Where(v => v.AssocTypeID == Convert.ToInt32(btn.StyleId)).Select(a => a.AssocFieldType)?.FirstOrDefault();
+
+                            //    if (!assocFieldValues.ContainsKey("assoc_" + aTypeFiled.ToString() + "_" + btn.StyleId.Split('|')[0].ToUpper()))
+                            //    {
+                            //        assocFieldValues.Add("assoc_" + aTypeFiled.ToString() + "_" + btn.StyleId, child._CASE_ASSOC_TYPE_ID_CHILD + "|" + selectedId);
+                            //        assocFieldTexts.Add("assoc_" + aTypeFiled.ToString() + "_" + btn.StyleId,selectedname);
+                            //    }
+                            //    else
+                            //    {
+                            //        assocFieldValues["assoc_" + aTypeFiled.ToString() + "_" + btn.StyleId] = child._CASE_ASSOC_TYPE_ID_CHILD + "|" + selectedId;
+                            //        assocFieldTexts["assoc_" + aTypeFiled.ToString() + "_" + btn.StyleId] = selectedname;
+                            //    }
+                            //}
+                            //catch
+                            //{
+                            //}
+
+                        }
 
                         ClearChildControl(child._CASE_ASSOC_TYPE_ID_CHILD, ItemTypes);
                     }
@@ -1506,6 +1964,7 @@ namespace StemmonsMobile.Views.Cases
             {
             }
         }
+
 
         private void Pk_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1686,23 +2145,75 @@ namespace StemmonsMobile.Views.Cases
             return 0;
         }
 
+        private object FindControls(string AssocID, string cntrlName = "")
+        {
+            try
+            {
+                foreach (StackLayout infofield in CasesView_ControlStack.Children)
+                {
+                    foreach (StackLayout item in infofield.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name.ToLower() != "stacklayout")
+                            {
+                                if (ty.Name.ToLower() == cntrlName && !string.IsNullOrEmpty(subitem.StyleId) && subitem.StyleId.Contains(AssocID))
+                                {
+                                    if (ty.Name.ToLower() == "picker")
+                                    {
+                                        Picker Picker = new Picker();
+                                        Picker = (Picker)xy;
+                                        return Picker;
+                                    }
+                                    else if (ty.Name.ToLower() == "button")
+                                    {
+                                        Button btn = new Button();
+                                        btn = (Button)xy;
+                                        return btn;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // 
+                return null;
+            }
+        }
+
         private object FindPickerControls(int AssocID)
         {
             try
             {
                 foreach (StackLayout infofield in CasesView_ControlStack.Children)
                 {
-                    foreach (var subitem in infofield.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
-                        var xy = subitem;
-                        Type ty = xy.GetType();
-                        if (ty.Name.ToLower() == "picker")
+                        foreach (var subitem in item.Children)
                         {
-                            Picker Picker = new Picker();
-                            Picker.TextColor = Color.Gray;
-                            Picker = (Picker)xy;
-                            if (Picker.StyleId.Contains(AssocID.ToString()))
-                                return Picker;
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name.ToLower() == "picker")
+                            {
+                                Picker Picker = new Picker();
+                                Picker.TextColor = Color.Gray;
+                                Picker = (Picker)xy;
+                                if (Picker.StyleId.Contains(AssocID.ToString()))
+                                    return Picker;
+                            }
+                            else if (ty.Name.ToLower() == "button")
+                            {
+                                Button btn = new Button();
+                                btn = (Button)xy;
+                                if (btn.StyleId.Contains(AssocID.ToString()))
+                                    return btn;
+                            }
                         }
                     }
                 }
@@ -1714,7 +2225,6 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
-
         private object FindCasesControls(int AssocID, string Cnt_type = "")
         {
             try
@@ -1723,17 +2233,26 @@ namespace StemmonsMobile.Views.Cases
                 {
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-                        foreach (var subitem in infofield.Children)
+                        foreach (StackLayout item in infofield.Children)
                         {
-                            var xy = subitem;
-                            Type ty = xy.GetType();
-                            if (ty.Name != "StackLayout")
-                            {
-                                var id = xy.StyleId.Contains("|") ? xy.StyleId.Split('|')[0] : xy.StyleId;
 
-                                if (id.Contains(AssocID.ToString()))
-                                    return xy;
+                            foreach (var subitem in item.Children)
+                            {
+                                var xy = subitem;
+                                Type ty = xy.GetType();
+
+                                if (xy.StyleId != null)
+                                {
+                                    if (ty.Name != "StackLayout")
+                                    {
+                                        var id = xy.StyleId.Contains("|") ? xy.StyleId.Split('|')[0] : xy.StyleId;
+
+                                        if (id.Contains(AssocID.ToString()))
+                                            return xy;
+                                    }
+                                }
                             }
+
                         }
                     }
                 }
@@ -1741,41 +2260,52 @@ namespace StemmonsMobile.Views.Cases
                 {
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-                        foreach (var subitem in infofield.Children)
+
+                        foreach (StackLayout item in infofield.Children)
                         {
-                            var xy = subitem;
-                            Type ty = xy.GetType();
-                            if (ty.Name != "StackLayout")
+
+                            foreach (var subitem in item.Children)
                             {
-                                if (ty.Name == "DatePicker")
+                                var xy = subitem;
+                                Type ty = xy.GetType();
+                                if (ty.Name != "StackLayout")
                                 {
-                                    if (xy.StyleId.Contains(AssocID.ToString()))
+                                    if (ty.Name == "DatePicker")
                                     {
-                                        return xy;
+                                        if (xy.StyleId.Contains(AssocID.ToString()))
+                                        {
+                                            return xy;
+                                        }
                                     }
                                 }
                             }
                         }
+
                     }
                 }
                 else if (Cnt_type == "Image")
                 {
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-                        foreach (var subitem in infofield.Children)
-                        {
-                            var xy = subitem;
-                            Type ty = xy.GetType();
-                            if (ty.Name != "StackLayout")
-                            {
-                                if (ty.Name == "Image")
-                                {
-                                    if (xy.StyleId.Contains(AssocID.ToString()))
-                                    {
-                                        return xy;
-                                    }
-                                }
 
+                        foreach (StackLayout item in infofield.Children)
+                        {
+
+                            foreach (var subitem in item.Children)
+                            {
+                                var xy = subitem;
+                                Type ty = xy.GetType();
+                                if (ty.Name != "StackLayout")
+                                {
+                                    if (ty.Name == "Image")
+                                    {
+                                        if (xy.StyleId.Contains(AssocID.ToString()))
+                                        {
+                                            return xy;
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -1839,7 +2369,10 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 string parentSelectedValue = null;
 
-                                parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+                                //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
+
+                                parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
 
 
                                 string parentFieldName = ItemTypes.Where(t => t.AssocTypeID == p._CASE_ASSOC_TYPE_ID_PARENT).FirstOrDefault().Name;
@@ -1897,8 +2430,9 @@ namespace StemmonsMobile.Views.Cases
                                 var ItemValues = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(CasesAPIMethods.GetValuesQueryAndConnection(Casetypeid, child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), fieldName/*SelectedCaseType.Name*/,
                                      (itemType.IsRequired == 'Y').ToString(), conn, query).GetValue("ResponseContent").ToString());
 
-                                (control as Picker).ItemsSource = ItemValues;
-                                (control as Picker).SelectedIndex = 0;
+                                //(control as Picker).ItemsSource = ItemValues;
+                                //(control as Picker).SelectedIndex = 0;
+                                lstexternaldatasource = ItemValues;
                             }
                         }
                         else
@@ -1916,7 +2450,8 @@ namespace StemmonsMobile.Views.Cases
 
                                 lst_extdatasource.Add(cases_extedataSource);
 
-                                (control as Picker).ItemsSource = lst_extdatasource;
+                                //(control as Picker).ItemsSource = lst_extdatasource;
+                                lstexternaldatasource = lst_extdatasource;
                             }
                         }
                     }
@@ -1982,100 +2517,73 @@ namespace StemmonsMobile.Views.Cases
                 #region Dynamic Control Fill 
                 foreach (StackLayout infofield in CasesView_ControlStack.Children)
                 {
-                    foreach (var subitem in infofield.Children)
+
+                    foreach (StackLayout item in infofield.Children)
                     {
-                        var xy = subitem;
-                        Type ty = xy.GetType();
-                        if (ty.Name.ToLower() != "stacklayout")
+
+                        foreach (var subitem in item.Children)
                         {
-                            if (ty.Name.ToLower() == "entry")
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name.ToLower() != "stacklayout")
                             {
-                                try
+                                if (ty.Name.ToLower() == "entry")
                                 {
-                                    var en = (Entry)xy;
-                                    if (en.StyleId == _TitleFieldControlID)
+                                    try
                                     {
-                                        savecase.caseTitle = en.Text;
-                                    }
-                                    int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-
-                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
-                                    {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
-
-                                        goto requiredJump;
-                                    }
-                                    else
-                                    {
-                                        if (!en.StyleId.Contains("a_"))
+                                        var en = (Entry)xy;
+                                        if (en.StyleId == _TitleFieldControlID)
                                         {
-                                            textValues.Add(Key, en.Text);
+                                            savecase.caseTitle = en.Text;
                                         }
-                                        else
-                                        {
-                                            var stDate = string.Empty;
-                                            if (!string.IsNullOrEmpty(en.Text))
-                                            {
-                                                var sDate = Convert.ToDateTime(en.Text);
-                                                stDate = sDate.Date.ToString("MM/dd/yyyy");
-                                            }
-                                            textValues.Add(Key, stDate);
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-                            else if (ty.Name.ToLower() == "picker")
-                            {
-                                try
-                                {
-                                    var picker = (Picker)xy;
-
-                                    ItemValue itemValue = new ItemValue();
-
-                                    string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                    if (styletype.ToLower() == "d")
-                                    {
-                                        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                        int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
                                         string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
+                                        string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+
+                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
                                         {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                            DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
 
                                             goto requiredJump;
                                         }
                                         else
                                         {
-                                            var val = picker.SelectedItem as ItemValue;
-                                            ItemValue it = new ItemValue();
-                                            if (val != null)
+                                            if (!en.StyleId.Contains("a_"))
                                             {
-                                                it.Name = val.Name;
-                                                it.AssocDecodeID = val.AssocDecodeID;
-                                                dropDownValues.Add(Key, it);
-                                                dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
+                                                textValues.Add(Key, en.Text);
+                                            }
+                                            else
+                                            {
+                                                var stDate = string.Empty;
+                                                if (!string.IsNullOrEmpty(en.Text))
+                                                {
+                                                    var sDate = Convert.ToDateTime(en.Text);
+                                                    stDate = sDate.Date.ToString("MM/dd/yyyy");
+                                                }
+                                                textValues.Add(Key, stDate);
                                             }
                                         }
                                     }
-                                    else
+                                    catch (Exception ex)
                                     {
-                                        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
-                                        {
-                                            savecase.caseTitle = itemValue.Name;
-                                        }
-                                        try
-                                        {
+                                    }
+                                }
+                                else if (ty.Name.ToLower() == "picker")
+                                {
+                                    try
+                                    {
+                                        var picker = (Picker)xy;
 
+                                        ItemValue itemValue = new ItemValue();
+
+                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+
+                                        if (styletype.ToLower() == "d")
+                                        {
+                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
                                             string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
                                             string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
                                             {
                                                 DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
 
@@ -2083,81 +2591,154 @@ namespace StemmonsMobile.Views.Cases
                                             }
                                             else
                                             {
-
-                                                if (picker.StyleId.Split('_')[0].ToLower() == "o")
+                                                var val = picker.SelectedItem as ItemValue;
+                                                ItemValue it = new ItemValue();
+                                                if (val != null)
                                                 {
-                                                    var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                    ItemValue it = new ItemValue();
-                                                    if (val != null)
-                                                    {
-                                                        it.Name = val.NAME;
-                                                        it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                        dropDownValues.Add(Key, it);
-                                                        dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                    ItemValue it = new ItemValue();
-                                                    if (val != null)
-                                                    {
-                                                        it.Name = val.NAME;
-                                                        it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                        dropDownValues.Add(Key, it);
-                                                        dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
-                                                    }
+                                                    it.Name = val.Name;
+                                                    it.AssocDecodeID = val.AssocDecodeID;
+                                                    dropDownValues.Add(Key, it);
+                                                    dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
                                                 }
                                             }
                                         }
-                                        catch { }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-                            else if (ty.Name.ToLower() == "bordereditor")
-                            {
-                                try
-                                {
-                                    var editor = (BorderEditor)xy;
-                                    if (editor.StyleId == _TitleFieldControlID)
-                                    {
-                                        savecase.caseTitle = editor.Text;
-                                    }
+                                        else
+                                        {
+                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                            if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                            {
+                                                savecase.caseTitle = itemValue.Name;
+                                            }
+                                            try
+                                            {
 
-                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
-                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
-                                    {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-                                        goto requiredJump;
-                                    }
-                                    else
-                                    {
-                                        textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-                            else if (ty.Name.ToLower() == "datepicker")
-                            {
-                                try
-                                {
-                                    //var datepicker = (DatePicker)xy;
+                                                string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                {
+                                                    DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
 
-                                    //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                    //{
-                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
-                                    //}
-                                    //else
-                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
+                                                    goto requiredJump;
+                                                }
+                                                else
+                                                {
+
+                                                    if (picker.StyleId.Split('_')[0].ToLower() == "o")
+                                                    {
+                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                        ItemValue it = new ItemValue();
+                                                        if (val != null)
+                                                        {
+                                                            it.Name = val.NAME;
+                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                            dropDownValues.Add(Key, it);
+                                                            dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                        ItemValue it = new ItemValue();
+                                                        if (val != null)
+                                                        {
+                                                            it.Name = val.NAME;
+                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                            dropDownValues.Add(Key, it);
+                                                            dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
                                 }
-                                catch (Exception ex)
+                                else if (ty.Name.ToLower() == "button")
                                 {
+                                    try
+                                    {
+                                        Button btn = new Button();
+                                        btn = (Button)xy;
+
+                                        ItemValue it = new ItemValue();
+                                        if (btn != null)
+                                        {
+                                            int Key = int.Parse(btn.StyleId);
+                                            if (btn.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                            {
+                                                savecase.caseTitle = btn.Text;
+                                            }
+
+                                            var tempassocdecodeid = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(btn.StyleId))?.FirstOrDefault().Value;
+
+                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && btn.Text == "-- Select Item --")
+                                            {
+                                                DisplayAlert("Field Required.", "Please Select valid item in " + FiledName, "OK");
+
+                                                goto requiredJump;
+                                            }
+                                            else
+                                            {
+
+                                                it.Name = btn.Text;
+                                                it.AssocDecodeID = Convert.ToInt32(tempassocdecodeid?.FirstOrDefault().ID);
+                                                dropDownValues.Add(Key, it);
+                                                //   dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));}
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //throw ex;
+                                    }
+                                }
+                                else if (ty.Name.ToLower() == "bordereditor")
+                                {
+                                    try
+                                    {
+                                        var editor = (BorderEditor)xy;
+                                        if (editor.StyleId == _TitleFieldControlID)
+                                        {
+                                            savecase.caseTitle = editor.Text;
+                                        }
+
+                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
+                                        {
+                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                            goto requiredJump;
+                                        }
+                                        else
+                                        {
+                                            textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+                                else if (ty.Name.ToLower() == "datepicker")
+                                {
+                                    try
+                                    {
+                                        //var datepicker = (DatePicker)xy;
+
+                                        //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                        //{
+                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                        //}
+                                        //else
+                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
                                 }
                             }
                         }
@@ -2532,104 +3113,104 @@ namespace StemmonsMobile.Views.Cases
 
                         foreach (StackLayout infofield in CasesView_ControlStack.Children)
                         {
-                            foreach (var subitem in infofield.Children)
+                            foreach (StackLayout sitem in infofield.Children)
                             {
 
-                                Type ty = subitem.GetType();
-                                if (ty.Name.ToLower() != "stacklayout")
+                                foreach (var subitem in sitem.Children)
                                 {
-                                    if (ty.Name.ToLower() == "picker")
+
+                                    Type ty = subitem.GetType();
+                                    if (ty.Name.ToLower() != "stacklayout")
                                     {
-                                        var picker = (Picker)subitem;
-                                        if (picker.StyleId == CurrentStyleId && !ISadd)
+                                        if (ty.Name.ToLower() == "picker")
                                         {
-                                            ISadd = true;
-                                            cntrl = subitem;
-                                            dynamic selectedValue = null;
-                                            try
-                                            {
-                                                selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
-                                                selectedId = Convert.ToString(selectedValue.ID);
-                                                selectedname = Convert.ToString(selectedValue.Name);
-                                                if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
-                                                {
-                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + selectedId);
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), selectedname);
-                                                }
-                                                else
-                                                {
-                                                    assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + selectedId;
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = selectedname;
-                                                }
-                                            }
-                                            catch
-                                            {
-                                                selectedId = Convert.ToString((picker.SelectedItem as Cases_extedataSource)?.ID);
-                                                selectedname = (picker.SelectedItem as Cases_extedataSource)?.NAME;
-                                                assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as Cases_extedataSource)?.ID));
-                                                assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), (picker.SelectedItem as Cases_extedataSource)?.NAME);
-                                            }
-                                        }
-                                    }
-                                    else if (ty.Name.ToLower() == "entry")
-                                    {
-                                        var en = (Entry)subitem;
-                                        if (en.StyleId != null && !string.IsNullOrEmpty(CurrentStyleId))
-                                        {
-                                            if (en.StyleId == CurrentStyleId && !ISadd)
+                                            var picker = (Picker)subitem;
+                                            if (picker.StyleId == CurrentStyleId && !ISadd)
                                             {
                                                 ISadd = true;
-
-                                                if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
-                                                {
-                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
-                                                }
-                                                else
-                                                {
-                                                    assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
-
-                                                }
-                                                if (!assocFieldTexts.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
-                                                {
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), en.Text);
-                                                }
-                                                else
-                                                {
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = en.Text;
-                                                }
                                                 cntrl = subitem;
+                                                dynamic selectedValue = null;
+                                                try
+                                                {
+                                                    selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
+                                                    selectedId = Convert.ToString(selectedValue.ID);
+                                                    selectedname = Convert.ToString(selectedValue.Name);
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + selectedId);
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), selectedname);
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + selectedId;
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = selectedname;
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    selectedId = Convert.ToString((picker.SelectedItem as Cases_extedataSource)?.ID);
+                                                    selectedname = (picker.SelectedItem as Cases_extedataSource)?.NAME;
+                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as Cases_extedataSource)?.ID));
+                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), (picker.SelectedItem as Cases_extedataSource)?.NAME);
+                                                }
                                             }
                                         }
-                                    }
-                                    else if (ty.Name.ToLower() == "datepicker")
-                                    {
-                                        var en = (DatePicker)subitem;
-                                        if (en.StyleId != null && !string.IsNullOrEmpty(CurrentStyleId))
+                                        else if (ty.Name.ToLower() == "entry")
                                         {
-                                            if (en.StyleId == CurrentStyleId && !ISadd)
+                                            var en = (Entry)subitem;
+                                            if (en.StyleId != null && !string.IsNullOrEmpty(CurrentStyleId))
                                             {
-                                                ISadd = true;
-
-                                                if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
-
+                                                if (en.StyleId == CurrentStyleId && !ISadd)
                                                 {
+                                                    ISadd = true;
 
-                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
 
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), en.Date.Date.ToString("MM/dd/yyyy"));
-
+                                                    }
+                                                    if (!assocFieldTexts.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), en.Text);
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = en.Text;
+                                                    }
+                                                    cntrl = subitem;
                                                 }
-                                                else
-
+                                            }
+                                        }
+                                        else if (ty.Name.ToLower() == "datepicker")
+                                        {
+                                            var en = (DatePicker)subitem;
+                                            if (en.StyleId != null && !string.IsNullOrEmpty(CurrentStyleId))
+                                            {
+                                                if (en.StyleId == CurrentStyleId && !ISadd)
                                                 {
+                                                    ISadd = true;
 
-                                                    assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
 
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = en.Date.Date.ToString("MM/dd/yyyy");
+                                                    {
 
+                                                        assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
+
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
+
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                                    }
+                                                    cntrl = subitem;
                                                 }
-
-                                                cntrl = subitem;
                                             }
                                         }
                                     }
@@ -2683,18 +3264,22 @@ namespace StemmonsMobile.Views.Cases
 
                             foreach (StackLayout infofield in CasesView_ControlStack.Children)
                             {
-                                foreach (var subitem in infofield.Children)
+                                foreach (StackLayout sitem in infofield.Children)
                                 {
-                                    var xy = subitem;
-                                    Type ty = xy.GetType();
-                                    if (ty.Name.ToLower() != "stacklayout")
+
+                                    foreach (var subitem in sitem.Children)
                                     {
-                                        if (ty.Name.ToLower() == "entry")
+                                        var xy = subitem;
+                                        Type ty = xy.GetType();
+                                        if (ty.Name.ToLower() != "stacklayout")
                                         {
-                                            var en = (Entry)xy;
-                                            if (en.StyleId == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
+                                            if (ty.Name.ToLower() == "entry")
                                             {
-                                                en.Text = Convert.ToString(Result.Result);
+                                                var en = (Entry)xy;
+                                                if (en.StyleId == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
+                                                {
+                                                    en.Text = Convert.ToString(Result.Result);
+                                                }
                                             }
                                         }
                                     }
@@ -2723,55 +3308,93 @@ namespace StemmonsMobile.Views.Cases
                     {
                         foreach (StackLayout infofield in CasesView_ControlStack.Children)
                         {
-                            foreach (var subitem in infofield.Children)
+                            foreach (StackLayout sitem in infofield.Children)
                             {
 
-                                Type ty = subitem.GetType();
-                                if (ty.Name.ToLower() != "stacklayout")
+                                foreach (var subitem in sitem.Children)
                                 {
-                                    if (ty.Name.ToLower() == "picker")
+
+                                    Type ty = subitem.GetType();
+                                    if (ty.Name.ToLower() != "stacklayout")
                                     {
-                                        var picker = (Picker)subitem;
-                                        if (picker.StyleId == CurrentStyleId)
+                                        if (ty.Name.ToLower() == "picker")
                                         {
-                                            cntrl = subitem;
-                                            dynamic selectedValue = null;
-                                            try
+                                            var picker = (Picker)subitem;
+                                            if (picker.StyleId == CurrentStyleId)
                                             {
-                                                selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
-                                                selectedId = Convert.ToString(selectedValue.ID);
-                                                selectedname = Convert.ToString(selectedValue.Name);
-                                                if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                cntrl = subitem;
+                                                dynamic selectedValue = null;
+                                                try
                                                 {
-                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + selectedId);
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), selectedname);
+                                                    selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
+                                                    selectedId = Convert.ToString(selectedValue.ID);
+                                                    selectedname = Convert.ToString(selectedValue.Name);
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + selectedId);
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), selectedname);
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + selectedId;
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = selectedname;
+                                                    }
                                                 }
-                                                else
+                                                catch
                                                 {
-                                                    assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + selectedId;
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = selectedname;
+                                                    selectedValue = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                    selectedId = Convert.ToString(selectedValue.ID);
+                                                    selectedname = selectedValue.NAME;
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.ID));
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), (picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.NAME);
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.ID);
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = (picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.NAME;
+                                                    }
+
                                                 }
                                             }
-                                            catch
+                                        }
+                                        else if (ty.Name.ToLower() == "button")
+                                        {
+                                            var btn = (Button)subitem;
+                                            if (btn.StyleId == CurrentStyleId)
                                             {
-                                                selectedValue = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                selectedId = Convert.ToString(selectedValue.ID);
-                                                selectedname = selectedValue.NAME;
-                                                if (!assocFieldValues.ContainsKey("assoc_" + CurrentStyleId.Split('|')[0].ToUpper()))
-                                                {
-                                                    assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.ID));
-                                                    assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), (picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.NAME);
-                                                }
-                                                else
-                                                {
-                                                    assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.ID);
-                                                    assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = (picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.NAME;
-                                                }
+                                                cntrl = subitem;
+                                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(CurrentStyleId))?.FirstOrDefault().Value;
 
+
+                                                try
+                                                {
+                                                    //selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
+                                                    selectedId = lst == null ? Convert.ToString(metadatacollection.Where(v => v.AssociatedTypeID == Convert.ToInt32(CurrentStyleId)).FirstOrDefault().ExternalDatasourceObjectID) : Convert.ToString(lst?.FirstOrDefault().ID);
+                                                    selectedname = Convert.ToString(btn.Text);
+
+                                                    var aTypeFiled = sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId)).Select(a => a.AssocFieldType)?.FirstOrDefault();
+
+                                                    if (!assocFieldValues.ContainsKey("assoc_" + aTypeFiled.ToString() + "_" + CurrentStyleId.Split('|')[0].ToUpper()))
+                                                    {
+                                                        assocFieldValues.Add("assoc_" + aTypeFiled.ToString() + "_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + selectedId);
+                                                        assocFieldTexts.Add("assoc_" + aTypeFiled.ToString() + "_" + CurrentStyleId.Split('|')[0].ToUpper(), selectedname);
+                                                    }
+                                                    else
+                                                    {
+                                                        assocFieldValues["assoc_" + aTypeFiled.ToString() + "_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + selectedId;
+                                                        assocFieldTexts["assoc_" + aTypeFiled.ToString() + "_" + CurrentStyleId.Split('|')[0].ToUpper()] = selectedname;
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                }
                                             }
                                         }
                                     }
                                 }
+
                             }
                         }
                     }
@@ -2780,6 +3403,10 @@ namespace StemmonsMobile.Views.Cases
                     if (x.Name == "Picker")
                     {
                         CalTxtbox = SetCalControlsForExd(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControlscal, selectedId + "|" + selectedname);
+                    }
+                    else if (x.Name == "Button")
+                    {
+                        CalTxtbox = SetCalControlsForExd(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId)).ToList(), sControlscal, "", selectedId + "|" + selectedname);
                     }
 
                     if (!string.IsNullOrEmpty(CalTxtbox))
@@ -2794,6 +3421,21 @@ namespace StemmonsMobile.Views.Cases
                             if (cnt > calculationsFieldlist.Count)
                                 return;
 
+                            foreach (var iitem in assocFieldValues.Keys.ToList())
+                            {
+                                var ctrl = FindPickerControls(Convert.ToInt32(iitem.Split('_').Last()));
+                                if (ctrl != null)
+                                {
+                                    Button btn = ctrl as Button;
+                                    btn.FontSize = 16;
+                                    if (btn.Text == "-- Select Item --")
+                                    {
+                                        assocFieldValues[iitem] = iitem.Split('_').Last() + "|" + -1;
+
+                                        assocFieldTexts[iitem] = "-- Select Item --";
+                                    }
+                                }
+                            }
                             RefreshCalculationFieldsRequest rf = new RefreshCalculationFieldsRequest();
                             rf.assocFieldCollection = JsonConvert.SerializeObject(sControlsList);
                             rf.assocFieldValues = assocFieldValues;
@@ -2807,19 +3449,31 @@ namespace StemmonsMobile.Views.Cases
 
                             foreach (StackLayout infofield in CasesView_ControlStack.Children)
                             {
-                                foreach (var subitem in infofield.Children)
+
+                                foreach (StackLayout sitem in infofield.Children)
                                 {
-                                    var xy = subitem;
-                                    Type ty = xy.GetType();
-                                    if (ty.Name.ToLower() != "stacklayout")
+
+                                    foreach (var subitem in sitem.Children)
                                     {
-                                        if (ty.Name.ToLower() == "entry")
+                                        var xy = subitem;
+                                        Type ty = xy.GetType();
+                                        if (ty.Name.ToLower() != "stacklayout")
                                         {
-                                            var en = (Entry)xy;
-                                            en.FontFamily = "Soin Sans Neue";
-                                            if (en.StyleId == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
+                                            if (ty.Name.ToLower() == "entry")
                                             {
-                                                en.Text = Convert.ToString(Result.Result);
+                                                var en = (Entry)xy;
+                                                en.FontFamily = "Soin Sans Neue";
+                                                Device.BeginInvokeOnMainThread(() =>
+                                                {
+                                                    if (en.StyleId.ToLower() == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
+                                                    {
+                                                        Device.BeginInvokeOnMainThread(() =>
+                                                        {
+                                                            en.Text = "";
+                                                            en.Text = Convert.ToString(Result.Result);
+                                                        });
+                                                    }
+                                                });
                                             }
                                         }
                                     }
@@ -2943,140 +3597,141 @@ namespace StemmonsMobile.Views.Cases
                     #region  Dynamic Control Fill 
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-                        foreach (var subitem in infofield.Children)
+                        foreach (StackLayout sitem in infofield.Children)
                         {
-
-                            var xy = subitem;
-                            Type ty = xy.GetType();
-                            if (ty.Name.ToLower() != "stacklayout")
+                            foreach (var subitem in sitem.Children)
                             {
-                                if (ty.Name.ToLower() == "entry")
+                                Type ty = subitem.GetType();
+                                if (ty.Name.ToLower() != "stacklayout")
                                 {
-                                    var en = (Entry)xy;
-                                    if (en.StyleId == _TitleFieldControlID)
+                                    if (ty.Name.ToLower() == "entry")
                                     {
-                                        savecase.caseTitle = en.Text;
-                                    }
-                                    int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-
-                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
-                                    {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
-
-                                        goto requiredJump;
-                                    }
-                                    else
-                                    {
-                                        textValues.Add(Key, en.Text);
-                                    }
-                                }
-                                else if (ty.Name.ToLower() == "picker")
-                                {
-                                    var picker = (Picker)xy;
-                                    ItemValue itemValue = new ItemValue();
-
-                                    string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                    if (styletype.ToLower() == "d")
-                                    {
-                                        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
+                                        var en = (Entry)subitem;
+                                        if (en.StyleId == _TitleFieldControlID)
                                         {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                            savecase.caseTitle = en.Text;
+                                        }
+                                        int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
+                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                        string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+
+                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
+                                        {
+                                            DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
+
                                             goto requiredJump;
                                         }
                                         else
                                         {
-                                            var val = picker.SelectedItem as ItemValue;
-                                            ItemValue it = new ItemValue();
-                                            if (val != null)
-                                            {
-                                                it.Name = val.Name;
-                                                it.AssocDecodeID = val.AssocDecodeID;
-                                                dropDownValues.Add(Key, it);
-                                            }
+                                            textValues.Add(Key, en.Text);
                                         }
                                     }
-                                    else
+                                    else if (ty.Name.ToLower() == "picker")
                                     {
-                                        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                        var picker = (Picker)subitem;
+                                        ItemValue itemValue = new ItemValue();
+
+                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+
+                                        if (styletype.ToLower() == "d")
                                         {
-                                            savecase.caseTitle = itemValue.Name;
-                                        }
-                                        try
-                                        {
+                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
                                             string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
                                             string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
                                             {
                                                 DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
                                                 goto requiredJump;
                                             }
                                             else
                                             {
-                                                if (picker.StyleId.Split('_')[0].ToLower() == "o" || picker.StyleId.Split('_')[0].ToLower() == "e")
+                                                var val = picker.SelectedItem as ItemValue;
+                                                ItemValue it = new ItemValue();
+                                                if (val != null)
                                                 {
-                                                    var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                    ItemValue it = new ItemValue();
-                                                    if (val != null)
-                                                    {
-                                                        it.Name = val.NAME;
-                                                        it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                        dropDownValues.Add(Key, it);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    //dropDownValues.Add(Key, <itemValue>.Na);
-                                                    var val = picker.SelectedItem as Cases_extedataSource;
-                                                    ItemValue it = new ItemValue();
-                                                    if (val != null)
-                                                    {
-                                                        it.Name = val.NAME;
-                                                        it.AssocDecodeID = val.ID;
-                                                        dropDownValues.Add(Key, it);
-                                                    }
+                                                    it.Name = val.Name;
+                                                    it.AssocDecodeID = val.AssocDecodeID;
+                                                    dropDownValues.Add(Key, it);
                                                 }
                                             }
                                         }
-                                        catch { }
+                                        else
+                                        {
+                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                            if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                            {
+                                                savecase.caseTitle = itemValue.Name;
+                                            }
+                                            try
+                                            {
+                                                string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                {
+                                                    DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                                    goto requiredJump;
+                                                }
+                                                else
+                                                {
+                                                    if (picker.StyleId.Split('_')[0].ToLower() == "o" || picker.StyleId.Split('_')[0].ToLower() == "e")
+                                                    {
+                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                        ItemValue it = new ItemValue();
+                                                        if (val != null)
+                                                        {
+                                                            it.Name = val.NAME;
+                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                            dropDownValues.Add(Key, it);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        //dropDownValues.Add(Key, <itemValue>.Na);
+                                                        var val = picker.SelectedItem as Cases_extedataSource;
+                                                        ItemValue it = new ItemValue();
+                                                        if (val != null)
+                                                        {
+                                                            it.Name = val.NAME;
+                                                            it.AssocDecodeID = val.ID;
+                                                            dropDownValues.Add(Key, it);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+                                        }
                                     }
-                                }
-                                else if (ty.Name.ToLower() == "bordereditor")
-                                {
-                                    var editor = (BorderEditor)xy;
-                                    if (editor.StyleId == _TitleFieldControlID)
+                                    else if (ty.Name.ToLower() == "bordereditor")
                                     {
-                                        savecase.caseTitle = editor.Text;
-                                    }
+                                        var editor = (BorderEditor)subitem;
+                                        if (editor.StyleId == _TitleFieldControlID)
+                                        {
+                                            savecase.caseTitle = editor.Text;
+                                        }
 
-                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
-                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
-                                    {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
+                                        {
+                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
 
-                                        goto requiredJump;
+                                            goto requiredJump;
+                                        }
+                                        else
+                                        {
+                                            textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
+                                        }
                                     }
-                                    else
+                                    else if (ty.Name.ToLower() == "datepicker")
                                     {
-                                        textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
+                                        //var datepicker = (DatePicker)subitem;
+                                        //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                        //{
+                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                        //}
+                                        //else
+                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
                                     }
-                                }
-                                else if (ty.Name.ToLower() == "datepicker")
-                                {
-                                    //var datepicker = (DatePicker)xy;
-                                    //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                    //{
-                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
-                                    //}
-                                    //else
-                                    //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
                                 }
                             }
                         }
@@ -3553,7 +4208,7 @@ namespace StemmonsMobile.Views.Cases
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
 
-                    #endregion      
+                    #endregion
 
                     #region Assigned To Me
                     case "Assigned To Me":
@@ -3605,7 +4260,7 @@ namespace StemmonsMobile.Views.Cases
 
                         txt_CasNotes.Text = string.Empty;
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        break; 
+                        break;
                     #endregion
 
                     #region Take Ownership
