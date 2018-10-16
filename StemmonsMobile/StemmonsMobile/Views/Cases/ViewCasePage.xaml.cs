@@ -804,7 +804,6 @@ namespace StemmonsMobile.Views.Cases
                                             case "t":
                                             case "h":
                                                 Entry entry = new Entry();
-
                                                 entry.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID;
 
                                                 try
@@ -894,8 +893,6 @@ namespace StemmonsMobile.Views.Cases
                         Label11.HorizontalOptions = LayoutOptions.Start;
                         Label11.FontSize = 16;
                         Label11.WidthRequest = 200;
-                        Label11.FontFamily = "Soin Sans Neue";
-
 
                         var layout14 = new StackLayout();
                         layout14.Orientation = StackOrientation.Vertical;
@@ -1354,18 +1351,19 @@ namespace StemmonsMobile.Views.Cases
                                             var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
                                             if (cnt != null)
                                             {
-                                                Entry entry = new Entry();
-                                                entry.FontSize = 16;
-                                                entry = cnt as Entry;
-                                                if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "c" && !Onlineflag)
+                                                Entry entry = cnt as Entry;
+                                                Device.BeginInvokeOnMainThread(() =>
                                                 {
-                                                    entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
-                                                }
-                                                else
-                                                {
-                                                    entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+                                                    if (Metaitem.ASSOC_FIELD_TYPE.ToLower() == "c" && !Onlineflag)
+                                                    {
+                                                        entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
+                                                    }
+                                                    else
+                                                    {
+                                                        entry.Text = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
 
-                                                }
+                                                    }
+                                                });
                                             }
                                         }
                                         catch (Exception)
@@ -1747,7 +1745,11 @@ namespace StemmonsMobile.Views.Cases
 
                 lbl_line.IsVisible = _Casedata.IsClosed;
                 lbl_Casestatus.IsVisible = _Casedata.IsClosed;
-                lbl_Casestatus.Text = "Closed By " + _Casedata.CaseClosedByDisplayName + " at " + App.DateFormatStringToString(Convert.ToString(_Casedata.CaseClosedDateTime));
+
+                DateTime Dout = new DateTime();
+                DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
+
+                lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBy) + " at " + Convert.ToString(Dout.ToString());
             }
             catch (Exception)
             {

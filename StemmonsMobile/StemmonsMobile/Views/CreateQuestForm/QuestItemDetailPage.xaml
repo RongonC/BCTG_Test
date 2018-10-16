@@ -12,7 +12,7 @@
                   AbsoluteLayout.LayoutFlags="All" 
                   ColumnSpacing="1" RowSpacing="1" >
                 <Grid.RowDefinitions>
-                    
+
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
@@ -115,6 +115,23 @@
                     </Label>
                 </StackLayout>
             </ContentView>
+
+            <StackLayout x:Name="Stack_Popup" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <Frame OutlineColor="Black" 
+                   HorizontalOptions="Center"
+                   VerticalOptions="CenterAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="Black">
+                        <StackLayout x:Name="popupLT"  
+                         BackgroundColor="White" Margin="2"   >
+                        </StackLayout>
+                    </StackLayout>
+
+                </Frame>
+            </StackLayout>
+
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

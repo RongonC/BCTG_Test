@@ -15,10 +15,12 @@ using Xamarin.Forms.Xaml;
 using DataServiceBus.OfflineHelper.DataTypes.Quest;
 using DataServiceBus.OfflineHelper.DataTypes.Common;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using StemmonsMobile.Views.LoginProcess;
 using System.Globalization;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemCategoriesByItemIDResponse;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemQuestionFieldsByItemCategoryID_ViewScoresResponse;
+using static StemmonsMobile.DataTypes.DataType.Quest.GetItemInfoDependencyResponse;
 
 namespace StemmonsMobile.Views.CreateQuestForm
 {
@@ -40,6 +42,15 @@ namespace StemmonsMobile.Views.CreateQuestForm
         List<string> CategoryIdList = new List<string>();
         List<Add_Questions_MetadataRequest> CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
         List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId> lstcatbyitemid = new List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId>();
+
+        //ArpanB Start
+        public static ObservableCollection<string> Exditems { get; set; }
+        public Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>> lstexnaldatasouce = new Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>>();
+        List<GetExternalDatasourceByIDResponse.ExternalDataSource> lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+        Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>> lstextdatasourceHistory = new Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>>();
+        int iSelectedItemlookupId = 0;
+        ListView lstView = new ListView();
+        //ArpanB End
 
         public NewQuestForm(int _itemid, string arID = "")
         {
@@ -145,39 +156,74 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             case "se":
                             case "el":
                             case "me":
+                                //Picker pk = new Picker();
+                                //pk.WidthRequest = 200;
+                                //List<GetExternalDatasourceByIDResponse.ExternalDataSource> view = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+                                //GetExternalDatasourceByIDResponse.ExternalDataSource dt = new GetExternalDatasourceByIDResponse.ExternalDataSource();
+                                //dt.strObjectID = "-1";
+                                //dt.strName = "-- Select Item --";
+                                //dt.strDescription = "-- Select Item --";
+
+                                //if (App.Isonline)
+                                //{
+                                //    List<GetItemInfoDependencyResponse.ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy?.Where(t => t.intItemInfoFieldIDChild == lst_NewQuestFormFields[i].intItemInfoFieldID).ToList();
+
+                                //    if (infoFieldChild?.Count < 1)
+                                //    {
+                                //        var ExternalCall = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
+                                //        view = ExternalCall.Result;
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    var ExternalCall = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
+                                //    view = ExternalCall.Result;
+                                //}
+
+                                //view.Insert(0, dt);
+                                //pk.ItemsSource = view;
+                                //pk.TextColor = Color.Gray;
+
+                                //pk.ItemDisplayBinding = new Binding("strName");
+                                //pk.SelectedIndex = 0;
+                                //pk.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                //pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                //Rightlayout.Children.Add(pk);
+
                                 Picker pk = new Picker();
                                 pk.WidthRequest = 200;
-                                List<GetExternalDatasourceByIDResponse.ExternalDataSource> view = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
-                                GetExternalDatasourceByIDResponse.ExternalDataSource dt = new GetExternalDatasourceByIDResponse.ExternalDataSource();
-                                dt.strObjectID = "-1";
-                                dt.strName = "-- Select Item --";
-                                dt.strDescription = "-- Select Item --";
-
-                                if (App.Isonline)
-                                {
-                                    List<GetItemInfoDependencyResponse.ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy?.Where(t => t.intItemInfoFieldIDChild == lst_NewQuestFormFields[i].intItemInfoFieldID).ToList();
-
-                                    if (infoFieldChild?.Count < 1)
-                                    {
-                                        var ExternalCall = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
-                                        view = ExternalCall.Result;
-                                    }
-                                }
-                                else
-                                {
-                                    var ExternalCall = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
-                                    view = ExternalCall.Result;
-                                }
-
-                                view.Insert(0, dt);
-                                pk.ItemsSource = view;
                                 pk.TextColor = Color.Gray;
 
-                                pk.ItemDisplayBinding = new Binding("strName");
-                                pk.SelectedIndex = 0;
+                                Button itm_look_button = new Button();
+                                itm_look_button.WidthRequest = 200;
+                                itm_look_button.TextColor = Color.Gray;
+                                itm_look_button.BackgroundColor = Color.White;
+                                if (Device.RuntimePlatform == "Android")
+                                {
+                                    itm_look_button.Margin = new Thickness(0, 0, 0, 1);
+                                    itm_look_button.CornerRadius = 0;
+                                }
+                                if (Device.RuntimePlatform == "iOS")
+                                {
+                                    itm_look_button.BorderWidth = 1;
+                                    itm_look_button.BorderRadius = 5;
+                                    itm_look_button.BorderColor = Color.Gray;
+                                    itm_look_button.CornerRadius = 5;
+                                }
+
+                                pk.IsVisible = false;
+                                itm_look_button.IsVisible = true;
+
                                 pk.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                itm_look_button.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+
+                                itm_look_button.Clicked += itm_look_button_Clicked;
+                                itm_look_button.Text = "-- Select Item --";
+                                itm_look_button.WidthRequest = 200;
                                 Rightlayout.Children.Add(pk);
+                                Rightlayout.Children.Add(itm_look_button);
+                                Rightlayout.BackgroundColor = Color.Gray;
+
                                 break;
                             #endregion
 
@@ -228,7 +274,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         var cnt = (Entry)sender;
                                         var sty_id = cnt.StyleId?.Split('_')[1];
-                                        var dt_c = FindQuestControl(sty_id, "DatePicker") as DatePicker;
+                                        var dt_c = FindQuestControl(sty_id, "datepicker") as DatePicker;
                                         cnt.Unfocus();
                                         Device.BeginInvokeOnMainThread(() =>
                                         {
@@ -364,12 +410,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         List<ItemQuestionField_ViewScoresModel> itemcategoryscroreList = new List<ItemQuestionField_ViewScoresModel>();
                         await Task.Run(() =>
-                         {
-                             var getitemcategoryscrore = QuestSyncAPIMethods.GetItemQuestionFieldsByItemCategoryIDviewscores(App.Isonline, Convert.ToString(itemCatByid.intItemCategoryID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                             var tempscores = getitemcategoryscrore.Result;
-                             getitemcategoryscrore.Wait();
-                             itemcategoryscroreList = getitemcategoryscrore.Result;
-                         });
+                        {
+                            var getitemcategoryscrore = QuestSyncAPIMethods.GetItemQuestionFieldsByItemCategoryIDviewscores(App.Isonline, Convert.ToString(itemCatByid.intItemCategoryID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                            var tempscores = getitemcategoryscrore.Result;
+                            getitemcategoryscrore.Wait();
+                            itemcategoryscroreList = getitemcategoryscrore.Result;
+                        });
 
                         if (itemcategoryscroreList != null)
                         {
@@ -445,6 +491,351 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private void OnRefresh(object sender, EventArgs e)
+        {
+            var list = (ListView)sender;
+            list.IsRefreshing = false;
+        }
+
+        private async void itm_look_button_Clicked(object sender, EventArgs e)
+        {
+            Button btn_cancel = new Button()
+            {
+                Text = "Cancel",
+                WidthRequest = 100,
+                HeightRequest = 40,
+                Margin = new Thickness(0, 0, 10, 10),
+                TextColor = Color.Accent,
+                BackgroundColor = Color.Transparent,
+                HorizontalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.EndAndExpand
+            };
+            btn_cancel.Clicked += Btn_cancel_Clicked;
+
+            SearchBar ext_search = new SearchBar();
+            ext_search.TextChanged += ext_serch;
+
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+            try
+            {
+                //this.popupLT.IsVisible = true;
+                //this.masterGrid.IsVisible = false;                
+
+                lstView.ItemsSource = null;
+
+                var btn = sender as Button;
+                string[] exdID = btn.StyleId.Split('_');
+                iSelectedItemlookupId = int.Parse(exdID[1]);
+                int? EDS = 0;
+                foreach (var item in lst_NewQuestFormFields)
+                {
+                    if (item.intItemInfoFieldID == iSelectedItemlookupId)
+                    {
+                        EDS = item.intExternalDatasourceID;
+                        break;
+                    }
+                }
+
+                List<GetExternalDatasourceByIDResponse.ExternalDataSource> lst_extdatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+                lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+
+                lstexternaldatasource.Add(new GetExternalDatasourceByIDResponse.ExternalDataSource
+                {
+                    strName = "-- Select Item --",
+                    strDescription = "-- Select Item --",
+                    strObjectID = "0"
+                });
+
+                List<ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDChild == iSelectedItemlookupId).ToList();
+
+                if (infoFieldChild.Count > 0)
+                {
+                    //FindQuestControl -- picker
+
+                    var Child1 = lst_NewQuestFormFields.Where(t => t.intItemInfoFieldID == iSelectedItemlookupId).ToList();
+
+                    //var Child1 = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDParent == iSelectedItemlookupId).ToList();
+
+
+                    foreach (var iChild in Child1)
+                    {
+                        Picker drp1 = FindQuestControl(iChild.intItemInfoFieldID.ToString(), "picker") as Picker;
+                        Button btn1 = FindQuestControl(iChild.intItemInfoFieldID.ToString(), "button") as Button;
+
+                        var Response = QuestSyncAPIMethods.GetExternalDatasourceInfoByID(App.Isonline, iChild.intExternalDatasourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
+                        List<ExternalDatasourceInfo> ls = Response.Result;
+
+                        string sConnectionString = string.Empty;
+                        string sQuery = string.Empty;
+                        string filterQueryOrg = string.Empty;
+                        if (ls != null && ls.Count > 0)
+                        {
+                            sConnectionString = ls?.FirstOrDefault()?._CONNECTION_STRING;
+                            sQuery = ls?.FirstOrDefault()?._QUERY;
+
+                            var res = QuestSyncAPIMethods.GetFilterQuery_Quest(App.Isonline, iChild.intExternalDatasourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
+                            var d = res.Result;
+                            filterQueryOrg = d[0]._FILTER_QUERY;
+
+                            List<ItemInfoDependancy> infoFieldparent = lstItemInfoDependancy?.Where(t => t.intItemInfoFieldIDChild == iChild.intItemInfoFieldID)?.ToList();
+
+                            if (infoFieldparent != null && infoFieldparent.Count > 0)
+                            {
+                                int parentCount = 1;
+                                foreach (var p in infoFieldparent)
+                                {
+                                    string value = "-1";
+                                    Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent.ToString(), "picker") as Picker;
+                                    Button btn_ctrl = FindQuestControl(p.intItemInfoFieldIDParent.ToString(), "button") as Button;
+
+                                    //if (btn_ctrl.Text.ToLower() != "-- select item --")
+                                    {
+                                        if (drpParent != null)
+                                        {
+                                            if (drpParent.SelectedItem != null)
+                                            {
+                                                if (drpParent.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
+                                                    value = (drpParent.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource).strObjectID;
+                                                else
+                                                    value = (drpParent.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource).strObjectID;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+
+                                        sQuery = GetQueryStringWithParamaters(sQuery, p.strExternalDatasourceNameParent, value, p.strInfoFieldDisplayNameParent);//6
+                                                                                                                                                                 //replace internal entity type 
+                                        if (!string.IsNullOrEmpty(filterQueryOrg))
+                                        {
+                                            string filterQuery;
+                                            filterQuery = filterQueryOrg.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "(" + value + ")");
+                                            filterQuery = filterQuery.Replace("/*coalesce(CCS.CONNECTION_NAME,'BOXER_ENTITIES') like '%BOXER_ENTITIES%' */".ToUpper(), " and coalesce(CCS.CONNECTION_NAME, 'BOXER_ENTITIES') like '%BOXER_ENTITIES%'".ToUpper());
+                                            sQuery = sQuery.Replace("/*{ENTITY_FILTER_QUERY_" + parentCount + "}*/", filterQuery);
+                                            parentCount++;
+                                        }
+
+                                        if (sQuery.ToUpper().Contains("|CURRENT_USER"))
+                                        {
+                                            sQuery = GetQueryStringWithParamaters(sQuery, "CURRENT_USER", Functions.UserName);
+                                        }
+
+                                        try
+                                        {
+                                            var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
+                                            var qResult = qUesponse.GetValue("ResponseContent");
+                                            List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(qResult.ToString());
+
+                                            lstexternaldatasource.AddRange(l);
+                                            //drp.ItemsSource = null;
+                                            //drp.ItemsSource = l;
+                                            //drp.SelectedIndex = 0;
+                                        }
+                                        catch (Exception ex) { }
+
+                                    }
+                                }
+                            }
+
+                            //if (sQuery.ToUpper().Contains("|CURRENT_USER"))
+                            //{
+                            //    sQuery = GetQueryStringWithParamaters(sQuery, "CURRENT_USER", Functions.UserName);
+                            //}
+
+                            //try
+                            //{
+                            //    var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
+                            //    var qResult = qUesponse.GetValue("ResponseContent");
+                            //    List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(qResult.ToString());
+
+                            //    lstexternaldatasource.AddRange(l);
+                            //    //drp.ItemsSource = null;
+                            //    //drp.ItemsSource = l;
+                            //    //drp.SelectedIndex = 0;
+                            //}
+                            //catch (Exception ex) { }
+
+                        }
+                    }
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        var temp_extdatasource = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, EDS.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, iSelectedItemlookupId.ToString());
+
+                        temp_extdatasource.Wait();
+                        if (temp_extdatasource.Result.Count > 0)
+                        {
+                            lstexternaldatasource.AddRange(temp_extdatasource.Result);
+                        }
+                    });
+
+                }
+
+                lstView.ItemsSource = lstexternaldatasource.Select(v => v.strName);
+
+                #region Popup initilize
+                lstView.WidthRequest = 260;
+                lstView.IsPullToRefreshEnabled = true;
+                lstView.Refreshing += OnRefresh;
+                lstView.ItemSelected += OnSelection;
+                lstView.BackgroundColor = Color.White;
+
+                var temp = new DataTemplate(typeof(TextViewCell));
+                lstView.ItemTemplate = temp;
+
+                popupLT.Children.Clear();
+                popupLT.Children.Add(new StackLayout
+                {
+                    Children =
+                    {
+                        //Search Bar Stacklayout
+                        new StackLayout{
+                            Children =
+                            {
+                                ext_search
+                            }
+                        },
+                        
+                        //ListView StackLayout
+                        new StackLayout
+                        {
+                            Children =
+                            {
+                                lstView
+                            }
+                        },
+
+                        //Cancel button layout
+                        new StackLayout
+                        {
+                            Children =
+                            {
+                                btn_cancel
+                            }
+                        }
+                    }
+                });
+
+                Stack_Popup.IsVisible = true;
+                //popupLT.IsVisible = true;
+                masterGrid.IsVisible = false;
+                //     this.masterGrid.IsEnabled = false;
+
+                Stack_Popup.HeightRequest = this.Height - 20;
+                //popupLT.HeightRequest = this.Height - 20;
+                // Bor_popupLT.HeightRequest = this.Height - 20;
+
+                Stack_Popup.WidthRequest = this.Width - 20;
+                // popupLT.WidthRequest = this.Width - 20;
+                //Bor_popupLT.WidthRequest = this.Width - 20;
+
+                //popupLT.IsVisible = true;
+                //Bor_popupLT.IsVisible = true;
+                //this.masterGrid.IsVisible = false;
+
+                #endregion
+
+            }
+            catch (Exception)
+            {
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        {
+            // iSelectedItemlookupId
+            if (e.SelectedItem == null)
+            {
+                return;
+            }
+
+            Stack_Popup.IsVisible = false;
+            //popupLT.IsVisible = true;
+            masterGrid.IsVisible = true;
+            //   this.masterGrid.IsEnabled = true;
+
+            //this.masterGrid.IsVisible = true;
+            //this.popupLT.IsVisible = false;
+            //this.Bor_popupLT.IsVisible = false;
+
+            var pik_cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "picker");
+            var cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "button");
+
+
+            if (cntrl != null)
+            {
+                Button q_btn = cntrl as Button;
+                q_btn.FontSize = 16;
+                q_btn.Text = e.SelectedItem.ToString();
+
+                Picker q_pik = pik_cntrl as Picker;
+
+                var lst = lstexternaldatasource.Where(t => t.strName.ToLower().Contains(q_btn.Text.ToLower())).ToList();
+
+                q_pik.ItemsSource = lst;
+                q_pik.SelectedIndex = 0;
+
+                if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
+                {
+                    lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
+                }
+                else
+                {
+                    lstextdatasourceHistory[iSelectedItemlookupId] = lst;
+                }
+
+                //  fillchildControl("_" + iSelectedItemlookupId.ToString());
+            }
+        }
+
+        private void Btn_cancel_Clicked(object sender, EventArgs e)
+        {
+            Stack_Popup.IsVisible = false;
+            //popupLT.IsVisible = true;
+            masterGrid.IsVisible = true;
+            // this.masterGrid.IsEnabled = true;
+
+            //this.masterGrid.IsVisible = true;
+            //popupLT.IsVisible = false;
+            //Bor_popupLT.IsVisible = false;            
+        }
+
+
+        private void ext_serch(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (lstexternaldatasource.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(e.NewTextValue))
+                    {
+                        //lstView.ItemsSource = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString())).ToList();
+                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.strName);
+                    }
+                    else
+                    {
+                        var list = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
+                        if (list.Count > 0)
+                        {
+                            lstView.ItemsSource = list.Select(v => v.strName).ToList();
+                        }
+                        else
+                        {
+                            lstView.ItemsSource = null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
@@ -692,42 +1083,141 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
 
 
-        public object FindQuestControl(string type, string cntType = "")
-        {
-            foreach (StackLayout v in DynamicFields.Children)
-            {
-                foreach (StackLayout item in v.Children)
-                {
-                    foreach (var subitem in item.Children)
-                    {
-                        var xy = subitem;
-                        Type ty = xy.GetType();
+        //public object FindQuestControl(string type, string cntType = "")
+        //{
+        //    foreach (StackLayout v in DynamicFields.Children)
+        //    {
+        //        foreach (StackLayout item in v.Children)
+        //        {
+        //            foreach (var subitem in item.Children)
+        //            {
+        //                var xy = subitem;
+        //                Type ty = xy.GetType();
 
-                        if (ty.Name != "StackLayout")
+        //                if (ty.Name != "StackLayout")
+        //                {
+        //                    if (xy.StyleId != null)
+        //                    {
+        //                        if (xy.StyleId.Contains(type))
+        //                        {
+        //                            if (cntType == "DatePicker")
+        //                            {
+        //                                if (ty.Name == "DatePicker")
+        //                                {
+        //                                    return subitem;
+        //                                }
+        //                            }
+        //                            else
+        //                                return subitem;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+
+        //    return null;
+        //}
+
+        public object FindQuestControl(string type, string cntrlName = "")
+        {
+            if (string.IsNullOrEmpty(cntrlName))
+            {
+                foreach (StackLayout v in DynamicFields.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
                         {
-                            if (xy.StyleId != null)
+                            var xy = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (xy != null)
                             {
-                                if (xy.StyleId.Contains(type))
+                                if (xy.Contains(type))
                                 {
-                                    if (cntType == "DatePicker")
-                                    {
-                                        if (ty.Name == "DatePicker")
-                                        {
-                                            return subitem;
-                                        }
-                                    }
-                                    else
-                                        return subitem;
+                                    return subitem;
                                 }
                             }
                         }
                     }
                 }
             }
-
-
+            else if (cntrlName.ToLower() == "picker")
+            {
+                foreach (StackLayout v in DynamicFields.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name.ToLower() == "picker")
+                                {
+                                    if (_styleId.Contains(type))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (cntrlName.ToLower() == "button")
+            {
+                foreach (StackLayout v in DynamicFields.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name.ToLower() == "button")
+                                {
+                                    if (_styleId.Contains(type))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (cntrlName.ToLower() == "datepicker")
+            {
+                foreach (StackLayout v in DynamicFields.Children)
+                {
+                    foreach (StackLayout item in v.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name.ToLower() == "datepicker")
+                                {
+                                    if (_styleId.Contains(type))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return null;
         }
+
 
         public async void CreateJsonforAddForm(string itemid, bool IsEditable)
         {

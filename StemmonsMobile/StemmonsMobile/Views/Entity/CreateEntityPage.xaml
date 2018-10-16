@@ -120,10 +120,14 @@
                                     <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" 
                                                        FontAttributes="Bold" FontSize="14" />
 
-                                    <Label Grid.Row="1" Grid.Column="2" FontSize="14" x:Name="lbl_createname" />
-                                    <Label Grid.Row="3" Grid.Column="2" FontSize="14" x:Name="lbl_assignto" />
-                                    <Label Grid.Row="5" Grid.Column="2" FontSize="14" x:Name="lbl_ownername"  />
-                                    <Label Grid.Row="7" Grid.Column="2" FontSize="14" x:Name="lbl_modifiedname" />
+                                    <Label Grid.Row="1" Grid.Column="2" FontSize="14"
+                                           x:Name="lbl_createname" />
+                                    <Label Grid.Row="3" Grid.Column="2" FontSize="14"
+                                           x:Name="lbl_assignto" />
+                                    <Label Grid.Row="5" Grid.Column="2" FontSize="14"
+                                           x:Name="lbl_ownername"  />
+                                    <Label Grid.Row="7" Grid.Column="2" FontSize="14"
+                                           x:Name="lbl_modifiedname" />
                                 </Grid>
                             </StackLayout>
                         </ListView.Footer>
@@ -171,6 +175,22 @@
                     </Label>
                 </StackLayout>
             </ContentView>
+
+            <StackLayout x:Name="Stack_Popup" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <Frame OutlineColor="Transparent" 
+                   HorizontalOptions="Center"
+                   VerticalOptions="CenterAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="Black">
+                        <StackLayout x:Name="popupLT"  
+                         BackgroundColor="White" Margin="2"   >
+                        </StackLayout>
+                    </StackLayout>
+
+                </Frame>
+            </StackLayout>
 
         </AbsoluteLayout>
     </ContentPage.Content>

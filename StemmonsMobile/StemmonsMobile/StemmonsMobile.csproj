@@ -103,20 +103,11 @@
     <Compile Include="Views\Cases\CaseActivityLog.xaml.cs">
       <DependentUpon>CaseActivityLog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Cases\CaseDetailsPage.xaml.cs">
-      <DependentUpon>CaseDetailsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Cases\CaseDetailsView.xaml.cs">
       <DependentUpon>CaseDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cases\CaseNotes.xaml.cs">
       <DependentUpon>CaseNotes.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Cases\CaseProperty.xaml.cs">
-      <DependentUpon>CaseProperty.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Cases\CaseTypeDetails.xaml.cs">
-      <DependentUpon>CaseTypeDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cases\FavoriteDetailsDialog.xaml.cs">
       <DependentUpon>FavoriteDetailsDialog.xaml</DependentUpon>
@@ -127,6 +118,7 @@
     <Compile Include="Views\Cases\SelectCaseType.xaml.cs">
       <DependentUpon>SelectCaseType.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Commonfiles\TextViewCell.cs" />
     <Compile Include="Views\Cases\ViewcaseNotes.xaml.cs">
       <DependentUpon>ViewcaseNotes.xaml</DependentUpon>
     </Compile>
@@ -334,19 +326,11 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Cases\CaseDetailsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\Cases\CaseDetailsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Cases\CaseNotes.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Cases\CaseProperty.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -443,12 +427,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LoginProcess\SelectInstancePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\Cases\CaseTypeDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -135,7 +135,7 @@ namespace StemmonsMobile.Views.Cases
                         //}
 
                         break;
-                    case "Closes Cases":
+                    case "Closed Cases":
                         if (!string.IsNullOrEmpty(data.Description))
                             seacrchvalue = "caseDetailClosesCases";
                         //if (string.IsNullOrEmpty(data.Description))

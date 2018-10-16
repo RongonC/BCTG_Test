@@ -8,6 +8,7 @@ using PCLStorage;
 using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Entity;
+using StemmonsMobile.Views.Cases;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -223,42 +224,160 @@ namespace StemmonsMobile.Views.Entity
                                 case "ME":
                                 case "MS":
                                 case "SS":
+
                                     Picker pk = new Picker
                                     {
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
                                         WidthRequest = 200,
-                                        TextColor = Color.Gray
+                                        TextColor = Color.Gray,
+                                        IsVisible = false
                                     };
 
-                                    if (Functions.IsEditEntity)
-                                    {
-                                        // for Entity View only
-                                        pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-                                    }
-                                    else
-                                    {
-                                        if (Device.RuntimePlatform == "iOS")
-                                        {
-                                            pk.Unfocused += Pk_Unfocused;
-                                        }
-                                        else
-                                        {
-                                            pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-                                        }
-                                    }
+                                    pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
+                                    pk.SelectedIndex = 0;
 
+                                    RightLyout.Children.Add(pk);
+
+                                    //Picker pk = new Picker
+                                    //{
+                                    //    StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
+                                    //    WidthRequest = 200,
+                                    //    TextColor = Color.Gray
+                                    //};
+
+                                    //if (Functions.IsEditEntity)
+                                    //{
+                                    //    // for Entity View only
+                                    //    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                    //}
+                                    //else
+                                    //{
+                                    //    if (Device.RuntimePlatform == "iOS")
+                                    //    {
+                                    //        pk.Unfocused += Pk_Unfocused;
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                    //    }
+                                    //}
+
+
+                                    /*Bind list in Dropdown*/
                                     try
                                     {
-                                        List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
-                                        EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1
-                                        {
-                                            Count = 0,
-                                            EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
-                                            EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
-                                            ID = 0
-                                        };
-                                        _list_ed1.Add(ed1);
+                                        //List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
+                                        //EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1
+                                        //{
+                                        //    Count = 0,
+                                        //    EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
+                                        //    EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
+                                        //    ID = 0
+                                        //};
+                                        //_list_ed1.Add(ed1);
 
+                                        //List<AssociationField> ls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID).ToList();
+
+                                        //foreach (var item in ls)
+                                        //{
+                                        //    if (item.EntityAssocTypeCascade?.Count >= 0)
+                                        //    {
+                                        //        List<int> CHildLst = item.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDChild == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
+                                        //        if (CHildLst.Count < 1 && App.Isonline)
+                                        //        {
+                                        //            if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE != null)
+                                        //            {
+                                        //                if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count != 0)
+                                        //                {
+                                        //                    for (int j = 0; j < EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count(); j++)
+                                        //                    {
+                                        //                        _list_ed1.Add(EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE[j]);
+                                        //                    }
+                                        //                }
+                                        //            }
+                                        //        }
+                                        //        else if (!App.Isonline)
+                                        //        {
+                                        //            if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE == null)
+                                        //            {
+                                        //                List<EXTERNAL_DATASOURCE1> ld = new List<EXTERNAL_DATASOURCE1>();
+                                        //                EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(new EXTERNAL_DATASOURCE1());
+                                        //            }
+                                        //            if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count != 0)
+                                        //            {
+                                        //                for (int j = 0; j < EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count(); j++)
+                                        //                {
+                                        //                    _list_ed1.Add(EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE[j]);
+                                        //                }
+                                        //            }
+
+                                        //            if (Functions.IsEditEntity)
+                                        //            {
+                                        //                var cnttype = EntityListsValues.AssociationFieldCollection.Where(v => v.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID)?.ToList();
+                                        //                var Assoc = cnttype[0].AssocMetaData[0];
+
+                                        //                if (!string.IsNullOrEmpty(Assoc.FieldValue) && !string.IsNullOrEmpty(Assoc.ExternalDatasourceObjectID))
+                                        //                {
+                                        //                    var p1 = _list_ed1.Find(x => x.ID == Convert.ToInt32(Assoc.ExternalDatasourceObjectID == "" ? "0" : Assoc.ExternalDatasourceObjectID));
+                                        //                    if (p1 == null)
+                                        //                    {
+                                        //                        p1 = new EXTERNAL_DATASOURCE1();
+                                        //                        p1.EXTERNAL_DATASOURCE_NAME = Assoc.FieldValue;
+                                        //                        p1.ID = Convert.ToInt32(Assoc.ExternalDatasourceObjectID);
+                                        //                        EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(p1);
+                                        //                        _list_ed1.Add(p1);
+                                        //                    }
+                                        //                }
+                                        //            }
+                                        //        }
+                                        //    }
+                                        //}
+
+                                        //pk.ItemsSource = _list_ed1;
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+
+                                    Button pk_button = new Button();
+                                    pk_button.WidthRequest = 200;
+                                    pk_button.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
+                                    pk_button.Clicked += Pk_button_Clicked;
+                                    pk_button.Text = "-- Select Item --";
+                                    pk_button.TextColor = Color.Gray;
+                                    pk_button.HorizontalOptions = LayoutOptions.Start;
+                                    pk_button.Margin = new Thickness(0, 0, 0, 1);
+                                    pk_button.CornerRadius = 0;
+                                    pk_button.BackgroundColor = Color.White;
+                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
+                                    if (Functions.IsEditEntity)
+                                    {
+                                        var cnttype = EntityListsValues.AssociationFieldCollection.Where(v => v.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID)?.ToList();
+                                        var Assoc = cnttype[0].AssocMetaData[0];
+
+                                        if (!string.IsNullOrEmpty(Assoc.FieldValue) && !string.IsNullOrEmpty(Assoc.ExternalDatasourceObjectID))
+                                        {
+                                            //var p1 = _list_ed1.Find(x => x.ID == Convert.ToInt32(Assoc.ExternalDatasourceObjectID == "" ? "0" : Assoc.ExternalDatasourceObjectID));
+                                            //if (p1 == null)
+                                            //{
+                                            //    p1 = new EXTERNAL_DATASOURCE1();
+                                            //    p1.EXTERNAL_DATASOURCE_NAME = Assoc.FieldValue;
+                                            //    p1.ID = Convert.ToInt32(Assoc.ExternalDatasourceObjectID);
+                                            //    EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(p1);
+                                            //    _list_ed1.Add(p1);
+                                            //}
+                                            pk_button.Text = Assoc.FieldValue;
+                                        }
+
+                                    }
+
+                                    if (!fieldLeveSecurity_Create)
+                                        pk_button.IsEnabled = false;
+
+                                    RightLyout.Children.Add(pk_button);
+                                    RightLyout.BackgroundColor = Color.Gray;
+                                    if (!Functions.IsEditEntity)
+                                    {
                                         List<AssociationField> ls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID).ToList();
 
                                         foreach (var item in ls)
@@ -266,66 +385,20 @@ namespace StemmonsMobile.Views.Entity
                                             if (item.EntityAssocTypeCascade?.Count >= 0)
                                             {
                                                 List<int> CHildLst = item.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDChild == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
-                                                if (CHildLst.Count < 1 && App.Isonline)
-                                                {
-                                                    if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE != null)
-                                                    {
-                                                        if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count != 0)
-                                                        {
-                                                            for (int j = 0; j < EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count(); j++)
-                                                            {
-                                                                _list_ed1.Add(EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE[j]);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else if (!App.Isonline)
-                                                {
-                                                    if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE == null)
-                                                    {
-                                                        List<EXTERNAL_DATASOURCE1> ld = new List<EXTERNAL_DATASOURCE1>();
-                                                        EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(new EXTERNAL_DATASOURCE1());
-                                                    }
-                                                    if (EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count != 0)
-                                                    {
-                                                        for (int j = 0; j < EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Count(); j++)
-                                                        {
-                                                            _list_ed1.Add(EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE[j]);
-                                                        }
-                                                    }
 
-                                                    if (Functions.IsEditEntity)
-                                                    {
-                                                        var cnttype = EntityListsValues.AssociationFieldCollection.Where(v => v.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID)?.ToList();
-                                                        var Assoc = cnttype[0].AssocMetaData[0];
-
-                                                        if (!string.IsNullOrEmpty(Assoc.FieldValue) && !string.IsNullOrEmpty(Assoc.ExternalDatasourceObjectID))
-                                                        {
-                                                            var p1 = _list_ed1.Find(x => x.ID == Convert.ToInt32(Assoc.ExternalDatasourceObjectID == "" ? "0" : Assoc.ExternalDatasourceObjectID));
-                                                            if (p1 == null)
-                                                            {
-                                                                p1 = new EXTERNAL_DATASOURCE1();
-                                                                p1.EXTERNAL_DATASOURCE_NAME = Assoc.FieldValue;
-                                                                p1.ID = Convert.ToInt32(Assoc.ExternalDatasourceObjectID);
-                                                                EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(p1);
-                                                                _list_ed1.Add(p1);
-                                                            }
-                                                        }
-                                                    }
+                                                if (CHildLst.Count > 0)
+                                                {
+                                                    pk_button.IsEnabled = false;
                                                 }
                                             }
                                         }
+                                    }
+                                    //if (!fieldLeveSecurity_Create)
+                                    //    pk.IsEnabled = false;
+                                    //pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
+                                    //pk.SelectedIndex = 0;
+                                    //RightLyout.Children.Add(pk);
 
-                                        pk.ItemsSource = _list_ed1;
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-                                    if (!fieldLeveSecurity_Create)
-                                        pk.IsEnabled = false;
-                                    pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
-                                    pk.SelectedIndex = 0;
-                                    RightLyout.Children.Add(pk);
                                     break;
                                 #endregion
 
@@ -705,7 +778,29 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 string _field_type = EntityListsValues.AssociationFieldCollection[i].FieldType;
 
-                                var cnt = FindEntityControl(_field_type + "_" + EntityListsValues.AssociationFieldCollection[i].AssocTypeID);
+                                var cnt = FindEntityControl(_field_type + "_" + EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "");
+                                var cntBtn = FindEntityControl(_field_type + "_" + EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                if (cntBtn != null)
+                                {
+                                    var cnt_type = cntBtn.GetType();
+                                    if (cnt_type.Name.ToLower() == "button")
+                                    {
+                                        var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == cntBtn.Text).ToList();
+                                        var pick_Ext_datasrc = new Picker();
+                                        var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
+                                        int j = 0;
+                                        //pick_Ext_datasrc = (Picker)cnt;
+                                        //List<EXTERNAL_DATASOURCE1> src = pick_Ext_datasrc.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                        if (data.Count != 0)
+                                        {
+                                            var records = ItmSrc.Where(v => v.ID == (string.IsNullOrEmpty(Convert.ToString(data[0]?.ExternalDatasourceObjectID)) ? 0 : Convert.ToInt32(data[0]?.ExternalDatasourceObjectID))).FirstOrDefault();
+                                            j = ItmSrc.Where(t => t.ID == records.ID).Select(t => t.ID).FirstOrDefault();
+                                        }
+
+                                        pick_Ext_datasrc.SelectedIndex = j;
+                                    }
+                                    continue;
+                                }
                                 if (cnt != null)
                                 {
                                     var cnt_type = cnt.GetType();
@@ -779,21 +874,21 @@ namespace StemmonsMobile.Views.Entity
                                                 _checkbox.IsToggled = false;
                                         }
                                     }
-                                    else if (cnt_type.Name.ToLower() == "picker")
-                                    {
-                                        var pick_Ext_datasrc = new Picker();
-                                        var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
-                                        int j = 0;
-                                        pick_Ext_datasrc = (Picker)cnt;
-                                        List<EXTERNAL_DATASOURCE1> src = pick_Ext_datasrc.ItemsSource as List<EXTERNAL_DATASOURCE1>;
-                                        if (data.Count != 0)
-                                        {
-                                            var records = src.Where(v => v.ID == (string.IsNullOrEmpty(Convert.ToString(data[0]?.ExternalDatasourceObjectID)) ? 0 : Convert.ToInt32(data[0]?.ExternalDatasourceObjectID))).FirstOrDefault();
-                                            j = src.FindIndex(v => v.ID == records?.ID);
-                                        }
+                                    //else if (cnt_type.Name.ToLower() == "picker")
+                                    //{
+                                    //    var pick_Ext_datasrc = new Picker();
+                                    //    var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
+                                    //    int j = 0;
+                                    //    pick_Ext_datasrc = (Picker)cnt;
+                                    //    List<EXTERNAL_DATASOURCE1> src = pick_Ext_datasrc.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                    //    if (data.Count != 0)
+                                    //    {
+                                    //        var records = src.Where(v => v.ID == (string.IsNullOrEmpty(Convert.ToString(data[0]?.ExternalDatasourceObjectID)) ? 0 : Convert.ToInt32(data[0]?.ExternalDatasourceObjectID))).FirstOrDefault();
+                                    //        j = src.FindIndex(v => v.ID == records?.ID);
+                                    //    }
 
-                                        pick_Ext_datasrc.SelectedIndex = j;
-                                    }
+                                    //    pick_Ext_datasrc.SelectedIndex = j;
+                                    //}
                                     else if (cnt_type.Name.ToLower() == "image")
                                     {
                                         var img = new Image();
@@ -831,6 +926,7 @@ namespace StemmonsMobile.Views.Entity
                         #endregion
 
                         #region Get Entity notes
+
                         if (Entity_NotesLists != null)
                         {
                             ObservableCollection<EntityNotesGroup> Temp = new ObservableCollection<EntityNotesGroup>();
@@ -873,6 +969,8 @@ namespace StemmonsMobile.Views.Entity
                             gridEntitynotes.ItemsSource = NotesGroups;
                         }
                         #endregion
+
+
                     }
                     else
                     {
@@ -902,6 +1000,402 @@ namespace StemmonsMobile.Views.Entity
             {
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        int iSelectedItemlookupId = 0;
+        List<EXTERNAL_DATASOURCE1> _list_EDS = new List<EXTERNAL_DATASOURCE1>();
+        AssociationField Exdls = null;
+        ListView lstView = new ListView();
+        private async void Pk_button_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (App.Isonline)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    lstView.ItemsSource = null;
+                    var btn = sender as Button;
+                    iSelectedItemlookupId = Convert.ToInt32(btn.StyleId?.Split('_')[1]);
+                    Picker pickercntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId)) as Picker;
+
+                    if (pickercntrl != null)
+                    {
+                        _list_EDS.Clear();
+                        EXTERNAL_DATASOURCE1 EDS = new EXTERNAL_DATASOURCE1
+                        {
+                            Count = 0,
+                            EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
+                            EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
+                            ID = 0
+                        };
+                        _list_EDS.Add(EDS);
+
+
+                        var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
+
+                        if (CurAssco.EntityAssocTypeCascade?.Count >= 0)
+                        {
+                            List<int> CHildLst = CurAssco.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
+                            if (CHildLst.Count < 1)
+                            {
+                                // Fill Parent
+                                Exdls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
+                                _list_EDS.AddRange(Exdls.EXTERNAL_DATASOURCE);
+
+                            }
+                            else
+                            {
+                                // Generate Filter Query and Fill Child Control
+
+                                var AssocTypeIDChild = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).FirstOrDefault();
+
+
+                                string sFieldType = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).FirstOrDefault().FieldType;
+                                string sQuery = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.Query;
+
+                                if (string.IsNullOrEmpty(sQuery))
+                                    return;
+
+                                string sExternalDatasourceName = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.DataSourceName;
+                                var childAssocObject = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).ToList();
+                                //int? externalDatasourceIdChild = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).FirstOrDefault()?.ExternalDataSource?.ExternalDatasourceID;
+
+                                var AssocTypeIDParent = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDParent).FirstOrDefault();
+
+                                List<int> ParentLst = childAssocObject.FirstOrDefault()?.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == AssocTypeIDChild).ToList().Select(x => x.EntityAssocTypeIDParent).ToList();
+
+                                Dictionary<int, string> dctFilter = new Dictionary<int, string>();
+                                int iFilter = 0;
+
+                                foreach (var parentID in ParentLst)
+                                {
+                                    string sSelectedValue = null;
+                                    Picker pkCntrl = FindEntityControl(Convert.ToString(parentID), "Picker") as Picker;
+                                    Button btnCntrl = FindEntityControl(Convert.ToString(parentID), "Button") as Button;
+
+                                    if (parentID == iSelectedItemlookupId)
+                                    {
+                                        dctFilter.Add(parentID, sSelectedValue);
+                                    }
+                                    else
+                                    {
+                                        string sFieldTypeParent = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == parentID).FirstOrDefault().FieldType;
+
+                                        if (sFieldTypeParent.ToUpper() == "SE" || sFieldTypeParent.ToUpper() == "ME" || sFieldTypeParent.ToUpper() == "EL")
+                                        {
+                                            if (!Functions.IsEditEntity)
+                                            {
+                                                var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID, "Picker");
+
+                                                var ddlEds = (Picker)cnt;
+                                                List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                                dctFilter.Add(parentID, Convert.ToString(src[0].ID));
+                                            }
+                                            else
+                                            {
+                                                var ItmSrc = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDParent).Select(m => m.EXTERNAL_DATASOURCE).ToList()[0].Where(n => n.EXTERNAL_DATASOURCE_NAME == btnCntrl.Text).ToList();
+                                                dctFilter.Add(parentID, Convert.ToString(ItmSrc[0].ID));
+                                            }
+                                        }
+                                    }
+                                    iFilter = 1;
+                                }
+
+                                foreach (var dct in dctFilter.OrderBy(v => v.Key))
+                                {
+                                    if (dct.Value != "-- Select Item --")
+                                    {
+                                        var assoc = EntitySchemaLists.AssociationFieldCollection.FirstOrDefault(t => t.AssocTypeID == AssocTypeIDChild);
+                                        int? externalDataSourceIdParent = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == dct.Key).FirstOrDefault()?.ExternalDataSource.ExternalDatasourceID;
+
+                                        if (assoc.ExternalDataSource != null)
+                                        {
+                                            string strconection = string.Empty;
+
+                                            await Task.Run(() =>
+                                              {
+                                                  strconection = Functions.GetDecodeConnectionString(assoc.ExternalDataSource.ConnectionString);
+                                              });
+
+                                            if (strconection.ToUpper().Contains("BOXER_ENTITIES"))
+                                            {
+                                                string filterQueryChild = "";
+
+                                                await Task.Run(() =>
+                                                {
+                                                    var data = EntityAPIMethods.getConnectionString(Convert.ToString(assoc.ExternalDataSource.ExternalDatasourceID)).GetValue("ResponseContent");
+
+                                                    if (!string.IsNullOrEmpty(data?.ToString()) && data.ToString() != "[]")
+                                                    {
+                                                        List<ConnectionStringCls> responsejson = JsonConvert.DeserializeObject<List<ConnectionStringCls>>(data.ToString());
+
+                                                        filterQueryChild = responsejson[0]._FILTER_QUERY;
+                                                    }
+                                                });
+
+                                                string sFilterQuery = string.Empty;
+
+                                                if (!string.IsNullOrEmpty(filterQueryChild))
+                                                {
+                                                    sFilterQuery = filterQueryChild;
+
+                                                    var cnt = 0;
+                                                    if (sFilterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
+                                                        cnt++;
+                                                    if (sFilterQuery.Contains("'%BOXER_ENTITIES%'"))
+                                                        cnt++;
+                                                    try
+                                                    {
+                                                        for (int i = 0; i < cnt; i++)
+                                                        {
+                                                            int s1 = sFilterQuery.IndexOf("/*");
+                                                            int e1 = sFilterQuery.IndexOf("*/");
+                                                            string f1 = sFilterQuery.Substring(s1, (e1 + 2) - s1);
+                                                            if (f1.IndexOf("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}") > 0)
+                                                            {
+                                                                s1 = s1 + 2;
+                                                                string r1 = sFilterQuery.Substring(s1, e1 - s1);
+                                                                sFilterQuery = sFilterQuery.Replace(f1, " and " + r1);
+
+                                                                sFilterQuery = sFilterQuery.Replace("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}", externalDataSourceIdParent.ToString());
+                                                            }
+                                                            else
+                                                            {
+                                                                sFilterQuery = sFilterQuery.Replace(f1, "");
+                                                            }
+                                                        }
+                                                        if (dct.Value != "-- Select Item --")
+                                                            sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + dct.Value + " )");
+                                                        else
+                                                        { sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + 0 + " )"); }
+                                                    }
+                                                    catch (Exception ex) { continue; }
+                                                }
+
+                                                sQuery = sQuery.Replace("/*{ENTITY_FILTER_QUERY_" + iFilter + "}*/", "  " + sFilterQuery + " ");
+                                                iFilter++;
+                                            }
+                                        }
+                                        var sbitem = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == dct.Key).FirstOrDefault();
+                                        sQuery = GetQueryStringWithParamaters(sQuery, sbitem.ExternalDataSource?.DataSourceName, dct.Value, sbitem.AssocName);
+                                    }
+
+                                }
+
+                                if (dctForumulaQuery.ContainsKey(sExternalDatasourceName))
+                                {
+                                    dctForumulaQuery.Remove(sExternalDatasourceName);
+                                }
+                                dctForumulaQuery.Add(sExternalDatasourceName, sQuery);
+
+                                List<EXTERNAL_DATASOURCE1> dt = new List<EXTERNAL_DATASOURCE1>();
+
+                                var p = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild)?.ToList()?.Select(x => x.ExternalDataSource).FirstOrDefault().ConnectionString;
+
+                                await Task.Run(() =>
+                                 {
+                                     var Response = EntityAPIMethods.ExternalDatasourceByQuery(Functions.GetDecodeConnectionString(CurAssco.ExternalDataSource.ConnectionString), sQuery);
+                                     var result = Response.GetValue("ResponseContent");
+                                     dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
+                                 });
+
+                                _list_EDS.AddRange(dt);
+                            }
+
+                        }
+
+                        #region List Pop up
+                        lstView.WidthRequest = 310;
+                        lstView.IsPullToRefreshEnabled = true;
+                        lstView.Refreshing += OnRefresh;
+                        lstView.ItemSelected += OnSelection;
+                        lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+
+                        Button btn_cancel = new Button()
+                        {
+                            Text = "Cancel",
+                            WidthRequest = 100,
+                            HeightRequest = 40,
+                            TextColor = Color.Accent,
+                            BackgroundColor = Color.Transparent,
+                            HorizontalOptions = LayoutOptions.Center,
+                        };
+
+                        btn_cancel.Clicked += Btn_cancel_Clicked;
+
+                        SearchBar ext_search = new SearchBar()
+                        {
+                            WidthRequest = 300,
+                            HeightRequest = 40,
+                            TextColor = Color.Accent,
+                            BackgroundColor = Color.Transparent,
+                            HorizontalOptions = LayoutOptions.Center,
+                        };
+                        ext_search.TextChanged += ext_serch;
+
+                        var temp = new DataTemplate(typeof(TextViewCell));
+                        lstView.ItemTemplate = temp;
+
+                        popupLT.Children.Clear();
+
+                        popupLT.Children.Add(new StackLayout
+                        {
+                            Children =
+                            {
+                                new StackLayout
+                                 {
+                                    VerticalOptions=LayoutOptions.Center,
+                                    HorizontalOptions=LayoutOptions.Center,
+                                    Children ={
+                                        ext_search
+                                    }
+                                },
+
+                                new StackLayout
+                                {
+                                    VerticalOptions =LayoutOptions.Center,
+                                    HorizontalOptions =LayoutOptions.Center,
+                                    Children ={
+                                        lstView,
+                                    },
+                                },
+
+                                new StackLayout
+                                {
+                                     HorizontalOptions=LayoutOptions.EndAndExpand,
+                                     VerticalOptions=LayoutOptions.EndAndExpand,
+                                     Margin= new Thickness(0,0,1,10),
+                                    Children =
+                                    {
+                                        btn_cancel
+                                    }
+                                }
+                            }
+                        });
+                        Stack_Popup.IsVisible = true;
+                        masterGrid.IsVisible = false;
+
+                        Stack_Popup.HeightRequest = this.Height - 20;
+                        Stack_Popup.WidthRequest = this.Width - 40;
+                        #endregion
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        private void Btn_cancel_Clicked(object sender, EventArgs e)
+        {
+            //popupLT.IsVisible = false;
+            Stack_Popup.IsVisible = false;
+            masterGrid.IsVisible = true;
+        }
+
+        private void OnRefresh(object sender, EventArgs e)
+        {
+            var list = (ListView)sender;
+            list.IsRefreshing = false;
+        }
+
+        Dictionary<int, List<ExternalDatasource>> lstexnaldatasouce = new Dictionary<int, List<ExternalDatasource>>();
+        Dictionary<int, List<EXTERNAL_DATASOURCE1>> lstextdatasourceHistory = new Dictionary<int, List<EXTERNAL_DATASOURCE1>>();
+
+        private void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        {
+            try
+            {
+                ClearEntityChildControls(iSelectedItemlookupId);
+                if (e.SelectedItem == null)
+                {
+                    return;
+                }
+                this.Stack_Popup.IsVisible = false;
+                //this.popupLT.IsVisible = false;
+                this.masterGrid.IsVisible = true;
+
+
+                var ctrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Button") as Button;
+                var pik_cntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Picker");
+                if (ctrl != null)
+                {
+                    Button btn = ctrl as Button;
+                    btn.Text = e.SelectedItem.ToString();
+
+                    Picker e_pik = pik_cntrl as Picker;
+
+                    List<EXTERNAL_DATASOURCE1> lst = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower() == (btn.Text.ToLower())).ToList();
+
+                    e_pik.ItemsSource = lst;
+                    e_pik.SelectedIndex = 0;
+                    if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
+                        lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
+                    else
+                        lstextdatasourceHistory[iSelectedItemlookupId] = lst;
+                    List<AssociationField> ls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == iSelectedItemlookupId).ToList();
+
+                    foreach (var item in ls)
+                    {
+                        if (item.EntityAssocTypeCascade?.Count > 0)
+                        {
+                            List<int> CHildLst = item.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDParent == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
+
+                            if (CHildLst.Count > 0)
+                            {
+                                foreach (var j in CHildLst)
+                                {
+                                    //Find child and Disable it
+                                    var cntrl = FindEntityControl(Convert.ToString(j), "Button") as Button;
+                                    if (ctrl.Text == "-- Select Item --")
+                                    {
+                                        cntrl.IsEnabled = false;
+                                    }
+                                    else
+                                    {
+                                        cntrl.IsEnabled = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            //e.SelectedItem = null;
+        }
+
+        private void ext_serch(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (_list_EDS.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(e.NewTextValue))
+                    {
+                        //lstView.ItemsSource = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString())).ToList();
+                        lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+                    }
+                    else
+                    {
+                        var list = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
+                        if (list.Count > 0)
+                        {
+                            lstView.ItemsSource = list.Select(v => v.EXTERNAL_DATASOURCE_NAME).ToList();
+                        }
+                        else
+                        {
+                            lstView.ItemsSource = null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         Dictionary<string, string> assocFieldValues = new Dictionary<string, string>();
@@ -1664,9 +2158,9 @@ namespace StemmonsMobile.Views.Entity
                 if (!string.IsNullOrEmpty(txt_EntNotes.Text))
                 {
                     await Task.Run(async () =>
-                     {
-                         recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntityTypeID, EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
-                     });
+                    {
+                        recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntityTypeID, EntityID.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
+                    });
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
                     {
@@ -1779,6 +2273,149 @@ namespace StemmonsMobile.Views.Entity
                     }
                 }
             }
+            else if (controlType == "Button")
+            {
+                foreach (StackLayout infofield in TextFieldsLayout.Children)
+                {
+                    foreach (StackLayout item in infofield.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name == "Button")
+                                {
+                                    if (_styleId.Contains(type))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //if (string.IsNullOrEmpty(controlType))
+            //{
+            //    foreach (StackLayout v in TextFieldsLayout.Children)
+            //    {
+            //        foreach (StackLayout item in v.Children)
+            //        {
+            //            foreach (var subitem in item.Children)
+            //            {
+            //                var xy = subitem.StyleId;
+            //                if (xy != null)
+            //                {
+            //                    if (xy.Contains(type))
+            //                    {
+            //                        var d = subitem.GetType();
+            //                        if ((subitem.GetType()).Name.ToLower() != "button")
+            //                            return subitem;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else if (controlType == "DatePicker")
+            //{
+            //    foreach (StackLayout v in TextFieldsLayout.Children)
+            //    {
+            //        foreach (StackLayout item in v.Children)
+            //        {
+            //            foreach (var subitem in item.Children)
+            //            {
+            //                var _styleId = subitem.StyleId;
+            //                Type ty = subitem.GetType();
+            //                if (_styleId != null)
+            //                {
+            //                    if (ty.Name == "DatePicker")
+            //                    {
+            //                        if (_styleId.Contains(type.Split('_')[1]))
+            //                        {
+            //                            return subitem;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else if (controlType == "Image")
+            //{
+            //    foreach (StackLayout v in TextFieldsLayout.Children)
+            //    {
+            //        foreach (StackLayout item in v.Children)
+            //        {
+            //            foreach (var subitem in item.Children)
+            //            {
+            //                var _styleId = subitem.StyleId;
+            //                Type ty = subitem.GetType();
+            //                if (_styleId != null)
+            //                {
+            //                    if (ty.Name == "Image")
+            //                    {
+            //                        if (_styleId.Contains(type.Split('_')[1]))
+            //                        {
+            //                            return subitem;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else if (controlType == "Button")
+            //{
+            //    foreach (StackLayout v in TextFieldsLayout.Children)
+            //    {
+            //        foreach (StackLayout item in v.Children)
+            //        {
+            //            foreach (var subitem in item.Children)
+            //            {
+            //                var _styleId = subitem.StyleId;
+            //                Type ty = subitem.GetType();
+            //                if (_styleId != null)
+            //                {
+            //                    if (ty.Name == "Button")
+            //                    {
+            //                        if (_styleId.Contains(type))
+            //                        {
+            //                            return subitem;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else if (controlType == "Picker")
+            //{
+            //    foreach (StackLayout v in TextFieldsLayout.Children)
+            //    {
+            //        foreach (StackLayout item in v.Children)
+            //        {
+            //            foreach (var subitem in item.Children)
+            //            {
+            //                var _styleId = subitem.StyleId;
+            //                Type ty = subitem.GetType();
+            //                if (_styleId != null)
+            //                {
+            //                    if (ty.Name == "Picker")
+            //                    {
+            //                        if (_styleId.Contains(type))
+            //                        {
+            //                            return subitem;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             return null;
         }
@@ -1962,25 +2599,47 @@ namespace StemmonsMobile.Views.Entity
                     var _field_type1 = EntitySchemaLists.AssociationFieldCollection[i].FieldType;
 
                     var cnt = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                    var cntbtn = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                    if (cntbtn != null)
+                    {
+                        Type cnt_type = cntbtn.GetType();
+                        var ent = new Entry();
+                        var editor = new BorderEditor();
+                        var img = new Image();
+                        var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == cntbtn.Text).ToList();
+                        if (cnt_type.Name.ToLower() == "button")
+                        {
+                            if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
+                            {
+                                if (ItmSrc.Count == 0)
+                                {
+                                    IsRequiredFieldEmpty = true;
+                                    ((Button)cntbtn).Focus();
+                                    ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     if (cnt != null)
                     {
                         Type cnt_type = cnt.GetType();
                         var ent = new Entry();
                         var editor = new BorderEditor();
                         var img = new Image();
-                        if (cnt_type.Name.ToLower() == "picker")
-                        {
-                            if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
-                            {
-                                if ((((Picker)cnt).SelectedItem as EXTERNAL_DATASOURCE1).ID == 0)
-                                {
-                                    IsRequiredFieldEmpty = true;
-                                    ((Picker)cnt).Focus();
-                                    ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
-                                    break;
-                                }
-                            }
-                        }
+                        //if (cnt_type.Name.ToLower() == "picker")
+                        //{
+                        //    if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
+                        //    {
+                        //        if ((((Picker)cnt).SelectedItem as EXTERNAL_DATASOURCE1).ID == 0)
+                        //        {
+                        //            IsRequiredFieldEmpty = true;
+                        //            ((Picker)cnt).Focus();
+                        //            ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                        //            break;
+                        //        }
+                        //    }
+                        //}
                         if (cnt_type.Name.ToLower() == "entry")
                         {
                             ent = (Entry)cnt;
@@ -2067,20 +2726,49 @@ namespace StemmonsMobile.Views.Entity
                             case "EL":
                             case "ME":
 
+                                //var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                //Type cnt_type = cnt.GetType();
+                                //var pick_Ext_datasrc = new Picker();
+                                //if (cnt_type.Name.ToLower() == "picker")
+                                //{
+                                //    pick_Ext_datasrc = (Picker)cnt;
+                                //}
+                                //var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
+                                //if (pick_value == null)
+                                //    break;
+                                //AssociationMetaData Asso_metadata_value = new AssociationMetaData();
+                                //Asso_metadata_value.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
+                                //Asso_metadata_value.ExternalDatasourceObjectID = pick_value.ID.ToString();
+                                //Asso_metadata_value.FieldValue = pick_value.EXTERNAL_DATASOURCE_NAME;
+                                //Asso_metadata_value.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+
+                                //eAssociationField.AssocMetaData.Add(Asso_metadata_value);
+                                //break;
                                 var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                var btnCnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt.Text).ToList();
                                 Type cnt_type = cnt.GetType();
                                 var pick_Ext_datasrc = new Picker();
                                 if (cnt_type.Name.ToLower() == "picker")
                                 {
                                     pick_Ext_datasrc = (Picker)cnt;
                                 }
-                                var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
-                                if (pick_value == null)
-                                    break;
+                                //var btn_value = btn_Ext_datasrc.Text as EXTERNAL_DATASOURCE1;
+                                //var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
+                                //if (pick_value == null)
+                                //    break;
                                 AssociationMetaData Asso_metadata_value = new AssociationMetaData();
                                 Asso_metadata_value.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
-                                Asso_metadata_value.ExternalDatasourceObjectID = pick_value.ID.ToString();
-                                Asso_metadata_value.FieldValue = pick_value.EXTERNAL_DATASOURCE_NAME;
+                                if (ItmSrc.Count == 0)
+                                {
+                                    Asso_metadata_value.ExternalDatasourceObjectID = "0";
+                                    Asso_metadata_value.FieldValue = null;
+                                }
+                                else
+                                {
+                                    Asso_metadata_value.ExternalDatasourceObjectID = ItmSrc[0].ID.ToString();
+                                    Asso_metadata_value.FieldValue = ItmSrc[0].EXTERNAL_DATASOURCE_NAME;
+                                }
                                 Asso_metadata_value.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
 
                                 eAssociationField.AssocMetaData.Add(Asso_metadata_value);
@@ -2090,7 +2778,27 @@ namespace StemmonsMobile.Views.Entity
                             #region SS - MS
                             case "SS":
                             case "MS":
+                                //var cnt1 = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                //Type cnt_type1 = cnt1.GetType();
+                                //var pick_assocDeccod = new Picker();
+                                //if (cnt_type1.Name.ToLower() == "picker")
+                                //{
+                                //    pick_assocDeccod = (Picker)cnt1;
+                                //}
+
+                                //var pick_value1 = pick_assocDeccod.SelectedItem as EXTERNAL_DATASOURCE1;
+                                //AssociationMetaData Asso_metadata_value1 = new AssociationMetaData();
+                                //Asso_metadata_value1.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
+                                //Asso_metadata_value1.ExternalDatasourceObjectID = Convert.ToString(pick_value1.ID);
+                                //Asso_metadata_value1.AssocDecodeID = pick_value1.ID;
+                                //Asso_metadata_value1.FieldValue = pick_value1.EXTERNAL_DATASOURCE_NAME;
+                                //Asso_metadata_value1.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+
+                                //eAssociationField.AssocMetaData.Add(Asso_metadata_value1);
+                                //break;
                                 var cnt1 = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                var btnCnt1 = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                var ItmSrc1 = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt1.Text).ToList();
                                 Type cnt_type1 = cnt1.GetType();
                                 var pick_assocDeccod = new Picker();
                                 if (cnt_type1.Name.ToLower() == "picker")
@@ -2101,9 +2809,18 @@ namespace StemmonsMobile.Views.Entity
                                 var pick_value1 = pick_assocDeccod.SelectedItem as EXTERNAL_DATASOURCE1;
                                 AssociationMetaData Asso_metadata_value1 = new AssociationMetaData();
                                 Asso_metadata_value1.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
-                                Asso_metadata_value1.ExternalDatasourceObjectID = Convert.ToString(pick_value1.ID);
-                                Asso_metadata_value1.AssocDecodeID = pick_value1.ID;
-                                Asso_metadata_value1.FieldValue = pick_value1.EXTERNAL_DATASOURCE_NAME;
+                                if (ItmSrc1.Count == 0)
+                                {
+                                    Asso_metadata_value1.ExternalDatasourceObjectID = "0";
+                                    Asso_metadata_value1.AssocDecodeID = 0;
+                                    Asso_metadata_value1.FieldValue = null;
+                                }
+                                else
+                                {
+                                    Asso_metadata_value1.ExternalDatasourceObjectID = Convert.ToString(ItmSrc1[0].ID);
+                                    Asso_metadata_value1.AssocDecodeID = ItmSrc1[0].ID;
+                                    Asso_metadata_value1.FieldValue = ItmSrc1[0].EXTERNAL_DATASOURCE_NAME;
+                                }
                                 Asso_metadata_value1.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
 
                                 eAssociationField.AssocMetaData.Add(Asso_metadata_value1);
@@ -2322,6 +3039,7 @@ namespace StemmonsMobile.Views.Entity
                         if (sFieldType.ToUpper() == "EL" || sFieldType.ToUpper() == "SE" || sFieldType.ToUpper() == "ME")
                         {
                             var pick = FindEntityControl(sFieldType + "_" + subItem) as Picker;
+                            var btn = FindEntityControl(sFieldType + "_" + subItem, "Button") as Button;
                             List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
                             EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1();
                             ed1.Count = 0;
@@ -2331,6 +3049,8 @@ namespace StemmonsMobile.Views.Entity
                             _list_ed1.Add(ed1);
                             pick.ItemsSource = _list_ed1;
                             pick.SelectedIndex = 0;
+                            btn.Text = "-- Select Item --";
+                            btn.IsEnabled = false;
                         }
 
                         ClearEntityChildControls(subItem);
@@ -2603,4 +3323,19 @@ namespace StemmonsMobile.Views.Entity
             await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
         }
     }
+    //public class TextViewCell : ViewCell
+    //{
+    //    public TextViewCell()
+    //    {
+    //        StackLayout layout = new StackLayout();
+    //        layout.BackgroundColor = Color.Transparent;
+    //        layout.Padding = new Thickness(15, 0, 15, 0);
+    //        Label label = new Label();
+    //        label.TextColor = Color.Black;
+
+    //        label.SetBinding(Label.TextProperty, ".");
+    //        layout.Children.Add(label);
+    //        View = layout;
+    //    }
+    //}
 }
