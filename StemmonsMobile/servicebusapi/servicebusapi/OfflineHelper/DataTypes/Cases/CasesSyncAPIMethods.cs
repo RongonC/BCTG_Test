@@ -4142,8 +4142,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             {
                 SearchRequest sr = new SearchRequest();
                 sr.SystemId = SystemId;
-                sr.TypeId = null;
-                sr.FieldId = null;
                 sr.SearchText = _SearchText;
                 sr.FromPageIndex = _FromPageIndex;
                 sr.ToPageIndex = _ToPageIndex;

@@ -21,6 +21,7 @@ using System.Globalization;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemCategoriesByItemIDResponse;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemQuestionFieldsByItemCategoryID_ViewScoresResponse;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemInfoDependencyResponse;
+using static StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse;
 
 namespace StemmonsMobile.Views.CreateQuestForm
 {
@@ -33,7 +34,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         int RequiredFieldCount = 0;
         int ViewCount, SaveClick;
         string clickedCategoryId = string.Empty;
-        List<ItemInfoField> lst_NewQuestFormFields = new List<ItemInfoField>();
+        List<ItemInfoField> Control_Schema = new List<ItemInfoField>();
         AddFormRequest addForm = new AddFormRequest();
         string jsonaddForm = string.Empty;
         double avpoints = 0.0;
@@ -43,11 +44,17 @@ namespace StemmonsMobile.Views.CreateQuestForm
         List<Add_Questions_MetadataRequest> CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
         List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId> lstcatbyitemid = new List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId>();
 
+
+        GetExternalDatasourceByIDResponse.ExternalDataSource ExdDefaultValue = new GetExternalDatasourceByIDResponse.ExternalDataSource
+        {
+            strObjectID = "-1",
+            strName = "-- Select Item --",
+            strDescription = "-- Select Item --"
+        };
         //ArpanB Start
         public static ObservableCollection<string> Exditems { get; set; }
         public Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>> lstexnaldatasouce = new Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>>();
         List<GetExternalDatasourceByIDResponse.ExternalDataSource> lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
-        Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>> lstextdatasourceHistory = new Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDataSource>>();
         int iSelectedItemlookupId = 0;
         ListView lstView = new ListView();
         //ArpanB End
@@ -107,8 +114,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     await Task.Run(action: () =>
                     {
                         var result = QuestSyncAPIMethods.AssignControlsAsync(App.Isonline, Convert.ToString(itemid), Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                        lst_NewQuestFormFields = result.Result;
-
+                        Control_Schema = result.Result;
 
                         var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, "0");
                         lstItemInfoDependancy = getInfoDepeResult.Result;
@@ -118,7 +124,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         lstcatbyitemid = getitemcategoryCall.Result;
                     });
 
-                    for (int i = 0; i < lst_NewQuestFormFields.Count; i++)
+                    #region Draw Control Dynamically
+
+                    for (int i = 0; i < Control_Schema.Count; i++)
                     {
                         var layout = new StackLayout();
                         layout.Orientation = StackOrientation.Horizontal;
@@ -133,9 +141,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         };
 
                         FormattedString frmtText = new FormattedString();
-                        frmtText.Spans.Add(new Span { Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc + ":" });
+                        frmtText.Spans.Add(new Span { Text = Control_Schema[i].strItemInfoFieldDesc + ":" });
 
-                        if (lst_NewQuestFormFields[i].strIsRequired.ToLower() == "y")
+                        if (Control_Schema[i].strIsRequired.ToLower() == "y")
                             frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
 
                         Label1.FormattedText = frmtText;
@@ -150,19 +158,17 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         var Rightlayout = new StackLayout();
                         Rightlayout.HorizontalOptions = LayoutOptions.Start;
 
-                        switch (lst_NewQuestFormFields[i].strFieldType.ToLower())
+                        switch (Control_Schema[i].strFieldType.ToLower())
                         {
                             #region -- SE -- EL -- ME --
                             case "se":
                             case "el":
                             case "me":
-                                //Picker pk = new Picker();
-                                //pk.WidthRequest = 200;
-                                //List<GetExternalDatasourceByIDResponse.ExternalDataSource> view = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
-                                //GetExternalDatasourceByIDResponse.ExternalDataSource dt = new GetExternalDatasourceByIDResponse.ExternalDataSource();
-                                //dt.strObjectID = "-1";
-                                //dt.strName = "-- Select Item --";
-                                //dt.strDescription = "-- Select Item --";
+                                Picker pk = new Picker();
+                                pk.WidthRequest = 200;
+                                List<GetExternalDatasourceByIDResponse.ExternalDataSource> view = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+
+                                #region Old Code
 
                                 //if (App.Isonline)
                                 //{
@@ -178,21 +184,17 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 //{
                                 //    var ExternalCall = QuestSyncAPIMethods.GetExternalDatasourceByID(App.Isonline, Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
                                 //    view = ExternalCall.Result;
-                                //}
+                                //} 
+                                #endregion
 
-                                //view.Insert(0, dt);
-                                //pk.ItemsSource = view;
+                                view.Insert(0, ExdDefaultValue);
+                                pk.ItemsSource = view;
                                 //pk.TextColor = Color.Gray;
 
-                                //pk.ItemDisplayBinding = new Binding("strName");
-                                //pk.SelectedIndex = 0;
-                                //pk.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                //pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-                                //Rightlayout.Children.Add(pk);
-
-                                Picker pk = new Picker();
-                                pk.WidthRequest = 200;
-                                pk.TextColor = Color.Gray;
+                                pk.ItemDisplayBinding = new Binding("strName");
+                                pk.SelectedIndex = 0;
+                                pk.IsVisible = false;
+                                pk.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
 
                                 Button itm_look_button = new Button();
                                 itm_look_button.WidthRequest = 200;
@@ -211,15 +213,21 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     itm_look_button.CornerRadius = 5;
                                 }
 
-                                pk.IsVisible = false;
                                 itm_look_button.IsVisible = true;
 
-                                pk.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
-                                itm_look_button.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+
+                                List<GetItemInfoDependencyResponse.ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy?.Where(t => t.intItemInfoFieldIDChild == Control_Schema[i].intItemInfoFieldID).ToList();
+
+                                if (infoFieldChild.Count >= 1)
+                                    itm_look_button.IsEnabled = false;
+
+
+                                itm_look_button.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
 
                                 itm_look_button.Clicked += itm_look_button_Clicked;
                                 itm_look_button.Text = "-- Select Item --";
                                 itm_look_button.WidthRequest = 200;
+
                                 Rightlayout.Children.Add(pk);
                                 Rightlayout.Children.Add(itm_look_button);
                                 Rightlayout.BackgroundColor = Color.Gray;
@@ -236,10 +244,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 txt_Date.TextColor = Color.Gray;
                                 txt_Date.Keyboard = Keyboard.Numeric;
                                 txt_Date.Text = "";
-                                txt_Date.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                txt_Date.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
 
                                 Image img_clr = new Image();
-                                img_clr.StyleId = "imgdo_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                img_clr.StyleId = "imgdo_" + Control_Schema[i].intItemInfoFieldID;
                                 img_clr.Source = ImageSource.FromFile("Assets/erase16.png");
                                 img_clr.WidthRequest = 25;
                                 img_clr.HeightRequest = 25;
@@ -249,13 +257,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 date_pick.Format = "MM/dd/yyyy";
                                 date_pick.WidthRequest = 200;
                                 date_pick.TextColor = Color.Gray;
-                                date_pick.StyleId = "do_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                date_pick.StyleId = "do_" + Control_Schema[i].intItemInfoFieldID;
                                 #endregion
 
                                 try
                                 {
 
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
+                                    if (!(Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("C") || Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
                                         txt_Date.IsEnabled = false;
                                     }
@@ -327,10 +335,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 TA.FontSize = 16;
                                 TA.Keyboard = Keyboard.Default;
 
-                                TA.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                TA.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
                                 try
                                 {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
+                                    if (!(Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("C") || Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
                                         TA.IsEnabled = false;
                                     }
@@ -353,15 +361,15 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 ST.WidthRequest = 200;
                                 ST.FontSize = 16;
 
-                                if (lst_NewQuestFormFields[i].strFieldType.ToLower() == "st" || lst_NewQuestFormFields[i].strFieldType.ToLower() == "hl")
+                                if (Control_Schema[i].strFieldType.ToLower() == "st" || Control_Schema[i].strFieldType.ToLower() == "hl")
                                     ST.Keyboard = Keyboard.Default;
                                 else
                                     ST.Keyboard = Keyboard.Numeric;
 
-                                ST.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                ST.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
                                 try
                                 {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
+                                    if (!(Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("C") || Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
                                         ST.IsEnabled = false;
                                     }
@@ -379,10 +387,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 CL.WidthRequest = 200;
                                 CL.FontSize = 16;
                                 CL.IsEnabled = false;
-                                CL.StyleId = lst_NewQuestFormFields[i].strFieldType.ToLower() + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID;
+                                CL.StyleId = Control_Schema[i].strFieldType.ToLower() + "_" + Control_Schema[i].intItemInfoFieldID;
                                 try
                                 {
-                                    if (!(lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("C") || lst_NewQuestFormFields[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
+                                    if (!(Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("C") || Control_Schema[i].FIELD_SECURITY.ToUpper().Contains("OPEN")))
                                     {
                                         CL.IsEnabled = false;
                                     }
@@ -403,7 +411,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         DynamicFields.Children.Add(layout);
                     }
 
-                    //int ii = 0;
+                    #endregion
+
+                    #region Set Question Category Grid
                     for (int i = 0; i < lstcatbyitemid.Count; i++)
                     {
                         ItemCategoryByItemId itemCatByid = lstcatbyitemid[i];
@@ -424,6 +434,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             avpoints += Convert.ToDouble(itemcategoryscroreList.Where(a => a.intItemCategoryID == itemCatByid.intItemCategoryID).Sum(v => v.dcPointsAvailable));
                         }
                     }
+                    #endregion
 
                     listQuesCategorydata.ItemsSource = lstcatbyitemid;
 
@@ -442,15 +453,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
             else
             {
+                // Called When Come back from Question Detail Page to show Updated Score
                 try
                 {
-
                     var availpoints = Functions.questObjectData.pPOINTS_AVAILABLE.Split(',');
                     decimal Aval = 0;
                     foreach (var _item in availpoints)
                     {
                         Aval += Convert.ToInt32(_item);
-
                     }
 
                     var Earnedpoints = Functions.questObjectData.pPOINTS_EARNED.Split(',');
@@ -501,28 +511,25 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
         private async void itm_look_button_Clicked(object sender, EventArgs e)
         {
-            Button btn_cancel = new Button()
-            {
-                Text = "Cancel",
-                WidthRequest = 100,
-                HeightRequest = 40,
-                Margin = new Thickness(0, 0, 10, 10),
-                TextColor = Color.Accent,
-                BackgroundColor = Color.Transparent,
-                HorizontalOptions = LayoutOptions.EndAndExpand,
-                VerticalOptions = LayoutOptions.EndAndExpand
-            };
-            btn_cancel.Clicked += Btn_cancel_Clicked;
-
-            SearchBar ext_search = new SearchBar();
-            ext_search.TextChanged += ext_serch;
-
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
 
             try
             {
-                //this.popupLT.IsVisible = true;
-                //this.masterGrid.IsVisible = false;                
+                Button btn_cancel = new Button()
+                {
+                    Text = "Cancel",
+                    WidthRequest = 100,
+                    HeightRequest = 40,
+                    Margin = new Thickness(0, 0, 10, 10),
+                    TextColor = Color.Accent,
+                    BackgroundColor = Color.Transparent,
+                    HorizontalOptions = LayoutOptions.EndAndExpand,
+                    VerticalOptions = LayoutOptions.EndAndExpand
+                };
+                btn_cancel.Clicked += Btn_cancel_Clicked;
+
+                SearchBar ext_search = new SearchBar();
+                ext_search.TextChanged += ext_serch;
 
                 lstView.ItemsSource = null;
 
@@ -530,7 +537,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 string[] exdID = btn.StyleId.Split('_');
                 iSelectedItemlookupId = int.Parse(exdID[1]);
                 int? EDS = 0;
-                foreach (var item in lst_NewQuestFormFields)
+                foreach (var item in Control_Schema)
                 {
                     if (item.intItemInfoFieldID == iSelectedItemlookupId)
                     {
@@ -542,12 +549,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 List<GetExternalDatasourceByIDResponse.ExternalDataSource> lst_extdatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
                 lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
 
-                lstexternaldatasource.Add(new GetExternalDatasourceByIDResponse.ExternalDataSource
-                {
-                    strName = "-- Select Item --",
-                    strDescription = "-- Select Item --",
-                    strObjectID = "0"
-                });
+                lstexternaldatasource.Add(ExdDefaultValue);
 
                 List<ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDChild == iSelectedItemlookupId).ToList();
 
@@ -555,10 +557,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     //FindQuestControl -- picker
 
-                    var Child1 = lst_NewQuestFormFields.Where(t => t.intItemInfoFieldID == iSelectedItemlookupId).ToList();
-
-                    //var Child1 = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDParent == iSelectedItemlookupId).ToList();
-
+                    var Child1 = Control_Schema.Where(t => t.intItemInfoFieldID == iSelectedItemlookupId).ToList();
 
                     foreach (var iChild in Child1)
                     {
@@ -631,34 +630,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                             List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(qResult.ToString());
 
                                             lstexternaldatasource.AddRange(l);
-                                            //drp.ItemsSource = null;
-                                            //drp.ItemsSource = l;
-                                            //drp.SelectedIndex = 0;
                                         }
                                         catch (Exception ex) { }
 
                                     }
                                 }
                             }
-
-                            //if (sQuery.ToUpper().Contains("|CURRENT_USER"))
-                            //{
-                            //    sQuery = GetQueryStringWithParamaters(sQuery, "CURRENT_USER", Functions.UserName);
-                            //}
-
-                            //try
-                            //{
-                            //    var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
-                            //    var qResult = qUesponse.GetValue("ResponseContent");
-                            //    List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(qResult.ToString());
-
-                            //    lstexternaldatasource.AddRange(l);
-                            //    //drp.ItemsSource = null;
-                            //    //drp.ItemsSource = l;
-                            //    //drp.SelectedIndex = 0;
-                            //}
-                            //catch (Exception ex) { }
-
                         }
                     }
                 }
@@ -723,22 +700,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 });
 
                 Stack_Popup.IsVisible = true;
-                //popupLT.IsVisible = true;
                 masterGrid.IsVisible = false;
-                //     this.masterGrid.IsEnabled = false;
 
                 Stack_Popup.HeightRequest = this.Height - 20;
-                //popupLT.HeightRequest = this.Height - 20;
-                // Bor_popupLT.HeightRequest = this.Height - 20;
-
                 Stack_Popup.WidthRequest = this.Width - 20;
-                // popupLT.WidthRequest = this.Width - 20;
-                //Bor_popupLT.WidthRequest = this.Width - 20;
-
-                //popupLT.IsVisible = true;
-                //Bor_popupLT.IsVisible = true;
-                //this.masterGrid.IsVisible = false;
-
                 #endregion
 
             }
@@ -748,63 +713,74 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
+
+
         private void OnSelection(object sender, SelectedItemChangedEventArgs e)
         {
-            // iSelectedItemlookupId
-            if (e.SelectedItem == null)
+            try
             {
-                return;
+                if (e.SelectedItem == null)
+                {
+                    return;
+                }
+
+                Stack_Popup.IsVisible = false;
+                masterGrid.IsVisible = true;
+
+                var pik_cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "picker");
+                var cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "button");
+
+                RefreshDropDownsAndLookUp(iSelectedItemlookupId);
+
+                if (cntrl != null)
+                {
+                    Button q_btn = cntrl as Button;
+                    q_btn.FontSize = 16;
+                    q_btn.Text = e.SelectedItem.ToString();
+
+                    Picker q_pik = pik_cntrl as Picker;
+
+                    var lst = lstexternaldatasource.Where(t => t.strName.ToLower().Contains(q_btn.Text.ToLower())).ToList();
+
+                    if (lst?.FirstOrDefault().strName != "-- Select Item --")
+                    {
+                        lst.Insert(0, ExdDefaultValue);
+                        q_pik.ItemsSource = lst;
+                        q_pik.SelectedIndex = 1;
+                    }
+                    else
+                        q_pik.SelectedIndex = 0;
+
+
+                    List<ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDParent == iSelectedItemlookupId).ToList();
+
+                    foreach (var item in infoFieldChild)
+                    {
+                        try
+                        {
+                            Button btn = FindQuestControl(item.intItemInfoFieldIDChild.ToString(), "button") as Button;
+                            if (q_pik.SelectedIndex != 0)
+                                btn.IsEnabled = true;
+                            else
+                                btn.IsEnabled = false;
+                        }
+                        catch
+                        { }
+                    }
+                }
+
+                ((ListView)sender).SelectedItem = null;
             }
-
-            Stack_Popup.IsVisible = false;
-            //popupLT.IsVisible = true;
-            masterGrid.IsVisible = true;
-            //   this.masterGrid.IsEnabled = true;
-
-            //this.masterGrid.IsVisible = true;
-            //this.popupLT.IsVisible = false;
-            //this.Bor_popupLT.IsVisible = false;
-
-            var pik_cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "picker");
-            var cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "button");
-
-
-            if (cntrl != null)
+            catch (Exception)
             {
-                Button q_btn = cntrl as Button;
-                q_btn.FontSize = 16;
-                q_btn.Text = e.SelectedItem.ToString();
-
-                Picker q_pik = pik_cntrl as Picker;
-
-                var lst = lstexternaldatasource.Where(t => t.strName.ToLower().Contains(q_btn.Text.ToLower())).ToList();
-
-                q_pik.ItemsSource = lst;
-                q_pik.SelectedIndex = 0;
-
-                if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
-                {
-                    lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
-                }
-                else
-                {
-                    lstextdatasourceHistory[iSelectedItemlookupId] = lst;
-                }
-
-                //  fillchildControl("_" + iSelectedItemlookupId.ToString());
+                ((ListView)sender).SelectedItem = null;
             }
         }
 
         private void Btn_cancel_Clicked(object sender, EventArgs e)
         {
             Stack_Popup.IsVisible = false;
-            //popupLT.IsVisible = true;
             masterGrid.IsVisible = true;
-            // this.masterGrid.IsEnabled = true;
-
-            //this.masterGrid.IsVisible = true;
-            //popupLT.IsVisible = false;
-            //Bor_popupLT.IsVisible = false;            
         }
 
 
@@ -911,11 +887,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
         private void RefreshDropDownsAndLookUp(int itemInfofieldId)
         {
-            // using (SEMonitoredScope scope = new SEMonitoredScope("BP.Quest", "_NewForm - RefreshDropDownsAndLookUp"))
             try
             {
-
-
                 List<GetItemInfoDependencyResponse.ItemInfoDependancy> infoFieldChild = lstItemInfoDependancy.Where(t => t.intItemInfoFieldIDParent == itemInfofieldId).ToList();
 
                 if (infoFieldChild.Count <= 0)
@@ -926,27 +899,31 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     Picker drp = FindQuestControl(item.intItemInfoFieldIDChild.ToString()) as Picker;
                     if (drp != null)
                     {
+                        List<ExternalDataSource> l = new List<ExternalDataSource>();
 
-                        List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource> l = new List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource>();
-
-                        GetExternalDatasourceInfoByIDResponse.ExternalDataSource ed = new GetExternalDatasourceInfoByIDResponse.ExternalDataSource
-                        {
-                            strObjectID = "-1",
-                            strName = "-- Select Item --",
-                            strDescription = "-- Select Item --"
-                        };
-
-                        l.Insert(0, ed);
+                        l.Insert(0, ExdDefaultValue);
                         drp.ItemsSource = l;
                         drp.SelectedIndex = 0;
                     }
 
+                    /*New Added For Button text*/
+
+                    try
+                    {
+                        Button btn = FindQuestControl(item.intItemInfoFieldIDChild.ToString(), "button") as Button;
+                        btn.Text = "-- Select Item --";
+                        btn.IsEnabled = false;
+                    }
+                    catch (Exception)
+                    {
+                    }
+
                     RefreshDropDownsAndLookUp(item.intItemInfoFieldIDChild);
                 }
-
             }
             catch (Exception ex)
             {
+
 
             }
         }
@@ -1026,13 +1003,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
                                 var qResult = qUesponse.GetValue("ResponseContent");
-                                List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceInfoByIDResponse.ExternalDataSource>>(qResult.ToString());
-                                GetExternalDatasourceInfoByIDResponse.ExternalDataSource ed = new GetExternalDatasourceInfoByIDResponse.ExternalDataSource();
+                                List<GetExternalDatasourceByIDResponse.ExternalDataSource> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(qResult.ToString());
 
-                                ed.strObjectID = "-1";
-                                ed.strName = "-- Select Item --";
-                                ed.strDescription = "-- Select Item --";
-                                l.Insert(0, ed);
+                                l.Insert(0, ExdDefaultValue);
                                 drp.ItemsSource = null;
                                 drp.ItemsSource = l;
                                 drp.SelectedIndex = 0;
@@ -1240,22 +1213,21 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     isCaseRequested = "",
                     createdBy = Functions.UserName,
                     notes = ""
-
                 };
                 infoobj.ItemInfoFieldData = new AddFormRequest.InfoFieldValues();
 
 
-                for (int i = 0; i < lst_NewQuestFormFields.Count; i++)
+                for (int i = 0; i < Control_Schema.Count; i++)
                 {
                     AddFormRequest.InfoFieldValues iValue = new AddFormRequest.InfoFieldValues();
                     infoobj = new AddFormRequest.ItemInfoFieldInfo();
-                    var _field_type = lst_NewQuestFormFields[i].strFieldType.ToLower();
+                    var _field_type = Control_Schema[i].strFieldType.ToLower();
                     switch (_field_type)
                     {
                         case "se":
                         case "el":
                         case "me":
-                            var cnt = FindQuestControl((_field_type) + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID);
+                            var cnt = FindQuestControl((_field_type) + "_" + Control_Schema[i].intItemInfoFieldID);
                             Type cnt_type = cnt.GetType();
                             var pick_Ext_datasrc = new Picker();
                             if (cnt_type.Name.ToLower() == "picker")
@@ -1263,72 +1235,43 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 pick_Ext_datasrc = (Picker)cnt;
                             }
 
-                            if (lst_NewQuestFormFields[i].strIsRequired == "Y")
+                            //if (lst_NewQuestFormFields[i].strIsRequired == "Y")
                             {
-
-
-                                if (Convert.ToInt32(pick_Ext_datasrc.SelectedIndex) == 0)
+                                if (Control_Schema[i].strIsRequired == "Y" && Convert.ToInt32(pick_Ext_datasrc.SelectedIndex) == 0)
                                 {
-                                    DisplayAlert("Field Required.", "Please enter valid data in " + lst_NewQuestFormFields[i].strItemInfoFieldName, "OK");
+                                    DisplayAlert("Field Required.", "Please enter valid data in " + Control_Schema[i].strItemInfoFieldName, "OK");
                                     RequiredFieldCount = RequiredFieldCount + 1;
                                     goto requiredJump;
                                 }
                                 else
                                 {
-                                    if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
+                                    //if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
                                     {
                                         pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource;
                                         strobjid = Convert.ToString(pickervalue.strObjectID);
-                                        if (pickervalue == null)
-                                        {
-                                            pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                        strobjid = Convert.ToString(pickervalue.strObjectID);
-                                        if (pickervalue == null)
-                                        {
-                                            pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                        }
-
                                     }
                                     iValue.ItemInfoFieldText = pickervalue.strName;
                                     //iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
                                     iValue.externalDatasourceObjectIDs = Convert.ToString(strobjid);
-                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                 }
                             }
-                            else
-                            {
+                            //else
+                            //{
 
-                                if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
-                                {
+                            //    //if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
+                            //    {
 
-                                    pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource;
-                                    strobjid = Convert.ToString(pickervalue.strObjectID);
-                                    if (pickervalue == null)
-                                    {
-                                        pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                    }
-                                }
-                                else
-                                {
-                                    pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                    strobjid = Convert.ToString(pickervalue.strObjectID);
-                                    if (pickervalue == null)
-                                    {
-                                        pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource;
-                                    }
+                            //        pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDataSource;
+                            //        strobjid = Convert.ToString(pickervalue.strObjectID);
 
-                                }
+                            //    }
 
-                                iValue.ItemInfoFieldText = pickervalue.strName;
-                                //iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i]);
-                                iValue.externalDatasourceObjectIDs = Convert.ToString(strobjid);
-                                infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
-                            }
+                            //    iValue.ItemInfoFieldText = pickervalue.strName;
+                            //    //iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i]);
+                            //    iValue.externalDatasourceObjectIDs = Convert.ToString(strobjid);
+                            //    infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                            //}
 
                             break;
 
@@ -1342,7 +1285,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         case "et":
                         case "cl":
 
-                            cnt = FindQuestControl((_field_type) + "_" + lst_NewQuestFormFields[i].intItemInfoFieldID);
+                            cnt = FindQuestControl((_field_type) + "_" + Control_Schema[i].intItemInfoFieldID);
                             cnt_type = cnt.GetType();
                             if (cnt_type.Name.ToLower() == "datepicker")
                             {
@@ -1351,8 +1294,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                 {
                                     iValue.ItemInfoFieldText += Convert.ToDateTime(App.DateFormatStringToString(date_pick.Date.ToString())).Date.ToString("MM/dd/yyyy");
-                                    iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
-                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                    iValue.externalDatasourceObjectIDs = Convert.ToString(Control_Schema[i].intExternalDatasourceID);
+                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                 }
                             }
                             else if (cnt_type.Name.ToLower() == "entry")
@@ -1360,53 +1303,53 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 var ent = new Entry();
                                 ent = (Entry)cnt;
 
-                                if (lst_NewQuestFormFields[i].strIsRequired == "Y")
+                                if (Control_Schema[i].strIsRequired == "Y")
                                 {
                                     if (string.IsNullOrEmpty(ent.Text))
                                     {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + lst_NewQuestFormFields[i].strItemInfoFieldName, "OK");
+                                        DisplayAlert("Field Required.", "Please enter valid data in " + Control_Schema[i].strItemInfoFieldName, "OK");
                                         RequiredFieldCount = RequiredFieldCount + 1;
                                         goto requiredJump;
                                     }
                                     else
                                     {
                                         iValue.ItemInfoFieldText = ent.Text;
-                                        iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
-                                        infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                        iValue.externalDatasourceObjectIDs = Convert.ToString(Control_Schema[i].intExternalDatasourceID);
+                                        infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                     }
                                 }
                                 else
                                 {
                                     iValue.ItemInfoFieldText = ent.Text;
-                                    iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
-                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                    iValue.externalDatasourceObjectIDs = Convert.ToString(Control_Schema[i].intExternalDatasourceID);
+                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                 }
                             }
                             else if (cnt_type.Name.ToLower() == "bordereditor")
                             {
                                 var edit = new BorderEditor();
                                 edit = (BorderEditor)cnt;
-                                if (lst_NewQuestFormFields[i].strIsRequired == "Y")
+                                if (Control_Schema[i].strIsRequired == "Y")
                                 {
 
                                     if (string.IsNullOrEmpty(edit.Text))
                                     {
-                                        DisplayAlert("Field Required.", "Please enter valid data in " + lst_NewQuestFormFields[i].strItemInfoFieldName, "OK");
+                                        DisplayAlert("Field Required.", "Please enter valid data in " + Control_Schema[i].strItemInfoFieldName, "OK");
                                         RequiredFieldCount = RequiredFieldCount + 1;
                                         goto requiredJump;
                                     }
                                     else
                                     {
                                         iValue.ItemInfoFieldText = edit.Text;
-                                        iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
-                                        infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                        iValue.externalDatasourceObjectIDs = Convert.ToString(Control_Schema[i].intExternalDatasourceID);
+                                        infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                     }
                                 }
                                 else
                                 {
                                     iValue.ItemInfoFieldText = edit.Text;
-                                    iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
-                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(lst_NewQuestFormFields[i].intItemInfoFieldID));
+                                    iValue.externalDatasourceObjectIDs = Convert.ToString(Control_Schema[i].intExternalDatasourceID);
+                                    infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
                                 }
 
                             }

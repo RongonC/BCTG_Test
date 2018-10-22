@@ -135,7 +135,7 @@ namespace StemmonsMobile.Views.Search
 
                     await Task.Run(() =>
                     {
-                        list = CasesSyncAPIMethods.GetSearchResult(App.Isonline, Functions.UserName, Appid, null, null, null, SearchText.Text, 0, 10, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                        list = CasesSyncAPIMethods.GetSearchResult(App.Isonline, Functions.UserName, Appid, null, null, null, SearchText.Text,0, 10, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                     });
 
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
