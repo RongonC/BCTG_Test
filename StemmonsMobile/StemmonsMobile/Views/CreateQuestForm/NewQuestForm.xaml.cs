@@ -141,14 +141,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         };
 
                         FormattedString frmtText = new FormattedString();
-                        frmtText.Spans.Add(new Span { Text = Control_Schema[i].strItemInfoFieldDesc + ":" });
+                        frmtText.Spans.Add(new Span { Text = Control_Schema[i].strItemInfoFieldName + ":" });
 
                         if (Control_Schema[i].strIsRequired.ToLower() == "y")
                             frmtText.Spans.Add(new Span { Text = " *", ForegroundColor = Color.Red });
 
                         Label1.FormattedText = frmtText;
 
-                        // Label1.Text = lst_NewQuestFormFields[i].strItemInfoFieldDesc;//strItemInfoFieldName
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.FontSize = 16;
 

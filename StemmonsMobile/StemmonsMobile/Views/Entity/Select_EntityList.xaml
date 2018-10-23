@@ -19,7 +19,7 @@
                 
            
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
-                    <ListView x:Name="list_entity" Margin="0,0,0,0" RowHeight="30" 
+                    <ListView x:Name="list_entity" Margin="0,0,0,0" 
                       ItemTapped="List_entity_ItemTapped"  HasUnevenRows="True" >
                         <ListView.ItemTemplate>
                             <DataTemplate  >
@@ -29,7 +29,7 @@
                                 CommandParameter="{Binding .}" Clicked="Menu_Details_Clicked"/>
                                     </ViewCell.ContextActions>
                                     <ViewCell.View>
-                                        <StackLayout Orientation="Horizontal" HeightRequest="30">
+                                        <StackLayout Orientation="Horizontal">
                                             <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
                                                 <Label  Text="{Binding EntityTypeName}" VerticalOptions="Center"
                                                 TextColor="Black"  Margin="15,0,0,0"
