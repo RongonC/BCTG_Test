@@ -1070,7 +1070,7 @@ namespace StemmonsMobile.Views.Entity
                                 foreach (var parentID in ParentLst)
                                 {
                                     string sSelectedValue = null;
-                                    Picker pkCntrl = FindEntityControl(Convert.ToString(parentID), "Picker") as Picker;
+                                    Picker pkCntrl = FindEntityControl(Convert.ToString(parentID)) as Picker;
                                     Button btnCntrl = FindEntityControl(Convert.ToString(parentID), "Button") as Button;
 
                                     if (parentID == iSelectedItemlookupId)
@@ -1085,7 +1085,7 @@ namespace StemmonsMobile.Views.Entity
                                         {
                                             if (!Functions.IsEditEntity)
                                             {
-                                                var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID, "Picker");
+                                                var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID);
 
                                                 var ddlEds = (Picker)cnt;
                                                 List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
@@ -1318,7 +1318,7 @@ namespace StemmonsMobile.Views.Entity
 
 
                 var ctrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Button") as Button;
-                var pik_cntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Picker");
+                var pik_cntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId));
                 if (ctrl != null)
                 {
                     Button btn = ctrl as Button;
@@ -2134,7 +2134,7 @@ namespace StemmonsMobile.Views.Entity
                                 im.WidthRequest = 150;
                                 im.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID + "|" + (imgCon + 1) + "|" + response.ToString();
 
-                                im.Source = ImageSource.FromUri(new Uri("http://entities-s-15.boxerproperty.com/Download.aspx?FileID=" + response.ToString()));
+                                im.Source = ImageSource.FromUri(new Uri(App.EntityImgURL + "/Download.aspx?FileID=" + response.ToString()));
                                 stack.Children.Add(im);
                             }
                         }
@@ -2286,6 +2286,31 @@ namespace StemmonsMobile.Views.Entity
                             if (_styleId != null)
                             {
                                 if (ty.Name == "Button")
+                                {
+                                    if (_styleId.Contains(type))
+                                    {
+                                        return subitem;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            else if (controlType == "Picker")
+            {
+                foreach (StackLayout infofield in TextFieldsLayout.Children)
+                {
+                    foreach (StackLayout item in infofield.Children)
+                    {
+                        foreach (var subitem in item.Children)
+                        {
+                            var _styleId = subitem.StyleId;
+                            Type ty = subitem.GetType();
+                            if (_styleId != null)
+                            {
+                                if (ty.Name == "Picker")
                                 {
                                     if (_styleId.Contains(type))
                                     {

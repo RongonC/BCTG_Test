@@ -460,14 +460,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     decimal Aval = 0;
                     foreach (var _item in availpoints)
                     {
-                        Aval += Convert.ToInt32(_item);
+                        Aval += Convert.ToDecimal(_item);
                     }
 
                     var Earnedpoints = Functions.questObjectData.pPOINTS_EARNED.Split(',');
                     decimal Earn = 0;
                     foreach (var _item in Earnedpoints)
                     {
-                        Earn += Convert.ToInt32(_item);
+                        Earn += Convert.ToDecimal(_item);
                     }
 
                     decimal totalpercentage = Math.Round((Earn == 0 && Aval == 0) ? 0 : ((Earn / Aval) * 100), 0);

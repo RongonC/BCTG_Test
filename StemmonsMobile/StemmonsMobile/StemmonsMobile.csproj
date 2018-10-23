@@ -47,8 +47,6 @@
       <DependentUpon>AssignCase.xaml</DependentUpon>
     </Compile>
     <Compile Include="BorderEditor.cs" />
-    <Compile Include="CircleImage.cs" />
-    <Compile Include="Commands.cs" />
     <Compile Include="Commonfiles\APICalls.cs" />
     <Compile Include="Commonfiles\Constants.cs" />
     <Compile Include="Commonfiles\Functions.cs" />
@@ -86,7 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDataStore.cs" />
     <Compile Include="Services\MockDataStore.cs" />
-    <Compile Include="ToggleExpandCommand.cs" />
     <Compile Include="ViewModels\ApplicationListViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CaseTypeViewModel.cs" />

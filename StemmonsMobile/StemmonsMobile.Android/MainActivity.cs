@@ -25,7 +25,7 @@ namespace StemmonsMobile.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             UserDialogs.Init(this);
-            ImageCircleRenderer.Init();
+            //ImageCircleRenderer.Init();
             CrossCurrentActivity.Current.Init(this, bundle);
             //UserDialogs.Instance.ShowSuccess("True");
             LoadApplication(new App());
