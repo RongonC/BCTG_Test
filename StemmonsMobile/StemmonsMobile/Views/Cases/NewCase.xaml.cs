@@ -594,7 +594,7 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         var ct = (Image)s;
                                         var sty_id = ct.StyleId?.Split('_')[1];
-                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
                                         C_ent.Text = "";
                                     }
                                     catch (Exception)
@@ -940,7 +940,7 @@ namespace StemmonsMobile.Views.Cases
                                         break;
 
                                     case "a":
-                                        var cnt = FindCasesControls(iitem.ASSOC_TYPE_ID);
+                                        var cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "DatePicker");
                                         if (cnt != null)
                                         {
                                             DatePicker DO = new DatePicker();
@@ -954,7 +954,7 @@ namespace StemmonsMobile.Views.Cases
                                         break;
 
                                     case "x":
-                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID);
+                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "BorderEditor");
                                         if (cnt != null)
                                         {
                                             BorderEditor bd = cnt as BorderEditor;
@@ -968,7 +968,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "c":
                                     case "n":
                                     case "h":
-                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID);
+                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "Entry");
                                         if (cnt != null)
                                         {
                                             Entry entry = new Entry();
@@ -1244,72 +1244,170 @@ namespace StemmonsMobile.Views.Cases
             masterGrid.IsVisible = true;
         }
 
-        private object FindCasesControls(int AssocID, string Cnt_type = "")
+        private object FindCasesControls(int AssocID, string Cnt_type)
         {
             try
             {
-                if (string.IsNullOrEmpty(Cnt_type))
+                foreach (StackLayout infofield in Cases_EntryStack.Children)
                 {
-                    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
-                        foreach (StackLayout item in infofield.Children)
+                        foreach (var subitem in item.Children)
                         {
-
-                            foreach (var subitem in item.Children)
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name != "StackLayout")
                             {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-                                if (ty.Name != "StackLayout")
-                                    if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
+                                if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
                                         return xy;
-                            }
-                        }
-                    }
-                }
-                else if (Cnt_type == "DatePicker")
-                {
-                    foreach (StackLayout infofield in Cases_EntryStack.Children)
-                    {
-                        foreach (StackLayout item in infofield.Children)
-                        {
-                            foreach (var subitem in item.Children)
-                            {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-                                if (ty.Name != "StackLayout")
-                                {
-                                    if (ty.Name == "DatePicker")
-                                    {
-                                        if (xy.StyleId.Contains(AssocID.ToString()))
-                                            return xy;
-                                    }
                                 }
-                            }
-                        }
-                    }
-                }
-                else if (Cnt_type == "Image")
-                {
-                    foreach (StackLayout infofield in Cases_EntryStack.Children)
-                    {
-                        foreach (StackLayout item in infofield.Children)
-                        {
-                            foreach (var subitem in item.Children)
-                            {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-                                if (ty.Name != "StackLayout")
+                                else if (Cnt_type == "Image" && ty.Name == "Image")
                                 {
-                                    if (ty.Name == "Image")
-                                    {
-                                        if (xy.StyleId.Contains(AssocID.ToString()))
-                                            return xy;
-                                    }
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
                                 }
+                                else if (Cnt_type == "Button" && ty.Name == "Button")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "Picker" && ty.Name == "Picker")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "Entry" && ty.Name == "Entry")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                //else if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
+                                //    return xy;
                             }
                         }
                     }
                 }
+
+
+
+
+
+
+                //if (string.IsNullOrEmpty(Cnt_type))
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else
+                //                    if (Cnt_type == "Image" && ty.Name == "Image")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+
+                //                    }
+                //                    else if (Cnt_type == "Button" && ty.Name == "Button")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "Picker" && ty.Name == "Picker")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "Entry" && ty.Name == "Entry")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
+                //                        return xy;
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else if (Cnt_type == "DatePicker")
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (ty.Name == "DatePicker")
+                //                    {
+                //                        if (xy.StyleId.Contains(AssocID.ToString()))
+                //                            return xy;
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else if (Cnt_type == "Image")
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (ty.Name == "Image")
+                //                    {
+                //                        if (xy.StyleId.Contains(AssocID.ToString()))
+                //                            return xy;
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
                 return null;
             }
             catch (Exception ex)
@@ -1330,7 +1428,7 @@ namespace StemmonsMobile.Views.Cases
             {
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
-                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
                 DateTime dt = cnt.Date;
                 dt_Entry.Text = dt.Date.ToString("d");
                 // dt_Entry.Unfocus();
@@ -1504,7 +1602,7 @@ namespace StemmonsMobile.Views.Cases
                                 Result.Wait();
                                 if (!string.IsNullOrEmpty(Result.Result))
                                 {
-                                    var cnt = FindCasesControls(Convert.ToInt32(itm));
+                                    var cnt = FindCasesControls(Convert.ToInt32(itm), "Entry");
                                     if (cnt != null)
                                     {
                                         Entry entry = new Entry();
@@ -2321,11 +2419,11 @@ namespace StemmonsMobile.Views.Cases
 
                                         if (btn != null)
                                         {
-                                            int Key = int.Parse(btn.StyleId.ToString());
+                                            int Key = int.Parse(btn.StyleId.Split('_')[1].Split('|')[0].ToString());
                                             metaDataValues.Add(Key, btn.Text);
                                         }
 
-                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+                                        // string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
 
                                         //if (styletype.ToLower() == "d")
                                         //{
@@ -2439,7 +2537,7 @@ namespace StemmonsMobile.Views.Cases
                         }
                         break;
                     case "Create & Assign":
-                        
+
                         await this.Navigation.PushAsync(new AssignCase(CASEID, Convert.ToString(casedata.CaseTypeID), createcase, txt_CasNotes.Text, Functions.UserName, "C", null, false, false, "", App.Isonline));
 
                         break;

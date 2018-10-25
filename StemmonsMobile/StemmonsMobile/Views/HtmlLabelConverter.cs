@@ -77,8 +77,8 @@ namespace StemmonsMobile
 
 
                 StringBuilder sbHTML = new StringBuilder(rawText);
-                string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;", "&rsquo;", "&lsquo;", "&sbquo;", "&ldquo;", "&rdquo;", "&bdquo;", "&frasl;" };
-                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "•", "™", "'", "’", "‘", "‚", "“", "”", "„", "⁄" };
+                string[] OldWords = { "&nbsp;", "&amp;", "&quot;", "&lt;", "&gt;", "&reg;", "&copy;", "&bull;", "&trade;", "&#39;", "&rsquo;", "&lsquo;", "&sbquo;", "&ldquo;", "&rdquo;", "&bdquo;", "&frasl;", "&#8217;" };
+                string[] NewWords = { " ", "&", "\"", "<", ">", "Â®", "Â©", "•", "™", "'", "’", "‘", "‚", "“", "”", "„", "⁄", "’" };
                 for (int i = 0; i < OldWords.Length; i++)
                 {
                     sbHTML = sbHTML.Replace(OldWords[i], NewWords[i]);

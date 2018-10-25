@@ -794,7 +794,7 @@ namespace StemmonsMobile.Views.Cases
                                                     {
                                                         var ct = (Image)s;
                                                         var sty_id = ct.StyleId?.Split('_')[1];
-                                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
                                                         C_ent.Text = "";
                                                         C_ent.Unfocus();
                                                     }
@@ -1008,7 +1008,7 @@ namespace StemmonsMobile.Views.Cases
                                         if (controlbtn != null)
                                         {
                                             Button btn = controlbtn as Button;
-                                            var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue;
+                                            var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue; //null than make it blank
 
                                             List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
                                             GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
@@ -1034,21 +1034,25 @@ namespace StemmonsMobile.Views.Cases
                                             else
                                             {
                                                 btn.Text = "-- Select Item --";
-                                                btn.IsEnabled = false;
+                                                //btn.IsEnabled = false;
                                             }
 
-                                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Metaitem.ASSOC_TYPE_ID).ToList();
+                                            //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Metaitem.ASSOC_TYPE_ID).ToList();
 
-                                            if (assocChild.Count >= 1 && btn.Text != "-- Select Item --")
-                                            {
-                                                // parent has some Value So need to enable its child
-                                                foreach (var item in assocChild)
-                                                {
-                                                    // IsChild Control
-                                                    var Chl = FindPickerControls(item._CASE_ASSOC_TYPE_ID_CHILD) as Button;
-                                                    Chl.IsEnabled = true;
-                                                }
-                                            }
+                                            //if (assocChild.Count >= 1)// && btn.Text != "-- Select Item --")
+                                            //{
+                                            //    // parent has some Value So need to enable its child
+                                            //    foreach (var item in assocChild)
+                                            //    {
+                                            //        // IsChild Control
+                                            //        var Chl = FindPickerControls(item._CASE_ASSOC_TYPE_ID_CHILD) as Button;
+                                            //        Chl.IsEnabled = true;
+                                            //    }
+                                            //}
+                                            //else
+                                            //{
+                                            //    btn.IsEnabled = true;
+                                            //}
                                             // el
 
 
@@ -1348,7 +1352,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "a":
                                         try
                                         {
-                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID, "Entry");
                                             if (cnt != null)
                                             {
                                                 Entry DO = new Entry();
@@ -1377,7 +1381,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "x":
                                         try
                                         {
-                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID, "BorderEditor");
                                             if (cnt != null)
                                             {
                                                 BorderEditor bd = cnt as BorderEditor;
@@ -1396,7 +1400,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "h":
                                         try
                                         {
-                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID);
+                                            var cnt = FindCasesControls(Metaitem.ASSOC_TYPE_ID, "Entry");
                                             if (cnt != null)
                                             {
                                                 Entry entry = cnt as Entry;
@@ -1465,7 +1469,7 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 var btn = sender as Button;
-                iSelectedItemlookupId = int.Parse(btn.StyleId);
+                iSelectedItemlookupId = Convert.ToInt32(btn.StyleId.ToString());
                 //var BTNcntrl = FindPickerControls(iSelectedItemlookupId) as Button;
                 dynamic Exditemslst = null;
 
@@ -1863,7 +1867,7 @@ namespace StemmonsMobile.Views.Cases
             {
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
-                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
+                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
                 DateTime dt = cnt.Date;
                 dt_Entry.Text = dt.Date.ToString("d");
             }
@@ -2217,92 +2221,171 @@ namespace StemmonsMobile.Views.Cases
                 return null;
             }
         }
-
-        private object FindCasesControls(int AssocID, string Cnt_type = "")
+        private object FindCasesControls(int AssocID, string Cnt_type)
         {
             try
             {
-                if (string.IsNullOrEmpty(Cnt_type))
+                foreach (StackLayout infofield in CasesView_ControlStack.Children)
                 {
-                    foreach (StackLayout infofield in CasesView_ControlStack.Children)
-                    {
-                        foreach (StackLayout item in infofield.Children)
-                        {
-
-                            foreach (var subitem in item.Children)
-                            {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-
-                                if (xy.StyleId != null)
-                                {
-                                    if (ty.Name != "StackLayout")
-                                    {
-                                        var id = xy.StyleId.Contains("|") ? xy.StyleId.Split('|')[0] : xy.StyleId;
-
-                                        if (id.Contains(AssocID.ToString()))
-                                            return xy;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-                else if (Cnt_type == "DatePicker")
-                {
-                    foreach (StackLayout infofield in CasesView_ControlStack.Children)
+                    foreach (StackLayout item in infofield.Children)
                     {
 
-                        foreach (StackLayout item in infofield.Children)
+                        foreach (var subitem in item.Children)
                         {
-
-                            foreach (var subitem in item.Children)
+                            var xy = subitem;
+                            Type ty = xy.GetType();
+                            if (ty.Name != "StackLayout")
                             {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-                                if (ty.Name != "StackLayout")
+                                if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
                                 {
-                                    if (ty.Name == "DatePicker")
-                                    {
-                                        if (xy.StyleId.Contains(AssocID.ToString()))
-                                        {
-                                            return xy;
-                                        }
-                                    }
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
                                 }
-                            }
-                        }
-
-                    }
-                }
-                else if (Cnt_type == "Image")
-                {
-                    foreach (StackLayout infofield in CasesView_ControlStack.Children)
-                    {
-
-                        foreach (StackLayout item in infofield.Children)
-                        {
-
-                            foreach (var subitem in item.Children)
-                            {
-                                var xy = subitem;
-                                Type ty = xy.GetType();
-                                if (ty.Name != "StackLayout")
+                                else if (Cnt_type == "Image" && ty.Name == "Image")
                                 {
-                                    if (ty.Name == "Image")
-                                    {
-                                        if (xy.StyleId.Contains(AssocID.ToString()))
-                                        {
-                                            return xy;
-                                        }
-                                    }
-
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
                                 }
+                                else if (Cnt_type == "Button" && ty.Name == "Button")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "Picker" && ty.Name == "Picker")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "Entry" && ty.Name == "Entry")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
+                                {
+                                    var sID = xy.StyleId.Split('_')[1];
+                                    if (sID == AssocID.ToString())
+                                        return xy;
+                                }
+                                //else if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
+                                //    return xy;
                             }
                         }
                     }
                 }
+
+
+
+
+
+
+                //if (string.IsNullOrEmpty(Cnt_type))
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else
+                //                    if (Cnt_type == "Image" && ty.Name == "Image")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+
+                //                    }
+                //                    else if (Cnt_type == "Button" && ty.Name == "Button")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "Picker" && ty.Name == "Picker")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "Entry" && ty.Name == "Entry")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
+                //                    {
+                //                        var sID = xy.StyleId.Split('_')[1];
+                //                        if (sID == AssocID.ToString())
+                //                            return xy;
+                //                    }
+                //                    else if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
+                //                        return xy;
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else if (Cnt_type == "DatePicker")
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (ty.Name == "DatePicker")
+                //                    {
+                //                        if (xy.StyleId.Contains(AssocID.ToString()))
+                //                            return xy;
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else if (Cnt_type == "Image")
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout item in infofield.Children)
+                //        {
+                //            foreach (var subitem in item.Children)
+                //            {
+                //                var xy = subitem;
+                //                Type ty = xy.GetType();
+                //                if (ty.Name != "StackLayout")
+                //                {
+                //                    if (ty.Name == "Image")
+                //                    {
+                //                        if (xy.StyleId.Contains(AssocID.ToString()))
+                //                            return xy;
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
                 return null;
             }
             catch (Exception ex)
@@ -2310,9 +2393,103 @@ namespace StemmonsMobile.Views.Cases
                 return null;
             }
         }
+
+
+        //private object FindCasesControls(int AssocID, string Cnt_type = "")
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(Cnt_type))
+        //        {
+        //            foreach (StackLayout infofield in CasesView_ControlStack.Children)
+        //            {
+        //                foreach (StackLayout item in infofield.Children)
+        //                {
+
+        //                    foreach (var subitem in item.Children)
+        //                    {
+        //                        var xy = subitem;
+        //                        Type ty = xy.GetType();
+
+        //                        if (xy.StyleId != null)
+        //                        {
+        //                            if (ty.Name != "StackLayout")
+        //                            {
+        //                                var id = xy.StyleId.Contains("|") ? xy.StyleId.Split('|')[0] : xy.StyleId;
+
+        //                                if (id.Contains(AssocID.ToString()))
+        //                                    return xy;
+        //                            }
+        //                        }
+        //                    }
+
+        //                }
+        //            }
+        //        }
+        //        else if (Cnt_type == "DatePicker")
+        //        {
+        //            foreach (StackLayout infofield in CasesView_ControlStack.Children)
+        //            {
+
+        //                foreach (StackLayout item in infofield.Children)
+        //                {
+
+        //                    foreach (var subitem in item.Children)
+        //                    {
+        //                        var xy = subitem;
+        //                        Type ty = xy.GetType();
+        //                        if (ty.Name != "StackLayout")
+        //                        {
+        //                            if (ty.Name == "DatePicker")
+        //                            {
+        //                                if (xy.StyleId.Contains(AssocID.ToString()))
+        //                                {
+        //                                    return xy;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //        }
+        //        else if (Cnt_type == "Image")
+        //        {
+        //            foreach (StackLayout infofield in CasesView_ControlStack.Children)
+        //            {
+
+        //                foreach (StackLayout item in infofield.Children)
+        //                {
+
+        //                    foreach (var subitem in item.Children)
+        //                    {
+        //                        var xy = subitem;
+        //                        Type ty = xy.GetType();
+        //                        if (ty.Name != "StackLayout")
+        //                        {
+        //                            if (ty.Name == "Image")
+        //                            {
+        //                                if (xy.StyleId.Contains(AssocID.ToString()))
+        //                                {
+        //                                    return xy;
+        //                                }
+        //                            }
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
         #endregion
 
-        private void FillChildControl(int assocTypeId, List<GetCaseTypesResponse.ItemType> ItemTypes)
+        private async void FillChildControl(int assocTypeId, List<GetCaseTypesResponse.ItemType> ItemTypes)
         {
             try
             {
@@ -2338,19 +2515,29 @@ namespace StemmonsMobile.Views.Cases
 
                         if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0)
                         {
-
+                            string query = string.Empty;
+                            string conn = string.Empty;
+                            string ParentExternalDatasourceName = string.Empty;
+                            // await Task.Run(() =>
+                            //{
                             var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                            string query = externalDatasource.Result?.FirstOrDefault()?.Query;
-                            string conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
+                            query = externalDatasource.Result?.FirstOrDefault()?.Query;
+                            conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
+                            ParentExternalDatasourceName = externalDatasource?.Result?.FirstOrDefault()?.Name;
+                            // });
+
                             string filterQueryOrg = "";
 
+                            //await Task.Run(() =>
+                            //{
                             var Result1 = CasesSyncAPIMethods.GetConnectionString(Onlineflag, itemType.ExternalDataSourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
                             if (!string.IsNullOrEmpty(Result1?.ToString()) && Result1.ToString() != "[]")
                             {
                                 filterQueryOrg = Result1.Result?.FirstOrDefault()?._FILTER_QUERY;
                             }
+                            //});
 
                             var assocParents = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == child._CASE_ASSOC_TYPE_ID_CHILD);
                             int parentCount = 1;
@@ -2359,15 +2546,16 @@ namespace StemmonsMobile.Views.Cases
                                 string parentSelectedValue = null;
 
                                 //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+
                                 List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
 
                                 parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
 
                                 string parentFieldName = itemType.Name;
 
-                                var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+                                //var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                                string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
+                                //string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
 
                                 query = GetQueryStringWithParamaters(query, parentFieldName, parentSelectedValue, ParentExternalDatasourceName);
 
@@ -2554,45 +2742,16 @@ namespace StemmonsMobile.Views.Cases
 
                                         ItemValue itemValue = new ItemValue();
 
-                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                        if (styletype.ToLower() == "d")
+                                        if (!picker.StyleId.Contains("NoteType"))
                                         {
-                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
-                                            {
-                                                DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                            string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
 
-                                                goto requiredJump;
-                                            }
-                                            else
+                                            if (styletype.ToLower() == "d")
                                             {
-                                                var val = picker.SelectedItem as ItemValue;
-                                                ItemValue it = new ItemValue();
-                                                if (val != null)
-                                                {
-                                                    it.Name = val.Name;
-                                                    it.AssocDecodeID = val.AssocDecodeID;
-                                                    dropDownValues.Add(Key, it);
-                                                    dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
-                                            {
-                                                savecase.caseTitle = itemValue.Name;
-                                            }
-                                            try
-                                            {
-
+                                                int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
                                                 string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
                                                 string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
                                                 {
                                                     DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
 
@@ -2600,34 +2759,66 @@ namespace StemmonsMobile.Views.Cases
                                                 }
                                                 else
                                                 {
-
-                                                    if (picker.StyleId.Split('_')[0].ToLower() == "o")
+                                                    var val = picker.SelectedItem as ItemValue;
+                                                    ItemValue it = new ItemValue();
+                                                    if (val != null)
                                                     {
-                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                        ItemValue it = new ItemValue();
-                                                        if (val != null)
-                                                        {
-                                                            it.Name = val.NAME;
-                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                            dropDownValues.Add(Key, it);
-                                                            dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                        ItemValue it = new ItemValue();
-                                                        if (val != null)
-                                                        {
-                                                            it.Name = val.NAME;
-                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                            dropDownValues.Add(Key, it);
-                                                            dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
-                                                        }
+                                                        it.Name = val.Name;
+                                                        it.AssocDecodeID = val.AssocDecodeID;
+                                                        dropDownValues.Add(Key, it);
+                                                        dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
                                                     }
                                                 }
                                             }
-                                            catch { }
+                                            else
+                                            {
+                                                int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                                {
+                                                    savecase.caseTitle = itemValue.Name;
+                                                }
+                                                try
+                                                {
+
+                                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                    {
+                                                        DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+
+                                                        goto requiredJump;
+                                                    }
+                                                    else
+                                                    {
+
+                                                        if (picker.StyleId.Split('_')[0].ToLower() == "o")
+                                                        {
+                                                            var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                            ItemValue it = new ItemValue();
+                                                            if (val != null)
+                                                            {
+                                                                it.Name = val.NAME;
+                                                                it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                                dropDownValues.Add(Key, it);
+                                                                dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                            ItemValue it = new ItemValue();
+                                                            if (val != null)
+                                                            {
+                                                                it.Name = val.NAME;
+                                                                it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                                dropDownValues.Add(Key, it);
+                                                                dctmetadata.Add(Convert.ToInt32(Key), Convert.ToString(it.Name));
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                catch { }
+                                            }
                                         }
                                     }
                                     catch (Exception ex)
@@ -3427,7 +3618,6 @@ namespace StemmonsMobile.Views.Cases
 
                             foreach (StackLayout infofield in CasesView_ControlStack.Children)
                             {
-
                                 foreach (StackLayout sitem in infofield.Children)
                                 {
 
@@ -3487,7 +3677,7 @@ namespace StemmonsMobile.Views.Cases
                     Result.Wait();
                     if (!string.IsNullOrEmpty(Result.Result))
                     {
-                        var cnt = FindCasesControls(Convert.ToInt32(item.AssocTypeID));
+                        var cnt = FindCasesControls(Convert.ToInt32(item.AssocTypeID), "Entry");
                         if (cnt != null)
                         {
                             Entry ent = new Entry();
@@ -3575,140 +3765,228 @@ namespace StemmonsMobile.Views.Cases
                     #region  Dynamic Control Fill 
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-                        foreach (StackLayout sitem in infofield.Children)
+
+                        foreach (StackLayout item in infofield.Children)
                         {
-                            foreach (var subitem in sitem.Children)
+
+                            foreach (var subitem in item.Children)
                             {
-                                Type ty = subitem.GetType();
+                                var xy = subitem;
+                                Type ty = xy.GetType();
                                 if (ty.Name.ToLower() != "stacklayout")
                                 {
                                     if (ty.Name.ToLower() == "entry")
                                     {
-                                        var en = (Entry)subitem;
-                                        if (en.StyleId == _TitleFieldControlID)
+                                        try
                                         {
-                                            savecase.caseTitle = en.Text;
-                                        }
-                                        int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            var en = (Entry)xy;
+                                            if (en.StyleId == _TitleFieldControlID)
+                                            {
+                                                savecase.caseTitle = en.Text;
+                                            }
+                                            int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
+                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FileldName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
 
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
-                                        {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text))
+                                            {
+                                                DisplayAlert("Field Required.", "Please enter valid data in " + FileldName, "OK");
 
-                                            goto requiredJump;
+                                                goto requiredJump;
+                                            }
+                                            else
+                                            {
+                                                // To Save Date in Standard Format
+                                                if (!en.StyleId.Contains("a_"))
+                                                {
+                                                    textValues.Add(Key, en.Text);
+                                                }
+                                                else
+                                                {
+                                                    var stDate = string.Empty;
+                                                    if (!string.IsNullOrEmpty(en.Text))
+                                                    {
+                                                        var sDate = Convert.ToDateTime(en.Text);
+                                                        stDate = sDate.Date.ToString("MM/dd/yyyy");
+                                                    }
+                                                    textValues.Add(Key, stDate);
+                                                }
+                                            }
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            textValues.Add(Key, en.Text);
                                         }
                                     }
                                     else if (ty.Name.ToLower() == "picker")
                                     {
-                                        var picker = (Picker)subitem;
-                                        ItemValue itemValue = new ItemValue();
-
-                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                        if (styletype.ToLower() == "d")
+                                        try
                                         {
-                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
+                                            var picker = (Picker)xy;
+
+                                            ItemValue itemValue = new ItemValue();
+
+                                            if (!picker.StyleId.Contains("NoteType"))
+                                            {
+                                                string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+
+                                                if (styletype.ToLower() == "d")
+                                                {
+                                                    int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                    string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                    string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && picker.SelectedIndex == -1)
+                                                    {
+                                                        DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+
+                                                        goto requiredJump;
+                                                    }
+                                                    else
+                                                    {
+                                                        var val = picker.SelectedItem as ItemValue;
+                                                        ItemValue it = new ItemValue();
+                                                        if (val != null)
+                                                        {
+                                                            it.Name = val.Name;
+                                                            it.AssocDecodeID = val.AssocDecodeID;
+                                                            dropDownValues.Add(Key, it);
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                    if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                                    {
+                                                        savecase.caseTitle = itemValue.Name;
+                                                    }
+                                                    try
+                                                    {
+
+                                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                        {
+                                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+
+                                                            goto requiredJump;
+                                                        }
+                                                        else
+                                                        {
+
+                                                            if (picker.StyleId.Split('_')[0].ToLower() == "o")
+                                                            {
+                                                                var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                                ItemValue it = new ItemValue();
+                                                                if (val != null)
+                                                                {
+                                                                    it.Name = val.NAME;
+                                                                    it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                                    dropDownValues.Add(Key, it);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                                                                ItemValue it = new ItemValue();
+                                                                if (val != null)
+                                                                {
+                                                                    it.Name = val.NAME;
+                                                                    it.AssocDecodeID = Convert.ToInt32(val.ID);
+                                                                    dropDownValues.Add(Key, it);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    catch { }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                        }
+                                    }
+                                    else if (ty.Name.ToLower() == "button")
+                                    {
+                                        try
+                                        {
+                                            Button btn = new Button();
+                                            btn = (Button)xy;
+
+                                            ItemValue it = new ItemValue();
+                                            if (btn != null)
+                                            {
+                                                int Key = int.Parse(btn.StyleId);
+                                                if (btn.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                                {
+                                                    savecase.caseTitle = btn.Text;
+                                                }
+
+                                                var tempassocdecodeid = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(btn.StyleId))?.FirstOrDefault().Value;
+
+                                                string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && btn.Text == "-- Select Item --")
+                                                {
+                                                    DisplayAlert("Field Required.", "Please Select valid item in " + FiledName, "OK");
+
+                                                    goto requiredJump;
+                                                }
+                                                else
+                                                {
+
+                                                    it.Name = btn.Text;
+                                                    it.AssocDecodeID = Convert.ToInt32(tempassocdecodeid?.FirstOrDefault().ID);
+                                                    dropDownValues.Add(Key, it);
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //throw ex;
+                                        }
+                                    }
+                                    else if (ty.Name.ToLower() == "bordereditor")
+                                    {
+                                        try
+                                        {
+                                            var editor = (BorderEditor)xy;
+                                            if (editor.StyleId == _TitleFieldControlID)
+                                            {
+                                                savecase.caseTitle = editor.Text;
+                                            }
+
+                                            string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
                                             {
                                                 DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
                                                 goto requiredJump;
                                             }
                                             else
                                             {
-                                                var val = picker.SelectedItem as ItemValue;
-                                                ItemValue it = new ItemValue();
-                                                if (val != null)
-                                                {
-                                                    it.Name = val.Name;
-                                                    it.AssocDecodeID = val.AssocDecodeID;
-                                                    dropDownValues.Add(Key, it);
-                                                }
+                                                textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
                                             }
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
-                                            {
-                                                savecase.caseTitle = itemValue.Name;
-                                            }
-                                            try
-                                            {
-                                                string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                                string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                                if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
-                                                {
-                                                    DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-                                                    goto requiredJump;
-                                                }
-                                                else
-                                                {
-                                                    if (picker.StyleId.Split('_')[0].ToLower() == "o" || picker.StyleId.Split('_')[0].ToLower() == "e")
-                                                    {
-                                                        var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
-                                                        ItemValue it = new ItemValue();
-                                                        if (val != null)
-                                                        {
-                                                            it.Name = val.NAME;
-                                                            it.AssocDecodeID = Convert.ToInt32(val.ID);
-                                                            dropDownValues.Add(Key, it);
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        //dropDownValues.Add(Key, <itemValue>.Na);
-                                                        var val = picker.SelectedItem as Cases_extedataSource;
-                                                        ItemValue it = new ItemValue();
-                                                        if (val != null)
-                                                        {
-                                                            it.Name = val.NAME;
-                                                            it.AssocDecodeID = val.ID;
-                                                            dropDownValues.Add(Key, it);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            catch { }
-                                        }
-                                    }
-                                    else if (ty.Name.ToLower() == "bordereditor")
-                                    {
-                                        var editor = (BorderEditor)subitem;
-                                        if (editor.StyleId == _TitleFieldControlID)
-                                        {
-                                            savecase.caseTitle = editor.Text;
-                                        }
-
-                                        string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
-                                        {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-
-                                            goto requiredJump;
-                                        }
-                                        else
-                                        {
-                                            textValues.Add(int.Parse(editor.StyleId.Split('_')[1]?.ToString()), editor.Text);
                                         }
                                     }
                                     else if (ty.Name.ToLower() == "datepicker")
                                     {
-                                        //var datepicker = (DatePicker)subitem;
-                                        //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                        //{
-                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
-                                        //}
-                                        //else
-                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
+                                        try
+                                        {
+                                            //var datepicker = (DatePicker)xy;
+
+                                            //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                            //{
+                                            //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                            //}
+                                            //else
+                                            //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                        }
                                     }
                                 }
                             }
