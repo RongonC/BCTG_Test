@@ -912,6 +912,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
             try
             {
                 var btn = sender as Button;
+                btn.Focus();
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 string[] exdID = btn.StyleId.Split('_');
                 iSelectedItemlookupId = int.Parse(exdID[1]);
                 Button btn_cancel = new Button()
@@ -930,6 +932,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                 SearchBar ext_search = new SearchBar();
                 ext_search.TextChanged += ext_serch;
+                ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
 
                 lstView.ItemsSource = null;
 
@@ -1145,7 +1148,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     return;
                 }
-
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 Stack_Popup.IsVisible = false;
                 masterGrid.IsVisible = true;
 

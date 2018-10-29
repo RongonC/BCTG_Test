@@ -1066,6 +1066,7 @@ namespace StemmonsMobile.Views.Entity
         List<EXTERNAL_DATASOURCE1> _list_EDS = new List<EXTERNAL_DATASOURCE1>();
         AssociationField Exdls = null;
         ListView lstView = new ListView();
+        SearchBar ext_search = new SearchBar();
         private async void Pk_button_Clicked(object sender, EventArgs e)
         {
             try
@@ -1075,6 +1076,9 @@ namespace StemmonsMobile.Views.Entity
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                     lstView.ItemsSource = null;
                     var btn = sender as Button;
+                    btn.Focus();
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+
                     iSelectedItemlookupId = Convert.ToInt32(btn.StyleId?.Split('_')[1]);
                     Picker pickercntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId)) as Picker;
 
@@ -1283,14 +1287,9 @@ namespace StemmonsMobile.Views.Entity
 
                         btn_cancel.Clicked += Btn_cancel_Clicked;
 
-                        SearchBar ext_search = new SearchBar()
-                        {
-                            WidthRequest = 300,
-                            HeightRequest = 40,
-                            TextColor = Color.Accent,
-                            BackgroundColor = Color.Transparent,
-                            HorizontalOptions = LayoutOptions.Center,
-                        };
+                        ext_search = new SearchBar();
+                        ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+                        ext_search.Text = "";
                         ext_search.TextChanged += ext_serch;
 
                         var temp = new DataTemplate(typeof(TextViewCell));
@@ -1349,7 +1348,6 @@ namespace StemmonsMobile.Views.Entity
 
         private void Btn_cancel_Clicked(object sender, EventArgs e)
         {
-            //popupLT.IsVisible = false;
             Stack_Popup.IsVisible = false;
             masterGrid.IsVisible = true;
         }
@@ -1372,10 +1370,10 @@ namespace StemmonsMobile.Views.Entity
                 {
                     return;
                 }
+                ext_search.Unfocus();
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 this.Stack_Popup.IsVisible = false;
-                //this.popupLT.IsVisible = false;
                 this.masterGrid.IsVisible = true;
-
 
                 var ctrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Button") as Button;
                 var pik_cntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId));
@@ -1383,7 +1381,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     Button btn = ctrl as Button;
                     btn.Text = e.SelectedItem.ToString();
-
+                    btn.Focus();
                     Picker e_pik = pik_cntrl as Picker;
 
                     List<EXTERNAL_DATASOURCE1> lst = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower() == (btn.Text.ToLower())).ToList();
@@ -1843,11 +1841,13 @@ namespace StemmonsMobile.Views.Entity
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             Date_pick_DateSelected(sender, null);
         }
 
         private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             Entry dtp = new Entry();
             try
             {
@@ -1863,21 +1863,25 @@ namespace StemmonsMobile.Views.Entity
 
         private void Txt_Date_TextChanged(object sender, TextChangedEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
         }
 
         private void Pk_Unfocused(object sender, FocusEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             Pk_SelectedIndexChanged(sender, e);
         }
 
         private void DO_DateSelected(object sender, DateChangedEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             DyanmicSetCalc(((DatePicker)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
         }
 
         private void ST_Unfocused(object sender, FocusEventArgs e)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
 
         }

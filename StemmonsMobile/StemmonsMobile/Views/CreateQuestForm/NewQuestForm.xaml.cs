@@ -508,6 +508,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             list.IsRefreshing = false;
         }
 
+        SearchBar ext_search = new SearchBar();
         private async void itm_look_button_Clicked(object sender, EventArgs e)
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -526,13 +527,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     VerticalOptions = LayoutOptions.EndAndExpand
                 };
                 btn_cancel.Clicked += Btn_cancel_Clicked;
-
-                SearchBar ext_search = new SearchBar();
+                ext_search.Text = "";
                 ext_search.TextChanged += ext_serch;
 
                 lstView.ItemsSource = null;
 
                 var btn = sender as Button;
+                btn.Focus();
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 string[] exdID = btn.StyleId.Split('_');
                 iSelectedItemlookupId = int.Parse(exdID[1]);
                 int? EDS = 0;
@@ -722,7 +724,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     return;
                 }
-
+                ext_search.Unfocus();
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 Stack_Popup.IsVisible = false;
                 masterGrid.IsVisible = true;
 
@@ -823,6 +826,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Entry dtp = new Entry();
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindQuestControl(sty_id) as Entry;
@@ -837,6 +841,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         private void Pk_SelectedIndexChanged(object sender, EventArgs e)
         {
             Picker cnt = (Picker)sender;
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             if (App.Isonline)
             {
                 listQuesCategorydata.IsEnabled = false;

@@ -1464,11 +1464,14 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
+        SearchBar ext_search = new SearchBar();
         private async void Pk_button_Clicked(object sender, EventArgs e)
         {
             try
             {
                 var btn = sender as Button;
+                btn.Focus();
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 iSelectedItemlookupId = Convert.ToInt32(btn.StyleId.ToString());
                 //var BTNcntrl = FindPickerControls(iSelectedItemlookupId) as Button;
                 dynamic Exditemslst = null;
@@ -1540,8 +1543,7 @@ namespace StemmonsMobile.Views.Cases
                         lstView.ItemSelected += OnSelection;
                         lstView.ItemsSource = Exditemslst;
                         lstView.BackgroundColor = Color.White;
-
-                        SearchBar ext_search = new SearchBar();
+                        ext_search.Text = "";
                         ext_search.TextChanged += ext_serch;
                         ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
 
@@ -1655,13 +1657,15 @@ namespace StemmonsMobile.Views.Cases
             {
                 return;
             }
-
+            ext_search.Unfocus();
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             var ctrl = FindPickerControls(iSelectedItemlookupId);
             if (ctrl != null)
             {
                 Button btn = ctrl as Button;
                 btn.FontSize = 16;
                 btn.Text = e.SelectedItem.ToString();
+                btn.Focus();
 
                 var lst = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(btn.Text.ToLower())).ToList();
                 if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
@@ -1671,7 +1675,6 @@ namespace StemmonsMobile.Views.Cases
 
                 ClearChildControl(iSelectedItemlookupId, sControls);
 
-                DyanmicSetCalcexd(Convert.ToString(iSelectedItemlookupId), sControls.Where(v => (v.AssocFieldType == 'E' || v.AssocFieldType == 'O') && v.AssocTypeID == Convert.ToInt32(iSelectedItemlookupId)).ToList(), sControls.Where(v => (v.AssocFieldType == 'C')).ToList());
 
                 var asChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_PARENT == iSelectedItemlookupId);
 
@@ -1685,8 +1688,12 @@ namespace StemmonsMobile.Views.Cases
                         Ctbtn.IsEnabled = true;
                     }
                 }
-            }
 
+                Task.Run(() =>
+                {
+                    DyanmicSetCalcexd(Convert.ToString(iSelectedItemlookupId), sControls.Where(v => (v.AssocFieldType == 'E' || v.AssocFieldType == 'O') && v.AssocTypeID == Convert.ToInt32(iSelectedItemlookupId)).ToList(), sControls.Where(v => (v.AssocFieldType == 'C')).ToList());
+                });
+            }
 
             this.Stack_Popup.IsVisible = false;
             this.masterGrid.IsVisible = true;
@@ -1865,6 +1872,7 @@ namespace StemmonsMobile.Views.Cases
             Entry dtp = new Entry();
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
@@ -1881,6 +1889,7 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -3229,6 +3238,7 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 DatePicker en = (DatePicker)sender;
                 DyanmicSetCalc(en.StyleId);
             }
@@ -3241,6 +3251,7 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -3255,6 +3266,7 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -3267,6 +3279,7 @@ namespace StemmonsMobile.Views.Cases
 
         public void DyanmicSetCalc(string CurrentStyleId)
         {
+            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
             try
             {
                 if (Onlineflag)

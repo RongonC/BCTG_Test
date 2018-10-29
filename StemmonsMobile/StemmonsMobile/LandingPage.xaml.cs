@@ -1476,7 +1476,7 @@ namespace StemmonsMobile
                         App.Logout(this);
                         break;
                     case "About":
-                        DisplayAlert("App Info", Functions.Appinfomsg, "Ok") ;
+                        DisplayAlert("App Info", Functions.Appinfomsg, "Ok");
                         break;
                     case "Setting":
                         await Navigation.PushAsync(new Settings());
