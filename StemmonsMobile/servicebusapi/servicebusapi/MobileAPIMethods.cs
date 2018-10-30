@@ -13,13 +13,12 @@ namespace DataServiceBus
 {
     public class MobileAPIMethods
     {
-        static HttpClient client = new HttpClient();
+        //static HttpClient client = new HttpClient();
 
         #region Request for Token
         public static string RequestToken(string BaseUrl)
         {
             RequestToken rt = new RequestToken();
-            HttpClient httpClient = new HttpClient();
             HttpRequestMessage httpContent;
             Task<HttpResponseMessage> response;
             string accessToken = string.Empty;
@@ -43,20 +42,23 @@ namespace DataServiceBus
             };
                 #endregion
 
-                httpClient.Timeout = new TimeSpan(0, 15, 0);
-
-                httpContent = new HttpRequestMessage(HttpMethod.Post, BaseUrl);
-                httpContent.Headers.ExpectContinue = false;
-
-                httpContent.Content = new FormUrlEncodedContent(Body_value);
-                response = httpClient.SendAsync(httpContent);
-                response.Wait();
-                var result = response.Result.Content.ReadAsStringAsync();
-                JObject results = JObject.Parse(result.Result);
-                if (results != null)
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    ResponseToken responsejson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseToken>(response.Result.Content.ReadAsStringAsync().Result);
-                    accessToken = responsejson.access_token;
+                    httpClient.Timeout = new TimeSpan(0, 15, 0);
+
+                    httpContent = new HttpRequestMessage(HttpMethod.Post, BaseUrl);
+                    httpContent.Headers.ExpectContinue = false;
+
+                    httpContent.Content = new FormUrlEncodedContent(Body_value);
+                    response = httpClient.SendAsync(httpContent);
+                    response.Wait();
+                    var result = response.Result.Content.ReadAsStringAsync();
+                    JObject results = JObject.Parse(result.Result);
+                    if (results != null)
+                    {
+                        ResponseToken responsejson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseToken>(response.Result.Content.ReadAsStringAsync().Result);
+                        accessToken = responsejson.access_token;
+                    }
                 }
 
                 return accessToken;
@@ -71,6 +73,7 @@ namespace DataServiceBus
         #region Set API Get Post Method For Class Collection Parameter
         public static JObject CallAPIGetPostList<T>(List<KeyValuePair<string, string>> APIDetails, T ClassObject)
         {
+            JObject jobj = null;
             try
             {
                 var ObjectSerialize = JsonConvert.SerializeObject(ClassObject, Formatting.Indented);
@@ -81,27 +84,32 @@ namespace DataServiceBus
 
                 string baseurl = url.Split(new string[] { "/api" }, StringSplitOptions.None)[0];
 
-                HttpClient httpClient = new HttpClient();
-                httpClient.Timeout = new TimeSpan(1, 10, 0);
                 HttpRequestMessage httpContent;
-                string accessToken = RequestToken(baseurl + Constants.Get_Token);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
+                Task<HttpResponseMessage> response;
 
-                httpContent = new HttpRequestMessage(HttpMethod.Post, url);
-                httpContent.Headers.ExpectContinue = false;
-                HttpContent contentPost = new StringContent(ObjectSerialize, Encoding.UTF8, "application/json");
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    httpClient.Timeout = new TimeSpan(1, 10, 0);
+                    string accessToken = RequestToken(baseurl + Constants.Get_Token);
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
 
-                httpContent.Content = contentPost;
+                    httpContent = new HttpRequestMessage(HttpMethod.Post, url);
+                    httpContent.Headers.ExpectContinue = false;
+                    HttpContent contentPost = new StringContent(ObjectSerialize, Encoding.UTF8, "application/json");
 
-                Task<HttpResponseMessage> response = httpClient.SendAsync(httpContent);
-                var result = response.Result.Content.ReadAsStringAsync();
-                return JObject.Parse(result.Result);
+                    httpContent.Content = contentPost;
+
+                    response = httpClient.SendAsync(httpContent);
+                    var result = response.Result.Content.ReadAsStringAsync();
+                    jobj = JObject.Parse(result.Result);
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return jobj;
         }
         #endregion
 
@@ -116,27 +124,29 @@ namespace DataServiceBus
 
                 string baseurl = url.Split(new string[] { "/api" }, StringSplitOptions.None)[0];
 
-                HttpClient httpClient = new HttpClient();
-                httpClient.Timeout = new TimeSpan(1, 10, 0);
-
                 HttpRequestMessage httpContent;
                 Task<HttpResponseMessage> response;
-                string accessToken = RequestToken(baseurl + Constants.Get_Token);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
-                if (Method.ToUpper() == "POST")
+
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    httpContent = new HttpRequestMessage(HttpMethod.Post, url);
-                    httpContent.Headers.ExpectContinue = false;
-                    httpContent.Content = new FormUrlEncodedContent(BodyValue);
+                    httpClient.Timeout = new TimeSpan(1, 10, 0);
+                    string accessToken = RequestToken(baseurl + Constants.Get_Token);
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
+                    if (Method.ToUpper() == "POST")
+                    {
+                        httpContent = new HttpRequestMessage(HttpMethod.Post, url);
+                        httpContent.Headers.ExpectContinue = false;
+                        httpContent.Content = new FormUrlEncodedContent(BodyValue);
+                    }
+                    else
+                    {
+                        httpContent = new HttpRequestMessage(HttpMethod.Get, url);
+                    }
+                    response = httpClient.SendAsync(httpContent);
+                    var result = response.Result.Content.ReadAsStringAsync();
+                    jobj = JObject.Parse(result.Result);
                 }
-                else
-                {
-                    httpContent = new HttpRequestMessage(HttpMethod.Get, url);
-                }
-                response = httpClient.SendAsync(httpContent);
-                var result = response.Result.Content.ReadAsStringAsync();
-                jobj = JObject.Parse(result.Result);
             }
             catch (Exception e)
             {

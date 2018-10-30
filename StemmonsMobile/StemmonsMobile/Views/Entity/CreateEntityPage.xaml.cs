@@ -243,6 +243,8 @@ namespace StemmonsMobile.Views.Entity
                                     pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
                                     pk.SelectedIndex = 0;
 
+                                   
+
                                     RightLyout.Children.Add(pk);
 
                                     //Picker pk = new Picker
@@ -355,28 +357,20 @@ namespace StemmonsMobile.Views.Entity
                                     pk_button.HorizontalOptions = LayoutOptions.Start;
                                     pk_button.Margin = new Thickness(0, 0, 0, 1);
                                     pk_button.CornerRadius = 0;
+                                    if (Device.RuntimePlatform == "Android")
+                                    {
+                                        pk_button.Margin = new Thickness(0, 0, 0, 1);
+                                        pk_button.CornerRadius = 0;
+                                    }
+                                    if (Device.RuntimePlatform == "iOS")
+                                    {
+                                        pk_button.BorderWidth = 1;
+                                        pk_button.CornerRadius = 5;
+                                        pk_button.BorderColor = Color.Gray;
+                                        pk_button.CornerRadius = 5;
+                                    }
                                     pk_button.BackgroundColor = Color.White;
                                     List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
-                                    //if (Functions.IsEditEntity)
-                                    //{
-                                    //    var cnttype = EntityListsValues.AssociationFieldCollection.Where(v => v.AssocTypeID == EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID)?.ToList();
-                                    //    var Assoc = cnttype[0].AssocMetaData[0];
-
-                                    //    if (!string.IsNullOrEmpty(Assoc.FieldValue) && !string.IsNullOrEmpty(Assoc.ExternalDatasourceObjectID))
-                                    //    {
-                                    //        //var p1 = _list_ed1.Find(x => x.ID == Convert.ToInt32(Assoc.ExternalDatasourceObjectID == "" ? "0" : Assoc.ExternalDatasourceObjectID));
-                                    //        //if (p1 == null)
-                                    //        //{
-                                    //        //    p1 = new EXTERNAL_DATASOURCE1();
-                                    //        //    p1.EXTERNAL_DATASOURCE_NAME = Assoc.FieldValue;
-                                    //        //    p1.ID = Convert.ToInt32(Assoc.ExternalDatasourceObjectID);
-                                    //        //    EntitySchemaLists.AssociationFieldCollection[i]?.EXTERNAL_DATASOURCE.Add(p1);
-                                    //        //    _list_ed1.Add(p1);
-                                    //        //}
-                                    //        pk_button.Text = Assoc.FieldValue;
-                                    //    }
-
-                                    //}
 
                                     if (!fieldLeveSecurity_Create)
                                         pk_button.IsEnabled = false;
@@ -400,12 +394,6 @@ namespace StemmonsMobile.Views.Entity
                                             }
                                         }
                                     }
-                                    //if (!fieldLeveSecurity_Create)
-                                    //    pk.IsEnabled = false;
-                                    //pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
-                                    //pk.SelectedIndex = 0;
-                                    //RightLyout.Children.Add(pk);
-
                                     break;
                                 #endregion
 
@@ -1077,7 +1065,13 @@ namespace StemmonsMobile.Views.Entity
                     lstView.ItemsSource = null;
                     var btn = sender as Button;
                     btn.Focus();
-                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                    try
+                    {
+                        DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                    }
+                    catch (Exception)
+                    {
+                    }
 
                     iSelectedItemlookupId = Convert.ToInt32(btn.StyleId?.Split('_')[1]);
                     Picker pickercntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId)) as Picker;
@@ -1282,7 +1276,7 @@ namespace StemmonsMobile.Views.Entity
                             HeightRequest = 40,
                             TextColor = Color.Accent,
                             BackgroundColor = Color.Transparent,
-                            HorizontalOptions = LayoutOptions.Center,
+                            HorizontalOptions = LayoutOptions.EndAndExpand,
                         };
 
                         btn_cancel.Clicked += Btn_cancel_Clicked;
@@ -1303,8 +1297,8 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 new StackLayout
                                  {
-                                    VerticalOptions=LayoutOptions.Center,
-                                    HorizontalOptions=LayoutOptions.Center,
+                                    //VerticalOptions =LayoutOptions.Center,
+                                    //HorizontalOptions =LayoutOptions.Center,
                                     Children ={
                                         ext_search
                                     }
@@ -1312,8 +1306,8 @@ namespace StemmonsMobile.Views.Entity
 
                                 new StackLayout
                                 {
-                                    VerticalOptions =LayoutOptions.Center,
-                                    HorizontalOptions =LayoutOptions.Center,
+                                    //VerticalOptions =LayoutOptions.Center,
+                                    //HorizontalOptions =LayoutOptions.Center,
                                     Children ={
                                         lstView,
                                     },
@@ -1321,8 +1315,8 @@ namespace StemmonsMobile.Views.Entity
 
                                 new StackLayout
                                 {
-                                     HorizontalOptions=LayoutOptions.EndAndExpand,
-                                     VerticalOptions=LayoutOptions.EndAndExpand,
+                                     //HorizontalOptions=LayoutOptions.EndAndExpand,
+                                     //VerticalOptions=LayoutOptions.EndAndExpand,
                                      Margin= new Thickness(0,0,1,10),
                                     Children =
                                     {
@@ -1331,6 +1325,9 @@ namespace StemmonsMobile.Views.Entity
                                 }
                             }
                         });
+
+
+
                         Stack_Popup.IsVisible = true;
                         masterGrid.IsVisible = false;
 
@@ -1365,13 +1362,21 @@ namespace StemmonsMobile.Views.Entity
         {
             try
             {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
                 ClearEntityChildControls(iSelectedItemlookupId);
                 if (e.SelectedItem == null)
                 {
                     return;
                 }
                 ext_search.Unfocus();
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                
                 this.Stack_Popup.IsVisible = false;
                 this.masterGrid.IsVisible = true;
 
@@ -1841,13 +1846,25 @@ namespace StemmonsMobile.Views.Entity
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             Date_pick_DateSelected(sender, null);
         }
 
         private void Date_pick_DateSelected(object sender, DateChangedEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             Entry dtp = new Entry();
             try
             {
@@ -1863,25 +1880,49 @@ namespace StemmonsMobile.Views.Entity
 
         private void Txt_Date_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
         }
 
         private void Pk_Unfocused(object sender, FocusEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             Pk_SelectedIndexChanged(sender, e);
         }
 
         private void DO_DateSelected(object sender, DateChangedEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             DyanmicSetCalc(((DatePicker)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
         }
 
         private void ST_Unfocused(object sender, FocusEventArgs e)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             DyanmicSetCalc(((Entry)sender).StyleId, EntitySchemaLists.AssociationFieldCollection);
 
         }

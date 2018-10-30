@@ -67,6 +67,7 @@ namespace StemmonsMobile
         {
             try
             {
+                
                 Isonline = e.IsConnected;
                 isFirstcall = true;
                 OnlineSyncRecord();

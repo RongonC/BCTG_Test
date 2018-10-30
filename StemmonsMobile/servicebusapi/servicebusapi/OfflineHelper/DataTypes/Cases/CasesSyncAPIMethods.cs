@@ -1016,15 +1016,22 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         // L1_GetTeamMembers
                         var TeamMemberslist = DBHelper.GetAppTypeInfoList(UserProfileInstance, Convert.ToInt32(0), 0, "L1_GetTeamMembers", _DBPath, null);
                         TeamMemberslist.Wait();
-
-                        var TMList = JsonConvert.DeserializeObject<List<GetUserInfoResponse.UserInfo>>(TeamMemberslist?.Result?.ASSOC_FIELD_INFO);
-
-                        var Temamate = TMList.Where(v => v.SAMName == viewobj.CaseAssignedToSAM).Count();
-                        if (Temamate > 0)
+                        if (TeamMemberslist?.Result != null)
                         {
-                            Scrname = "_AssignedToMyTeam";
-                            teamName = viewobj.CaseAssignedToSAM;
+                            var TMList = JsonConvert.DeserializeObject<List<GetUserInfoResponse.UserInfo>>(TeamMemberslist?.Result?.ASSOC_FIELD_INFO);
+
+                            var Temamate = TMList.Where(v => v.SAMName == viewobj.CaseAssignedToSAM).Count();
+                            if (Temamate > 0)
+                            {
+                                Scrname = "_AssignedToMyTeam";
+                                teamName = viewobj.CaseAssignedToSAM;
+                            }
                         }
+                        //else
+                        //{
+                        //    Scrname = "_AssignedToMyTeam";
+                        //    teamName = viewobj.CaseAssignedToSAM
+                        //}
                     }
                     else if (viewobj.CaseAssignedToSAM?.ToLower() == _UserName?.ToLower())
                     {
@@ -1951,24 +1958,24 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         lstResultBasicInfo = lstResultBasicInfo.Select(av =>
                                                 {
 
-                                                    av.CaseAssignedDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseAssignedDateTime);
-                                                    av.CaseAssignedTo = lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
-                                                    av.CaseAssignedToDisplayName = lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
-                                                    av.CaseTypeID = lstResultBasicInfo.FirstOrDefault().CaseTypeID;
+                                                    //av.CaseAssignedDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseAssignedToDisplayName);
+                                                    av.CaseAssignedTo = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
+                                                    av.CaseAssignedToDisplayName = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
+                                                    av.CaseTypeID = lstResult.FirstOrDefault().CaseTypeID;
                                                     av.CreateBy = _UserName;
-                                                    av.ListID = lstResultBasicInfo.FirstOrDefault().ListID;
-                                                    av.CaseOwner = lstResultBasicInfo.FirstOrDefault().CaseOwner;
-                                                    av.CaseOwnerDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseOwnerDateTime);
-                                                    av.MetaDataCollection = viewCase_Json.MetaDataCollection;
-                                                    av.ModifiedBy = lstResultBasicInfo.FirstOrDefault().ModifiedBy;
-                                                    av.ModifiedByDisplayName = lstResultBasicInfo.FirstOrDefault().ModifiedByDisplayName;
-                                                    av.ModifiedDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().ModifiedDateTime);
-                                                    av.CaseClosedBy = lstResultBasicInfo.FirstOrDefault().CaseClosedByDisplayName;
-                                                    av.CaseClosedDateTime = lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime == default(DateTime) ? DateTime.Now : Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime);
-                                                    av.CaseOwnerDisplayName = lstResultBasicInfo.FirstOrDefault().CaseOwnerDisplayName;
-                                                    av.CaseTypeName = lstResultBasicInfo.FirstOrDefault().CaseTypeName;
-                                                    av.CreateDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CreateDateTime);
-                                                    av.CreateByDisplayName = lstResultBasicInfo.FirstOrDefault().CreateByDisplayName;
+                                                    av.ListID = lstResult.FirstOrDefault().ListID;
+                                                    av.CaseOwner = lstResult.FirstOrDefault().CaseOwnerDisplayName;
+                                                    av.CaseOwnerDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseOwnerDateTime);
+                                                    av.MetaDataCollection = lstResult.FirstOrDefault().MetaDataCollection;
+                                                    av.ModifiedBy = lstResult.FirstOrDefault().CaseModifiedBySAM;
+                                                    av.ModifiedByDisplayName = lstResult.FirstOrDefault().CaseModifiedByDisplayName;
+                                                    av.ModifiedDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseModifiedDateTime);
+                                                    av.CaseClosedBy = lstResult.FirstOrDefault().CaseClosedByDisplayName;
+                                                    av.CaseClosedDateTime = string.IsNullOrEmpty(lstResult.FirstOrDefault().CaseClosedDateTime) ? DateTime.Now : Convert.ToDateTime(lstResult.FirstOrDefault().CaseClosedDateTime);
+                                                    av.CaseOwnerDisplayName = lstResult.FirstOrDefault().CaseOwnerDisplayName;
+                                                    av.CaseTypeName = lstResult.FirstOrDefault().CaseTypeName;
+                                                    av.CreateDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseCreatedDateTime);
+                                                    av.CreateByDisplayName = lstResult.FirstOrDefault().CaseCreatedDisplayName;
                                                     return av;
                                                 }).ToList();
 
@@ -1998,6 +2005,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             insertID = Convert.ToString(insertedRecordid);
                             //AddCasNotes(_IsOnline, _caseTypeID, Convert.ToString(insertedRecordid), _CaseNotes, _UserName, _Notestypeid, _DBPath, FullName);
                         }
+
                         AddCasNotes(_IsOnline, _caseTypeID, Convert.ToString(insertID), _CaseNotes, _UserName, _Notestypeid, _DBPath, FullName);
                     }
 
@@ -3291,7 +3299,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
             try
             {
-                if (_IsOnline)
+                //if (_IsOnline)
                 {
                     var result = CasesAPIMethods.GetConnectionString(_ExternalDatasourceID);
                     var temp = result.GetValue("ResponseContent");
@@ -3302,9 +3310,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     }
                 }
-                else
-                {
-                }
+
             }
             catch (Exception ex)
             {
@@ -3322,7 +3328,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
             try
             {
-                if (_IsOnline)
+                //if (_IsOnline)
                 {
                     var result = CasesAPIMethods.GetExternalDataSourceItemsById(_ExternalDatasourceID);
                     var temp = result.GetValue("ResponseContent");
@@ -3335,7 +3341,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
             }
             return lstResult;
         }

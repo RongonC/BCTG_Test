@@ -119,7 +119,7 @@
             <StackLayout x:Name="Stack_Popup" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">
-                <Frame OutlineColor="Black" 
+                <Frame OutlineColor="Transparent" 
                    HorizontalOptions="Center"
                    VerticalOptions="CenterAndExpand">
                     <StackLayout VerticalOptions="CenterAndExpand"

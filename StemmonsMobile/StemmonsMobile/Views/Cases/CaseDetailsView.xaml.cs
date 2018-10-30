@@ -12,6 +12,7 @@ using StemmonsMobile.Views.View_Case_Origination_Center;
 using DataServiceBus.OfflineHelper.DataTypes.Common;
 using StemmonsMobile.Views.LoginProcess;
 using static StemmonsMobile.DataTypes.DataType.Cases.OriginationCenterDataResponse;
+using System.Globalization;
 
 namespace StemmonsMobile.Views.Cases
 {
@@ -33,19 +34,33 @@ namespace StemmonsMobile.Views.Cases
 
                 //CASETYPEID = Convert.ToString(CaseDetails.CaseTypeID);
 
+                //List<CaseTypeData> lst = new List<CaseTypeData>
+                //{
+                //    new CaseTypeData("Open Cases",Convert.ToString(CaseDetails.OpenCaseCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Closed Cases",Convert.ToString(CaseDetails.ClosedCaseCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Total Cases",Convert.ToString(CaseDetails.TotalCaseCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Past Due Total Cases",Convert.ToString(CaseDetails.TotalPastDueCaseCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Assigned To Me",Convert.ToString(CaseDetails.AssignedToMeCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("My Past Due Cases",Convert.ToString(CaseDetails.PastDueAssignedToMeCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Created By Me",Convert.ToString(CaseDetails.CreatedByMeCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Closed By Me",Convert.ToString(CaseDetails.ClosedByMeCount),"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Default Hopper",CaseDetails.DefaultHopperName,"Assets/dropdowniconClose.png"),
+                //    new CaseTypeData("Owner",CaseDetails.CaseTypeOwnerName,"Assets/dropdowniconClose.png"),
+                //};
                 List<CaseTypeData> lst = new List<CaseTypeData>
                 {
-                    new CaseTypeData("Open Cases",Convert.ToString(CaseDetails.OpenCaseCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Closed Cases",Convert.ToString(CaseDetails.ClosedCaseCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Total Cases",Convert.ToString(CaseDetails.TotalCaseCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Past Due Total Cases",Convert.ToString(CaseDetails.TotalPastDueCaseCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Assigned To Me",Convert.ToString(CaseDetails.AssignedToMeCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("My Past Due Cases",Convert.ToString(CaseDetails.PastDueAssignedToMeCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Created By Me",Convert.ToString(CaseDetails.CreatedByMeCount),"Assets/dropdowniconClose.png"),
-                    new CaseTypeData("Closed By Me",Convert.ToString(CaseDetails.ClosedByMeCount),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Open Cases",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.OpenCaseCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Closed Cases",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.ClosedCaseCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Total Cases",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.TotalCaseCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Past Due Total Cases",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.TotalPastDueCaseCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Assigned To Me",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.AssignedToMeCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("My Past Due Cases",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.PastDueAssignedToMeCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Created By Me",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.CreatedByMeCount))),"Assets/dropdowniconClose.png"),
+                    new CaseTypeData("Closed By Me",Convert.ToString(string.Format(CultureInfo.InvariantCulture,"{0:#,#}",(CaseDetails.ClosedByMeCount))),"Assets/dropdowniconClose.png"),
                     new CaseTypeData("Default Hopper",CaseDetails.DefaultHopperName,"Assets/dropdowniconClose.png"),
                     new CaseTypeData("Owner",CaseDetails.CaseTypeOwnerName,"Assets/dropdowniconClose.png"),
                 };
+
 
                 listCaseDetails.ItemsSource = lst;
             }

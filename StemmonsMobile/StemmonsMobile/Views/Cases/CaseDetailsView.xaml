@@ -22,7 +22,9 @@
                                 <Label Text="{Binding Caseoptions}"  HorizontalOptions="StartAndExpand" 
                                         VerticalOptions="Center"   Style="{StaticResource defaultLabelSize_16}" Margin="0,5,0,0" />
                                 <Label Text="{Binding Description}" HorizontalOptions="End" VerticalOptions="CenterAndExpand" 
-                                         Grid.Column="1" TextColor="Orange"  Style="{StaticResource defaultLabelSize_16}" Margin="0,5,0,0"/>
+                             Grid.Column="1" TextColor="Orange"  Style="{StaticResource defaultLabelSize_16}" Margin="0,5,0,0" LineBreakMode="TailTruncation"/>
+
+
                                 <Button Image="{Binding Icon}" Grid.Column="2" HorizontalOptions="End" 
                                          VerticalOptions="Center" BackgroundColor="Transparent" WidthRequest="25" HeightRequest="25" Margin="0,5,0,0"/>
                             </Grid>
@@ -38,9 +40,9 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2"/>
                         <Label Text="Create New Case"  LineBreakMode="TailTruncation"
-                           VerticalOptions="Center" Grid.Row="1" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                           VerticalOptions="Center" Grid.Row="1" />
                         <Button Image="Assets/plussign.png" BackgroundColor="Transparent" 
                             Grid.Row="1" Grid.Column="1" WidthRequest="25" HeightRequest="25"    Clicked="NewCaseCreat_Clicked" />
                     </Grid>

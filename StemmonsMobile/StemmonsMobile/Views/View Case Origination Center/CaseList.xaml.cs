@@ -145,7 +145,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             try
             {
                 Title = sTitle;
-                await SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
+                SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
 
                 Getcaselistdatafromapi(parametername, value, searchvalue);
             }
@@ -154,7 +154,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             }
         }
 
-        public static async Task SyncSqlitetoOnlineFromViewcaseonly(bool isMainthreadcall, ContentView overlay, Grid grd)
+        public static async void SyncSqlitetoOnlineFromViewcaseonly(bool isMainthreadcall, ContentView overlay, Grid grd)
         {
             try
             {
@@ -170,9 +170,9 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         if (isMainthreadcall)
                         {
                             await Task.Run(() =>
-                            {
-                                HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
-                            });
+                             {
+                                 HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+                             });
                         }
                         else
                         {
@@ -184,7 +184,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     }
 
                     Functions.ShowOverlayView_Grid(overlay, false, grd);
-
                 }
             }
             catch (Exception ex)

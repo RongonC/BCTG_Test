@@ -4,6 +4,7 @@ using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using PCLStorage;
+using Plugin.Connectivity;
 using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
@@ -1009,6 +1010,7 @@ namespace StemmonsMobile.Views.Cases
                                         {
                                             Button btn = controlbtn as Button;
                                             var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue; //null than make it blank
+                                            SelItmname = SelItmname ?? metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
 
                                             List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
                                             GetExternalDataSourceByIdResponse.ExternalDatasource cases_extedataSource = new GetExternalDataSourceByIdResponse.ExternalDatasource
@@ -1471,7 +1473,13 @@ namespace StemmonsMobile.Views.Cases
             {
                 var btn = sender as Button;
                 btn.Focus();
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 iSelectedItemlookupId = Convert.ToInt32(btn.StyleId.ToString());
                 //var BTNcntrl = FindPickerControls(iSelectedItemlookupId) as Button;
                 dynamic Exditemslst = null;
@@ -1489,30 +1497,27 @@ namespace StemmonsMobile.Views.Cases
 
                         string fieldName = string.Empty;
 
-                        //if (App.Isonline)
+                        var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                        if (assocChild.Count < 1)
                         {
-                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                            if (assocChild.Count < 1)
+                            await Task.Run(() =>
                             {
-                                await Task.Run(() =>
+                                var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
+
+                                temp_extdatasource.Wait();
+                                if (temp_extdatasource.Result.Count > 0)
                                 {
-                                    var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(App.Isonline, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-
-                                    temp_extdatasource.Wait();
-                                    if (temp_extdatasource.Result.Count > 0)
-                                    {
-                                        lst_extdatasource.AddRange(temp_extdatasource.Result);
-                                    }
-                                });
-                            }
+                                    lst_extdatasource.AddRange(temp_extdatasource.Result);
+                                }
+                            });
+                            lstexternaldatasource = lst_extdatasource;
                         }
-
-                        lstexternaldatasource = lst_extdatasource;
                         //if (lstexternaldatasource.Count == 1 && pickercntrl.ItemsSource != null)
-                        if (lstexternaldatasource.Count == 1)
+                        //if (lstexternaldatasource.Count == 1)
+                        else
                         {
-                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                            if (assocChild.Count <= 1)
+                            //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                            //if (assocChild.Count <= 1)
                             {
                                 FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
                             }
@@ -1526,14 +1531,13 @@ namespace StemmonsMobile.Views.Cases
                                 lst_extdatasourcee.Add(extDSdefaultValues);
                                 lstexternaldatasource = lst_extdatasourcee;
                             }
-                            Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
                         }
-                        else
-                        {
-                            Exditemslst = lst_extdatasource.Select(v => v.NAME);
-                        }
+                        //else
+                        //{
+                        //    Exditemslst = lst_extdatasource.Select(v => v.NAME);
+                        //}
                         //Exditems = new ObservableCollection<string>(Exditemslst);
-
+                        Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
 
                         #region Popup Initialization
 
@@ -1658,7 +1662,13 @@ namespace StemmonsMobile.Views.Cases
                 return;
             }
             ext_search.Unfocus();
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             var ctrl = FindPickerControls(iSelectedItemlookupId);
             if (ctrl != null)
             {
@@ -1785,18 +1795,21 @@ namespace StemmonsMobile.Views.Cases
             {
             }
         }
-        public void ReloadNotesArea()
+        public async void ReloadNotesArea()
         {
             try
             {
                 gridCasesnotes.ItemsSource = null;
                 CasesnotesGroups.Clear();
-
-                Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, _Casedata.NewestNoteOnTop);
-                NotesResponse.Wait();
-                var Noteslist = NotesResponse?.Result;
-
                 ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
+                List<GetCaseNotesResponse.NoteData> Noteslist = new List<GetCaseNotesResponse.NoteData>();
+                await Task.Run(() =>
+                {
+                    Task<List<GetCaseNotesResponse.NoteData>> NotesResponse = CasesSyncAPIMethods.GetCaseNotes(Onlineflag, CaseID, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, _Casedata.NewestNoteOnTop);
+                    NotesResponse.Wait();
+                    Noteslist = NotesResponse?.Result;
+                });
+
                 if (Noteslist?.Count > 0)
                 {
                     for (int i = 0; i < Noteslist.Count; i++)
@@ -1847,19 +1860,22 @@ namespace StemmonsMobile.Views.Cases
                         CasesnotesGroups.Add(item);
                     }
 
-                    gridCasesnotes.ItemsSource = null;
-                    gridCasesnotes.ItemsSource = CasesnotesGroups;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        gridCasesnotes.ItemsSource = null;
+                        gridCasesnotes.ItemsSource = CasesnotesGroups;
+                    });
                 }
             }
             catch (Exception ex)
             {
             }
-            if (CasesnotesGroups.Count <= 0)
-            {
-                gridCasesnotes.HeightRequest = 0;
-            }
-            else
-                gridCasesnotes.HeightRequest = 700;
+            //if (CasesnotesGroups.Count <= 0)
+            //{
+            //    gridCasesnotes.HeightRequest = 0;
+            //}
+            //else
+            //    gridCasesnotes.HeightRequest = 700;
         }
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
@@ -1872,7 +1888,13 @@ namespace StemmonsMobile.Views.Cases
             Entry dtp = new Entry();
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
                 var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
@@ -1889,7 +1911,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -2506,6 +2534,15 @@ namespace StemmonsMobile.Views.Cases
                 //var AssocType = json.GetValue("ResponseContent");
                 //AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
 
+                if (CrossConnectivity.Current.IsConnected)
+                {
+
+                }
+                else
+                {
+
+                }
+
                 string fieldName = string.Empty;
                 var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_PARENT == assocTypeId).ToList();
 
@@ -2522,112 +2559,127 @@ namespace StemmonsMobile.Views.Cases
                         //if (itemType != null)
                         //    externalDatasourceId = itemType.ExternalDataSourceID;
 
-                        if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0)
+                        if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0 && CrossConnectivity.Current.IsConnected)
                         {
-                            string query = string.Empty;
-                            string conn = string.Empty;
-                            string ParentExternalDatasourceName = string.Empty;
-                            // await Task.Run(() =>
-                            //{
-                            var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
-
-                            query = externalDatasource.Result?.FirstOrDefault()?.Query;
-                            conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
-                            ParentExternalDatasourceName = externalDatasource?.Result?.FirstOrDefault()?.Name;
-                            // });
-
-                            string filterQueryOrg = "";
-
-                            //await Task.Run(() =>
-                            //{
-                            var Result1 = CasesSyncAPIMethods.GetConnectionString(Onlineflag, itemType.ExternalDataSourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
-
-                            if (!string.IsNullOrEmpty(Result1?.ToString()) && Result1.ToString() != "[]")
+                            if (CrossConnectivity.Current.IsConnected)
                             {
-                                filterQueryOrg = Result1.Result?.FirstOrDefault()?._FILTER_QUERY;
-                            }
-                            //});
+                                string query = string.Empty;
+                                string conn = string.Empty;
+                                string ParentExternalDatasourceName = string.Empty;
+                                // await Task.Run(() =>
+                                //{
+                                var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(CrossConnectivity.Current.IsConnected, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                            var assocParents = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == child._CASE_ASSOC_TYPE_ID_CHILD);
-                            int parentCount = 1;
-                            foreach (var p in assocParents)
-                            {
-                                string parentSelectedValue = null;
+                                query = externalDatasource.Result?.FirstOrDefault()?.Query;
+                                conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
+                                ParentExternalDatasourceName = externalDatasource?.Result?.FirstOrDefault()?.Name;
+                                // });
 
-                                //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+                                string filterQueryOrg = "";
 
-                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
+                                //await Task.Run(() =>
+                                //{
+                                var Result1 = CasesSyncAPIMethods.GetConnectionString(CrossConnectivity.Current.IsConnected, itemType.ExternalDataSourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                                parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
-
-                                string parentFieldName = itemType.Name;
-
-                                //var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
-
-                                //string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
-
-                                query = GetQueryStringWithParamaters(query, parentFieldName, parentSelectedValue, ParentExternalDatasourceName);
-
-                                //replace internal entity type
-                                if (!string.IsNullOrEmpty(filterQueryOrg))
+                                if (!string.IsNullOrEmpty(Result1?.ToString()) && Result1.ToString() != "[]")
                                 {
-                                    var filterQuery = "" + filterQueryOrg;
-
-                                    var cnt = 0;
-                                    if (filterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
-                                        cnt++;
-                                    if (filterQuery.Contains("'%BOXER_ENTITIES%'"))
-                                        cnt++;
-                                    try
-                                    {
-                                        for (int i = 0; i < cnt; i++)
-                                        {
-                                            int s1 = filterQuery.IndexOf("/*");
-                                            int e1 = filterQuery.IndexOf("*/");
-                                            string f1 = filterQuery.Substring(s1, (e1 + 2) - s1);
-                                            if (f1.IndexOf("'%BOXER_ENTITIES%'") > 0)
-                                            {
-                                                s1 = s1 + 2;
-                                                string r1 = filterQuery.Substring(s1, e1 - s1);
-                                                filterQuery = filterQuery.Replace(f1, " and " + r1);
-                                            }
-                                            else
-                                            {
-                                                filterQuery = filterQuery.Replace(f1, "");
-                                            }
-                                        }
-                                        filterQuery = filterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + parentSelectedValue + " )");
-                                    }
-                                    catch (Exception ex) { }
-
-                                    query = query.Replace("/*{ENTITY_FILTER_QUERY_" + parentCount + "}*/", filterQuery);
-                                    parentCount++;
-
+                                    filterQueryOrg = Result1.Result?.FirstOrDefault()?._FILTER_QUERY;
                                 }
-                            }
+                                //});
 
-                            if (itemType != null)
-                            {
-                                fieldName = itemType.Name;
-                                var ItemValues = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(CasesAPIMethods.GetValuesQueryAndConnection(Casetypeid, child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), fieldName/*SelectedCaseType.Name*/,
-                                     (itemType.IsRequired == 'Y').ToString(), conn, query).GetValue("ResponseContent").ToString());
+                                var assocParents = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == child._CASE_ASSOC_TYPE_ID_CHILD);
+                                int parentCount = 1;
+                                foreach (var p in assocParents)
+                                {
+                                    string parentSelectedValue = null;
 
-                                //(control as Picker).ItemsSource = ItemValues;
-                                //(control as Picker).SelectedIndex = 0;
-                                lstexternaldatasource = ItemValues;
+                                    //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+
+                                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
+
+                                    parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
+
+                                    string parentFieldName = itemType.Name;
+
+                                    //var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+
+                                    //string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
+
+                                    query = GetQueryStringWithParamaters(query, parentFieldName, parentSelectedValue, ParentExternalDatasourceName);
+
+                                    //replace internal entity type
+                                    if (!string.IsNullOrEmpty(filterQueryOrg))
+                                    {
+                                        var filterQuery = "" + filterQueryOrg;
+
+                                        var cnt = 0;
+                                        if (filterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
+                                            cnt++;
+                                        if (filterQuery.Contains("'%BOXER_ENTITIES%'"))
+                                            cnt++;
+                                        try
+                                        {
+                                            for (int i = 0; i < cnt; i++)
+                                            {
+                                                int s1 = filterQuery.IndexOf("/*");
+                                                int e1 = filterQuery.IndexOf("*/");
+                                                string f1 = filterQuery.Substring(s1, (e1 + 2) - s1);
+                                                if (f1.IndexOf("'%BOXER_ENTITIES%'") > 0)
+                                                {
+                                                    s1 = s1 + 2;
+                                                    string r1 = filterQuery.Substring(s1, e1 - s1);
+                                                    filterQuery = filterQuery.Replace(f1, " and " + r1);
+                                                }
+                                                else
+                                                {
+                                                    filterQuery = filterQuery.Replace(f1, "");
+                                                }
+                                            }
+                                            filterQuery = filterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + parentSelectedValue + " )");
+                                        }
+                                        catch (Exception ex) { }
+
+                                        query = query.Replace("/*{ENTITY_FILTER_QUERY_" + parentCount + "}*/", filterQuery);
+                                        parentCount++;
+
+                                    }
+                                }
+
+                                if (itemType != null)
+                                {
+                                    fieldName = itemType.Name;
+                                    var DSValues = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(CasesAPIMethods.GetValuesQueryAndConnection(Casetypeid, child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), fieldName/*SelectedCaseType.Name*/,
+                                         (itemType.IsRequired == 'Y').ToString(), conn, query).GetValue("ResponseContent").ToString());
+
+                                    //(control as Picker).ItemsSource = ItemValues;
+                                    //(control as Picker).SelectedIndex = 0;
+                                    lstexternaldatasource = DSValues;
+                                }
                             }
                         }
                         else
                         {
-                            if (itemType != null)
-                            {
-                                fieldName = itemType.Name;
-                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                            lst_extdatasource.Add(extDSdefaultValues);
 
-                                lst_extdatasource.Add(extDSdefaultValues);
-                                //(control as Picker).ItemsSource = lst_extdatasource;
-                                lstexternaldatasource = lst_extdatasource;
+                            var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
+                            GetAppTypeInfo.Wait();
+
+                            Task<EDSResultList> Result = DBHelper.GetEDSResultListwithId(Convert.ToInt32(child._CASE_ASSOC_TYPE_ID_CHILD), Convert.ToInt32(GetAppTypeInfo?.Result?.APP_TYPE_INFO_ID), App.DBPath);
+                            Result.Wait();
+                            if (Result?.Result?.ASSOC_FIELD_ID > 0)
+                            {
+                                string jsonvalue = Result.Result.EDS_RESULT;
+                                var lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(jsonvalue);
+                                lst_extdatasource.AddRange(lstResult.OrderBy(v => v.NAME));
                             }
+
+                            //(control as Picker).ItemsSource = lst_extdatasource;
+                            lstexternaldatasource = lst_extdatasource;
+                            //if (itemType != null)
+                            //{
+                            //    fieldName = itemType.Name;
+                            //}
                         }
                     }
                 }
@@ -3238,7 +3290,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 DatePicker en = (DatePicker)sender;
                 DyanmicSetCalc(en.StyleId);
             }
@@ -3251,7 +3309,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -3266,7 +3330,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
 
                 DyanmicSetCalc(en.StyleId);
@@ -3279,7 +3349,13 @@ namespace StemmonsMobile.Views.Cases
 
         public void DyanmicSetCalc(string CurrentStyleId)
         {
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             try
             {
                 if (Onlineflag)
@@ -4281,8 +4357,10 @@ namespace StemmonsMobile.Views.Cases
 
 
                                     CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(_caseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
-                                    //else
-                                    //    CasesSyncAPIMethods.storeApproveandReturn(Onlineflag, objReturnCaseToLastAssignee, Convert.ToInt32(Casetypeid), Convert.ToString(ApproveAndReturn.Result), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, "", objview, Casetitle, Functions.UserFullName, strTome);
+
+
+                                    // To manage the footer for Return To Functionality Only
+                                    HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
                                 }
                             });
 
@@ -4356,6 +4434,9 @@ namespace StemmonsMobile.Views.Cases
                                     }
 
                                     CasesSyncAPIMethods.storeDeclineAndReturn(Onlineflag, objDeclineAndReturn, Convert.ToInt32(Casetypeid), Convert.ToString(CaseID), Functions.UserName, App.DBPath, "C1_C2_CASES_CASETYPELIST", "", ConstantsSync.CasesInstance, objview, Casetitle, Functions.UserFullName, strTome);
+
+                                    // To manage the footer for Return To Functionality Only
+                                    HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
 
                                 }
                             });

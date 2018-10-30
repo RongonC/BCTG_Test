@@ -170,7 +170,7 @@ namespace StemmonsMobile
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-            if (iRecord != null && iRecord.Result != null)
+            if (iRecord != null && iRecord.Result > 0)
             {
                 int AssignCAseID = iRecord.Result;
                 Functions.ShowtoastAlert("Case Assigned Successfully.");

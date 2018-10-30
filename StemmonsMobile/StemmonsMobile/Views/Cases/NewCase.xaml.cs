@@ -1021,7 +1021,13 @@ namespace StemmonsMobile.Views.Cases
             {
                 var btn = sender as Button;
                 btn.Focus();
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 iSelectedItemlookupId = int.Parse(btn.StyleId.Split('_')[1].Split('|')[0]);
 
                 var pickercntrl = FindPickerControls(Convert.ToInt32(iSelectedItemlookupId)) as Picker;
@@ -1204,7 +1210,13 @@ namespace StemmonsMobile.Views.Cases
                 return;
             }
             ext_search.Unfocus();
-            DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            try
+            {
+                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+            }
+            catch (Exception)
+            {
+            }
             this.Stack_Popup.IsVisible = false;
             this.masterGrid.IsVisible = true;
 
@@ -1431,7 +1443,13 @@ namespace StemmonsMobile.Views.Cases
             Entry dtp = new Entry();
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
 
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
@@ -1450,7 +1468,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
                 if (en.Text.Length > 10)
                     en.Text = e.OldTextValue;
@@ -1491,7 +1515,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 DatePicker en = (DatePicker)sender;
                 en.TextColor = Color.Gray;
                 DyanmicSetCalc(en.StyleId);
@@ -1505,7 +1535,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
                 DyanmicSetCalc(en.StyleId);
             }
@@ -1517,7 +1553,13 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                try
+                {
+                    DependencyService.Get<IKeyboardHelper>().HideKeyboard();
+                }
+                catch (Exception)
+                {
+                }
                 Entry en = (Entry)sender;
                 DyanmicSetCalc(en.StyleId);
             }
@@ -1854,6 +1896,7 @@ namespace StemmonsMobile.Views.Cases
 
                         if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0)
                         {
+
                             var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(App.Isonline, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
                             string query = externalDatasource.Result?.FirstOrDefault()?.Query;
