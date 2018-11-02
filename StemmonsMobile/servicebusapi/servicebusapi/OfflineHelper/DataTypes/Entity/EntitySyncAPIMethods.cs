@@ -418,7 +418,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         }
                     }
 
-
                     if (EntityList == null && _IsOnline)
                     {
                         // if not than go for the SQL Call

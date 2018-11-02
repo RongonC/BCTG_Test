@@ -2592,18 +2592,18 @@ namespace StemmonsMobile.Views.Cases
                                 foreach (var p in assocParents)
                                 {
                                     string parentSelectedValue = null;
-
+                                    var ParntItmType = ItemTypes.Where(t => t.AssocTypeID == p._CASE_ASSOC_TYPE_ID_PARENT).FirstOrDefault();
                                     //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
 
                                     List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
 
                                     parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
 
-                                    string parentFieldName = itemType.Name;
+                                    string parentFieldName = ParntItmType.Name;
 
-                                    //var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+                                    var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(Onlineflag, Convert.ToString(ParntItmType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                                    //string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
+                                    ParentExternalDatasourceName = externalDatasourceinfo?.Result?.FirstOrDefault()?.Name;
 
                                     query = GetQueryStringWithParamaters(query, parentFieldName, parentSelectedValue, ParentExternalDatasourceName);
 
@@ -2653,7 +2653,7 @@ namespace StemmonsMobile.Views.Cases
 
                                     //(control as Picker).ItemsSource = ItemValues;
                                     //(control as Picker).SelectedIndex = 0;
-                                    lstexternaldatasource = DSValues;
+                                    lstexternaldatasource = DSValues.OrderBy(v => v.NAME).ToList();
                                 }
                             }
                         }

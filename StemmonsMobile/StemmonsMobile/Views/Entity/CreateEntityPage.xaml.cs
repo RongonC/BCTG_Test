@@ -243,7 +243,7 @@ namespace StemmonsMobile.Views.Entity
                                     pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
                                     pk.SelectedIndex = 0;
 
-                                   
+
 
                                     RightLyout.Children.Add(pk);
 
@@ -1097,9 +1097,15 @@ namespace StemmonsMobile.Views.Entity
                             if (CHildLst.Count < 1)
                             {
                                 // Fill Parent
+                                //if (App.Isonline)
+                                //{
+
+                                //}
+                                //else
+                                //{
                                 Exdls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
                                 _list_EDS.AddRange(Exdls.EXTERNAL_DATASOURCE);
-
+                                //}
                             }
                             else
                             {
@@ -1164,6 +1170,7 @@ namespace StemmonsMobile.Views.Entity
                                     if (dct.Value != "-- Select Item --")
                                     {
                                         var assoc = EntitySchemaLists.AssociationFieldCollection.FirstOrDefault(t => t.AssocTypeID == AssocTypeIDChild);
+
                                         int? externalDataSourceIdParent = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == dct.Key).FirstOrDefault()?.ExternalDataSource.ExternalDatasourceID;
 
                                         if (assoc.ExternalDataSource != null)
@@ -1376,7 +1383,7 @@ namespace StemmonsMobile.Views.Entity
                     return;
                 }
                 ext_search.Unfocus();
-                
+
                 this.Stack_Popup.IsVisible = false;
                 this.masterGrid.IsVisible = true;
 

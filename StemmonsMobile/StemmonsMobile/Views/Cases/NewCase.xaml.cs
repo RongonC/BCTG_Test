@@ -1897,10 +1897,10 @@ namespace StemmonsMobile.Views.Cases
                         if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0)
                         {
 
-                            var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(App.Isonline, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+                            var ChildexternalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(App.Isonline, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
-                            string query = externalDatasource.Result?.FirstOrDefault()?.Query;
-                            string conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
+                            string query = ChildexternalDatasource.Result?.FirstOrDefault()?.Query;
+                            string conn = ChildexternalDatasource.Result?.FirstOrDefault()?.ConnectionString;
                             string filterQueryOrg = "";
 
 
@@ -1917,6 +1917,8 @@ namespace StemmonsMobile.Views.Cases
                             int parentCount = 1;
                             foreach (var p in assocParents)
                             {
+                                var ParntItmType = ItemTypes.Where(t => t.AssocTypeID == p._CASE_ASSOC_TYPE_ID_PARENT).FirstOrDefault();
+
                                 string parentSelectedValue = null;
 
                                 //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
@@ -1925,13 +1927,15 @@ namespace StemmonsMobile.Views.Cases
 
                                 parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
 
-                                string parentFieldName = itemType.Name;
+                                string parentFieldName = ParntItmType.Name;
 
-                                var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(App.Isonline, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
+                                var externalDatasourceinfo = CasesSyncAPIMethods.GetExternalDataSourceItemsById(App.Isonline, Convert.ToString(ParntItmType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
                                 string ParentExternalDatasourceName = externalDatasourceinfo?.Result?.AsQueryable()?.FirstOrDefault()?.Name;
 
 
                                 query = GetQueryStringWithParamaters(query, parentFieldName, parentSelectedValue, ParentExternalDatasourceName);
+
+                                //var SplQury = query.Split(new string[] { "ORDER  BY" }, StringSplitOptions.None);
 
                                 //replace internal entity type
                                 if (!string.IsNullOrEmpty(filterQueryOrg))
@@ -1969,6 +1973,7 @@ namespace StemmonsMobile.Views.Cases
                                     parentCount++;
 
                                 }
+
                             }
                             if (itemType != null)
                             {
@@ -1979,12 +1984,11 @@ namespace StemmonsMobile.Views.Cases
 
                                 //(control as Picker).ItemsSource = ItemValues;
                                 //(control as Picker).SelectedIndex = 0;
-                                lstexternaldatasource = ItemValues;
+                                lstexternaldatasource = ItemValues.OrderBy(v => v.NAME).ToList();
                             }
                         }
                         else
                         {
-
                             if (itemType != null)
                             {
                                 fieldName = itemType.Name;
