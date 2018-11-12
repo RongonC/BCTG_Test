@@ -1058,7 +1058,7 @@ namespace StemmonsMobile.Views.Entity
         {
             try
             {
-                if (App.Isonline)
+                //if (App.Isonline)
                 {
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                     lstView.ItemsSource = null;

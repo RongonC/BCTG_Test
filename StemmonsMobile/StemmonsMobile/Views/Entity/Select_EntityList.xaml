@@ -16,11 +16,11 @@
                 </Grid.RowDefinitions>
 
                 <SearchBar x:Name="txt_seacrhbar" TextChanged="Txt_seacrhbar_TextChanged" Grid.Row="0" Placeholder="Search" />
-                
-           
+
+
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
-                    <ListView x:Name="list_entity" Margin="0,0,0,0" 
-                      ItemTapped="List_entity_ItemTapped"  HasUnevenRows="True" >
+                    <ListView x:Name="list_entity"  
+                      ItemTapped="List_entity_ItemTapped" RowHeight="40"   >
                         <ListView.ItemTemplate>
                             <DataTemplate  >
                                 <ViewCell>
@@ -32,7 +32,7 @@
                                         <StackLayout Orientation="Horizontal">
                                             <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
                                                 <Label  Text="{Binding EntityTypeName}" VerticalOptions="Center"
-                                                TextColor="Black"  Margin="15,0,0,0"
+                                                TextColor="Black"  Margin="15,0,0,0" LineBreakMode="TailTruncation"
                                                 HorizontalOptions="End" />
                                             </StackLayout>
                                             <Image Source="Assets/dropdowniconClose.png"  
