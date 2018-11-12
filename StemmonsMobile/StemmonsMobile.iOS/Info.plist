@@ -33,7 +33,7 @@
 	<key>XSLaunchImageAssets</key>
 	<string>Assets.xcassets/LaunchImage.launchimage</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.46</string>
+	<string>1.4.64</string>
 	<key>NSCameraUsageDescription</key>
 	<string>I want to Use camera!</string>
 	<key>NSPhotoLibraryUsageDescription</key>
