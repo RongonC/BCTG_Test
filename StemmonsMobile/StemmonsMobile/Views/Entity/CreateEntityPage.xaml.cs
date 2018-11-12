@@ -1052,7 +1052,6 @@ namespace StemmonsMobile.Views.Entity
 
         int iSelectedItemlookupId = 0;
         List<EXTERNAL_DATASOURCE1> _list_EDS = new List<EXTERNAL_DATASOURCE1>();
-        AssociationField Exdls = null;
         ListView lstView = new ListView();
         SearchBar ext_search = new SearchBar();
         private async void Pk_button_Clicked(object sender, EventArgs e)
@@ -1079,14 +1078,14 @@ namespace StemmonsMobile.Views.Entity
                     if (pickercntrl != null)
                     {
                         _list_EDS.Clear();
-                        EXTERNAL_DATASOURCE1 EDS = new EXTERNAL_DATASOURCE1
-                        {
-                            Count = 0,
-                            EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
-                            EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
-                            ID = 0
-                        };
-                        _list_EDS.Add(EDS);
+                        //EXTERNAL_DATASOURCE1 EDS = new EXTERNAL_DATASOURCE1
+                        //{
+                        //    Count = 0,
+                        //    EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
+                        //    EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
+                        //    ID = 0
+                        //};
+                        _list_EDS.Add(EDSDefaultValue);
 
 
                         var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
@@ -1097,174 +1096,189 @@ namespace StemmonsMobile.Views.Entity
                             if (CHildLst.Count < 1)
                             {
                                 // Fill Parent
-                                //if (App.Isonline)
-                                //{
+                                if (App.Isonline && (CurAssco.FieldType.ToUpper() == "SE" || CurAssco.FieldType.ToUpper() == "ME" || CurAssco.FieldType.ToUpper() == "EL"))
+                                {
+                                    if (CurAssco.FieldType.ToUpper() == "SE" || CurAssco.FieldType.ToUpper() == "ME" || CurAssco.FieldType.ToUpper() == "EL")
+                                    {
+                                        var result = EntityAPIMethods.GetExternalDataSourceByID(Convert.ToString(CurAssco.ExternalDataSourceID));
+                                        var tEM = result.GetValue("ResponseContent");
 
-                                //}
-                                //else
-                                //{
-                                Exdls = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
-                                _list_EDS.AddRange(Exdls.EXTERNAL_DATASOURCE);
-                                //}
+                                        if (tEM != null)
+                                        {
+                                            ExternalDatasource exd = JsonConvert.DeserializeObject<ExternalDatasource>(tEM.ToString());
+                                            if (exd.List.Count > 0)
+                                            {
+                                                CurAssco.EXTERNAL_DATASOURCE = exd.List;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
                             }
                             else
                             {
                                 // Generate Filter Query and Fill Child Control
 
-                                var AssocTypeIDChild = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).FirstOrDefault();
-
-
-                                string sFieldType = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).FirstOrDefault().FieldType;
-                                string sQuery = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.Query;
-
-                                if (string.IsNullOrEmpty(sQuery))
-                                    return;
-
-                                string sExternalDatasourceName = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.DataSourceName;
-                                var childAssocObject = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).ToList();
-                                //int? externalDatasourceIdChild = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).FirstOrDefault()?.ExternalDataSource?.ExternalDatasourceID;
-
-                                var AssocTypeIDParent = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDParent).FirstOrDefault();
-
-                                List<int> ParentLst = childAssocObject.FirstOrDefault()?.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == AssocTypeIDChild).ToList().Select(x => x.EntityAssocTypeIDParent).ToList();
-
-                                Dictionary<int, string> dctFilter = new Dictionary<int, string>();
-                                int iFilter = 0;
-
-                                foreach (var parentID in ParentLst)
+                                if (App.Isonline)
                                 {
-                                    string sSelectedValue = null;
-                                    Picker pkCntrl = FindEntityControl(Convert.ToString(parentID)) as Picker;
-                                    Button btnCntrl = FindEntityControl(Convert.ToString(parentID), "Button") as Button;
+                                    var AssocTypeIDChild = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).FirstOrDefault();
 
-                                    if (parentID == iSelectedItemlookupId)
-                                    {
-                                        dctFilter.Add(parentID, sSelectedValue);
-                                    }
-                                    else
-                                    {
-                                        string sFieldTypeParent = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == parentID).FirstOrDefault().FieldType;
+                                    string sFieldType = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).FirstOrDefault().FieldType;
+                                    string sQuery = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.Query;
 
-                                        if (sFieldTypeParent.ToUpper() == "SE" || sFieldTypeParent.ToUpper() == "ME" || sFieldTypeParent.ToUpper() == "EL")
+                                    if (string.IsNullOrEmpty(sQuery))
+                                        return;
+
+                                    string sExternalDatasourceName = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild).ToList().Select(x => x.ExternalDataSource)?.FirstOrDefault()?.DataSourceName;
+                                    var childAssocObject = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).ToList();
+                                    //int? externalDatasourceIdChild = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == AssocTypeIDChild).FirstOrDefault()?.ExternalDataSource?.ExternalDatasourceID;
+
+                                    var AssocTypeIDParent = CurAssco.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDParent).FirstOrDefault();
+
+                                    List<int> ParentLst = childAssocObject.FirstOrDefault()?.EntityAssocTypeCascade.Where(t => t.EntityAssocTypeIDChild == AssocTypeIDChild).ToList().Select(x => x.EntityAssocTypeIDParent).ToList();
+
+                                    Dictionary<int, string> dctFilter = new Dictionary<int, string>();
+                                    int iFilter = 0;
+
+                                    foreach (var parentID in ParentLst)
+                                    {
+                                        string sSelectedValue = null;
+                                        Picker pkCntrl = FindEntityControl(Convert.ToString(parentID)) as Picker;
+                                        Button btnCntrl = FindEntityControl(Convert.ToString(parentID), "Button") as Button;
+
+                                        if (parentID == iSelectedItemlookupId)
                                         {
-                                            if (!Functions.IsEditEntity)
-                                            {
-                                                var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID);
+                                            dctFilter.Add(parentID, sSelectedValue);
+                                        }
+                                        else
+                                        {
+                                            string sFieldTypeParent = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == parentID).FirstOrDefault().FieldType;
 
-                                                var ddlEds = (Picker)cnt;
-                                                List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
-                                                dctFilter.Add(parentID, Convert.ToString(src[0].ID));
-                                            }
-                                            else
+                                            if (sFieldTypeParent.ToUpper() == "SE" || sFieldTypeParent.ToUpper() == "ME" || sFieldTypeParent.ToUpper() == "EL")
                                             {
-                                                var ItmSrc = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDParent).Select(m => m.EXTERNAL_DATASOURCE).ToList()[0].Where(n => n.EXTERNAL_DATASOURCE_NAME == btnCntrl.Text).ToList();
-                                                dctFilter.Add(parentID, Convert.ToString(ItmSrc[0].ID));
+                                                if (!Functions.IsEditEntity)
+                                                {
+                                                    var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID);
+
+                                                    var ddlEds = (Picker)cnt;
+                                                    List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                                    dctFilter.Add(parentID, Convert.ToString(src[0].ID));
+                                                }
+                                                else
+                                                {
+                                                    var ItmSrc = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDParent).Select(m => m.EXTERNAL_DATASOURCE).ToList()[0].Where(n => n.EXTERNAL_DATASOURCE_NAME == btnCntrl.Text).ToList();
+                                                    dctFilter.Add(parentID, Convert.ToString(ItmSrc[0].ID));
+                                                }
                                             }
                                         }
+                                        iFilter = 1;
                                     }
-                                    iFilter = 1;
-                                }
 
-                                foreach (var dct in dctFilter.OrderBy(v => v.Key))
-                                {
-                                    if (dct.Value != "-- Select Item --")
+                                    foreach (var dct in dctFilter.OrderBy(v => v.Key))
                                     {
-                                        var assoc = EntitySchemaLists.AssociationFieldCollection.FirstOrDefault(t => t.AssocTypeID == AssocTypeIDChild);
-
-                                        int? externalDataSourceIdParent = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == dct.Key).FirstOrDefault()?.ExternalDataSource.ExternalDatasourceID;
-
-                                        if (assoc.ExternalDataSource != null)
+                                        if (dct.Value != "-- Select Item --")
                                         {
-                                            string strconection = string.Empty;
+                                            var Childassoc = EntitySchemaLists.AssociationFieldCollection.FirstOrDefault(t => t.AssocTypeID == AssocTypeIDChild);
 
-                                            await Task.Run(() =>
-                                              {
-                                                  strconection = Functions.GetDecodeConnectionString(assoc.ExternalDataSource.ConnectionString);
-                                              });
+                                            int? externalDataSourceIdParent = EntitySchemaLists.AssociationFieldCollection.Where(i => i.AssocTypeID == dct.Key).FirstOrDefault()?.ExternalDataSource.ExternalDatasourceID;
 
-                                            if (strconection.ToUpper().Contains("BOXER_ENTITIES"))
+                                            if (Childassoc.ExternalDataSource != null)
                                             {
-                                                string filterQueryChild = "";
+                                                string strconection = string.Empty;
 
                                                 await Task.Run(() =>
                                                 {
-                                                    var data = EntityAPIMethods.getConnectionString(Convert.ToString(assoc.ExternalDataSource.ExternalDatasourceID)).GetValue("ResponseContent");
-
-                                                    if (!string.IsNullOrEmpty(data?.ToString()) && data.ToString() != "[]")
-                                                    {
-                                                        List<ConnectionStringCls> responsejson = JsonConvert.DeserializeObject<List<ConnectionStringCls>>(data.ToString());
-
-                                                        filterQueryChild = responsejson[0]._FILTER_QUERY;
-                                                    }
+                                                    strconection = Functions.GetDecodeConnectionString(Childassoc.ExternalDataSource.ConnectionString);
                                                 });
 
-                                                string sFilterQuery = string.Empty;
-
-                                                if (!string.IsNullOrEmpty(filterQueryChild))
+                                                if (strconection.ToUpper().Contains("BOXER_ENTITIES"))
                                                 {
-                                                    sFilterQuery = filterQueryChild;
+                                                    string filterQueryChild = "";
 
-                                                    var cnt = 0;
-                                                    if (sFilterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
-                                                        cnt++;
-                                                    if (sFilterQuery.Contains("'%BOXER_ENTITIES%'"))
-                                                        cnt++;
-                                                    try
+                                                    await Task.Run(() =>
                                                     {
-                                                        for (int i = 0; i < cnt; i++)
+                                                        var data = EntityAPIMethods.getConnectionString(Convert.ToString(Childassoc.ExternalDataSource.ExternalDatasourceID)).GetValue("ResponseContent");
+
+                                                        if (!string.IsNullOrEmpty(data?.ToString()) && data.ToString() != "[]")
                                                         {
-                                                            int s1 = sFilterQuery.IndexOf("/*");
-                                                            int e1 = sFilterQuery.IndexOf("*/");
-                                                            string f1 = sFilterQuery.Substring(s1, (e1 + 2) - s1);
-                                                            if (f1.IndexOf("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}") > 0)
-                                                            {
-                                                                s1 = s1 + 2;
-                                                                string r1 = sFilterQuery.Substring(s1, e1 - s1);
-                                                                sFilterQuery = sFilterQuery.Replace(f1, " and " + r1);
+                                                            List<ConnectionStringCls> responsejson = JsonConvert.DeserializeObject<List<ConnectionStringCls>>(data.ToString());
 
-                                                                sFilterQuery = sFilterQuery.Replace("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}", externalDataSourceIdParent.ToString());
-                                                            }
-                                                            else
-                                                            {
-                                                                sFilterQuery = sFilterQuery.Replace(f1, "");
-                                                            }
+                                                            filterQueryChild = responsejson[0]._FILTER_QUERY;
                                                         }
-                                                        if (dct.Value != "-- Select Item --")
-                                                            sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + dct.Value + " )");
-                                                        else
-                                                        { sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + 0 + " )"); }
-                                                    }
-                                                    catch (Exception ex) { continue; }
-                                                }
+                                                    });
 
-                                                sQuery = sQuery.Replace("/*{ENTITY_FILTER_QUERY_" + iFilter + "}*/", "  " + sFilterQuery + " ");
-                                                iFilter++;
+                                                    string sFilterQuery = string.Empty;
+
+                                                    if (!string.IsNullOrEmpty(filterQueryChild))
+                                                    {
+                                                        sFilterQuery = filterQueryChild;
+
+                                                        var cnt = 0;
+                                                        if (sFilterQuery.Contains("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}"))
+                                                            cnt++;
+                                                        if (sFilterQuery.Contains("'%BOXER_ENTITIES%'"))
+                                                            cnt++;
+                                                        try
+                                                        {
+                                                            for (int i = 0; i < cnt; i++)
+                                                            {
+                                                                int s1 = sFilterQuery.IndexOf("/*");
+                                                                int e1 = sFilterQuery.IndexOf("*/");
+                                                                string f1 = sFilterQuery.Substring(s1, (e1 + 2) - s1);
+                                                                if (f1.IndexOf("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}") > 0)
+                                                                {
+                                                                    s1 = s1 + 2;
+                                                                    string r1 = sFilterQuery.Substring(s1, e1 - s1);
+                                                                    sFilterQuery = sFilterQuery.Replace(f1, " and " + r1);
+
+                                                                    sFilterQuery = sFilterQuery.Replace("{'ENTITY_ASSOC_EXTERNAL_DATASOURCE_ID'}", externalDataSourceIdParent.ToString());
+                                                                }
+                                                                else
+                                                                {
+                                                                    sFilterQuery = sFilterQuery.Replace(f1, "");
+                                                                }
+                                                            }
+                                                            if (dct.Value != "-- Select Item --")
+                                                                sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + dct.Value + " )");
+                                                            else
+                                                            { sFilterQuery = sFilterQuery.Replace("{'EXTERNAL_DATASOURCE_OBJECT_ID'}", "( " + 0 + " )"); }
+                                                        }
+                                                        catch (Exception ex) { continue; }
+                                                    }
+
+                                                    sQuery = sQuery.Replace("/*{ENTITY_FILTER_QUERY_" + iFilter + "}*/", "  " + sFilterQuery + " ");
+                                                    iFilter++;
+                                                }
                                             }
+                                            var sbitem = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == dct.Key).FirstOrDefault();
+                                            sQuery = GetQueryStringWithParamaters(sQuery, sbitem.ExternalDataSource?.DataSourceName, dct.Value, sbitem.AssocName);
                                         }
-                                        var sbitem = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == dct.Key).FirstOrDefault();
-                                        sQuery = GetQueryStringWithParamaters(sQuery, sbitem.ExternalDataSource?.DataSourceName, dct.Value, sbitem.AssocName);
                                     }
 
-                                }
+                                    if (dctForumulaQuery.ContainsKey(sExternalDatasourceName))
+                                    {
+                                        dctForumulaQuery.Remove(sExternalDatasourceName);
+                                    }
+                                    dctForumulaQuery.Add(sExternalDatasourceName, sQuery);
 
-                                if (dctForumulaQuery.ContainsKey(sExternalDatasourceName))
+                                    List<EXTERNAL_DATASOURCE1> dt = new List<EXTERNAL_DATASOURCE1>();
+
+                                    //var p = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild)?.ToList()?.Select(x => x.ExternalDataSource).FirstOrDefault().ConnectionString;
+
+                                    await Task.Run(() =>
+                                    {
+                                        var Response = EntityAPIMethods.ExternalDatasourceByQuery(Functions.GetDecodeConnectionString(CurAssco.ExternalDataSource.ConnectionString), sQuery);
+                                        var result = Response.GetValue("ResponseContent");
+                                        dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
+                                    });
+
+                                    _list_EDS.AddRange(dt);
+                                }
+                                else
                                 {
-                                    dctForumulaQuery.Remove(sExternalDatasourceName);
+                                    _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
                                 }
-                                dctForumulaQuery.Add(sExternalDatasourceName, sQuery);
-
-                                List<EXTERNAL_DATASOURCE1> dt = new List<EXTERNAL_DATASOURCE1>();
-
-                                var p = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild)?.ToList()?.Select(x => x.ExternalDataSource).FirstOrDefault().ConnectionString;
-
-                                await Task.Run(() =>
-                                 {
-                                     var Response = EntityAPIMethods.ExternalDatasourceByQuery(Functions.GetDecodeConnectionString(CurAssco.ExternalDataSource.ConnectionString), sQuery);
-                                     var result = Response.GetValue("ResponseContent");
-                                     dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
-                                 });
-
-                                _list_EDS.AddRange(dt);
                             }
 
                         }
