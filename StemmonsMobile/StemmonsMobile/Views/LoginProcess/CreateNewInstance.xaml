@@ -28,7 +28,9 @@
                     <Label Text="Instance Name" FontSize="13" Margin="5,30,0,0" TextColor="Gray" />
                     <Entry x:Name="txt_instancename" Text="{Binding InstanceName}" Placeholder="The name of the instance to connect to" Style="{StaticResource defaultLabelSize_16}" Margin="5,0,5,0" Completed="txt_instancename_Completed" />
                     <Label Text="Instance URL" FontSize="13" Margin="5,30,0,0" TextColor="Gray" />
-                    <Entry x:Name="txt_instanceurl" Text="{Binding InstanceUrl}" Placeholder="Example: http://home.mysite.com/mysite" Style="{StaticResource defaultLabelSize_16}" TextChanged="Handle_TextChanged" Margin="5,0,5,0" Completed="txt_instanceurl_Completed" />
+                    <Entry x:Name="txt_instanceurl" Text="{Binding InstanceUrl}" Placeholder="Example: http://home.mysite.com/mysite"
+                           Keyboard="Url"
+                           Style="{StaticResource defaultLabelSize_16}" TextChanged="Handle_TextChanged" Margin="5,0,5,0" Completed="txt_instanceurl_Completed" />
                     <Button x:Name="Createbtn" Text="Create" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="18" Margin="0,0,10,0" FontAttributes="Italic" Clicked="Createbtn_Clicked"/>
                 </StackLayout>
             </Grid>

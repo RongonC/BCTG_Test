@@ -131,7 +131,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     try
                     {
-                        EntitySchemaLists = await EntitySyncAPIMethods.GetEntityTypeSchema(App.Isonline, ConstantsSync.EntityInstance, Convert.ToInt32(EntityTypeID), Functions.UserName, null, App.DBPath, Functions.IsEditEntity ? "U" : "C");
+                        EntitySchemaLists = await EntitySyncAPIMethods.GetEntityTypeSchema(App.Isonline, ConstantsSync.EntityInstance, Convert.ToInt32(EntityTypeID), Functions.UserName, null, App.DBPath);
                     }
                     catch (Exception)
                     {
@@ -547,7 +547,6 @@ namespace StemmonsMobile.Views.Entity
                                         VerticalOptions = LayoutOptions.Start,
                                         WidthRequest = 200,
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                        FontFamily = "Soin Sans Neue"
                                     };
                                     RightLyout.Children.Add(ST);
                                     ST.Text = "";
@@ -580,7 +579,6 @@ namespace StemmonsMobile.Views.Entity
                                     txt_number.WidthRequest = 200;
                                     txt_number.Keyboard = Keyboard.Numeric;
                                     txt_number.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
-                                    txt_number.FontFamily = "Soin Sans Neue";
                                     RightLyout.Children.Add(txt_number);
                                     txt_number.Text = "";
                                     if (!fieldLeveSecurity_Create)
@@ -616,7 +614,6 @@ namespace StemmonsMobile.Views.Entity
                                     editor.WidthRequest = 200;
                                     editor.HeightRequest = 200;
                                     editor.StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
-                                    editor.FontFamily = "Soin Sans Neue";
                                     RightLyout.Children.Add(editor);
                                     editor.Text = "";
                                     if (!fieldLeveSecurity_Create)
@@ -634,7 +631,6 @@ namespace StemmonsMobile.Views.Entity
                                         Text = "",
                                         WidthRequest = 200,
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                        FontFamily = "Soin Sans Neue"
                                     };
                                     RightLyout.Children.Add(CL);
                                     if (!fieldLeveSecurity_Create)
@@ -662,7 +658,6 @@ namespace StemmonsMobile.Views.Entity
                                         StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
                                         FontSize = 16
                                     };
-                                    lbl.FontFamily = "Soin Sans Neue";
                                     if (Functions.IsEditEntity)
                                         RightLyout.Children.Add(lbl);
                                     if (!fieldLeveSecurity_Create)
@@ -700,7 +695,6 @@ namespace StemmonsMobile.Views.Entity
                                     Label n = new Label();
                                     n.FontSize = 16;
                                     n.Text = "Not Added yet";
-                                    n.FontFamily = "Soin Sans Neue";
                                     RightLyout.Children.Add(n);
                                     break;
                             }
@@ -1671,7 +1665,6 @@ namespace StemmonsMobile.Views.Entity
                                 else if (ty.Name.ToLower() == "entry")
                                 {
                                     var en = (Entry)subitem;
-                                    en.FontFamily = "Soin Sans Neue";
                                     if (en.StyleId != null && !string.IsNullOrEmpty(CurrentStyleId))
                                     {
                                         if (en.StyleId == CurrentStyleId)
@@ -1845,7 +1838,6 @@ namespace StemmonsMobile.Views.Entity
                                     if (typ?.Name?.ToLower() == "entry")
                                     {
                                         var en = (Entry)subitem1;
-                                        en.FontFamily = "Soin Sans Neue";
                                         if (en.StyleId == Convert.ToString(sCalId))
                                         {
                                             en.Text = Convert.ToString(CalResult);
@@ -2751,46 +2743,46 @@ namespace StemmonsMobile.Views.Entity
 
                     var cnt = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
                     var cntbtn = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
-                    if (cntbtn != null)
-                    {
-                        Type cnt_type = cntbtn.GetType();
-                        var ent = new Entry();
-                        var editor = new BorderEditor();
-                        var img = new Image();
-                        var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == cntbtn.Text).ToList();
-                        if (cnt_type.Name.ToLower() == "button")
-                        {
-                            if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
-                            {
-                                if (ItmSrc.Count == 0)
-                                {
-                                    IsRequiredFieldEmpty = true;
-                                    ((Button)cntbtn).Focus();
-                                    ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    //if (cntbtn != null)
+                    //{
+                    //    Type cnt_type = cntbtn.GetType();
+                    //    var ent = new Entry();
+                    //    var editor = new BorderEditor();
+                    //    var img = new Image();
+                    //    var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == cntbtn.Text).ToList();
+                    //    if (cnt_type.Name.ToLower() == "button")
+                    //    {
+                    //        if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
+                    //        {
+                    //            if (ItmSrc.Count == 0)
+                    //            {
+                    //                IsRequiredFieldEmpty = true;
+                    //                ((Button)cntbtn).Focus();
+                    //                ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     if (cnt != null)
                     {
                         Type cnt_type = cnt.GetType();
                         var ent = new Entry();
                         var editor = new BorderEditor();
                         var img = new Image();
-                        //if (cnt_type.Name.ToLower() == "picker")
-                        //{
-                        //    if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
-                        //    {
-                        //        if ((((Picker)cnt).SelectedItem as EXTERNAL_DATASOURCE1).ID == 0)
-                        //        {
-                        //            IsRequiredFieldEmpty = true;
-                        //            ((Picker)cnt).Focus();
-                        //            ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
+                        if (cnt_type.Name.ToLower() == "picker")
+                        {
+                            if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
+                            {
+                                if ((((Picker)cnt).SelectedItem as EXTERNAL_DATASOURCE1).ID == 0)
+                                {
+                                    IsRequiredFieldEmpty = true;
+                                    ((Picker)cnt).Focus();
+                                    ReqFieldAssoc = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
+                                    break;
+                                }
+                            }
+                        }
                         if (cnt_type.Name.ToLower() == "entry")
                         {
                             ent = (Entry)cnt;
@@ -2905,20 +2897,22 @@ namespace StemmonsMobile.Views.Entity
                                     pick_Ext_datasrc = (Picker)cnt;
                                 }
                                 //var btn_value = btn_Ext_datasrc.Text as EXTERNAL_DATASOURCE1;
-                                //var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
+                                var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
                                 //if (pick_value == null)
                                 //    break;
                                 AssociationMetaData Asso_metadata_value = new AssociationMetaData();
                                 Asso_metadata_value.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
-                                if (ItmSrc.Count == 0)
+
+                                if (btnCnt.Text == "--Select Item--")
+                                //if (ItmSrc.Count == 0)
                                 {
                                     Asso_metadata_value.ExternalDatasourceObjectID = "0";
                                     Asso_metadata_value.FieldValue = null;
                                 }
                                 else
                                 {
-                                    Asso_metadata_value.ExternalDatasourceObjectID = ItmSrc[0].ID.ToString();
-                                    Asso_metadata_value.FieldValue = ItmSrc[0].EXTERNAL_DATASOURCE_NAME;
+                                    Asso_metadata_value.ExternalDatasourceObjectID = pick_value.ID.ToString();
+                                    Asso_metadata_value.FieldValue = pick_value.EXTERNAL_DATASOURCE_NAME;
                                 }
                                 Asso_metadata_value.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
 

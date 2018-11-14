@@ -135,7 +135,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     Label Question = new Label();
                     Question.FontSize = 16;
-                    Question.FontFamily = "Soin Sans Neue";
                     Question.Text = listdata[i].strQuestion;
 
                     Question.Margin = new Thickness(10, 5, 5, 0);
@@ -146,7 +145,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     selectlabel.Margin = new Thickness(10, 0, 10, 0);
                     selectlabel.Text = "Select Choice:";
                     selectlabel.FontSize = 12;
-                    selectlabel.FontFamily = "Soin Sans Neue";
                     QuestionLayout.Children.Add(selectlabel);
 
                     standardMeet = new List<ItemQuestionDecode>();
@@ -177,7 +175,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     var pointslabel = new Label();
                     pointslabel.FontSize = 16;
-                    pointslabel.FontFamily = "Soin Sans Neue";
                     pointslabel.Margin = new Thickness(10, 0, 10, 0);
                     string pointsEarned = "";
 
@@ -192,7 +189,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     var CommentLayout = new StackLayout();
                     var TA = new Entry();
-                    TA.FontFamily = "Soin Sans Neue";
                     TA.Margin = new Thickness(10, 0, 10, 0);
                     TA.Placeholder = "Write Note..";
                     TA.FontSize = 16;
@@ -213,7 +209,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     MakeCase.FontSize = 13;
                     MakeCase.Text = "Make Case";
                     MakeCase.Image = "Assets/Unchecked.png";
-                    MakeCase.FontFamily = "Soin Sans Neue";
                     MakeCase.StyleId = "makecase_" + listdata[i].intItemQuestionFieldID;
                     if (!isedit)
                     {
@@ -228,7 +223,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     Attachment.TextColor = Color.Blue;
                     Attachment.Text = "Attachment";
                     Attachment.FontSize = 13;
-                    Attachment.FontFamily = "Soin Sans Neue";
                     Attachment.Clicked += Attachment_Clicked;
                     Attachment.CommandParameter = listdata[i];
                     grid.Children.Add(Attachment, 1, 0);
@@ -237,7 +231,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     NewLine.BackgroundColor = Color.Transparent;
                     NewLine.TextColor = Color.Blue;
                     NewLine.Text = "Add Comment";
-                    NewLine.FontFamily = "Soin Sans Neue";
                     NewLine.FontSize = 13;
                     if (!isedit)
                     {
@@ -275,7 +268,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         ExtraViewCase.BackgroundColor = Color.Transparent;
                         ExtraViewCase.TextColor = Color.Blue;
                         ExtraViewCase.Text = "ViewCase";
-                        ExtraViewCase.FontFamily = "Soin Sans Neue";
                         ExtraViewCase.FontSize = 13;
                         if (listdata[i].intCaseID == null || listdata[i].intCaseID == 0)
                         {
@@ -292,7 +284,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         ExtraAttachment.BackgroundColor = Color.Transparent;
                         ExtraAttachment.TextColor = Color.Blue;
                         ExtraAttachment.Text = "Attachment";
-                        ExtraAttachment.FontFamily = "Soin Sans Neue";
                         ExtraAttachment.FontSize = 13;
                         ExtraAttachment.Margin = new Thickness(20, 0, 0, 0);
                         ExtraAttachment.HorizontalOptions = LayoutOptions.CenterAndExpand;
@@ -307,7 +298,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         ExtraRemove.BackgroundColor = Color.Transparent;
                         ExtraRemove.TextColor = Color.Blue;
                         ExtraRemove.Text = "Remove";
-                        ExtraRemove.FontFamily = "Soin Sans Neue";
                         ExtraRemove.FontSize = 13;
                         ExtraRemove.Margin = new Thickness(0, 0, 15, 0);
                         ExtraRemove.HorizontalOptions = LayoutOptions.EndAndExpand;
@@ -332,7 +322,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             ExtraViewCase.BackgroundColor = Color.Transparent;
                             ExtraViewCase.TextColor = Color.Blue;
                             ExtraViewCase.Text = "ViewCase";
-                            ExtraViewCase.FontFamily = "Soin Sans Neue";
                             ExtraViewCase.FontSize = 13;
                             if (listdata[i].intCaseID == null || listdata[i].intCaseID == 0)
                             {
@@ -362,7 +351,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             ExtraViewCase.BackgroundColor = Color.Transparent;
                             ExtraViewCase.TextColor = Color.Blue;
                             ExtraViewCase.Text = "ViewCase";
-                            ExtraViewCase.FontFamily = "Soin Sans Neue";
                             ExtraViewCase.FontSize = 13;
 
                             ExtraViewCase.IsEnabled = false;

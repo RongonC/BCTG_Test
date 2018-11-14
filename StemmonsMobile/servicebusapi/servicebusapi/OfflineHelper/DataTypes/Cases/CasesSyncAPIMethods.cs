@@ -49,7 +49,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     if (!string.IsNullOrEmpty(Res) && Convert.ToString(Res) != "[]" && Convert.ToString(Res) != "{}" && Convert.ToString(Res) != "[ ]" && Convert.ToString(Res) != "{ }" && Convert.ToString(Res) != "[{ }]" && Convert.ToString(Res) != "[{}]")
                     {
                         sError = Convert.ToString(Result);
-                        CommonConstants.MasterOfflineStore(Res, _DBPath);
+                        //CommonConstants.MasterOfflineStore(Res, _DBPath);
+                        CommonConstants.MasterOfflineStore_withEDSTable(Res, _DBPath);
                     }
                 }
                 else
@@ -2972,7 +2973,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get AssocCascade Info By CaseType
-        public static async Task<List<AssocCascadeInfo>> GetAssocCascadeInfoByCaseType(bool _IsOnline, string _caseTypeID, int _InstanceUserAssocId, string _DBPath)
+        public static async Task<List<AssocCascadeInfo>> GetAssocCascadeInfo(bool _IsOnline, string _caseTypeID, int _InstanceUserAssocId, string _DBPath)
         {
             List<AssocCascadeInfo> lstResult = new List<AssocCascadeInfo>();
             int id = CommonConstants.GetResultBySytemcode(CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _DBPath);
@@ -2995,16 +2996,16 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 }
                 else
                 {
-                    var GetOriginationCenterForUser = DBHelper.GetAppTypeInfoListByNameTypeScreenInfo(CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _DBPath);
-                    GetOriginationCenterForUser.Wait();
+                    // var GetOriginationCenterForUser = DBHelper.GetAppTypeInfoListByNameTypeScreenInfo(CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _DBPath);
+                    // GetOriginationCenterForUser.Wait();
                     //lstResult = GetOriginationCenterForUser.Result?.ASSOC_FIELD_INFO.ToString() == null ? null : JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(GetOriginationCenterForUser.Result?.ASSOC_FIELD_INFO.ToString());
-                    lstResult = CommonConstants.ReturnListResult<AssocCascadeInfo>(CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _DBPath);
+                    //lstResult = CommonConstants.ReturnListResult<AssocCascadeInfo>(CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _DBPath);
                 }
             }
             catch (Exception ex)
             {
 
-                throw ex;
+                //throw ex;
             }
             return lstResult;
         }
@@ -3231,16 +3232,27 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 }
                 else
                 {
-                    var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(CasesInstance, "C1_C2_CASES_CASETYPELIST", _caseTypeID, _DBPath, null);
-                    GetAppTypeInfo.Wait();
+                    #region From EDS_RESULT Table
+                    //var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(CasesInstance, "C1_C2_CASES_CASETYPELIST", _caseTypeID, _DBPath, null);
+                    //GetAppTypeInfo.Wait();
 
-                    Task<EDSResultList> Result = DBHelper.GetEDSResultListwithId(Convert.ToInt32(assoctypeId), Convert.ToInt32(GetAppTypeInfo?.Result?.APP_TYPE_INFO_ID), _DBPath);
-                    Result.Wait();
-                    if (Result?.Result?.ASSOC_FIELD_ID > 0)
+                    //Task<EDSResultList> Result = DBHelper.GetEDSResultListwithId(Convert.ToInt32(assoctypeId), Convert.ToInt32(GetAppTypeInfo?.Result?.APP_TYPE_INFO_ID), _DBPath);
+                    //Result.Wait();
+                    //if (Result?.Result?.ASSOC_FIELD_ID > 0)
+                    //{
+                    //    string jsonvalue = Result.Result.EDS_RESULT;
+                    //    lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(jsonvalue);
+                    //} 
+                    #endregion
+
+                    #region From EDS Cache table
+                    var ResultXDS = await DBHelper.GetXDSDetails("CASES", Convert.ToInt32(_ExternalDatasourceID), _DBPath);
+                    if (ResultXDS != null)
                     {
-                        string jsonvalue = Result.Result.EDS_RESULT;
+                        string jsonvalue = ResultXDS.EDS_VALUES;
                         lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(jsonvalue);
                     }
+                    #endregion
                 }
             }
             catch (Exception ex)
@@ -4224,6 +4236,15 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             //catch (Exception)
             //{
             //}
+        }
+
+        public static List<AssocCascadeInfo> GetAssocCascadeInfo(bool _IsOnline, string _user, string Casetypeid)
+        {
+            var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
+            var AssocType = json.GetValue("ResponseContent");
+            return JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+
+            return null;
         }
     }
 }

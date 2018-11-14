@@ -20,7 +20,7 @@
 
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
                     <ListView x:Name="list_entity"  
-                      ItemTapped="List_entity_ItemTapped" RowHeight="40"   >
+                      ItemTapped="List_entity_ItemTapped" RowHeight="30"   >
                         <ListView.ItemTemplate>
                             <DataTemplate  >
                                 <ViewCell>

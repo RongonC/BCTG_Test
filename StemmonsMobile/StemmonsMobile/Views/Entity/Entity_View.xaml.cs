@@ -144,11 +144,9 @@ namespace StemmonsMobile.Views.Entity
                         Label1.HorizontalOptions = LayoutOptions.Start;
                         Label1.VerticalOptions = LayoutOptions.Center;
                         Label1.FontSize = 14;
-                        Label1.FontFamily = "Soin Sans Neue";
 
                         var Label2 = new Label
                         { VerticalOptions = LayoutOptions.Start };
-                        Label2.FontFamily = "Soin Sans Neue";
 
                         switch (EntityAssocOrder[i].FieldType.ToLower())
                         {
@@ -237,7 +235,6 @@ namespace StemmonsMobile.Views.Entity
                     Label11.Text = "Notes";
                     Label11.HorizontalOptions = LayoutOptions.Start;
                     Label11.FontSize = 14;
-                    Label11.FontFamily = "Soin Sans Neue";
 
                     var layout14 = new StackLayout();
                     layout14.Orientation = StackOrientation.Vertical;
@@ -252,7 +249,6 @@ namespace StemmonsMobile.Views.Entity
                     txt_EntNotes.BorderColor = Color.Gray;
                     txt_EntNotes.BorderWidth = 1;
                     txt_EntNotes.CornerRadius = 5;
-                    txt_EntNotes.FontFamily = "Soin Sans Neue";
                     ;
 
                     var btn_addnotes = new Button { };
@@ -260,7 +256,6 @@ namespace StemmonsMobile.Views.Entity
                     btn_addnotes.FontSize = 14;
                     btn_addnotes.BackgroundColor = Color.Transparent;
                     btn_addnotes.Clicked += Btn_addnotes_Clicked;
-                    btn_addnotes.FontFamily = "Soin Sans Neue";
 
                     layout14.Children.Add(txt_EntNotes);
                     layout14.Children.Add(btn_addnotes);

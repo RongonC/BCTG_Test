@@ -106,12 +106,24 @@ namespace DataServiceBus.OfflineHelper.DataTypes
     //    public int INSTANCE_USER_ASSOC_ID { get; set; }
     //}
 
+    public class External_DSCache
+    {
+        [PrimaryKey, AutoIncrement]
+        public int EDS_CACHE_ID { get; set; }
+        public string SYSTEM { get; set; }
+        public int EXT_DATASOURCE_ID { get; set; }
+        public string EDS_VALUES { get; set; }
+        public DateTime LAST_MODIFIED_DATETIME { get; set; }
+        public int INSTANCE_USER_ASSOC_ID { get; set; }
+    }
+
     #endregion
 
     public class GetAllCaseType
     {
         public List<AppTypeInfo> AppTypeInfo { get; set; }
         public List<EDSResult> EDSResult { get; set; }
+        public List<X_DSCache> XDSCache { get; set; }
     }
 
     public class AppTypeInfo
@@ -131,6 +143,16 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         public int INSTANCE_USER_ASSOC_ID { get; set; }
         public bool Is_Online { get; set; }
         public string TM_Username { get; set; }
+    }
+
+    public class X_DSCache
+    {
+        public int EDS_CACHE_ID { get; set; }
+        public string SYSTEM { get; set; }
+        public int EXT_DATASOURCE_ID { get; set; }
+        public string EDS_VALUES { get; set; }
+        public DateTime LAST_MODIFIED_DATETIME { get; set; }
+        public int INSTANCE_USER_ASSOC_ID { get; set; }
     }
 
     public class Favorite
@@ -163,6 +185,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
     {
         public List<AppTypeInfo> AppTypeInfo { get; set; }
         public List<EDSResult> EDSResult { get; set; }
+        public List<X_DSCache> XDSCache { get; set; }
     }
 
     #endregion

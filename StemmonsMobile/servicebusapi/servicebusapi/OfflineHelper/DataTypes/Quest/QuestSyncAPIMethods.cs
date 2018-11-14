@@ -56,11 +56,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 }
                 else
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(Result), "N", "GetAllQuest", _UserName, DateTime.Now.ToString());
-
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllEntityTypeWithID", _UserName, DateTime.Now.ToString());
+                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllQuest", _UserName, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(Result), "N", "GetAllQuest", _UserName, DateTime.Now.ToString());
             }
 

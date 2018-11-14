@@ -219,9 +219,16 @@ namespace StemmonsMobile.Views.Cases
                 {
                     try
                     {
-                        var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
-                        var AssocType = json.GetValue("ResponseContent");
-                        AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+                        if (CrossConnectivity.Current.IsConnected)
+                        {
+                            var Assoc = CasesSyncAPIMethods.GetAssocCascadeInfo(CrossConnectivity.Current.IsConnected, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                            Assoc.Wait();
+                            AssocTypeCascades = Assoc.Result;
+
+                            //var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
+                            //var AssocType = json.GetValue("ResponseContent");
+                            //AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
+                        }
                     }
                     catch (Exception)
                     {
@@ -922,7 +929,6 @@ namespace StemmonsMobile.Views.Cases
                         txt_CasNotes.BorderColor = Color.LightGray;
                         txt_CasNotes.BorderWidth = 1;
                         txt_CasNotes.CornerRadius = 5;
-                        txt_CasNotes.FontFamily = "Soin Sans Neue";
 
                         layout14.Children.Add(txt_CasNotes);
 
@@ -945,7 +951,6 @@ namespace StemmonsMobile.Views.Cases
                         Label2.HorizontalOptions = LayoutOptions.Start;
                         Label2.FontSize = 16;
                         Label2.WidthRequest = 200;
-                        Label2.FontFamily = "Soin Sans Neue";
 
                         layout15 = new StackLayout();
                         layout15.Orientation = StackOrientation.Vertical;
@@ -1038,26 +1043,6 @@ namespace StemmonsMobile.Views.Cases
                                                 btn.Text = "-- Select Item --";
                                                 //btn.IsEnabled = false;
                                             }
-
-                                            //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Metaitem.ASSOC_TYPE_ID).ToList();
-
-                                            //if (assocChild.Count >= 1)// && btn.Text != "-- Select Item --")
-                                            //{
-                                            //    // parent has some Value So need to enable its child
-                                            //    foreach (var item in assocChild)
-                                            //    {
-                                            //        // IsChild Control
-                                            //        var Chl = FindPickerControls(item._CASE_ASSOC_TYPE_ID_CHILD) as Button;
-                                            //        Chl.IsEnabled = true;
-                                            //    }
-                                            //}
-                                            //else
-                                            //{
-                                            //    btn.IsEnabled = true;
-                                            //}
-                                            // el
-
-
                                             break;
 
                                             #region Old Picker Code
@@ -2534,15 +2519,6 @@ namespace StemmonsMobile.Views.Cases
                 //var AssocType = json.GetValue("ResponseContent");
                 //AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
 
-                if (CrossConnectivity.Current.IsConnected)
-                {
-
-                }
-                else
-                {
-
-                }
-
                 string fieldName = string.Empty;
                 var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_PARENT == assocTypeId).ToList();
 
@@ -3719,16 +3695,12 @@ namespace StemmonsMobile.Views.Cases
                                             if (ty.Name.ToLower() == "entry")
                                             {
                                                 var en = (Entry)xy;
-                                                en.FontFamily = "Soin Sans Neue";
                                                 Device.BeginInvokeOnMainThread(() =>
                                                 {
                                                     if (en.StyleId.ToLower() == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
                                                     {
-                                                        Device.BeginInvokeOnMainThread(() =>
-                                                        {
-                                                            en.Text = "";
-                                                            en.Text = Convert.ToString(Result.Result);
-                                                        });
+                                                        en.Text = "";
+                                                        en.Text = Convert.ToString(Result.Result);
                                                     }
                                                 });
                                             }

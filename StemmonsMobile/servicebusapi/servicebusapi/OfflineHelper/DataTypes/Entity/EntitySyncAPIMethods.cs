@@ -53,7 +53,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                     if (!string.IsNullOrEmpty(ResponseContent?.ToString()) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
-                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                        //CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                        CommonConstants.MasterOfflineStore_withEDSTable(ResponseContent, _DBPath);
+
                         GetMasterEntityCount(User, _DBPath);
                     }
                 }
@@ -85,7 +87,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 };
                 #endregion
 
-                List<BoxerCentralHomePage_EntityList_Mob> Result = new List<BoxerCentralHomePage_EntityList_Mob>();
+                //  List<BoxerCentralHomePage_EntityList_Mob> Result = new List<BoxerCentralHomePage_EntityList_Mob>();
 
                 List<KeyValuePair<string, string>> idAndDateTime = new List<KeyValuePair<string, string>>();
                 try
@@ -113,7 +115,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                 rResult = Constants.ApiCommon(getAssociatedEntityList, Constants.GetAssociatedEntityList);
 
-                Debug.WriteLine("GetAssociatedEntityList ==> " + Convert.ToString(rResult));
+                // Debug.WriteLine("GetAssociatedEntityList ==> " + Convert.ToString(rResult));
 
                 if (rResult != null)
                 {
@@ -380,7 +382,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
         #endregion
 
         #region #4 Get Entity Type Schema For Design Page
-        public async static Task<EntityClass> GetEntityTypeSchema(bool _IsOnline, string Sys_Name, int Entity_TypeID, string username, object _Body_value, string _DBPath, string _Mode)
+        public async static Task<EntityClass> GetEntityTypeSchema(bool _IsOnline, string Sys_Name, int Entity_TypeID, string username, object _Body_value, string _DBPath)
         {
             EntityClass EntityList = new EntityClass();
             try
@@ -403,18 +405,41 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     {
                         if (EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "se" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "el" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "ms" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "me" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "ss")
                         {
-                            //if (EntityList.AssociationFieldCollection[i].ExternalDataSourceID != null)
+
+
+                            #region Get Data from EDS Cache
+
+                            if (EntityList.AssociationFieldCollection[i].ExternalDataSourceID != null)
                             {
-                                var Result = await DBHelper.GetEDSResultListwithId(EntityList.AssociationFieldCollection[i].AssocTypeID, lstResult.APP_TYPE_INFO_ID, _DBPath);
-                                if (Result != null)
+                                var ResultXDS = await DBHelper.GetXDSDetails("ENTITY", (int)EntityList.AssociationFieldCollection[i].ExternalDataSourceID, _DBPath);
+                                if (ResultXDS != null)
                                 {
-                                    string jsonvalue = Result.EDS_RESULT;
+                                    string jsonvalue = ResultXDS.EDS_VALUES;
                                     List<EXTERNAL_DATASOURCE1> exdDetail = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(jsonvalue);
                                     EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = exdDetail;
                                 }
                                 else
                                     EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<EXTERNAL_DATASOURCE1>();
                             }
+                            else
+                            {
+                                #region Get data from EDS Result table
+                                //if (EntityList.AssociationFieldCollection[i].ExternalDataSourceID != null)
+                                {
+                                    var Result = await DBHelper.GetEDSResultListwithId(EntityList.AssociationFieldCollection[i].AssocTypeID, lstResult.APP_TYPE_INFO_ID, _DBPath);
+                                    if (Result != null)
+                                    {
+                                        string jsonvalue = Result.EDS_RESULT;
+                                        List<EXTERNAL_DATASOURCE1> exdDetail = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(jsonvalue);
+                                        EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = exdDetail;
+                                    }
+                                    else
+                                        EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<EXTERNAL_DATASOURCE1>();
+                                }
+                                #endregion
+                            }
+
+                            #endregion
                         }
                     }
 

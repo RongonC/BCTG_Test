@@ -122,7 +122,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                 var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
                                 Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
                                 record.Wait();
-                                
+
                                 var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
                                 if (ischeck == null)
@@ -161,6 +161,197 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
             return serror;
         }
 
+        public static string MasterOfflineStore_withEDSTable(string Res, string _DBPath)
+        {
+            Stopwatch sp = new Stopwatch();
+
+            sp.Start();
+            string serror = string.Empty;
+            try
+            {
+                GetAllEntityType Jobj = JsonConvert.DeserializeObject<GetAllEntityType>(Res);
+                AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
+                EDSResultList EDSResultList = new EDSResultList();
+                External_DSCache X_DSCacheList = new External_DSCache();
+                List<KeyValuePair<int, int>> dc = new List<KeyValuePair<int, int>>();
+                if (Jobj != null)
+                {
+                    try
+                    {
+                        Jobj.AppTypeInfo = Jobj.AppTypeInfo.Select(i =>
+                        {
+                            i.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                            return i;
+                        }).ToList();
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        Jobj.EDSResult = Jobj.EDSResult.Select(i =>
+                        {
+                            i.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                            return i;
+                        }).ToList();
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        Jobj.XDSCache = Jobj.XDSCache.Select(i =>
+                        {
+                            i.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                            return i;
+                        }).ToList();
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    foreach (var item in Jobj.AppTypeInfo)
+                    {
+                        try
+                        {
+                            Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
+                            record.Wait();
+
+                            var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && /*v.TYPE_NAME == item.TYPE_NAME &&*/ v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
+
+                            if (ischeck == null)
+                            {
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
+                                _AppTypeInfoList.LAST_SYNC_DATETIME = DateTime.Now;
+                                _AppTypeInfoList.SYSTEM = item.SYSTEM;
+                                _AppTypeInfoList.TYPE_ID = item.TYPE_ID;
+                                _AppTypeInfoList.ID = item.ID;
+                                _AppTypeInfoList.TYPE_NAME = item.TYPE_NAME;
+                                _AppTypeInfoList.CategoryId = item.CategoryId;
+                                _AppTypeInfoList.CategoryName = item.CategoryName;
+                                _AppTypeInfoList.TransactionType = "M";
+                                _AppTypeInfoList.TYPE_SCREEN_INFO = item.TYPE_SCREEN_INFO;
+                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                                _AppTypeInfoList.IS_ONLINE = true;
+                                _AppTypeInfoList.TM_Username = item.TM_Username;
+
+                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                                inserted.Wait();
+                                dc.Add(new KeyValuePair<int, int>(inserted.Result, item.TYPE_ID));
+                            }
+                            else
+                            {
+                                _AppTypeInfoList.LAST_SYNC_DATETIME = ischeck.LAST_SYNC_DATETIME;
+                                _AppTypeInfoList.SYSTEM = ischeck.SYSTEM;
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
+                                _AppTypeInfoList.TYPE_ID = ischeck.TYPE_ID;
+                                _AppTypeInfoList.ID = ischeck.ID;
+                                _AppTypeInfoList.TYPE_NAME = ischeck.TYPE_NAME;
+                                _AppTypeInfoList.CategoryId = ischeck.CategoryId;
+                                _AppTypeInfoList.CategoryName = ischeck.CategoryName;
+                                _AppTypeInfoList.TransactionType = "M";
+                                _AppTypeInfoList.TYPE_SCREEN_INFO = ischeck.TYPE_SCREEN_INFO;
+                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                                _AppTypeInfoList.IS_ONLINE = true;
+                                _AppTypeInfoList.TM_Username = item.TM_Username;
+                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
+                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                                inserted.Wait();
+                                dc.Add(new KeyValuePair<int, int>(ischeck.APP_TYPE_INFO_ID, item.TYPE_ID));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            serror = ex.Message;
+                        }
+                    }
+
+                    foreach (var item in Jobj.EDSResult)
+                    {
+                        try
+                        {
+                            if (dc.Count > 0)
+                            {
+                                var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
+                                Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
+                                record.Wait();
+
+                                var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+
+                                if (ischeck == null)
+                                {
+                                    EDSResultList.EDS_RESULT_ID = 0;
+                                    EDSResultList.APP_TYPE_INFO_ID = kvp.Key;
+                                    EDSResultList.LAST_SYNC_DATETIME = DateTime.Now;
+                                    EDSResultList.ASSOC_FIELD_ID = Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
+                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
+                                    EDSResultList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
+                                    inserted.Wait();
+                                }
+                                else
+                                {
+                                    EDSResultList = ischeck;
+                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
+                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
+                                    inserted.Wait();
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            serror = ex.Message;
+                        }
+                    }
+
+                    foreach (var item in Jobj.XDSCache)
+                    {
+
+                        Task<List<External_DSCache>> record = DBHelper.GetAllXDSDetails(_DBPath);
+                        record.Wait();
+
+                        var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.EXT_DATASOURCE_ID == item.EXT_DATASOURCE_ID && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+
+                        if (ischeck == null)
+                        {
+                            X_DSCacheList.EDS_CACHE_ID = 0;
+                            X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
+                            X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
+                            X_DSCacheList.SYSTEM = item.SYSTEM;
+                            X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
+                            X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+
+                            Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
+                            inserted.Wait();
+                        }
+                        else
+                        {
+                            X_DSCacheList.EDS_CACHE_ID = ischeck.EDS_CACHE_ID;
+                            X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
+                            X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
+                            X_DSCacheList.SYSTEM = item.SYSTEM;
+                            X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
+                            X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+
+                            Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
+                            inserted.Wait();
+                        }
+                    }
+                }
+                sp.Stop();
+                Debug.WriteLine("Sync Count => " + (cnt++) + Environment.NewLine + "Time taken => " + sp.ElapsedMilliseconds);
+            }
+            catch (Exception ex)
+            {
+                serror = ex.Message;
+            }
+            return serror;
+        }
 
 
 
@@ -313,7 +504,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
         public static string RefreshCalculationFields(string assocFieldCollection, string calculatedAssocId, Dictionary<string, string> assocFieldTexts, Dictionary<string, string> assocFieldValues, string sdateFormats, string _DBPath)
         {
             string returnVal = string.Empty;
-            if (string.IsNullOrEmpty(assocFieldCollection)) throw new Exception("assocFieldCollection is empty");
+            if (string.IsNullOrEmpty(assocFieldCollection))
+                throw new Exception("assocFieldCollection is empty");
             List<GetCaseTypesResponse.ItemType> casesAssocFieldCollection = null;
             try
             {
@@ -323,7 +515,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
             {
                 throw ex;
             }
-            if (casesAssocFieldCollection == null) throw new Exception("casesAssocFieldCollection is NULL");
+            if (casesAssocFieldCollection == null)
+                throw new Exception("casesAssocFieldCollection is NULL");
             string FieldType = calculatedAssocId.Split('_')[1];
             string AssocTypeID = calculatedAssocId.Split('_')[2];
             try
@@ -479,12 +672,14 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                                     if ((!lstexddatasourceName.Contains(part1) && !systemCodes.Contains(part1)))
                                                     {
                                                         query = GetQueryStringWithParamaters(query, externalDataSourceName, selectedValue.Split('|')[1], out success, item.Name, true);
-                                                        if (success) valueSet = true;
+                                                        if (success)
+                                                            valueSet = true;
                                                     }
                                                     else
                                                     {
                                                         query = GetQueryStringWithParamaters(query, externalDataSourceName, selectedValue.Split('|')[1], out success, item.Name);
-                                                        if (success) valueSet = true;
+                                                        if (success)
+                                                            valueSet = true;
                                                     }
 
 
@@ -612,7 +807,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                         //Extract field value and replace with the ASSOC name.
                                         var controlId = "assoc_" + item.AssocFieldType + "_" + item.AssocTypeID;
 
-                                        if (filedName != item.Name.ToString()) continue;
+                                        if (filedName != item.Name.ToString())
+                                            continue;
                                         if (item.AssocFieldType == 'D' || item.AssocFieldType == 'X' || item.AssocFieldType == 'L' || item.AssocFieldType == 'A' || item.AssocFieldType == 'N')
                                         {
                                             string selectedTextboxValue = "";
@@ -630,7 +826,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                             assocFieldValues.TryGetValue(controlId, out selectedValue1);
                                             if (!string.IsNullOrEmpty(selectedValue1))
                                             {
-                                                if (selectedValue1?.Split('|')[1] == "-1") selectedText1 = "";
+                                                if (selectedValue1?.Split('|')[1] == "-1")
+                                                    selectedText1 = "";
                                                 formula = formula.Replace("{" + result + "}", @"""" + selectedText1 + @"""");
                                             }
                                         }
@@ -689,8 +886,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                     }
                                 }
 
-                                if (formula.IndexOf("\"") > -1) formula = formula.Replace("\n", " ").Replace("\"", @"""");
-                                if (formula.Contains(result)) formula = formula.Replace("{" + result + "}", @"""" + string.Empty + @"""");
+                                if (formula.IndexOf("\"") > -1)
+                                    formula = formula.Replace("\n", " ").Replace("\"", @"""");
+                                if (formula.Contains(result))
+                                    formula = formula.Replace("{" + result + "}", @"""" + string.Empty + @"""");
                             }
 
                             //if (!string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["HttpsCertificate"]))
@@ -1111,7 +1310,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     }
                     else
                     {
-                        var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), "CASES", "C8_GetCaseBasicInfo", INSTANCE_USER_ASSOC_ID, dbPath, Record.Result.APP_TYPE_INFO_ID, Convert.ToString(lstResulttemp.CaseTypeID), "M", Convert.ToString(Record.Result.ID),0, "", "", true, null);
+                        var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), "CASES", "C8_GetCaseBasicInfo", INSTANCE_USER_ASSOC_ID, dbPath, Record.Result.APP_TYPE_INFO_ID, Convert.ToString(lstResulttemp.CaseTypeID), "M", Convert.ToString(Record.Result.ID), 0, "", "", true, null);
                     }
                 }
             }

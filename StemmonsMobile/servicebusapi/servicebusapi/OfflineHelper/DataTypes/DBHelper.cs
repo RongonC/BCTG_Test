@@ -19,6 +19,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
             database.CreateTableAsync<FavoriteList>().Wait();
             database.CreateTableAsync<INSTANCE_USER_ASSOC>().Wait();
             // database.CreateTableAsync<ActivityDetails>().Wait();
+            database.CreateTableAsync<External_DSCache>().Wait();
         }
 
         #region InstanceList Table Queries
@@ -798,6 +799,55 @@ namespace DataServiceBus.OfflineHelper.DataTypes
 
         //}
         //#endregion
+
+
+
+
+
+
+        #endregion
+
+
+        #region # External_DS Cache Tables Queries
+
+        #region Get All External_DS Cache
+        public static Task<List<External_DSCache>> GetAllXDSDetails(string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            return database.Table<External_DSCache>().ToListAsync();
+        }
+        #endregion
+
+        #region Get External_DS Cache List By ID
+        public static Task<External_DSCache> GetXDSDetailsByID(int id, string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            return database.Table<External_DSCache>().Where(i => i.EDS_CACHE_ID == id).FirstOrDefaultAsync();
+        }
+        #endregion
+
+        #region Save External_DS Cache
+        public static Task<int> SaveXDSDetails(External_DSCache item, string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            if (item.EDS_CACHE_ID != 0)
+            {
+                return database.UpdateAsync(item);
+            }
+            else
+            {
+                return database.InsertAsync(item);
+            }
+        }
+        #endregion
+
+        #region Get External_DS Cache List By SystemName == EDS_ID == TYPE_ID == Screen_Name
+        public static Task<External_DSCache> GetXDSDetails(string SystemName, int XDSid, string dbPath)
+        {
+            SQLiteAsyncConnection database = new SQLiteAsyncConnection(dbPath);
+            return database.Table<External_DSCache>().Where(i => i.SYSTEM.ToLower() == SystemName.ToLower() && i.EXT_DATASOURCE_ID == XDSid && i.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
+        }
+        #endregion
 
 
 
