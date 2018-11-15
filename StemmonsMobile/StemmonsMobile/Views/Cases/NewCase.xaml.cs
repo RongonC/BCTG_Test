@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
@@ -748,179 +749,204 @@ namespace StemmonsMobile.Views.Cases
 
                     if (metaDatatextValues_fav?.Count > 0)
                     {
-                        foreach (var iitem in CasesSchema)
+                        foreach (var Fav_iitem in CasesSchema)
                         {
 
                             try
                             {
-                                switch (iitem.ASSOC_FIELD_TYPE.ToLower())
+                                switch (Fav_iitem.ASSOC_FIELD_TYPE.ToLower())
                                 {
                                     case "o":
                                     case "e":
-
-
-                                        var control = FindPickerControls(iitem.ASSOC_TYPE_ID) as Picker;
-                                        if (control != null)
+                                        var btncontrol = FindPickerControls(Fav_iitem.ASSOC_TYPE_ID) as Button;
+                                        if (btncontrol != null)
                                         {
-                                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                                            var reclst = metaDataValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                            btncontrol.Text = Convert.ToString(reclst.Value.Value);
+                                            //ExternalDatasource
 
-                                            lst_extdatasource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
-
-                                            try
+                                            GetExternalDataSourceByIdResponse.ExternalDatasource Ed = new GetExternalDataSourceByIdResponse.ExternalDatasource()
                                             {
+                                                ID = 0,
+                                                NAME = btncontrol.Text,
+                                                DESCRIPTION = btncontrol.Text
+                                            };
 
-                                                int idd = 0;
-                                                if (App.Isonline)
-                                                {
-                                                    if (iitem.ASSOC_FIELD_TYPE.ToLower() == "e")
-                                                    {
-                                                        string exdvalue = Convert.ToString(metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
-                                                        if (!string.IsNullOrEmpty(exdvalue) && lst_extdatasource.Count > 1)
-                                                        {
-                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION.ToLower() == exdvalue.ToLower()).FirstOrDefault());
-                                                            if (idd == -1)
-                                                            {
-                                                                var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                                if (rec != null)
-                                                                {
-                                                                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                    {
-                                                                        DESCRIPTION = rec.Value.Value,
-                                                                        NAME = rec.Value.Value,
-                                                                        ID = rec.Value.Key
-                                                                    };
-                                                                    lst_extdatasource.Add(lst);
-                                                                    control.ItemsSource = null;
-                                                                    control.ItemsSource = lst_extdatasource;
-                                                                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
-                                                                }
-                                                            }
-
-                                                            control.SelectedIndex = idd;
-                                                        }
-                                                        else
-                                                        {
-                                                            var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                            if (rec != null)
-                                                            {
-                                                                GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                {
-                                                                    DESCRIPTION = rec.Value.Value,
-                                                                    NAME = rec.Value.Value,
-                                                                    ID = rec.Value.Key
-                                                                };
-                                                                lst_extdatasource.Add(lst);
-                                                                control.ItemsSource = null;
-                                                                control.ItemsSource = lst_extdatasource;
-                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
-                                                            }
-                                                            control.SelectedIndex = idd;
-                                                        }
-                                                    }
-                                                    else if (iitem.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    {
-                                                        string exdvalue = Convert.ToString(metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
-                                                        if (!string.IsNullOrEmpty(exdvalue) && lst_extdatasource.Count > 1)
-                                                        {
-                                                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION.ToLower() == exdvalue.ToLower()).FirstOrDefault());
-                                                            control.SelectedIndex = idd;
-                                                        }
-                                                        else
-                                                        {
-                                                            var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                            if (rec != null)
-                                                            {
-                                                                GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                {
-                                                                    DESCRIPTION = rec.Value.Value,
-                                                                    NAME = rec.Value.Value,
-                                                                    ID = rec.Value.Key
-                                                                };
-                                                                lst_extdatasource.Add(lst);
-                                                                control.ItemsSource = null;
-                                                                control.ItemsSource = lst_extdatasource;
-                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
-                                                                control.SelectedIndex = idd;
-                                                            }
-
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (iitem.ASSOC_FIELD_TYPE.ToLower() == "e")
-                                                    {
-                                                        var reclst = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                        if (reclst != null)
-                                                        {
-                                                            string strrec = reclst.Value.Value;
-                                                            if (!string.IsNullOrEmpty(strrec))
-                                                            {
-                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.NAME.ToLower().Trim() == strrec.ToLower().Trim()).FirstOrDefault());
-                                                                if (idd == -1)
-                                                                {
-                                                                    var rec1 = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                                    if (rec1 != null)
-                                                                    {
-                                                                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                        {
-                                                                            DESCRIPTION = rec1.Value.Value,
-                                                                            NAME = rec1.Value.Value,
-                                                                            ID = rec1.Value.Key
-                                                                        };
-                                                                        lst_extdatasource.Add(lst);
-                                                                        control.ItemsSource = null;
-                                                                        control.ItemsSource = lst_extdatasource;
-                                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
-
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        control.SelectedIndex = idd;
-                                                    }
-                                                    else if (iitem.ASSOC_FIELD_TYPE.ToLower() == "o")
-                                                    {
-                                                        var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                        if (rec != null)
-                                                        {
-                                                            string strrec = rec.Value.Value;
-                                                            if (!string.IsNullOrEmpty(strrec))
-                                                            {
-                                                                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.NAME.ToLower().Trim() == strrec.ToLower().Trim()).FirstOrDefault());
-                                                                if (idd == -1)
-                                                                {
-                                                                    var rec1 = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
-                                                                    if (rec1 != null)
-                                                                    {
-                                                                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
-                                                                        {
-                                                                            DESCRIPTION = rec1.Value.Value,
-                                                                            NAME = rec1.Value.Value,
-                                                                            ID = rec1.Value.Key
-                                                                        };
-                                                                        lst_extdatasource.Add(lst);
-                                                                        control.ItemsSource = null;
-                                                                        control.ItemsSource = lst_extdatasource;
-                                                                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
-
-                                                                    }
-                                                                }
-                                                            }
-                                                            control.SelectedIndex = idd;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            catch (Exception ex)
+                                            var lst = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>
                                             {
+                                                Ed
+                                            };
 
-                                            }
+                                            if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
+                                                lstextdatasourceHistory.Add(Fav_iitem.ASSOC_TYPE_ID, lst);
+                                            else
+                                                lstextdatasourceHistory[Fav_iitem.ASSOC_TYPE_ID] = lst;
                                         }
+
+                                        #region Old Code To set value in Picker Conrol
+                                        //var control = FindPickerControls(Fav_iitem.ASSOC_TYPE_ID) as Picker;
+                                        //if (control != null)
+                                        //{
+                                        //    //List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                                        //    //lst_extdatasource = control.ItemsSource as List<GetExternalDataSourceByIdResponse.ExternalDatasource>;
+
+                                        //    //try
+                                        //    //{
+
+                                        //    //    int idd = 0;
+                                        //    //    if (App.Isonline)
+                                        //    //    {
+                                        //    //        if (iitem.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                        //    //        {
+                                        //    //            string exdvalue = Convert.ToString(metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
+                                        //    //            if (!string.IsNullOrEmpty(exdvalue) && lst_extdatasource.Count > 1)
+                                        //    //            {
+                                        //    //                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION.ToLower() == exdvalue.ToLower()).FirstOrDefault());
+                                        //    //                if (idd == -1)
+                                        //    //                {
+                                        //    //                    var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //                    if (rec != null)
+                                        //    //                    {
+                                        //    //                        GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                        //    //                        {
+                                        //    //                            DESCRIPTION = rec.Value.Value,
+                                        //    //                            NAME = rec.Value.Value,
+                                        //    //                            ID = rec.Value.Key
+                                        //    //                        };
+                                        //    //                        lst_extdatasource.Add(lst);
+                                        //    //                        control.ItemsSource = null;
+                                        //    //                        control.ItemsSource = lst_extdatasource;
+                                        //    //                        idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
+                                        //    //                    }
+                                        //    //                }
+
+                                        //    //                control.SelectedIndex = idd;
+                                        //    //            }
+                                        //    //            else
+                                        //    //            {
+                                        //    //                var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //                if (rec != null)
+                                        //    //                {
+                                        //    //                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                        //    //                    {
+                                        //    //                        DESCRIPTION = rec.Value.Value,
+                                        //    //                        NAME = rec.Value.Value,
+                                        //    //                        ID = rec.Value.Key
+                                        //    //                    };
+                                        //    //                    lst_extdatasource.Add(lst);
+                                        //    //                    control.ItemsSource = null;
+                                        //    //                    control.ItemsSource = lst_extdatasource;
+                                        //    //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
+                                        //    //                }
+                                        //    //                control.SelectedIndex = idd;
+                                        //    //            }
+                                        //    //        }
+                                        //    //        else if (iitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                        //    //        {
+                                        //    //            string exdvalue = Convert.ToString(metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
+                                        //    //            if (!string.IsNullOrEmpty(exdvalue) && lst_extdatasource.Count > 1)
+                                        //    //            {
+                                        //    //                idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.DESCRIPTION.ToLower() == exdvalue.ToLower()).FirstOrDefault());
+                                        //    //                control.SelectedIndex = idd;
+                                        //    //            }
+                                        //    //            else
+                                        //    //            {
+                                        //    //                var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //                if (rec != null)
+                                        //    //                {
+                                        //    //                    GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                        //    //                    {
+                                        //    //                        DESCRIPTION = rec.Value.Value,
+                                        //    //                        NAME = rec.Value.Value,
+                                        //    //                        ID = rec.Value.Key
+                                        //    //                    };
+                                        //    //                    lst_extdatasource.Add(lst);
+                                        //    //                    control.ItemsSource = null;
+                                        //    //                    control.ItemsSource = lst_extdatasource;
+                                        //    //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
+                                        //    //                    control.SelectedIndex = idd;
+                                        //    //                }
+
+                                        //    //            }
+                                        //    //        }
+                                        //    //    }
+                                        //    //    else
+                                        //    //    {
+                                        //    //        if (iitem.ASSOC_FIELD_TYPE.ToLower() == "e")
+                                        //    //        {
+                                        //    //            var reclst = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //            if (reclst != null)
+                                        //    //            {
+                                        //    //                string strrec = reclst.Value.Value;
+                                        //    //                if (!string.IsNullOrEmpty(strrec))
+                                        //    //                {
+                                        //    //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.NAME.ToLower().Trim() == strrec.ToLower().Trim()).FirstOrDefault());
+                                        //    //                    if (idd == -1)
+                                        //    //                    {
+                                        //    //                        var rec1 = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //                        if (rec1 != null)
+                                        //    //                        {
+                                        //    //                            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                        //    //                            {
+                                        //    //                                DESCRIPTION = rec1.Value.Value,
+                                        //    //                                NAME = rec1.Value.Value,
+                                        //    //                                ID = rec1.Value.Key
+                                        //    //                            };
+                                        //    //                            lst_extdatasource.Add(lst);
+                                        //    //                            control.ItemsSource = null;
+                                        //    //                            control.ItemsSource = lst_extdatasource;
+                                        //    //                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
+
+                                        //    //                        }
+                                        //    //                    }
+                                        //    //                }
+                                        //    //            }
+                                        //    //            control.SelectedIndex = idd;
+                                        //    //        }
+                                        //    //        else if (iitem.ASSOC_FIELD_TYPE.ToLower() == "o")
+                                        //    //        {
+                                        //    //            var rec = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //            if (rec != null)
+                                        //    //            {
+                                        //    //                string strrec = rec.Value.Value;
+                                        //    //                if (!string.IsNullOrEmpty(strrec))
+                                        //    //                {
+                                        //    //                    idd = lst_extdatasource.IndexOf(lst_extdatasource.Where(v => v.NAME.ToLower().Trim() == strrec.ToLower().Trim()).FirstOrDefault());
+                                        //    //                    if (idd == -1)
+                                        //    //                    {
+                                        //    //                        var rec1 = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault();
+                                        //    //                        if (rec1 != null)
+                                        //    //                        {
+                                        //    //                            GetExternalDataSourceByIdResponse.ExternalDatasource lst = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                        //    //                            {
+                                        //    //                                DESCRIPTION = rec1.Value.Value,
+                                        //    //                                NAME = rec1.Value.Value,
+                                        //    //                                ID = rec1.Value.Key
+                                        //    //                            };
+                                        //    //                            lst_extdatasource.Add(lst);
+                                        //    //                            control.ItemsSource = null;
+                                        //    //                            control.ItemsSource = lst_extdatasource;
+                                        //    //                            idd = lst_extdatasource.IndexOf(lst_extdatasource.Single(v => v.ID == iitem.ASSOC_TYPE_ID));
+
+                                        //    //                        }
+                                        //    //                    }
+                                        //    //                }
+                                        //    //                control.SelectedIndex = idd;
+                                        //    //            }
+                                        //    //        }
+                                        //    //    }
+                                        //    //}
+                                        //    //catch (Exception ex)
+                                        //    //{
+
+                                        //    //}
+                                        //} 
+                                        #endregion
                                         break;
 
                                     case "d":
-                                        control = FindPickerControls(iitem.ASSOC_TYPE_ID) as Picker;
+                                        var control = FindPickerControls(Fav_iitem.ASSOC_TYPE_ID) as Picker;
                                         if (control != null)
                                         {
                                             List<ItemValue> lst_SSsource = new List<ItemValue>();
@@ -933,7 +959,7 @@ namespace StemmonsMobile.Views.Cases
                                                 {
                                                     if (lst_SSsource.Count != 0)
                                                     {
-                                                        var i = metaDataValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID).FirstOrDefault();
+                                                        var i = metaDataValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID).FirstOrDefault();
 
                                                         if (i?.Value?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || i?.Value?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
                                                             break;
@@ -950,27 +976,34 @@ namespace StemmonsMobile.Views.Cases
                                         break;
 
                                     case "a":
-                                        var cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "DatePicker");
+                                        var cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "Entry");
                                         if (cnt != null)
                                         {
-                                            DatePicker DO = new DatePicker();
-                                            DO = cnt as DatePicker;
-                                            DO.TextColor = Color.Gray;
-                                            //DO.FontSize = 16;
-                                            var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
-                                            DateTime dt = Convert.ToDateTime(Str);
-                                            DO.Date = dt;
+                                            Entry ent = (Entry)cnt;
+                                            string DT_val = metaDatatextValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
+                                            if (!string.IsNullOrEmpty(DT_val))
+                                            {
+                                                ent.Text = Convert.ToDateTime(App.DateFormatStringToString(DT_val)).Date.ToString();
+                                            }
+                                            else
+                                                ent.Text = "";
+
+                                            //DatePicker DO = new DatePicker();
+                                            //DO = cnt as DatePicker;
+                                            //DO.TextColor = Color.Gray;
+                                            ////DO.FontSize = 16;
+                                            //var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
+                                            //DateTime dt = Convert.ToDateTime(Str);
+                                            //DO.Date = dt;
                                         }
                                         break;
 
                                     case "x":
-                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "BorderEditor");
+                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "BorderEditor");
                                         if (cnt != null)
                                         {
                                             BorderEditor bd = cnt as BorderEditor;
-                                            bd.TextColor = Color.LightGray;
-                                            bd.FontSize = 16;
-                                            bd.Text = metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
+                                            bd.Text = metaDatatextValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
                                         }
                                         break;
 
@@ -978,20 +1011,17 @@ namespace StemmonsMobile.Views.Cases
                                     case "c":
                                     case "n":
                                     case "h":
-                                        cnt = FindCasesControls(iitem.ASSOC_TYPE_ID, "Entry");
+                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "Entry");
                                         if (cnt != null)
                                         {
-                                            Entry entry = new Entry();
-                                            entry = cnt as Entry;
-                                            entry.FontSize = 16;
-                                            entry.Text = metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
+                                            Entry entry = cnt as Entry;
+                                            entry.Text = metaDatatextValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
                                         }
                                         break;
                                 }
                             }
                             catch (Exception ex)
                             {
-
                             }
                         }
                     }
@@ -1023,8 +1053,56 @@ namespace StemmonsMobile.Views.Cases
         }
 
 
-        ListView lstView = new ListView();
+        ListView lst_itemlookup = new ListView();
         SearchBar ext_search = new SearchBar();
+        #region PUll to refresh in Item Look up control 
+        private bool _isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set
+            {
+                _isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
+        public ICommand PulltoRefreshCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    IsRefreshing = true;
+
+                    try
+                    {
+                        var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
+                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                        lst_extdatasource.Add(extDSdefaultValues);
+                        await Task.Run(() =>
+                        {
+                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
+
+                            temp_extdatasource.Wait();
+                            if (temp_extdatasource.Result.Count > 0)
+                            {
+                                lst_extdatasource.AddRange(temp_extdatasource.Result);
+                            }
+                        });
+                        lstexternaldatasource = lst_extdatasource;
+
+                        lst_itemlookup.ItemsSource = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    IsRefreshing = false;
+                });
+            }
+        }
+        #endregion
         private async void Pk_button_Clicked(object sender, EventArgs e)
         {
             try
@@ -1102,12 +1180,13 @@ namespace StemmonsMobile.Views.Cases
                         #region Item Lookup Initialization
                         //Exditems = new ObservableCollection<string>(Exditemslst);
 
-                        lstView.IsPullToRefreshEnabled = true;
-                        lstView.Refreshing += OnRefresh;
-                        lstView.ItemSelected += LstView_ItemSelected;
+                        lst_itemlookup.IsPullToRefreshEnabled = true;
+                        lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
+                        lst_itemlookup.Refreshing += OnRefresh;
+                        lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
 
-                        lstView.ItemsSource = Exditemslst;
-                        lstView.BackgroundColor = Color.White;
+                        lst_itemlookup.ItemsSource = Exditemslst;
+                        lst_itemlookup.BackgroundColor = Color.White;
 
                         ext_search.Text = "";
                         ext_search.TextChanged += Ext_search_TextChanged;
@@ -1125,7 +1204,7 @@ namespace StemmonsMobile.Views.Cases
                         btn_cancel.Clicked += Btn_cancel_Clicked;
 
                         var temp = new DataTemplate(typeof(TextViewCell));
-                        lstView.ItemTemplate = temp;
+                        lst_itemlookup.ItemTemplate = temp;
 
                         popupLT.Children.Clear();
 
@@ -1148,7 +1227,7 @@ namespace StemmonsMobile.Views.Cases
                                     HorizontalOptions=LayoutOptions.Center,
                                     Children =
                                     {
-                                        lstView
+                                        lst_itemlookup
                                     }
                                 },
                                 new StackLayout
@@ -1187,18 +1266,18 @@ namespace StemmonsMobile.Views.Cases
                 {
                     if (string.IsNullOrEmpty(e.NewTextValue))
                     {
-                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
+                        lst_itemlookup.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
                     }
                     else
                     {
                         var list = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(e.NewTextValue.ToLower().ToString())).ToList();
                         if (list.Count > 0)
                         {
-                            lstView.ItemsSource = list.Select(v => v.NAME).ToList();
+                            lst_itemlookup.ItemsSource = list.Select(v => v.NAME).ToList();
                         }
                         else
                         {
-                            lstView.ItemsSource = null;
+                            lst_itemlookup.ItemsSource = null;
                         }
                     }
                 }
@@ -1208,7 +1287,7 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
-        private void LstView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void lst_itemlookup_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)
             {
@@ -1232,6 +1311,8 @@ namespace StemmonsMobile.Views.Cases
                 btn.Text = e.SelectedItem.ToString();
                 btn.Focus();
                 var lst = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(btn.Text.ToLower())).ToList();
+
+                //ExternalDatasource
                 if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
                     lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
                 else

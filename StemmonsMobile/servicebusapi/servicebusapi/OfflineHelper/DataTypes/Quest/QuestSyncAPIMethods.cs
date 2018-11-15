@@ -40,7 +40,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 #endregion
 
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
-                Debug.WriteLine("GetAllQuest ==> " + Result.ToString());
+                //Debug.WriteLine("GetAllQuest ==> " + Result.ToString());
 
                 if (Result != null)
                 {

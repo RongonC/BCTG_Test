@@ -218,7 +218,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         {
             get
             {
-                return this._SYSTEM_PRIORITY;
+                return this._SYSTEM_PRIORITY ?? 5000;
             }
             set
             {

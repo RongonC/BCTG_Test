@@ -41,7 +41,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
                 if (Result != null)
                 {
-                    Debug.WriteLine("GetAllCaseTypeWithID ==> " + Convert.ToString(Result));
+                    //Debug.WriteLine("GetAllCaseTypeWithID ==> " + Convert.ToString(Result));
                     DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
 
                     string Res = Convert.ToString(Result.GetValue("ResponseContent"));
@@ -3225,7 +3225,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     var result = CasesAPIMethods.GetExternalDataSourceById(_ExternalDatasourceID, _SystemCode);
                     var temp = result.GetValue("ResponseContent");
 
-                    if (temp != null && temp.ToString() != "[]")
+                    if (!string.IsNullOrEmpty(Convert.ToString(temp)) && temp.ToString() != "[]")
                     {
                         lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(temp.ToString());
                     }

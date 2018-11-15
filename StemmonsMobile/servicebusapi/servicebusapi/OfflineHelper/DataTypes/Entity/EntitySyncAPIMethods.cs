@@ -41,7 +41,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
 
-                Debug.WriteLine("GetAllEntityTypeWithID ==> " + Convert.ToString(Result));
+                //Debug.WriteLine("GetAllEntityTypeWithID ==> " + Convert.ToString(Result));
 
                 if (Result != null)
                 {

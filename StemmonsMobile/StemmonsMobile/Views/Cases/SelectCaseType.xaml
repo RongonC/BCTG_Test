@@ -17,7 +17,7 @@
                 <!--<ScrollView>-->
 
                 <StackLayout x:Name="Main_Stack" Orientation="Vertical" Grid.Row="0">
-                    <SearchBar x:Name="txt_seacrhbar"  Placeholder="Search" TextChanged="Txt_seacrhbar_TextChanged"  FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"></SearchBar>
+                    <SearchBar x:Name="txt_seacrhbar"  Placeholder="Search" TextChanged="Txt_seacrhbar_TextChanged" ></SearchBar>
 
                     <!--My Favorites-->
                     <StackLayout Orientation="Horizontal" Margin="15,0,0,0"  >

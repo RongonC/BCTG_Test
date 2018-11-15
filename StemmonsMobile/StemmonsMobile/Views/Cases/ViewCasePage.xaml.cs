@@ -1466,96 +1466,86 @@ namespace StemmonsMobile.Views.Cases
                 {
                 }
                 iSelectedItemlookupId = Convert.ToInt32(btn.StyleId.ToString());
-                //var BTNcntrl = FindPickerControls(iSelectedItemlookupId) as Button;
                 dynamic Exditemslst = null;
 
-                // if (BTNcntrl == null)
+                var Ascitem = AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
+
+                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                lst_extdatasource.Add(extDSdefaultValues);
+
+                string fieldName = string.Empty;
+
+                var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                if (assocChild.Count < 1)
                 {
-                    var Ascitem = AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
-
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    //foreach (var item in AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId))
+                    await Task.Run(() =>
                     {
-                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
 
-                        lst_extdatasource.Add(extDSdefaultValues);
-
-                        string fieldName = string.Empty;
-
-                        var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                        if (assocChild.Count < 1)
+                        temp_extdatasource.Wait();
+                        if (temp_extdatasource.Result.Count > 0)
                         {
-                            await Task.Run(() =>
-                            {
-                                var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
-
-                                temp_extdatasource.Wait();
-                                if (temp_extdatasource.Result.Count > 0)
-                                {
-                                    lst_extdatasource.AddRange(temp_extdatasource.Result);
-                                }
-                            });
-                            lstexternaldatasource = lst_extdatasource;
+                            lst_extdatasource.AddRange(temp_extdatasource.Result);
                         }
-                        //if (lstexternaldatasource.Count == 1 && pickercntrl.ItemsSource != null)
-                        //if (lstexternaldatasource.Count == 1)
-                        else
-                        {
-                            //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                            //if (assocChild.Count <= 1)
-                            {
-                                FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
-                            }
+                    });
+                    lstexternaldatasource = lst_extdatasource;
+                }
+                else
+                {
+                    //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                    //if (assocChild.Count <= 1)
+                    {
+                        FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
+                    }
 
-                            if (lstexternaldatasource != null)
-                                Exditemslst = lstexternaldatasource.Select(v => v.NAME);
-                            else
-                            {
-                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                    if (lstexternaldatasource != null)
+                        Exditemslst = lstexternaldatasource.Select(v => v.NAME);
+                    else
+                    {
+                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
 
-                                lst_extdatasourcee.Add(extDSdefaultValues);
-                                lstexternaldatasource = lst_extdatasourcee;
-                            }
-                        }
-                        //else
-                        //{
-                        //    Exditemslst = lst_extdatasource.Select(v => v.NAME);
-                        //}
-                        //Exditems = new ObservableCollection<string>(Exditemslst);
-                        Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
+                        lst_extdatasourcee.Add(extDSdefaultValues);
+                        lstexternaldatasource = lst_extdatasourcee;
+                    }
+                }
 
-                        #region Popup Initialization
+                Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
 
-                        lstView.WidthRequest = 350;
-                        lstView.IsPullToRefreshEnabled = true;
-                        lstView.Refreshing += OnRefresh;
-                        lstView.ItemSelected += OnSelection;
-                        lstView.ItemsSource = Exditemslst;
-                        lstView.BackgroundColor = Color.White;
-                        ext_search.Text = "";
-                        ext_search.TextChanged += ext_serch;
-                        ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+                #region Popup Initialization
 
-                        Button btn_cancel = new Button()
-                        {
-                            Text = "Cancel",
-                            WidthRequest = 100,
-                            HeightRequest = 40,
-                            TextColor = Color.Accent,
-                            BackgroundColor = Color.Transparent,
-                            HorizontalOptions = LayoutOptions.Center,
-                        };
+                lst_itemlookup.WidthRequest = 350;
+                lst_itemlookup.IsPullToRefreshEnabled = true;
+                lst_itemlookup.Refreshing += OnRefresh;
+                lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
+                lst_itemlookup.ItemsSource = Exditemslst;
+                lst_itemlookup.BackgroundColor = Color.White;
 
-                        btn_cancel.Clicked += Btn_cancel_Clicked;
+                ext_search.Text = "";
+                ext_search.TextChanged += ext_serch;
+                ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+
+                Button btn_cancel = new Button()
+                {
+                    Text = "Cancel",
+                    WidthRequest = 100,
+                    HeightRequest = 40,
+                    TextColor = Color.Accent,
+                    BackgroundColor = Color.Transparent,
+                    HorizontalOptions = LayoutOptions.Center,
+                };
+
+                btn_cancel.Clicked += Btn_cancel_Clicked;
 
 
-                        var temp = new DataTemplate(typeof(TextViewCell));
-                        lstView.ItemTemplate = temp;
+                var temp = new DataTemplate(typeof(TextViewCell));
+                lst_itemlookup.ItemTemplate = temp;
 
-                        popupLT.Children.Clear();
-                        popupLT.Children.Add(new StackLayout
-                        {
-                            Children =
+                popupLT.Children.Clear();
+                popupLT.Children.Add(new StackLayout
+                {
+                    Children =
                             {
                                 new StackLayout
                                 {
@@ -1572,7 +1562,7 @@ namespace StemmonsMobile.Views.Cases
                                     HorizontalOptions =LayoutOptions.Center,
                                     Children =
                                     {
-                                        lstView
+                                        lst_itemlookup
                                     }
                                 },
 
@@ -1587,28 +1577,72 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                 }
                             }
-                        });
-                        Stack_Popup.IsVisible = true;
-                        masterGrid.IsVisible = false;
+                });
+                Stack_Popup.IsVisible = true;
+                masterGrid.IsVisible = false;
 
 
-                        Stack_Popup.HeightRequest = this.Height - 20;
-                        Stack_Popup.WidthRequest = this.Width - 20;
-                        #endregion
-
-                    }
-
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
-                }
+                Stack_Popup.HeightRequest = this.Height - 20;
+                Stack_Popup.WidthRequest = this.Width - 20;
+                #endregion
             }
             catch (Exception)
             {
 
             }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
         }
-        ListView lstView = new ListView();
+        ListView lst_itemlookup = new ListView();
+
+        #region PUll to refresh in Item Look up control 
+        private bool _isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set
+            {
+                _isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
+        public ICommand PulltoRefreshCommand
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    IsRefreshing = true;
+
+                    try
+                    {
+                        var Ascitem = AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
+                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                        lst_extdatasource.Add(extDSdefaultValues);
+                        await Task.Run(() =>
+                        {
+                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
+
+                            temp_extdatasource.Wait();
+                            if (temp_extdatasource.Result.Count > 0)
+                            {
+                                lst_extdatasource.AddRange(temp_extdatasource.Result);
+                            }
+                        });
+                        lstexternaldatasource = lst_extdatasource;
+
+                        lst_itemlookup.ItemsSource = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    IsRefreshing = false;
+                });
+            }
+        }
+        #endregion
 
         private void ext_serch(object sender, TextChangedEventArgs e)
         {
@@ -1618,18 +1652,18 @@ namespace StemmonsMobile.Views.Cases
                 {
                     if (string.IsNullOrEmpty(e.NewTextValue))
                     {
-                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
+                        lst_itemlookup.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
                     }
                     else
                     {
                         var list = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(e.NewTextValue.ToLower().ToString())).ToList();
                         if (list.Count > 0)
                         {
-                            lstView.ItemsSource = list.Select(v => v.NAME).ToList();
+                            lst_itemlookup.ItemsSource = list.Select(v => v.NAME).ToList();
                         }
                         else
                         {
-                            lstView.ItemsSource = null;
+                            lst_itemlookup.ItemsSource = null;
                         }
                     }
                 }
@@ -1640,7 +1674,7 @@ namespace StemmonsMobile.Views.Cases
         }
 
 
-        private async void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        private void lst_itemlookup_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)
             {
@@ -1693,7 +1727,6 @@ namespace StemmonsMobile.Views.Cases
             this.Stack_Popup.IsVisible = false;
             this.masterGrid.IsVisible = true;
         }
-
 
         private void Btn_cancel_Clicked(object sender, EventArgs e)
         {

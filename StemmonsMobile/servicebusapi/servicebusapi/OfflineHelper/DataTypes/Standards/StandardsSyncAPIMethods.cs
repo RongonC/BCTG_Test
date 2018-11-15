@@ -38,7 +38,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
             };
                 #endregion
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
-                Debug.WriteLine("GetAllStandards ==> " + Convert.ToString(Result));
 
                 if (Result != null)
                 {

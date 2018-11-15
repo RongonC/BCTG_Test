@@ -17,7 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
@@ -1072,15 +1072,7 @@ namespace StemmonsMobile.Views.Entity
                     if (pickercntrl != null)
                     {
                         _list_EDS.Clear();
-                        //EXTERNAL_DATASOURCE1 EDS = new EXTERNAL_DATASOURCE1
-                        //{
-                        //    Count = 0,
-                        //    EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
-                        //    EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
-                        //    ID = 0
-                        //};
                         _list_EDS.Add(EDSDefaultValue);
-
 
                         var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
 
@@ -1278,9 +1270,11 @@ namespace StemmonsMobile.Views.Entity
                         }
 
                         #region List Pop up
+
                         lstView.WidthRequest = 310;
                         lstView.IsPullToRefreshEnabled = true;
                         lstView.Refreshing += OnRefresh;
+                        lstView.RefreshCommand = PulltoRefreshCommand;
                         lstView.ItemSelected += OnSelection;
                         lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
 
@@ -1357,6 +1351,61 @@ namespace StemmonsMobile.Views.Entity
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
+
+        #region PUll to refresh in Item Look up control 
+        private bool _isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set
+            {
+                _isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
+        public ICommand PulltoRefreshCommand
+        {
+            get
+            {
+                return new Command(async () =>
+              {
+                  IsRefreshing = true;
+
+                  try
+                  {
+                      _list_EDS.Clear();
+                      _list_EDS.Add(EDSDefaultValue);
+                      var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
+
+                      await Task.Run(() =>
+                      {
+                          var result = EntityAPIMethods.GetExternalDataSourceByID(Convert.ToString(CurAssco.ExternalDataSourceID));
+                          var tEM = result.GetValue("ResponseContent");
+
+                          if (tEM != null)
+                          {
+                              ExternalDatasource exd = JsonConvert.DeserializeObject<ExternalDatasource>(tEM.ToString());
+                              if (exd.List.Count > 0)
+                              {
+                                  CurAssco.EXTERNAL_DATASOURCE = exd.List;
+                              }
+
+                              _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
+                          }
+                      });
+
+                      lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+                  }
+                  catch (Exception)
+                  {
+                  }
+
+                  IsRefreshing = false;
+              });
+            }
+        }
+        #endregion
 
         private void Btn_cancel_Clicked(object sender, EventArgs e)
         {
