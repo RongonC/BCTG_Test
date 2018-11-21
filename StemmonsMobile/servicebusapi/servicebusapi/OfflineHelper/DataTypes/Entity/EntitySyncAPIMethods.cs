@@ -80,12 +80,12 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             JObject rResult = null;
             try
             {
-                #region API Details
-                var API_value = new List<KeyValuePair<string, string>>
-                {
-                    new KeyValuePair<string, string>("API_Name", Constants.Baseurl  + Common.ConstantsSync.GetEntityTypeList)
-                };
-                #endregion
+                //#region API Details
+                //var API_value = new List<KeyValuePair<string, string>>
+                //{
+                //    new KeyValuePair<string, string>("API_Name", Constants.Baseurl  + Common.ConstantsSync.GetEntityTypeList)
+                //};
+                //#endregion
 
                 //  List<BoxerCentralHomePage_EntityList_Mob> Result = new List<BoxerCentralHomePage_EntityList_Mob>();
 
@@ -405,7 +405,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     {
                         if (EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "se" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "el" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "ms" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "me" || EntityList.AssociationFieldCollection[i].FieldType.ToLower() == "ss")
                         {
-
 
                             #region Get Data from EDS Cache
 

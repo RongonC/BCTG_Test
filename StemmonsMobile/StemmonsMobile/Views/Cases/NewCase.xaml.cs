@@ -120,46 +120,82 @@ namespace StemmonsMobile.Views.Cases
 
                     if (CasesSchema.Count > 0)
                     {
-                        Parallel.ForEach(CasesSchema, imetadata =>
+                        foreach (var imetadata in CasesSchema)
                         {
-                            try
+                            ItemType itmControl = new ItemType()
                             {
-                                ItemType itmControl = new ItemType()
-                                {
-                                    AssocFieldType = Convert.ToChar(imetadata.ASSOC_FIELD_TYPE),
-                                    AssociatedTypeSecurity = imetadata.ASSOC_SECURITY_TYPE,
-                                    AssocTypeID = imetadata.ASSOC_TYPE_ID,
-                                    CalculationFormula = imetadata.CALCULATION_FORMULA,
-                                    CalculationFrequencyMin = imetadata.CALCULATION_FREQUENCY_MIN,
-                                    CaseTypeID = imetadata.CASE_TYPE_ID,
-                                    Child = imetadata.CHILD_ID,
-                                    CreatedBy = imetadata.CREATED_BY,
-                                    CreatedDateTime = imetadata.CREATED_DATETIME,
-                                    Description = imetadata.DESCRIPTION,
-                                    ExternalDataSourceEntityTypeID = Convert.ToInt32(imetadata.ExternalDataSourceEntityTypeID),
-                                    ExternalDataSourceID = imetadata.EXTERNAL_DATASOURCE_ID,
-                                    IsActive = Convert.ToChar(imetadata.IS_ACTIVE),
-                                    IsRequired = Convert.ToChar(imetadata.IS_REQUIRED),
-                                    ModifiedBy = imetadata.MODIFIED_BY,
-                                    IsFroceRecalculation = imetadata.IS_FORCE_RECALCULATION,
-                                    ModifiedDateTime = imetadata.MODIFIED_DATETIME,
-                                    Name = imetadata.NAME,
-                                    Parent = imetadata.PARENT_ID,
-                                    SecurityType = imetadata.SECURITY_TYPE,
-                                    SeparatorCharactor = imetadata.SEPARATOR_CHARACTOR,
-                                    ShowOnList = Convert.ToChar(imetadata.SHOW_ON_LIST == null ? "N" : imetadata.SHOW_ON_LIST),
-                                    SystemCode = imetadata.SYSTEM_CODE,
-                                    SystemPriority = Convert.ToInt32(imetadata.SYSTEM_PRIORITY),
-                                    UIWidth = imetadata.UI_WIDTH,
-                                    UseCommaSeparator = imetadata.USE_COMMA_SEPARATOR == 'Y' ? true : false,
-                                };
-                                lock (this)
-                                    sControls.Add(itmControl);
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        });
+                                AssocFieldType = Convert.ToChar(imetadata.ASSOC_FIELD_TYPE),
+                                AssociatedTypeSecurity = imetadata.ASSOC_SECURITY_TYPE,
+                                AssocTypeID = imetadata.ASSOC_TYPE_ID,
+                                CalculationFormula = imetadata.CALCULATION_FORMULA,
+                                CalculationFrequencyMin = imetadata.CALCULATION_FREQUENCY_MIN,
+                                CaseTypeID = imetadata.CASE_TYPE_ID,
+                                Child = imetadata.CHILD_ID,
+                                CreatedBy = imetadata.CREATED_BY,
+                                CreatedDateTime = imetadata.CREATED_DATETIME,
+                                Description = imetadata.DESCRIPTION,
+                                ExternalDataSourceEntityTypeID = Convert.ToInt32(imetadata.ExternalDataSourceEntityTypeID),
+                                ExternalDataSourceID = imetadata.EXTERNAL_DATASOURCE_ID,
+                                IsActive = Convert.ToChar(imetadata.IS_ACTIVE),
+                                IsRequired = Convert.ToChar(imetadata.IS_REQUIRED),
+                                ModifiedBy = imetadata.MODIFIED_BY,
+                                IsFroceRecalculation = imetadata.IS_FORCE_RECALCULATION,
+                                ModifiedDateTime = imetadata.MODIFIED_DATETIME,
+                                Name = imetadata.NAME,
+                                Parent = imetadata.PARENT_ID,
+                                SecurityType = imetadata.SECURITY_TYPE,
+                                SeparatorCharactor = imetadata.SEPARATOR_CHARACTOR,
+                                ShowOnList = Convert.ToChar(imetadata.SHOW_ON_LIST == null ? "N" : imetadata.SHOW_ON_LIST),
+                                SystemCode = imetadata.SYSTEM_CODE,
+                                SystemPriority = Convert.ToInt32(imetadata.SYSTEM_PRIORITY),
+                                UIWidth = imetadata.UI_WIDTH,
+                                UseCommaSeparator = imetadata.USE_COMMA_SEPARATOR == 'Y' ? true : false,
+                            };
+                            sControls.Add(itmControl);
+                        }
+
+
+
+                        //Parallel.ForEach(CasesSchema, imetadata =>
+                        //{
+                        //    try
+                        //    {
+                        //        ItemType itmControl = new ItemType()
+                        //        {
+                        //            AssocFieldType = Convert.ToChar(imetadata.ASSOC_FIELD_TYPE),
+                        //            AssociatedTypeSecurity = imetadata.ASSOC_SECURITY_TYPE,
+                        //            AssocTypeID = imetadata.ASSOC_TYPE_ID,
+                        //            CalculationFormula = imetadata.CALCULATION_FORMULA,
+                        //            CalculationFrequencyMin = imetadata.CALCULATION_FREQUENCY_MIN,
+                        //            CaseTypeID = imetadata.CASE_TYPE_ID,
+                        //            Child = imetadata.CHILD_ID,
+                        //            CreatedBy = imetadata.CREATED_BY,
+                        //            CreatedDateTime = imetadata.CREATED_DATETIME,
+                        //            Description = imetadata.DESCRIPTION,
+                        //            ExternalDataSourceEntityTypeID = Convert.ToInt32(imetadata.ExternalDataSourceEntityTypeID),
+                        //            ExternalDataSourceID = imetadata.EXTERNAL_DATASOURCE_ID,
+                        //            IsActive = Convert.ToChar(imetadata.IS_ACTIVE),
+                        //            IsRequired = Convert.ToChar(imetadata.IS_REQUIRED),
+                        //            ModifiedBy = imetadata.MODIFIED_BY,
+                        //            IsFroceRecalculation = imetadata.IS_FORCE_RECALCULATION,
+                        //            ModifiedDateTime = imetadata.MODIFIED_DATETIME,
+                        //            Name = imetadata.NAME,
+                        //            Parent = imetadata.PARENT_ID,
+                        //            SecurityType = imetadata.SECURITY_TYPE,
+                        //            SeparatorCharactor = imetadata.SEPARATOR_CHARACTOR,
+                        //            ShowOnList = Convert.ToChar(imetadata.SHOW_ON_LIST == null ? "N" : imetadata.SHOW_ON_LIST),
+                        //            SystemCode = imetadata.SYSTEM_CODE,
+                        //            SystemPriority = Convert.ToInt32(imetadata.SYSTEM_PRIORITY),
+                        //            UIWidth = imetadata.UI_WIDTH,
+                        //            UseCommaSeparator = imetadata.USE_COMMA_SEPARATOR == 'Y' ? true : false,
+                        //        };
+                        //        lock (this)
+                        //            sControls.Add(itmControl);
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //    }
+                        //});
                         ContolrLst = JsonConvert.SerializeObject(sControls);
                     }
 
@@ -1127,90 +1163,77 @@ namespace StemmonsMobile.Views.Cases
 
                     var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
 
-                    //foreach (var item in CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId))
+                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                    lst_extdatasource.Add(extDSdefaultValues);
+
+                    string fieldName = string.Empty;
+
+                    var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                    if (assocChild.Count < 1)
                     {
-                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-
-                        lst_extdatasource.Add(extDSdefaultValues);
-
-                        string fieldName = string.Empty;
-
-                        var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                        if (assocChild.Count < 1)
+                        await Task.Run(() =>
                         {
-                            await Task.Run(() =>
-                            {
-                                var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
+                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
 
-                                temp_extdatasource.Wait();
-                                if (temp_extdatasource.Result.Count > 0)
-                                {
-                                    lst_extdatasource.AddRange(temp_extdatasource.Result);
-                                }
-                            });
-                            lstexternaldatasource = lst_extdatasource;
-                        }
-                        //if (lstexternaldatasource.Count == 1 && pickercntrl.ItemsSource != null)
-                        //if (lstexternaldatasource.Count == 1)
+                            temp_extdatasource.Wait();
+                            if (temp_extdatasource.Result.Count > 0)
+                            {
+                                lst_extdatasource.AddRange(temp_extdatasource.Result);
+                            }
+                        });
+                        lstexternaldatasource = lst_extdatasource;
+                    }
+                    else
+                    {
+                        FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
+                        if (lstexternaldatasource != null)
+                            Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
                         else
                         {
-                            //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                            //if (assocChild.Count <= 1)
-                            {
-                                FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
-                            }
-                            if (lstexternaldatasource != null)
-                                Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
-                            else
-                            {
-                                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
 
-                                lst_extdatasourcee.Add(extDSdefaultValues);
-                                lstexternaldatasource = lst_extdatasourcee;
-                            }
-                            Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
+                            lst_extdatasourcee.Add(extDSdefaultValues);
+                            lstexternaldatasource = lst_extdatasourcee;
                         }
-                        //else
-                        //{
-                        //    Exditemslst = lst_extdatasource?.Select(v => v.NAME);
-                        //}
+                        Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
+                    }
 
-                        Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
+                    Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
 
-                        #region Item Lookup Initialization
-                        //Exditems = new ObservableCollection<string>(Exditemslst);
+                    #region Item Lookup Initialization
 
-                        lst_itemlookup.IsPullToRefreshEnabled = true;
-                        lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
-                        lst_itemlookup.Refreshing += OnRefresh;
-                        lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
+                    lst_itemlookup.IsPullToRefreshEnabled = true;
+                    lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
+                    lst_itemlookup.Refreshing += OnRefresh;
+                    lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
 
-                        lst_itemlookup.ItemsSource = Exditemslst;
-                        lst_itemlookup.BackgroundColor = Color.White;
+                    lst_itemlookup.ItemsSource = Exditemslst;
+                    lst_itemlookup.BackgroundColor = Color.White;
 
-                        ext_search.Text = "";
-                        ext_search.TextChanged += Ext_search_TextChanged;
-                        ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
-                        Button btn_cancel = new Button()
-                        {
-                            Text = "Cancel",
-                            WidthRequest = 100,
-                            HeightRequest = 40,
-                            TextColor = Color.Accent,
-                            BackgroundColor = Color.Transparent,
-                            HorizontalOptions = LayoutOptions.Center,
-                        };
+                    ext_search.Text = "";
+                    ext_search.TextChanged += Ext_search_TextChanged;
+                    ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+                    Button btn_cancel = new Button()
+                    {
+                        Text = "Cancel",
+                        WidthRequest = 100,
+                        HeightRequest = 40,
+                        TextColor = Color.Accent,
+                        BackgroundColor = Color.Transparent,
+                        HorizontalOptions = LayoutOptions.Center,
+                    };
 
-                        btn_cancel.Clicked += Btn_cancel_Clicked;
+                    btn_cancel.Clicked += Btn_cancel_Clicked;
 
-                        var temp = new DataTemplate(typeof(TextViewCell));
-                        lst_itemlookup.ItemTemplate = temp;
+                    var temp = new DataTemplate(typeof(TextViewCell));
+                    lst_itemlookup.ItemTemplate = temp;
 
-                        popupLT.Children.Clear();
+                    popupLT.Children.Clear();
 
-                        popupLT.Children.Add(new StackLayout
-                        {
-                            Children =
+                    popupLT.Children.Add(new StackLayout
+                    {
+                        Children =
                             {
                                 new StackLayout
                                   {
@@ -1241,15 +1264,14 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                 },
                             }
-                        });
-                        Stack_Popup.IsVisible = true;
-                        masterGrid.IsVisible = false;
+                    });
+                    Stack_Popup.IsVisible = true;
+                    masterGrid.IsVisible = false;
 
-                        Stack_Popup.HeightRequest = this.Height - 20;
+                    Stack_Popup.HeightRequest = this.Height - 20;
 
-                        Stack_Popup.WidthRequest = this.Width - 20;
-                        #endregion
-                    }
+                    Stack_Popup.WidthRequest = this.Width - 20;
+                    #endregion
                 }
             }
             catch (Exception)

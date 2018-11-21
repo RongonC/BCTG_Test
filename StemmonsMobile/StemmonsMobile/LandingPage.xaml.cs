@@ -908,7 +908,7 @@ namespace StemmonsMobile
                     });
                 });
 
-                UpdateCount(appCount);
+                //UpdateCount(appCount);
             }
             catch (Exception)
             {
@@ -946,7 +946,6 @@ namespace StemmonsMobile
                 {
                     associationNotification.Text = appCount.EntityCount.ToString();
                 });
-
             }
             else
             {
@@ -959,7 +958,6 @@ namespace StemmonsMobile
                 {
                     standardNotification.Text = appCount.StandardCount.ToString();
                 });
-
             }
             else
             {

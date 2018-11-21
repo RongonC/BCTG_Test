@@ -67,7 +67,7 @@ namespace StemmonsMobile
         {
             try
             {
-                
+
                 Isonline = e.IsConnected;
                 isFirstcall = true;
                 OnlineSyncRecord();
@@ -77,7 +77,7 @@ namespace StemmonsMobile
             }
         }
         public static bool isFirstcall = true;
-        public static void OnlineSyncRecord()
+        public async static void OnlineSyncRecord()
         {
             if (Isonline && isFirstcall)
             {
@@ -106,10 +106,15 @@ namespace StemmonsMobile
 
                             dlg.Show();
 
-                            Task.Run(() =>
-                            {
-                                HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
-                            });
+                            await Task.Run(() =>
+                             {
+                                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                 {
+                                     dlg.PercentComplete = 25;
+                                     dlg.Title = "Online Data Sync Operation in Progress";
+                                 });
+                                 HelperProccessQueue.SyncSqlLiteTableWithSQLDatabase(App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID, Functions.UserName);
+                             });
 
                             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                             {
@@ -178,7 +183,7 @@ namespace StemmonsMobile
             try
             {
                 DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
-                
+
                 //Required To create Database
                 DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
             }

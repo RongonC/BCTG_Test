@@ -243,38 +243,37 @@ namespace StemmonsMobile.Views.Entity
                                     pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
                                     pk.SelectedIndex = 0;
 
-
-
                                     RightLyout.Children.Add(pk);
-
-                                    //Picker pk = new Picker
-                                    //{
-                                    //    StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
-                                    //    WidthRequest = 200,
-                                    //    TextColor = Color.Gray
-                                    //};
-
-                                    //if (Functions.IsEditEntity)
-                                    //{
-                                    //    // for Entity View only
-                                    //    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-                                    //}
-                                    //else
-                                    //{
-                                    //    if (Device.RuntimePlatform == "iOS")
-                                    //    {
-                                    //        pk.Unfocused += Pk_Unfocused;
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
-                                    //    }
-                                    //}
-
 
                                     /*Bind list in Dropdown*/
                                     try
                                     {
+                                        //Picker pk = new Picker
+                                        //{
+                                        //    StyleId = _field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID,
+                                        //    WidthRequest = 200,
+                                        //    TextColor = Color.Gray
+                                        //};
+
+                                        //if (Functions.IsEditEntity)
+                                        //{
+                                        //    // for Entity View only
+                                        //    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                        //}
+                                        //else
+                                        //{
+                                        //    if (Device.RuntimePlatform == "iOS")
+                                        //    {
+                                        //        pk.Unfocused += Pk_Unfocused;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+                                        //    }
+                                        //}
+
+
+
                                         //List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
                                         //EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1
                                         //{
@@ -1011,8 +1010,6 @@ namespace StemmonsMobile.Views.Entity
                             gridEntitynotes.ItemsSource = NotesGroups;
                         }
                         #endregion
-
-
                     }
                     else
                     {
@@ -1076,7 +1073,7 @@ namespace StemmonsMobile.Views.Entity
 
                         var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
 
-                        if (CurAssco.EntityAssocTypeCascade?.Count >= 0)
+                                                if (CurAssco.EntityAssocTypeCascade?.Count >= 0)
                         {
                             List<int> CHildLst = CurAssco.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
                             if (CHildLst.Count < 1)
@@ -1383,16 +1380,16 @@ namespace StemmonsMobile.Views.Entity
                           var result = EntityAPIMethods.GetExternalDataSourceByID(Convert.ToString(CurAssco.ExternalDataSourceID));
                           var tEM = result.GetValue("ResponseContent");
 
-                          if (tEM != null)
+                          if (!string.IsNullOrEmpty(Convert.ToString(tEM)))
                           {
                               ExternalDatasource exd = JsonConvert.DeserializeObject<ExternalDatasource>(tEM.ToString());
                               if (exd.List.Count > 0)
                               {
                                   CurAssco.EXTERNAL_DATASOURCE = exd.List;
                               }
-
-                              _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
                           }
+
+                          _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
                       });
 
                       lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
@@ -1457,6 +1454,14 @@ namespace StemmonsMobile.Views.Entity
 
                     e_pik.ItemsSource = lst;
                     e_pik.SelectedIndex = 0;
+
+                    EXTERNAL_DATASOURCE1 lsa = e_pik.SelectedItem as EXTERNAL_DATASOURCE1;
+
+                    if (lsa != null && lsa?.ID > 0)
+                    {
+                        DyanmicSetCalcexd(e_pik.StyleId, EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == Convert.ToInt32(e_pik.StyleId?.Split('_')[1]))?.ToList());
+                    }
+
                     if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
                         lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
                     else
@@ -1875,8 +1880,11 @@ namespace StemmonsMobile.Views.Entity
                                 rf.sdateFormats = "MM/dd/yyyy";
                                 JToken CalResult = null;
 
-                                var Result = EntityAPIMethods.RefreshCalculationFields(rf);
-                                CalResult = Result.GetValue("ResponseContent");
+                                Task.Run(() =>
+                                {
+                                    var Result = EntityAPIMethods.RefreshCalculationFields(rf);
+                                    CalResult = Result.GetValue("ResponseContent");
+                                }).Wait();
 
                                 var subitem1 = FindEntityControl(sCalId);
 
@@ -1889,7 +1897,10 @@ namespace StemmonsMobile.Views.Entity
                                         var en = (Entry)subitem1;
                                         if (en.StyleId == Convert.ToString(sCalId))
                                         {
-                                            en.Text = Convert.ToString(CalResult);
+                                            Device.BeginInvokeOnMainThread(() =>
+                                            {
+                                                en.Text = Convert.ToString(CalResult);
+                                            });
                                         }
                                     }
                                 }

@@ -154,6 +154,8 @@ namespace DataServiceBus
                 Debug.WriteLine("InnerException => " + e.InnerException);
                 Debug.WriteLine("Message => " + e.Message);
                 throw e;
+                //DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllQuest", _UserName, DateTime.Now.ToString());
+
             }
             return jobj;
         }
