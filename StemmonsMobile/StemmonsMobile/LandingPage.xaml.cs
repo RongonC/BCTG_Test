@@ -197,10 +197,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = Percentage;
-                                                        dlg.Title = "Cases Items Sync Operation " + 1 + " of " + itemCount + " in Progress";
-                                                    });
+                                {
+                                    dlg.PercentComplete = Percentage;
+                                    dlg.Title = "Cases Items Sync Operation " + 1 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -233,10 +233,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 2;
-                                                       dlg.Title = "Case Types and Items Sync Operation " + 1 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 2;
+                                    dlg.Title = "Case Types and Items Sync Operation " + 1 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -286,10 +286,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = Percentage * 3;
-                                                        dlg.Title = "Case Types Sync Operation Sync Operation " + 2 + " of " + itemCount + " completed";
-                                                    });
+                                {
+                                    dlg.PercentComplete = Percentage * 3;
+                                    dlg.Title = "Case Types Sync Operation Sync Operation " + 2 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -304,9 +304,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -339,10 +339,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 4;
-                                                       dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 4;
+                                    dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -357,9 +357,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -392,10 +392,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 5;
-                                                       dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 5;
+                                    dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -410,9 +410,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount + " in Progress";
-                                                    });
+                                {
+                                    dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -446,10 +446,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 6;
-                                                       dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 6;
+                                    dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -464,9 +464,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -504,10 +504,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 7;
-                                                       dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 7;
+                                    dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -522,9 +522,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Origination Center Data Sync Operation " + 7 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Origination Center Data Sync Operation " + 7 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -557,10 +557,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = Percentage * 8;
-                                                        dlg.Title = "Origination Center Sync Operation " + 7 + " of " + itemCount + " completed";
-                                                    });
+                                {
+                                    dlg.PercentComplete = Percentage * 8;
+                                    dlg.Title = "Origination Center Sync Operation " + 7 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -575,9 +575,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -609,10 +609,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = Percentage * 8;
-                                                        dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount + " completed";
-                                                    });
+                                {
+                                    dlg.PercentComplete = Percentage * 8;
+                                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -627,9 +627,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount + " in Progress";
-                                                    });
+                                {
+                                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -664,10 +664,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 9;
-                                                       dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 9;
+                                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -682,9 +682,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -718,10 +718,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = Percentage * 10;
-                                                        dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount + " completed";
-                                                    });
+                                {
+                                    dlg.PercentComplete = Percentage * 10;
+                                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -736,9 +736,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount + " in Progress";
-                                                   });
+                                {
+                                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -777,10 +777,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                   {
-                                                       dlg.PercentComplete = Percentage * 11;
-                                                       dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount + " completed";
-                                                   });
+                                {
+                                    dlg.PercentComplete = Percentage * 11;
+                                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -795,9 +795,9 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                  {
-                                                      dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount + " in Progress";
-                                                  });
+                                {
+                                    dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount + " in Progress";
+                                });
                             }
                             catch (Exception)
                             {
@@ -832,10 +832,10 @@ namespace StemmonsMobile
                             try
                             {
                                 Device.BeginInvokeOnMainThread(() =>
-                                                    {
-                                                        dlg.PercentComplete = 100;
-                                                        dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount + " completed";
-                                                    });
+                                {
+                                    dlg.PercentComplete = 100;
+                                    dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount + " completed";
+                                });
                             }
                             catch (Exception)
                             {
@@ -946,6 +946,7 @@ namespace StemmonsMobile
                 {
                     associationNotification.Text = appCount.EntityCount.ToString();
                 });
+
             }
             else
             {
@@ -958,6 +959,7 @@ namespace StemmonsMobile
                 {
                     standardNotification.Text = appCount.StandardCount.ToString();
                 });
+
             }
             else
             {
@@ -1127,11 +1129,11 @@ namespace StemmonsMobile
             {
                 List<GetUserInfoResponse.UserInfo> Userlist = new List<GetUserInfoResponse.UserInfo>();
                 await Task.Run(() =>
-                 {
-                     var itemRec = CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                     itemRec.Wait();
-                     Userlist = itemRec.Result;
-                 });
+                {
+                    var itemRec = CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                    itemRec.Wait();
+                    Userlist = itemRec.Result;
+                });
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 if (Userlist?.Count > 0)
                 {
@@ -1359,6 +1361,7 @@ namespace StemmonsMobile
                         break;
 
                     case "Cases Origination Center":
+                        IsCreateEntity = false;
                         await this.Navigation.PushAsync(new CaseOriginationCenter());
                         break;
 
@@ -1512,6 +1515,7 @@ namespace StemmonsMobile
             var applicationtype = button.BindingContext as ApplicationList;
             if (applicationtype.ApplicationName == "Cases")
             {
+                IsCreateEntity = false;
                 await this.Navigation.PushAsync(new SelectCaseType());
             }
             else if (applicationtype.ApplicationName == "Entities")
@@ -1566,6 +1570,7 @@ namespace StemmonsMobile
             var applicationtype = button.BindingContext as ApplicationList;
             if (applicationtype.ApplicationName == "Cases")
             {
+                IsCreateEntity = true;
                 await this.Navigation.PushAsync(new SelectCaseType());
             }
             else if (applicationtype.ApplicationName == "Entities")

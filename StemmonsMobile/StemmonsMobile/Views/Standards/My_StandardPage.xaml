@@ -34,21 +34,21 @@
                                         <Label Text="{Binding APP_NAME}" 
                                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                        HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                       FontSize="16" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                       FontSize="16"/>
                                         <Label Text="{Binding DESCRIPTIONS}"
                                        Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                        HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
                                        FontSize="16"
-                                       TextColor="{StaticResource DetailsColor}" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
+                                       TextColor="{StaticResource DetailsColor}"  />
                                         <Label Text="{Binding MODIFIED_DATETIME}"
                                        Grid.Row="2" Grid.Column="0" 
                                        HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                       FontSize="12" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
+                                       FontSize="12" 
                                        />
                                         <Label Text="{Binding LAST_VISIT_Date}"
                                        Grid.Row="2" Grid.Column="1" 
                                        HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
-                                        FontSize="12" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"
+                                        FontSize="12" 
                                        />
 
                                         <Button Image="Assets/dropdowniconClose.png"

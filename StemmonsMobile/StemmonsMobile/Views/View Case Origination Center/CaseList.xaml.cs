@@ -1,5 +1,4 @@
-﻿
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using DataServiceBus.OfflineHelper.DataTypes;
 using DataServiceBus.OfflineHelper.DataTypes.Cases;
 using DataServiceBus.OfflineHelper.DataTypes.Common;
@@ -46,6 +45,15 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             Team_Username = _uname;
             searchvalue = _searchvalue;
             sTitle = _Titile == "" ? "Case List" : _Titile;
+
+            if (parametername == "caseAssgnSAM" || parametername == "caseCreateBySAM" || parametername == "caseOwnerSAM")
+            {
+                btn_add.IsVisible = false;
+            }
+            else
+            {
+                btn_add.IsVisible = true;
+            }
 
             listdata.RefreshCommand = RefreshCommand;
 
@@ -139,7 +147,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             };
         }
 
-        protected async override void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
             try
@@ -687,6 +695,14 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             }
         }
 
+        //New Code start - ArpanB
+        private async void btn_add_Clicked(object sender, EventArgs e)
+        {
+            await this.Navigation.PushAsync(new NewCase("0", Convert.ToString(casetypeid)));
+        }
+        //New Code end
+
+        #region Pull To refresh Case List
         private bool _isRefreshing = false;
         public bool IsRefreshing
         {
@@ -741,6 +757,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 });
             }
         }
+        #endregion
     }
 
     public class HopperData

@@ -374,7 +374,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     var app = EntityRelatedResponse.ToString().Split(',');
 
-                    ChillerEntityGroup group1 = new ChillerEntityGroup("Related Item", "", true);
+                    ChillerEntityGroup group1 = new ChillerEntityGroup("Related Items", "", true);
 
 
                     groupedItems.Add(group1);

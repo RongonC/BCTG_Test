@@ -77,6 +77,15 @@ namespace StemmonsMobile.Views.Cases
 
                 Favoriteid = FAVORITEID;
                 Casetypeid = CASETYPEID;
+
+                if (!string.IsNullOrEmpty(Favoriteid) && Favoriteid != "0")
+                {
+                    btn_rem_fav.IsVisible = true;
+                }
+                else
+                {
+                    btn_rem_fav.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {
@@ -2954,5 +2963,23 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
+        async void btn_rem_fav_Clicked(object sender, EventArgs e)
+        {
+            // remove code
+            try
+            {
+                var result = await DisplayAlert("Alert", "Would you like to remove this case from Your favourite list?", "Yes", "No");
+
+                if (result)
+                {
+                    var res = CasesSyncAPIMethods.RemoveFavorite(App.Isonline, Favoriteid.ToString(), App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID.ToString(), Functions.UserName);
+                    await this.Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // 
+            }
+        }
     }
 }

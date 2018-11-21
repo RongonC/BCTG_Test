@@ -123,9 +123,6 @@
     <Compile Include="Views\Cases\ViewCasePage.xaml.cs">
       <DependentUpon>ViewCasePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Cases\ViewcasePage_New.xaml.cs">
-      <DependentUpon>ViewcasePage_New.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CreateQuestForm\Attachment.xaml.cs">
       <DependentUpon>Attachment.xaml</DependentUpon>
     </Compile>
@@ -701,12 +698,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Entity\ViewEntityNotes.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\Cases\ViewcasePage_New.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -2309,7 +2309,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (temp != null && temp.ToString() != "[]")
                     {
-                        res = Convert.ToInt32(temp.ToString());
+                        res = Convert.ToInt32(temp.ToString() == "True" ? 1 : 0);
                     }
                 }
                 else
@@ -2943,7 +2943,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 result = CasesAPIMethods.GetCaseListSync(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, idAndDateTime, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, screenName, 0, 0);
                 var temp = result.GetValue("ResponseContent");
 
-                Debug.WriteLine("GetCaseListSync||" + screenName + " ==> " + Convert.ToString(temp));
+                //Debug.WriteLine("GetCaseListSync||" + screenName + " ==> " + Convert.ToString(temp));
 
                 if (!string.IsNullOrEmpty(Convert.ToString(temp)) && temp?.ToString() != "[]")
                 {
@@ -2988,10 +2988,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     if (temp != null && temp.ToString() != "[]")
                     {
                         lstResult = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(temp.ToString());
-                        if (lstResult.Count > 0)
-                        {
-                            var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _InstanceUserAssocId, _DBPath, id, _caseTypeID, "M");
-                        }
+                        //if (lstResult.Count > 0)
+                        //{
+                        //    var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C4_GetAssocCascadeInfoByCaseType", _InstanceUserAssocId, _DBPath, id, _caseTypeID, "M");
+                        //}
                     }
                 }
                 else

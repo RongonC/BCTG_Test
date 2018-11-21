@@ -19,8 +19,8 @@
 
                 <ListView  x:Name="listViewStandards"
                     GroupDisplayBinding="{Binding Title}"
-                   HasUnevenRows="true"
-                   IsGroupingEnabled="true" ItemTapped="Standards_ItemTapped">
+                   HasUnevenRows="True"
+                   IsGroupingEnabled="True" ItemTapped="Standards_ItemTapped">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ImageCell  

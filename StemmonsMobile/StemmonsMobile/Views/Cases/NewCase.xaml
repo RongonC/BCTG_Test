@@ -34,9 +34,9 @@
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1"
                          IsClippedToBounds="True" >
                     <Button Image="Assets/Home_Icon.png"  BackgroundColor="Transparent" x:Name="btn_home" Clicked="HomeMenu_Click" HorizontalOptions="CenterAndExpand" />
+                    <Button x:Name="btn_rem_fav" Image="Assets/removeicn.png" HeightRequest="35" IsVisible="False" Clicked="btn_rem_fav_Clicked" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
                     <Button Image="Assets/menuicon.png"  BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
                 </StackLayout>
-
             </Grid>
             
             

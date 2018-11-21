@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace StemmonsMobile.Models
 {
-    public class Group_CaseType : ObservableCollection<CaseTypeCollection>, INotifyPropertyChanged
+    public class Group_CaseType : ObservableCollection<Sel_CaseTypeList>, INotifyPropertyChanged
     {
 
         private bool _expanded;
@@ -45,7 +45,7 @@ namespace StemmonsMobile.Models
             Expanded = expanded;
         }
 
-        public static ObservableCollection<CaseTypeCollection> All { private set; get; }
+        public static ObservableCollection<Sel_CaseTypeList> All { private set; get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -54,10 +54,10 @@ namespace StemmonsMobile.Models
         }
     }
 
-    public class CaseTypeCollection
+    public class Sel_CaseTypeList
     {
-        public int GroupId { get; set; }
-        public int CaseType_Id { get; set; }
-        public string CaseType_Name { get; set; }
+        public int TypeId { get; set; }
+        public string TypeName { get; set; }
+        public bool TypeFlag { get; set; }
     }
 }

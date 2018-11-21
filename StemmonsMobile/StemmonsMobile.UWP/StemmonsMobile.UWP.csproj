@@ -192,6 +192,7 @@
     <Content Include="Assets\plussign1.png" />
     <Content Include="Assets\Questblack.png" />
     <Content Include="Assets\Questblack_1.png" />
+    <Content Include="Assets\removeicn.png" />
     <Content Include="Assets\Save.png" />
     <Content Include="Assets\setting.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />

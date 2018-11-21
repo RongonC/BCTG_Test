@@ -32,7 +32,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer >
-                    <Grid Margin="15,0,10,0">
+                    <StackLayout>
+
+                    </StackLayout>
+                    <!--<Grid Margin="15,0,10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1" />
                         </Grid.RowDefinitions>
@@ -45,7 +48,7 @@
                            VerticalOptions="Center" Grid.Row="1" />
                         <Button Image="Assets/plussign.png" BackgroundColor="Transparent" 
                             Grid.Row="1" Grid.Column="1" WidthRequest="25" HeightRequest="25"    Clicked="NewCaseCreat_Clicked" />
-                    </Grid>
+                    </Grid>-->
                 </ListView.Footer>
             </ListView>
 
