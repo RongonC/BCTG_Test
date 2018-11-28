@@ -38,10 +38,17 @@
                       BorderWidth="0"
                          Clicked="HeaderTapped" 
                       CommandParameter="{Binding .}"/>
-                                    <Label Text="{Binding TitleWithItemCount}" 
+                                    <!--<Label Text="{Binding TitleWithItemCount}" 
                      
                      FontSize="14"
-                     VerticalOptions="Center"/>
+                     VerticalOptions="Center"/>-->
+                                    <Button Text="{Binding TitleWithItemCount}" FontSize="14"
+                     VerticalOptions="Center" 
+                      BackgroundColor="Transparent"
+                      BorderColor="Transparent"
+                      BorderWidth="0"
+                         Clicked="HeaderTapped" 
+                      CommandParameter="{Binding .}"/>
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>

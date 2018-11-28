@@ -9,6 +9,7 @@ using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.Models;
+using StemmonsMobile.Views.People_Screen;
 using StemmonsMobile.Views.View_Case_Origination_Center;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,11 @@ namespace StemmonsMobile.Views.Cases
         List<AssocCascadeInfo> AssocTypeCascades = new List<AssocCascadeInfo>();
         BorderEditor txt_CasNotes = new BorderEditor();
         Label WarningLabel = new Label();
+
+        string Assign_Sam = string.Empty;
+        string Create_Sam = string.Empty;
+        string Modify_Sam = string.Empty;
+        string Owner_Sam = string.Empty;
 
         int iSelectedItemlookupId = 0;
 
@@ -1768,7 +1774,7 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CREATED_DATETIME)) : (Convert.ToDateTime(_Casedata.CreateDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    lbl_createname.FormattedText = s;
+                    lbl_createname.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseAssignedToDisplayName != null)
@@ -1778,7 +1784,7 @@ namespace StemmonsMobile.Views.Cases
 
                     }
 
-                    lbl_assignto.FormattedText = s;
+                    lbl_assignto.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     if (_Casedata?.CaseOwnerDisplayName != null)
@@ -1787,7 +1793,7 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_OWNER_DATETIME)) : (Convert.ToDateTime(_Casedata.CaseOwnerDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    lbl_ownername.FormattedText = s;
+                    lbl_ownername.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     if (_Casedata?.ModifiedByDisplayName != null)
@@ -1796,7 +1802,7 @@ namespace StemmonsMobile.Views.Cases
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(MODIFIED_DATETIME)) : (Convert.ToDateTime(_Casedata.ModifiedDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    lbl_modifiedname.FormattedText = s;
+                    lbl_modifiedname.Text = Convert.ToString(s);
                 }
 
                 Grd_Footer.IsVisible = true;
@@ -1808,6 +1814,11 @@ namespace StemmonsMobile.Views.Cases
                 DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
 
                 lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBy) + " at " + Convert.ToString(Dout.ToString());
+
+                Assign_Sam = _Casedata.CaseAssignedTo;
+                Create_Sam = _Casedata.CreateBy;
+                Modify_Sam = _Casedata.ModifiedBy;
+                Owner_Sam = _Casedata.CaseOwner;
             }
             catch (Exception)
             {
@@ -4944,6 +4955,67 @@ namespace StemmonsMobile.Views.Cases
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
         }
+
+        private async void btn_crtnam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Create_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_assinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Assign_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_ownam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Owner_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_modinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Modify_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
 
     }
 

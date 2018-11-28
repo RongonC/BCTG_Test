@@ -159,16 +159,32 @@
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
                                         <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
-                                        <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14" />
-                                        <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14" />
-                                        <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14" />
-                                        <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14" />
+                                        <Label Grid.Row="1" Grid.Column="0" Text="Created By :" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Text="Assigned  To :" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"/>
+                                        <Label Grid.Row="5" Grid.Column="0" Text="Owner :" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"/>
+                                        <Label Grid.Row="7" Grid.Column="0" Text="Modified  By :" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"/>
 
                                         <!--<Label Grid.Row="0" Grid.ColumnSpan="3"   BackgroundColor="#D0D0D0" HeightRequest="1"  />-->
-                                        <Label Grid.Row="1" Grid.Column="2"  FontSize="14" x:Name="lbl_createname"/>
+                                        <!--<Label Grid.Row="1" Grid.Column="2"  FontSize="14" x:Name="lbl_createname"/>
                                         <Label Grid.Row="3" Grid.Column="2" FontSize="14"  x:Name="lbl_assignto" />
                                         <Label Grid.Row="5" Grid.Column="2" FontSize="14"  x:Name="lbl_ownername" />
-                                        <Label Grid.Row="7" Grid.Column="2" FontSize="14"  x:Name="lbl_modifiedname"/>
+                                        <Label Grid.Row="7" Grid.Column="2" FontSize="14"  x:Name="lbl_modifiedname"/>-->
+
+                                        <Button Grid.Row="1" Grid.Column="2" FontSize="14" x:Name="lbl_createname"  
+                                            BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" 
+                                            Clicked="entity_btn_crtnam" />
+                                        <Button Grid.Row="3" Grid.Column="2" FontSize="14" x:Name="lbl_assignto"
+                                             BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" 
+                                            Clicked="entity_btn_assinam"/>
+                                        <Button Grid.Row="5" Grid.Column="2" FontSize="14" x:Name="lbl_ownername" 
+                                            BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" 
+                                            Clicked="entity_btn_ownam"
+                                            />
+                                        <Button Grid.Row="7" Grid.Column="2" FontSize="14"  x:Name="lbl_modifiedname"
+                                            BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" 
+                                            Clicked="entity_btn_modinam"
+                                           />
+
 
                                     </Grid>
                                 </Grid>
@@ -185,7 +201,7 @@
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" 
                                  IsClippedToBounds="True"  >
                     <Button x:Name="btn_home" Image="Assets/Home_Icon.png"  BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="btn_home_Clicked"/>
-                    <Button x:Name="btn_add" Text="+" FontSize="35" Clicked="btn_add_Clicked" IsVisible="False" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                    <Button x:Name="btn_add" Text="+" FontSize="50" Clicked="btn_add_Clicked" IsVisible="False" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
                     <Button x:Name="btn_more" Image="Assets/menuicon.png" BackgroundColor="Transparent" Clicked="btn_more_Clicked" HorizontalOptions="CenterAndExpand" />
                 </StackLayout>
             </Grid>

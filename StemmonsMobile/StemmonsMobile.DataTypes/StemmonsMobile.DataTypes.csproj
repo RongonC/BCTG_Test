@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="DataType\Cases\AssigntomeRequest.cs" />
     <Compile Include="DataType\Cases\AssigntomeResponse.cs" />
+    <Compile Include="DataType\Cases\CaseData.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateRequest.cs" />
     <Compile Include="DataType\Cases\AcceptCaseRequest.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateResponse.cs" />

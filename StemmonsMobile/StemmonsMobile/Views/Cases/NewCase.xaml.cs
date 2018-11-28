@@ -810,6 +810,29 @@ namespace StemmonsMobile.Views.Cases
                                             btncontrol.Text = Convert.ToString(reclst.Value.Value);
                                             //ExternalDatasource
 
+                                            var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Fav_iitem.ASSOC_TYPE_ID).ToList();
+                                            Button findbtn = new Button();
+                                            if (assocChild.Count < 1)
+                                            {
+                                                findbtn = btncontrol;
+                                                //is Parent
+                                            }
+                                            else
+                                            {
+                                                findbtn = FindPickerControls(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT) as Button;
+                                                // is child
+                                            }
+
+
+                                            if (findbtn.Text == "-- Select Item --")
+                                            {
+                                                btncontrol.IsEnabled = false;
+                                            }
+                                            else
+                                            {
+                                                btncontrol.IsEnabled = true;
+                                            }
+
                                             GetExternalDataSourceByIdResponse.ExternalDatasource Ed = new GetExternalDataSourceByIdResponse.ExternalDatasource()
                                             {
                                                 ID = 0,
@@ -1192,6 +1215,11 @@ namespace StemmonsMobile.Views.Cases
                             }
                         });
                         lstexternaldatasource = lst_extdatasource;
+
+                        //if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
+                        //    lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
+                        //else
+                        //    lstextdatasourceHistory[iSelectedItemlookupId] = lst;
                     }
                     else
                     {

@@ -22,7 +22,7 @@
                 </Grid.RowDefinitions>
 
                 <SearchBar Placeholder="Search for a case in this list"
-   x:Name="SearchCase" TextChanged="SearchCase_TextChanged" Grid.Row="0" />
+                         x:Name="SearchCase" TextChanged="SearchCase_TextChanged" Grid.Row="0" />
 
                 <StackLayout Grid.Row="1"  IsClippedToBounds="True">
                     <ListView x:Name="listdata" ItemTapped="listdata_ItemTapped"
@@ -86,7 +86,7 @@
                                                HorizontalOptions="EndAndExpand" VerticalOptions="Center"
                                                FontSize="12"    />
 
-                                        <Button Image="Assets/dropdowniconClose.png"   Grid.Column="3" Grid.RowSpan="3"
+                                        <Button Image="Assets/dropdowniconClose.png"   Grid.Column="3" Grid.RowSpan="6"
                                                 BackgroundColor="Transparent"
                                                 HorizontalOptions="EndAndExpand" VerticalOptions="Center"
                                                 Margin="0,0,5,0" />
@@ -119,10 +119,9 @@
 
                 </StackLayout>
 
-
-                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="1" IsClippedToBounds="True">
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" IsClippedToBounds="True">
                     <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />
-                    <Button x:Name="btn_add" Text="+" FontSize="35" IsVisible="True" Clicked="btn_add_Clicked" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                    <Button x:Name="btn_add" Text="+" FontSize="50" IsVisible="True" Clicked="btn_add_Clicked" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
                     <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
                 </StackLayout>
             </Grid>

@@ -21,6 +21,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         {
             public int CaseNoteID { get; set; }
             public int CaseID { get; set; }
+            public int CaseTypeID { get; set; }
             public int NoteTypeID { get; set; }
             public string Note
             {
@@ -35,7 +36,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                     OnPropertyChanged("Note");
                 }
             }
-          
+
             public DateTime CreatedDateTime { get; set; }
             public string CreatedBy { get; set; }
             public string BColor { get; set; }

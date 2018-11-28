@@ -9,6 +9,7 @@ using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.Views.Cases;
+using StemmonsMobile.Views.People_Screen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +34,11 @@ namespace StemmonsMobile.Views.Entity
         EntityClass EntitySchemaLists = null;
         EntityClass EntityListsValues = null;
         List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
+
+        string Assign_Sam = string.Empty;
+        string Create_Sam = string.Empty;
+        string Modify_Sam = string.Empty;
+        string Owner_Sam = string.Empty;
 
         string ischeckcalControl = string.Empty;
         string ContolrLst = string.Empty;
@@ -78,7 +84,7 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_createname.FormattedText = FrmtText;
+                    lbl_createname.Text = Convert.ToString(FrmtText);
 
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityAssignedToFullName != null)
@@ -87,7 +93,7 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_assignto.FormattedText = FrmtText;
+                    lbl_assignto.Text = Convert.ToString(FrmtText);
 
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityOwnedByFullName != null)
@@ -96,7 +102,7 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_ownername.FormattedText = FrmtText;
+                    lbl_ownername.Text = Convert.ToString(FrmtText);
 
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityModifiedByFullName != null)
@@ -105,7 +111,12 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_modifiedname.FormattedText = FrmtText;
+                    lbl_modifiedname.Text = Convert.ToString(FrmtText);
+
+                    Assign_Sam = EntitymbView.EntityDetails.EntitiyAssignedToUserName;
+                    Create_Sam = EntitymbView.EntityDetails.EntityCreatedByUserName;
+                    Modify_Sam = EntitymbView.EntityDetails.EntityModifiedByUserName;
+                    Owner_Sam = EntitymbView.EntityDetails.EntitiyOwnedByUserName;
                 }
             }
         }
@@ -2364,7 +2375,7 @@ namespace StemmonsMobile.Views.Entity
                     FormattedString s = new FormattedString();
                     s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
                     s.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-                    lbl_modifiedname.FormattedText = s;
+                    lbl_modifiedname.Text = s.ToString();
 
                 }
                 else
@@ -3526,6 +3537,69 @@ namespace StemmonsMobile.Views.Entity
         private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
+        }
+
+        private async void btn_crtnam(object sender, EventArgs e)
+        {
+            // DisplayAlert("", Functions.Goonline_forFunc, "Ok");
+
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Create_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_assinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Assign_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_ownam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Owner_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void btn_modinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Modify_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
     //public class TextViewCell : ViewCell

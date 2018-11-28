@@ -9,6 +9,7 @@ using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.Models;
 using StemmonsMobile.Views.LoginProcess;
+using StemmonsMobile.Views.People_Screen;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -278,7 +279,7 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_createname.FormattedText = s;
+                    lbl_createname.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     try
@@ -292,7 +293,7 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_assignto.FormattedText = s;
+                    lbl_assignto.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     try
@@ -306,7 +307,7 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_ownername.FormattedText = s;
+                    lbl_ownername.Text = Convert.ToString(s);
 
                     s = new FormattedString();
                     try
@@ -320,7 +321,14 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_modifiedname.FormattedText = s;
+                    lbl_modifiedname.Text = Convert.ToString(s);
+
+                    Assign_Sam = EntityLists.EntitiyAssignedToUserName;
+                    Create_Sam = EntityLists.EntityCreatedByUserName;
+                    Modify_Sam = EntityLists.EntityModifiedByUserName;
+                    Owner_Sam = EntityLists.EntitiyOwnedByUserName;
+
+
                 }
                 else
                 {
@@ -791,6 +799,12 @@ namespace StemmonsMobile.Views.Entity
                                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                                 if (IsOwnerChangeed)
                                 {
+                                    Assign_Sam = EntityLists.EntitiyAssignedToUserName;
+                                    Create_Sam = EntityLists.EntityCreatedByUserName;
+                                    Modify_Sam = EntityLists.EntityModifiedByUserName;
+                                    Owner_Sam = EntityLists.EntitiyOwnedByUserName;
+
+
                                     FormattedString s = new FormattedString();
                                     if (EntityLists.EntityOwnedByFullName != null)
                                     {
@@ -801,7 +815,7 @@ namespace StemmonsMobile.Views.Entity
                                         s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
                                         s.Spans.Add(new Span { Text = DateTime.Now.ToString(), FontSize = 14 });
                                     }
-                                    lbl_ownername.FormattedText = s;
+                                    lbl_ownername.Text = Convert.ToString(s);
 
                                     s = new FormattedString();
                                     if (EntityLists.EntityModifiedByFullName != null)
@@ -812,7 +826,7 @@ namespace StemmonsMobile.Views.Entity
                                         s.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
                                         s.Spans.Add(new Span { Text = DateTime.Now.ToString(), FontSize = 14 });
                                     }
-                                    lbl_modifiedname.FormattedText = s;
+                                    lbl_modifiedname.Text = Convert.ToString(s);
 
                                     if (!string.IsNullOrEmpty(txt_EntNotes.Text))
                                     {
@@ -986,6 +1000,77 @@ namespace StemmonsMobile.Views.Entity
             }
             ((ListView)sender).SelectedItem = null;
         }
+
+        private async void entity_btn_crtnam(object sender, EventArgs e)
+        {
+            // DisplayAlert("", Functions.Goonline_forFunc, "Ok");
+
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Create_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void entity_btn_assinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Assign_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void entity_btn_ownam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Owner_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async void entity_btn_modinam(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Modify_Sam))
+                {
+                    await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+
+        string Assign_Sam = string.Empty;
+        string Create_Sam = string.Empty;
+        string Modify_Sam = string.Empty;
+        string Owner_Sam = string.Empty;
+
+
 
         //private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
         //{
