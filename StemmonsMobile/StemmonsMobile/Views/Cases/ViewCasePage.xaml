@@ -101,10 +101,10 @@
                           BackgroundColor="Transparent"
                           BorderColor="Transparent" BorderWidth="0" Clicked="btn_crtnam" HorizontalOptions="StartAndExpand"/>
                   <Button Grid.Row="3" Grid.Column="2" x:Name="lbl_assignto" FontSize="14"
-                                                BackgroundColor="Transparent"
-    BorderColor="Transparent"
-    BorderWidth="0"
-Clicked="btn_assinam" HorizontalOptions="StartAndExpand"/>
+                          BackgroundColor="Transparent"
+                          BorderColor="Transparent"
+                          BorderWidth="0"
+                          Clicked="btn_assinam" HorizontalOptions="StartAndExpand"/>
                   <Button Grid.Row="5" Grid.Column="2" x:Name="lbl_ownername"  FontSize="14"
                                                 BackgroundColor="Transparent"
     BorderColor="Transparent"
