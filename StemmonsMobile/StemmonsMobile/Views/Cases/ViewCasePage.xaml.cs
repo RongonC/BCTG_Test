@@ -1767,42 +1767,115 @@ namespace StemmonsMobile.Views.Cases
 
                     _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName ?? _Casedata.CaseAssignedTo;
 
+                    #region Created By Name
                     var s = new FormattedString();
                     if (_Casedata?.CreateByDisplayName != null)
                     {
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_BY)) ? CREATED_BY + "\r\n" : _Casedata.CreateByDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CREATED_DATETIME)) : (Convert.ToDateTime(_Casedata.CreateDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(CREATED_DATETIME) : (Convert.ToDateTime(_Casedata.CreateDateTime)).ToString(), FontSize = 14 });
                     }
 
-                    lbl_createname.Text = Convert.ToString(s);
+                    lbl_createname.FormattedText = (s);
 
+                    var create_trgr = new TapGestureRecognizer();
+                    create_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Create_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_createname.GestureRecognizers.Add(create_trgr);
+                    #endregion
+
+                    #region Assigned to Name
                     s = new FormattedString();
                     if (_Casedata?.CaseAssignedToDisplayName != null)
                     {
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_TO)) ? CASE_ASSGN_TO + "\r\n" : _Casedata.CaseAssignedToDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_ASSGN_DATETIME)) : Convert.ToString(_Casedata.CaseAssignedDateTime == default(DateTime) ? DateTime.Now : _Casedata.CaseAssignedDateTime), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_DATETIME)) ? Convert.ToString(CASE_ASSGN_DATETIME) : Convert.ToString(_Casedata.CaseAssignedDateTime == default(DateTime) ? DateTime.Now : _Casedata.CaseAssignedDateTime), FontSize = 14 });
 
                     }
 
-                    lbl_assignto.Text = Convert.ToString(s);
+                    lbl_assignto.FormattedText = (s);
+                    var assign_trgr = new TapGestureRecognizer();
+                    assign_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Assign_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_assignto.GestureRecognizers.Add(assign_trgr);
+                    #endregion
+
+                    #region Owned By Name
 
                     s = new FormattedString();
                     if (_Casedata?.CaseOwnerDisplayName != null)
                     {
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER)) ? CASE_OWNER + "\r\n" : _Casedata.CaseOwnerDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER_DATETIME)) ? Convert.ToString(Convert.ToDateTime(CASE_OWNER_DATETIME)) : (Convert.ToDateTime(_Casedata.CaseOwnerDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_OWNER_DATETIME)) ? Convert.ToString(CASE_OWNER_DATETIME) : Convert.ToString(_Casedata.CaseOwnerDateTime), FontSize = 14 });
                     }
 
-                    lbl_ownername.Text = Convert.ToString(s);
+                    lbl_ownername.FormattedText = (s);
 
+                    var ownern_tgr = new TapGestureRecognizer();
+                    ownern_tgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Owner_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_ownername.GestureRecognizers.Add(ownern_tgr);
+
+                    #endregion
+
+                    #region Modified BY Name
                     s = new FormattedString();
                     if (_Casedata?.ModifiedByDisplayName != null)
                     {
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_BY)) ? MODIFIED_BY + "\r\n" : _Casedata.ModifiedByDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(Convert.ToDateTime(MODIFIED_DATETIME)) : (Convert.ToDateTime(_Casedata.ModifiedDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(MODIFIED_DATETIME) : Convert.ToString(_Casedata.ModifiedDateTime), FontSize = 14 });
                     }
 
-                    lbl_modifiedname.Text = Convert.ToString(s);
+                    lbl_modifiedname.FormattedText = (s);
+
+                    var modified_tgr = new TapGestureRecognizer();
+                    modified_tgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Modify_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_modifiedname.GestureRecognizers.Add(modified_tgr);
+                    #endregion
                 }
 
                 Grd_Footer.IsVisible = true;
@@ -1811,7 +1884,7 @@ namespace StemmonsMobile.Views.Cases
                 lbl_Casestatus.IsVisible = _Casedata.IsClosed;
 
                 DateTime Dout = new DateTime();
-                DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
+                DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out Dout);
 
                 lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBy) + " at " + Convert.ToString(Dout.ToString());
 
@@ -1824,6 +1897,9 @@ namespace StemmonsMobile.Views.Cases
             {
             }
         }
+
+
+
         public async void ReloadNotesArea()
         {
             try
@@ -2682,7 +2758,7 @@ namespace StemmonsMobile.Views.Cases
                             List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
                             lst_extdatasource.Add(extDSdefaultValues);
 
-                            var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
+                            var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
                             GetAppTypeInfo.Wait();
 
                             Task<EDSResultList> Result = DBHelper.GetEDSResultListwithId(Convert.ToInt32(child._CASE_ASSOC_TYPE_ID_CHILD), Convert.ToInt32(GetAppTypeInfo?.Result?.APP_TYPE_INFO_ID), App.DBPath);

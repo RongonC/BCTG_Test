@@ -53,8 +53,35 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                     if (!string.IsNullOrEmpty(ResponseContent?.ToString()) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(EntityInstance, "G1_G2_Entity_Cate_TypeDetails", _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                                EDS.Wait();
+                                foreach (var itm in EDS.Result)
+                                {
+                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                                }
+                            }
+                        }
+                        #endregion
+
+
                         //CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                         CommonConstants.MasterOfflineStore_withEDSTable(ResponseContent, _DBPath);
+
+                        var record = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, EntityType_CountDetails, _DBPath);
+                        record.Wait();
+                        foreach (var itemREc in record.Result)
+                        {
+                            DBHelper.DeleteAppTypeInfoListById(itemREc, _DBPath).Wait();
+                        }
 
                         GetMasterEntityCount(User, _DBPath);
                     }
@@ -132,6 +159,80 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                     if (!string.IsNullOrEmpty(ResponseContent?.ToString()) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+
+                        //MyEntityAssociationList
+                        //G8_EntityitemView
+                        //G8_EntityItemNotes
+                        //G8_EntityRelatedApplications
+                        //G10_GetEntityRelatedTypes
+                        //G10_GetEntitiesRelationData
+                        //G10_GetCasesRelationData
+                        //G10_GetQuestRelationData
+
+
+                        #region Delete Data Before Master Sync
+
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(EntityInstance, "MyEntityAssociationList", _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                                var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityitemView", Convert.ToInt32(item.ID), _DBPath, null);
+                                Basic.Wait();
+
+                                foreach (var Tempitem in Basic.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityItemNotes", Convert.ToInt32(item.ID), _DBPath, null);
+                                note.Wait();
+                                foreach (var Tempitem in note.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityRelatedApplications", Convert.ToInt32(item.ID), _DBPath, null);
+                                Activity.Wait();
+                                foreach (var Tempitem in Activity.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var EntityRelatedType = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntityRelatedTypes", Convert.ToInt32(item.ID), _DBPath, null);
+                                EntityRelatedType.Wait();
+                                foreach (var Tempitem in EntityRelatedType.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var EntitiesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntitiesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                                EntitiesRelationData.Wait();
+                                foreach (var Tempitem in EntitiesRelationData.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var CasesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetCasesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                                CasesRelationData.Wait();
+                                foreach (var Tempitem in CasesRelationData.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+
+                                var QuestRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetQuestRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                                QuestRelationData.Wait();
+                                foreach (var Tempitem in QuestRelationData.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                }
+                            }
+                        }
+                        #endregion
+
                         CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                     }
                 }
@@ -156,7 +257,17 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
             try
             {
-                if (_IsOnline)
+                lstResult = await DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, Entity_Category_TypeDetails, _DBPath);
+
+                var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+
+                foreach (var item in sd)
+                {
+                    if (item.CategoryId > 0)
+                        EntityList.Add(new Entity_categoryList(item.CategoryId, item.CategoryName, "", "", ""));
+                }
+
+                if (EntityList.Count == 0 && _IsOnline)
                 {
                     var result = EntityAPIMethods.GetEntityTypeCategoryList(Username);
 
@@ -167,19 +278,31 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         EntityList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Entity_categoryList>>(temp.ToString());
                     }
                 }
-                else
-                {
-                    lstResult = await DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, Entity_Category_TypeDetails, _DBPath);
 
-                    var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+                //if (_IsOnline)
+                //{
+                //    var result = EntityAPIMethods.GetEntityTypeCategoryList(Username);
 
-                    foreach (var item in sd)
-                    {
-                        if (item.CategoryId > 0)
-                            EntityList.Add(new Entity_categoryList(item.CategoryId, item.CategoryName, "", "", ""));
-                    }
+                //    var temp = result.GetValue("ResponseContent");
 
-                }
+                //    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
+                //    {
+                //        EntityList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Entity_categoryList>>(temp.ToString());
+                //    }
+                //}
+                //else
+                //{
+                //    lstResult = await DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, Entity_Category_TypeDetails, _DBPath);
+
+                //    var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+
+                //    foreach (var item in sd)
+                //    {
+                //        if (item.CategoryId > 0)
+                //            EntityList.Add(new Entity_categoryList(item.CategoryId, item.CategoryName, "", "", ""));
+                //    }
+
+                //}
             }
             catch (Exception ex)
             {
@@ -395,7 +518,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 {
                     //First Go for the SQLite Data Existance
                     dynamic lstResult = null;
-                    lstResult = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(Sys_Name, Entity_Category_TypeDetails, Entity_TypeID, _DBPath, null);
+                    lstResult = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(Sys_Name, Entity_Category_TypeDetails, Entity_TypeID, _DBPath, null);
                     lstResult = lstResult.Result as AppTypeInfoList;
 
                     if (lstResult != null)
@@ -1059,7 +1182,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             List<Entity_categoryList> EntityList = new List<Entity_categoryList>();
             var lstResult = await DBHelper.GetAppTypeInfoListBySystemName(EntityInstance, ConstantsSync.Entity_Category_TypeDetails, _DBPath);
 
-            foreach (var item in lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList())
+            // DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+            var itList = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+            foreach (var item in itList)
             {
                 try
                 {
@@ -1072,6 +1197,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                             Task<List<AppTypeInfoList>> record = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, EntityType_CountDetails, _DBPath);
                             record.Wait();
+                          
+                           
 
                             var ischeck = record.Result.Where(v => v.SYSTEM == EntityInstance && v.TYPE_SCREEN_INFO == EntityType_CountDetails && v.TYPE_ID == Convert.ToInt32(EntitysList[0].EntityTypeID) && v.CategoryId == Convert.ToInt32(item.CategoryId ?? default(int)) && v.TYPE_NAME == EntitysList[0].EntityTypeName).FirstOrDefault();
 

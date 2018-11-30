@@ -48,6 +48,26 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
 
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.StandardInstance, "I1_I2_AllStandardData", _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                                EDS.Wait();
+                                foreach (var itm in EDS.Result)
+                                {
+                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                                }
+                            }
+
+                        }
+                        #endregion
                         CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                     }
                 }
@@ -128,7 +148,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                     Response = JsonConvert.DeserializeObject<standardsBookView>(jsonValue);
 
 
-                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(Sys_Name, ConstantsSync.BookView, TypeId, _DBPath, null);
+                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(Sys_Name, ConstantsSync.BookView, TypeId, _DBPath, null);
                     result.Wait();
                     AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
 
@@ -155,7 +175,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                 }
                 else
                 {
-                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(Sys_Name, ConstantsSync.BookView, TypeId, _DBPath, null);
+                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(Sys_Name, ConstantsSync.BookView, TypeId, _DBPath, null);
                     result.Wait();
                     if (result.Result != null)
                     {

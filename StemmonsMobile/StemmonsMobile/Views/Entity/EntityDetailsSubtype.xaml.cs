@@ -25,7 +25,7 @@ namespace StemmonsMobile.Views.Entity
         EntityOrgCenterList _selectedlist;
         List<EntityClass> EntityLists = new List<EntityClass>();
         int? _pageindex = 1;
-        int? pageSize = 20;
+        int? pageSize = 50;
         string _Viewtype = "";
         public EntityDetailsSubtype(EntityOrgCenterList selectedlist, string Viewtype)
         {

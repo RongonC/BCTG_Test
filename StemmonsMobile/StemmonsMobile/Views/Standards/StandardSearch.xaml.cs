@@ -21,8 +21,14 @@ namespace StemmonsMobile.Views.Standards
         {
             InitializeComponent();
             Title = "Standard Search";
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             SearchText.Focus();
         }
+
 
         private async void btn_search_Clicked(object sender, EventArgs e)
         {

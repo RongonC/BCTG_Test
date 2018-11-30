@@ -33,7 +33,6 @@ namespace StemmonsMobile
         {
             InitializeComponent();
 
-            GetAppLocalData();
             //MainPage = new ViewcasePage_New();
 
             //return;
@@ -211,9 +210,6 @@ namespace StemmonsMobile
                 else
                     Functions.IsLogin = false;
 
-
-
-
                 if (Application.Current.Properties.ContainsKey("UserName"))
                     Functions.UserName = Convert.ToString(Application.Current.Properties["UserName"]);
 
@@ -289,6 +285,9 @@ namespace StemmonsMobile
                 else
                     Functions.InstanceName = string.Empty;
 
+                var res = DBHelper.GetinstanceuserassocListByUsername_Id(Functions.UserName, Functions.Selected_Instance, DBPath);
+                res.Wait();
+                ConstantsSync.INSTANCE_USER_ASSOC_ID = res.Result.INSTANCE_USER_ASSOC_ID;
             }
             catch (Exception)
             {
@@ -305,6 +304,7 @@ namespace StemmonsMobile
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             CreateDataBase();
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
+            GetAppLocalData();
 
             //Crashes Report 
             AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +

@@ -223,6 +223,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes
     {
         public List<AppTypeInfo> AppTypeInfo { get; set; }
         public List<EDSResult> EDSResult { get; set; }
+        public List<X_DSCache> XDSCache { get; set; }
     }
 
     #endregion

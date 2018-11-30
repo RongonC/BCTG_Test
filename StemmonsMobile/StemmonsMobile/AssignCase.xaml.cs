@@ -1,22 +1,14 @@
-﻿using StemmonsMobile.Models;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Cases;
+using StemmonsMobile.Commonfiles;
+using StemmonsMobile.DataTypes.DataType.Cases;
+using StemmonsMobile.Models;
+using StemmonsMobile.Views.Cases;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using StemmonsMobile.Commonfiles;
-using Newtonsoft.Json;
-using DataServiceBus.OnlineHelper.DataTypes;
-using DataServiceBus.OfflineHelper.DataTypes.Cases;
-using StemmonsMobile.DataTypes.DataType.Cases;
-using DataServiceBus.OfflineHelper.DataTypes.Common;
-using StemmonsMobile.Views.View_Case_Origination_Center;
-using StemmonsMobile.Views.Cases;
-using StemmonsMobile.Views.LoginProcess;
 
 namespace StemmonsMobile
 {
@@ -50,11 +42,16 @@ namespace StemmonsMobile
             sMode = mode;
             bApproveCase = isApproveCase;
             bDeclineCase = isdeclineCase;
+            searchTxt.Focus();
             (searchTxt as Entry).Completed += Search_Clicked;
             Screemname = screemname;
             bOnlineflag = Onlineflag;
         }
-
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            searchTxt.Focus();
+        }
         private void Search_Clicked(object sender, EventArgs e)
         {
             Task<List<GetUserInfoResponse.UserInfo>> val = CasesSyncAPIMethods.GetEmployeesBySearch(searchTxt.Text ?? "", App.DBPath, Functions.UserName);
@@ -89,6 +86,11 @@ namespace StemmonsMobile
             var mi = ((Button)sender);
             var value = mi.CommandParameter as GetUserInfoResponse.UserInfo;
 
+            await AssignTouser(value);
+        }
+
+        private async Task AssignTouser(GetUserInfoResponse.UserInfo value)
+        {
             Task<int> iRecord = null;
 
             string NoteTypeID = "19";
@@ -109,10 +111,10 @@ namespace StemmonsMobile
                 try
                 {
                     await Task.Run(() =>
-                            {
-                                iRecord = CasesSyncAPIMethods.StoreAndcreateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oCreatecase, sCaseNotes, sUserName, App.DBPath, value, Functions.UserFullName, NoteTypeID, Screemname);
-                                iRecord.Wait();
-                            });
+                    {
+                        iRecord = CasesSyncAPIMethods.StoreAndcreateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oCreatecase, sCaseNotes, sUserName, App.DBPath, value, Functions.UserFullName, NoteTypeID, Screemname);
+                        iRecord.Wait();
+                    });
                 }
                 catch (Exception)
                 {
@@ -123,10 +125,10 @@ namespace StemmonsMobile
                 try
                 {
                     await Task.Run(() =>
-                            {
-                                iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, bApproveCase, false, Functions.UserFullName, Screemname);
-                                iRecord.Wait();
-                            });
+                    {
+                        iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, bApproveCase, false, Functions.UserFullName, Screemname);
+                        iRecord.Wait();
+                    });
                 }
                 catch (Exception)
                 {
@@ -137,10 +139,10 @@ namespace StemmonsMobile
                 try
                 {
                     await Task.Run(() =>
-                             {
-                                 iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, false, true, Functions.UserFullName, Screemname);
-                                 iRecord.Wait();
-                             });
+                    {
+                        iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, false, true, Functions.UserFullName, Screemname);
+                        iRecord.Wait();
+                    });
                 }
                 catch (Exception)
                 {
@@ -151,22 +153,15 @@ namespace StemmonsMobile
                 try
                 {
                     await Task.Run(() =>
-                            {
-                                iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, false, false, Functions.UserFullName, Screemname);
-                                iRecord.Wait();
-                            });
+                    {
+                        iRecord = CasesSyncAPIMethods.StoreAndUpdateCase(bOnlineflag, Convert.ToInt32(sCaseTypeId), oSaveCase, sCaseNotes, sUserName, App.DBPath, oCreatecase, value, null, NoteTypeID, false, false, Functions.UserFullName, Screemname);
+                        iRecord.Wait();
+                    });
                 }
                 catch (Exception)
                 {
                 }
             }
-
-            /*Delete Case which is assigned to other*/
-            //if (sMode != "C")
-            //    Convert.ToInt32(sCaseTypeId)
-            //           var tempRsecord = (oSaveCase as SaveCaseTypeRequest).caseId;
-
-
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
@@ -217,6 +212,12 @@ namespace StemmonsMobile
         private void AssignCase_Completed(object sender, EventArgs e)
         {
             var text = (sender as Entry).Text;
+        }
+
+        private async void ListViewFoundUsers_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var tem = ((ListView)sender).SelectedItem as GetUserInfoResponse.UserInfo;
+            await AssignTouser(tem);
         }
     }
 

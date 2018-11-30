@@ -78,6 +78,12 @@ namespace StemmonsMobile.Views.Entity
 
                 if (EntitymbView != null)
                 {
+                    Assign_Sam = EntitymbView.EntityDetails.EntitiyAssignedToUserName;
+                    Create_Sam = EntitymbView.EntityDetails.EntityCreatedByUserName;
+                    Modify_Sam = EntitymbView.EntityDetails.EntityModifiedByUserName;
+                    Owner_Sam = EntitymbView.EntityDetails.EntitiyOwnedByUserName;
+
+                    #region Created By Name
                     if (EntitymbView.EntityDetails.EntityCreatedByFullName != null)
                     {
                         //FrmtText.Spans.Add(new Span { Text = "Created By : ", FontSize = 14 });
@@ -85,7 +91,24 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_createname.Text = Convert.ToString(FrmtText);
+                    var create_trgr = new TapGestureRecognizer();
+                    create_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Create_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_createname.GestureRecognizers.Add(create_trgr);
+                    #endregion
 
+                    #region Assigned to Name
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityAssignedToFullName != null)
                     {
@@ -94,6 +117,25 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_assignto.Text = Convert.ToString(FrmtText);
+
+                    var assign_trgr = new TapGestureRecognizer();
+                    assign_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Assign_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_assignto.GestureRecognizers.Add(assign_trgr);
+                    #endregion
+
+                    #region Owned By name
 
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityOwnedByFullName != null)
@@ -104,6 +146,25 @@ namespace StemmonsMobile.Views.Entity
                     }
                     lbl_ownername.Text = Convert.ToString(FrmtText);
 
+
+                    var owner_trgr = new TapGestureRecognizer();
+                    owner_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Owner_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_ownername.GestureRecognizers.Add(owner_trgr);
+                    #endregion
+
+                    #region Modified by Name
                     FrmtText = new FormattedString();
                     if (EntitymbView.EntityDetails.EntityModifiedByFullName != null)
                     {
@@ -113,10 +174,23 @@ namespace StemmonsMobile.Views.Entity
                     }
                     lbl_modifiedname.Text = Convert.ToString(FrmtText);
 
-                    Assign_Sam = EntitymbView.EntityDetails.EntitiyAssignedToUserName;
-                    Create_Sam = EntitymbView.EntityDetails.EntityCreatedByUserName;
-                    Modify_Sam = EntitymbView.EntityDetails.EntityModifiedByUserName;
-                    Owner_Sam = EntitymbView.EntityDetails.EntitiyOwnedByUserName;
+                   var modified_trgr = new TapGestureRecognizer();
+                    modified_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Modify_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_modifiedname.GestureRecognizers.Add(modified_trgr);
+                    #endregion
+
                 }
             }
         }
@@ -1084,7 +1158,7 @@ namespace StemmonsMobile.Views.Entity
 
                         var CurAssco = EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == iSelectedItemlookupId)?.FirstOrDefault();
 
-                                                if (CurAssco.EntityAssocTypeCascade?.Count >= 0)
+                        if (CurAssco.EntityAssocTypeCascade?.Count >= 0)
                         {
                             List<int> CHildLst = CurAssco.EntityAssocTypeCascade?.Where(t => t.EntityAssocTypeIDChild == iSelectedItemlookupId).ToList().Select(x => x.EntityAssocTypeIDChild).ToList();
                             if (CHildLst.Count < 1)

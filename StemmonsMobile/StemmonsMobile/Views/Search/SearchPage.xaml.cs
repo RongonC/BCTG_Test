@@ -40,9 +40,15 @@ namespace StemmonsMobile.Views.Search
                 searchlabel.Text = "Search Quest";
             }
 
+            SearchText.Focus();
             (SearchText as Entry).Completed += btn_search_Clicked;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             SearchText.Focus();
         }
+
         async void BackButton_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PopAsync();

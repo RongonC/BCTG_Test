@@ -442,7 +442,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
         public static List<T> ReturnListResult<T>(string ApplicationeName, string TypeScreenInfo, string _DBPath, string typeID)
         {
             List<T> result = default(List<T>);
-            var GetResult = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ApplicationeName, TypeScreenInfo, Convert.ToInt32(typeID), _DBPath, null);
+            var GetResult = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ApplicationeName, TypeScreenInfo, Convert.ToInt32(typeID), _DBPath, null);
             GetResult.Wait();
             result = GetResult.Result?.ASSOC_FIELD_INFO == null ? null : JsonConvert.DeserializeObject<List<T>>(GetResult.Result.ASSOC_FIELD_INFO.ToString());
             return result;
@@ -473,7 +473,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
         public static int GetResultBySytemcodeId(string _Instance, string _Systemcode, int _CasetypeId, string _DBPath)
         {
             int iResult = 0;
-            var Result = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(_Instance, _Systemcode, _CasetypeId, _DBPath, null);
+            var Result = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(_Instance, _Systemcode, _CasetypeId, _DBPath, null);
             Result.Wait();
             iResult = Result.Result == null ? 0 : Result.Result.APP_TYPE_INFO_ID;
             return iResult;
@@ -542,7 +542,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                             List<string> lstexddatasourceName = new List<string>();
                             foreach (var item in assocItemsWithExternalDatasource)
                             {
-                                var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", item.CaseTypeID, _DBPath, null);
+                                var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", item.CaseTypeID, _DBPath, null);
                                 GetAppTypeInfo.Wait();
 
                                 Task<EDSResultList> exd = DBHelper.GetEDSResultListwithId(item.AssocTypeID, GetAppTypeInfo.Result.APP_TYPE_INFO_ID, _DBPath);

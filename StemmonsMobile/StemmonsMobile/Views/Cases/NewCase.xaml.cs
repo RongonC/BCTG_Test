@@ -2139,7 +2139,7 @@ namespace StemmonsMobile.Views.Cases
                             List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
                             lst_extdatasource.Add(extDSdefaultValues);
 
-                            var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
+                            var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
                             GetAppTypeInfo.Wait();
 
                             Task<EDSResultList> Result = DBHelper.GetEDSResultListwithId(Convert.ToInt32(child._CASE_ASSOC_TYPE_ID_CHILD), Convert.ToInt32(GetAppTypeInfo?.Result?.APP_TYPE_INFO_ID), App.DBPath);

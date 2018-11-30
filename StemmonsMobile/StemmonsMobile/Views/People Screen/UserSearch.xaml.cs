@@ -22,6 +22,11 @@ namespace StemmonsMobile.Views.People_Screen
             Title = "Employee Search";
             SearchText.Focus();
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            SearchText.Focus();
+        }
 
         private void btn_search_Clicked(object sender, EventArgs e)
         {

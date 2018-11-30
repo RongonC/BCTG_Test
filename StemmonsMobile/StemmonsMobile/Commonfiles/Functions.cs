@@ -117,7 +117,7 @@ namespace StemmonsMobile.Commonfiles
             UserDialogs.Instance.Toast(t);
         }
 
-  
+
 
         public static async Task DownloadImageFile(string Url)
         {
@@ -216,11 +216,6 @@ namespace StemmonsMobile.Commonfiles
                     var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
                     AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
 
-                    if (Check == null)
-                        _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
-                    else
-                        _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
-
                     _AppTypeInfoList = new AppTypeInfoList
                     {
                         ASSOC_FIELD_INFO = JsonConvert.SerializeObject(lst),
@@ -236,6 +231,10 @@ namespace StemmonsMobile.Commonfiles
                         IS_ONLINE = true
                     };
 
+                    if (Check == null)
+                        _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                    else
+                        _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
                     var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, App.DBPath);
 
                 }
@@ -256,13 +255,11 @@ namespace StemmonsMobile.Commonfiles
                 Functions.UserFullName = string.Empty;
                 Application.Current.Properties["UserFullName"] = string.Empty;
 
-
                 Application.Current.Properties["IsLogin"] = false;
                 Functions.IsLogin = false;
 
                 Application.Current.Properties["IsPWDRemember"] = false;
                 Functions.IsPWDRemember = false;
-
 
                 Functions.UserLoginName = string.Empty;
                 Application.Current.Properties["UserLoginName"] = string.Empty;
@@ -270,21 +267,15 @@ namespace StemmonsMobile.Commonfiles
                 Functions.UserPassword = string.Empty;
                 Application.Current.Properties["UserPassword"] = string.Empty;
 
-                //Functions.Baseurl = string.Empty;
-                //Application.Current.Properties["Baseurl"] = string.Empty;
+                Application.Current.Properties["Baseurl"] = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl;
 
-                //Application.Current.Properties["Selected_Instance"] = 0;
-                //Functions.Selected_Instance = 0;
+                Application.Current.Properties["Selected_Instance"] = Functions.Selected_Instance;
 
-
-                //Application.Current.Properties["InstanceName"] = string.Empty;
-                //Functions.InstanceName = string.Empty;
+                Application.Current.Properties["InstanceName"] = Functions.InstanceName;
 
             }
             catch (Exception)
             {
-
-                throw;
             }
 
         }

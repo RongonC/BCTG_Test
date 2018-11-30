@@ -267,7 +267,14 @@ namespace StemmonsMobile.Views.Entity
 
                     TextFieldsLayout.Children.Add(layout);
 
+                    Assign_Sam = EntityLists.EntitiyAssignedToUserName;
+                    Create_Sam = EntityLists.EntityCreatedByUserName;
+                    Modify_Sam = EntityLists.EntityModifiedByUserName;
+                    Owner_Sam = EntityLists.EntitiyOwnedByUserName;
+
                     FormattedString s = new FormattedString();
+
+                    #region Created By Name
                     try
                     {
                         if (EntityLists?.EntityCreatedByFullName != null)
@@ -279,8 +286,25 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_createname.Text = Convert.ToString(s);
+                    lbl_createname.FormattedText = (s);
+                    var create_trgr = new TapGestureRecognizer();
+                    create_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Create_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_createname.GestureRecognizers.Add(create_trgr);
+                    #endregion
 
+                    #region Assign To Name
                     s = new FormattedString();
                     try
                     {
@@ -293,8 +317,25 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_assignto.Text = Convert.ToString(s);
+                    lbl_assignto.FormattedText = (s);
+                    var assign_trgr = new TapGestureRecognizer();
+                    assign_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Assign_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_assignto.GestureRecognizers.Add(assign_trgr);
+                    #endregion
 
+                    #region Owned By Name
                     s = new FormattedString();
                     try
                     {
@@ -307,8 +348,26 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_ownername.Text = Convert.ToString(s);
+                    lbl_ownername.FormattedText = (s);
 
+                    var owner_trgr = new TapGestureRecognizer();
+                    owner_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Owner_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_ownername.GestureRecognizers.Add(owner_trgr);
+                    #endregion
+
+                    #region Modified By Name
                     s = new FormattedString();
                     try
                     {
@@ -321,13 +380,23 @@ namespace StemmonsMobile.Views.Entity
                     catch (Exception)
                     {
                     }
-                    lbl_modifiedname.Text = Convert.ToString(s);
-
-                    Assign_Sam = EntityLists.EntitiyAssignedToUserName;
-                    Create_Sam = EntityLists.EntityCreatedByUserName;
-                    Modify_Sam = EntityLists.EntityModifiedByUserName;
-                    Owner_Sam = EntityLists.EntitiyOwnedByUserName;
-
+                    lbl_modifiedname.FormattedText = (s);
+                    var modified_trgr = new TapGestureRecognizer();
+                    modified_trgr.Tapped += async (se, e) =>
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(Modify_Sam))
+                            {
+                                await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    };
+                    lbl_modifiedname.GestureRecognizers.Add(modified_trgr);
+                    #endregion
 
                 }
                 else
@@ -833,7 +902,7 @@ namespace StemmonsMobile.Views.Entity
                                         await EntityAddnotes(txt_EntNotes.Text);
                                     }
 
-                                    var TempList = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(ConstantsSync.EntityInstance, EntityItemView, _entityListMBView.EntityDetails.EntityTypeID, App.DBPath, null);
+                                    var TempList = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.EntityInstance, EntityItemView, _entityListMBView.EntityDetails.EntityTypeID, App.DBPath, null);
                                     TempList.Wait();
 
                                     CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(EntityLists), EntityInstance, EntityItemView, INSTANCE_USER_ASSOC_ID, App.DBPath, TempList.Result.APP_TYPE_INFO_ID, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.TransactionType, _entityListMBView.EntityDetails.EntityID.ToString(), 0, _entityListMBView.EntityDetails.EntityTypeName, "").Wait();

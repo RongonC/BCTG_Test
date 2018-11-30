@@ -51,6 +51,27 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
 
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                                EDS.Wait();
+                                foreach (var itm in EDS.Result)
+                                {
+                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                                }
+                            }
+
+                        }
+                        #endregion
+
                         CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                     }
                 }
@@ -72,43 +93,65 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         {
             List<AreaResponse.Area> areaList = new List<AreaResponse.Area>();
             List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
-            AreaResponse.Area area = new AreaResponse.Area();
-            var GetAreaList = CommonConstants.GetResultBySytemcodeList(QuestInstance, "H1_GetAreaList", _DBPath);
 
             try
             {
-                if (_IsOnline)
+
+                Task<List<AppTypeInfoList>> Result = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+                Result.Wait();
+                lstResult = Result?.Result;
+                var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+                int cnt = 0;
+                foreach (var item in sd)
+                {
+                    var temp = JsonConvert.DeserializeObject<List<ItemInfoField>>(lstResult[cnt].ASSOC_FIELD_INFO).FirstOrDefault();
+                    if (item.CategoryId > 0)
+                        areaList.Add(new AreaResponse.Area(Convert.ToInt32(item.CategoryId), item.CategoryName, temp.FIELD_SECURITY));
+                    cnt++;
+                }
+
+                if (areaList.Count == 0 && _IsOnline)
                 {
                     var result = QuestAPIMethods.GetAreas(AreaId, user);
-
                     var temp = result.GetValue("ResponseContent");
 
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
                     {
                         areaList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AreaResponse.Area>>(temp.ToString());
-
                     }
                 }
-                else
-                {
-                    Task<List<AppTypeInfoList>> Result = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
-                    Result.Wait();
-                    lstResult = Result?.Result;
-                    var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
-                    int cnt = 0;
-                    foreach (var item in sd)
-                    {
-                        var temp = JsonConvert.DeserializeObject<List<ItemInfoField>>(lstResult[cnt].ASSOC_FIELD_INFO).FirstOrDefault();
-                        if (item.CategoryId > 0)
-                            areaList.Add(new AreaResponse.Area(Convert.ToInt32(item.CategoryId), item.CategoryName, temp.FIELD_SECURITY));
-                        cnt++;
-                    }
 
-                }
+                //if (_IsOnline)
+                //{
+                //    var result = QuestAPIMethods.GetAreas(AreaId, user);
+
+                //    var temp = result.GetValue("ResponseContent");
+
+                //    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
+                //    {
+                //        areaList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AreaResponse.Area>>(temp.ToString());
+
+                //    }
+                //}
+                //else
+                //{
+                //    Task<List<AppTypeInfoList>> Result = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+                //    Result.Wait();
+                //    lstResult = Result?.Result;
+                //    var sd = lstResult.Select(o => new { o.CategoryId, o.CategoryName }).Distinct().ToList();
+                //    int cnt = 0;
+                //    foreach (var item in sd)
+                //    {
+                //        var temp = JsonConvert.DeserializeObject<List<ItemInfoField>>(lstResult[cnt].ASSOC_FIELD_INFO).FirstOrDefault();
+                //        if (item.CategoryId > 0)
+                //            areaList.Add(new AreaResponse.Area(Convert.ToInt32(item.CategoryId), item.CategoryName, temp.FIELD_SECURITY));
+                //        cnt++;
+                //    }
+
+                //}
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return areaList;
         }
@@ -206,7 +249,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
 
             try
             {
-                var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(_intItemID), _DBPath, null);
+                var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(_intItemID), _DBPath, null);
                 GetAppTypeInfo.Wait();
                 if (!string.IsNullOrEmpty(GetAppTypeInfo?.Result?.ASSOC_FIELD_INFO))
                 {
@@ -1017,7 +1060,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 }
                 else
                 {
-                    Task<AppTypeInfoList> Getapplist = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(QuestInstance, "H15_GetItemQuestionMetadataCase", Convert.ToInt32(_pITEM_ID), _DBPath, null);
+                    Task<AppTypeInfoList> Getapplist = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(QuestInstance, "H15_GetItemQuestionMetadataCase", Convert.ToInt32(_pITEM_ID), _DBPath, null);
                     Getapplist.Wait();
                     var tempItemList = JsonConvert.DeserializeObject<List<GetItemQuestionMetadataCaseResponse.ItemQuestionMetadataCase>>(Getapplist.Result.ASSOC_FIELD_INFO);
                     var ItemList = tempItemList.Where(v => v.intItemQuestionMetadataCaseID == Convert.ToInt32(intItemQuestionMetadataCaseID)).ToList();
@@ -2388,7 +2431,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     var temp = result.GetValue("ResponseContent");
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
                     {
-                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetItemQuestionDecodeByFieldIDResponse.ItemQuestionDecode>>(temp.ToString());
+                        ItemList = JsonConvert.DeserializeObject<List<GetItemQuestionDecodeByFieldIDResponse.ItemQuestionDecode>>(temp.ToString());
                         if (ItemList.Count > 0)
                         {
 

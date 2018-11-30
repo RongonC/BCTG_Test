@@ -50,6 +50,26 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     {
                         sError = Convert.ToString(Result);
                         //CommonConstants.MasterOfflineStore(Res, _DBPath);
+
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName("CASES", "C1_C2_CASES_CASETYPELIST", _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                                EDS.Wait();
+                                foreach (var itm in EDS.Result)
+                                {
+                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                                }
+                            }
+
+                        }
+                        #endregion
+
                         CommonConstants.MasterOfflineStore_withEDSTable(Res, _DBPath);
                     }
                 }
@@ -89,8 +109,16 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         lstResult = JsonConvert.DeserializeObject<List<OriginationCenterDataResponse.OriginationCenterData>>(ResponseContent.ToString());
                         if (lstResult.Count > 0)
                         {
-                            CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C1_GetOriginationCenterForUser", INSTANCE_USER_ASSOC_ID, _DBPath, id
-                                , "", "M").Wait();
+                            #region Delete Data Before Master Sync
+                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
+                            CaseDate.Wait();
+                            foreach (var item in CaseDate.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                            }
+                            #endregion
+
+                            CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C1_GetOriginationCenterForUser", INSTANCE_USER_ASSOC_ID, _DBPath, id, "", "M").Wait();
                         }
                     }
                 }
@@ -239,7 +267,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 //}
                 //else
                 {
-                    var GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(CasesInstance, "C1_C2_CASES_CASETYPELIST", _caseTypeID, _DBPath, null);
+                    var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(CasesInstance, "C1_C2_CASES_CASETYPELIST", _caseTypeID, _DBPath, null);
                     GetAppTypeInfo.Wait();
                     if (!string.IsNullOrEmpty(GetAppTypeInfo?.Result?.ASSOC_FIELD_INFO))
                     {
@@ -1577,7 +1605,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (GetAppTypeInfo.Result == null)
                     {
-                        GetAppTypeInfo = DBHelper.GetAppTypeInfoListByNameTypeIdScreenInfo(CasesInstance, "E2_GetCaseList" + Screenname, _caseTypeID, _DBPath, tm_uname);
+                        GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(CasesInstance, "E2_GetCaseList" + Screenname, _caseTypeID, _DBPath, tm_uname);
                         GetAppTypeInfo.Wait();
                     }
 
@@ -2955,7 +2983,40 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
 
-                    // sError = ResponseContent;
+                    #region Delete Data Before Master Sync
+                    var CaseDate = DBHelper.GetAppTypeInfoListBySystemName("CASES", "E2_GetCaseList" + screenName, _DBPath);
+                    CaseDate.Wait();
+                    if (CaseDate.Result.Count > 0)
+                    {
+                        foreach (var item in CaseDate.Result)
+                        {
+                            DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                            var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C8_GetCaseBasicInfo", Convert.ToInt32(item.ID), _DBPath, null);
+                            Basic.Wait();
+
+                            foreach (var Tempitem in Basic.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            }
+
+                            var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C4_GetCaseNotes", Convert.ToInt32(item.ID), _DBPath, null);
+                            note.Wait();
+                            foreach (var Tempitem in note.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            }
+
+                            var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C10_GetCaseActivity", Convert.ToInt32(item.ID), _DBPath, null);
+                            Activity.Wait();
+                            foreach (var Tempitem in Activity.Result)
+                            {
+                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            }
+                        }
+                    }
+                    #endregion
+
                     CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                 }
                 else

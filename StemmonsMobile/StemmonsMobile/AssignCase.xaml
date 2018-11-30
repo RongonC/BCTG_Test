@@ -14,21 +14,17 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <StackLayout x:Name="Main_stack" Grid.Row="0">
-                    <Label Text="Search User" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" Margin="0,5,0,0"/>
+                    <Label Text="Search User"  Margin="0,5,0,0"/>
                     <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
-                        <Entry HorizontalOptions="FillAndExpand" x:Name="searchTxt" Completed="Search_Clicked"   FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
-                        <Button Text="Search"   TextColor="White" BackgroundColor="Orange" HorizontalOptions="End" Clicked="Search_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}" />
+                        <Entry HorizontalOptions="FillAndExpand" x:Name="searchTxt" Completed="Search_Clicked"   />
+                        <Button Text="Search"   TextColor="White" BackgroundColor="Orange" HorizontalOptions="End" Clicked="Search_Clicked" />
                     </StackLayout>
 
-                    <!--<StackLayout x:Name="Stack_indicator" IsVisible="False"  HeightRequest="10">
-                        <ActivityIndicator x:Name="ActInd" Color="Black" HeightRequest="8" IsRunning="True" VerticalOptions="Center" />
-                    </StackLayout>-->
-
-                    <ListView x:Name="listViewFoundUsers" IsGroupingEnabled="True" VerticalOptions="Start">
+                    <ListView x:Name="listViewFoundUsers" IsGroupingEnabled="True" VerticalOptions="Start" ItemTapped="ListViewFoundUsers_ItemTapped">
                         <ListView.GroupHeaderTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Label Text="{Binding Title}" VerticalOptions="Center" Margin="5,0,0,0" TextColor="#2175c8" FontSize="16" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                    <Label Text="{Binding Title}" VerticalOptions="Center" Margin="5,0,0,0" TextColor="#2175c8" FontSize="16" />
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.GroupHeaderTemplate>
@@ -36,7 +32,8 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout Orientation="Horizontal" Margin="15,0,0,0">
-                                        <Label Text="{Binding DisplayName}" HorizontalOptions="StartAndExpand" VerticalOptions="Center"  Style="{StaticResource defaultLabelSize_16}" TextColor="Black" FontSize="16"/>
+                                        <Label Text="{Binding DisplayName}" HorizontalOptions="StartAndExpand" VerticalOptions="Center" 
+                                               Style="{StaticResource defaultLabelSize_16}" TextColor="Black" FontSize="16"/>
                                         <Button Text="Assign" TextColor="{StaticResource ButtonTextColor}" 
                                     HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,5,0"
                                     Clicked="Assign_Clicked" BackgroundColor="Transparent"
