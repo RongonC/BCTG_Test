@@ -90,22 +90,8 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_createname.Text = Convert.ToString(FrmtText);
-                    var create_trgr = new TapGestureRecognizer();
-                    create_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Create_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Create_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_createname.GestureRecognizers.Add(create_trgr);
+                    lbl_createname.FormattedText = Convert.ToString(FrmtText);
+                   
                     #endregion
 
                     #region Assigned to Name
@@ -116,23 +102,9 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_assignto.Text = Convert.ToString(FrmtText);
+                    lbl_assignto.FormattedText = Convert.ToString(FrmtText);
 
-                    var assign_trgr = new TapGestureRecognizer();
-                    assign_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Assign_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_assignto.GestureRecognizers.Add(assign_trgr);
+                    
                     #endregion
 
                     #region Owned By name
@@ -144,24 +116,10 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_ownername.Text = Convert.ToString(FrmtText);
+                    lbl_ownername.FormattedText = Convert.ToString(FrmtText);
 
 
-                    var owner_trgr = new TapGestureRecognizer();
-                    owner_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Owner_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_ownername.GestureRecognizers.Add(owner_trgr);
+                    
                     #endregion
 
                     #region Modified by Name
@@ -172,23 +130,9 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
                     }
-                    lbl_modifiedname.Text = Convert.ToString(FrmtText);
+                    lbl_modifiedname.FormattedText = Convert.ToString(FrmtText);
 
-                   var modified_trgr = new TapGestureRecognizer();
-                    modified_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Modify_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_modifiedname.GestureRecognizers.Add(modified_trgr);
+                 
                     #endregion
 
                 }
@@ -3613,25 +3557,24 @@ namespace StemmonsMobile.Views.Entity
             await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
         }
 
-        private async void btn_crtnam(object sender, EventArgs e)
+      
+
+        private async void lbl_createname_tapped(object sender, EventArgs e)
         {
-            // DisplayAlert("", Functions.Goonline_forFunc, "Ok");
-
-
             try
             {
                 if (!string.IsNullOrEmpty(Create_Sam))
                 {
                     await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                    //   this.finish();
                 }
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_assinam(object sender, EventArgs e)
+        private async void lbl_assignto_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -3642,11 +3585,10 @@ namespace StemmonsMobile.Views.Entity
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_ownam(object sender, EventArgs e)
+        private async void lbl_ownername_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -3657,11 +3599,10 @@ namespace StemmonsMobile.Views.Entity
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_modinam(object sender, EventArgs e)
+        private async void lbl_modifiedname_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -3672,9 +3613,10 @@ namespace StemmonsMobile.Views.Entity
             }
             catch (Exception)
             {
-
             }
         }
+
+
     }
     //public class TextViewCell : ViewCell
     //{

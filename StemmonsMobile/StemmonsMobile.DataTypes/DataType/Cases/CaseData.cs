@@ -332,30 +332,31 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public string strCaseDue { get; set; }
             public DateTime? CaseDue { get; set; }
             public bool IsClosed { get; set; }
+            public string CaseTitle { get; set; }
+            public int? SystemPriority { get; set; }
+            //public string CaseTitle
+            //{
+            //    get
+            //    {
+            //        foreach (MetaData item in this.MetaDataCollection)
+            //        {
+            //            if (item.AssocTypeSystemCode != null)
+            //            {
+            //                if (item.AssocTypeSystemCode.ToUpper().Trim() == "TITLE")
+            //                {
+            //                    // TODO Why is this alternating?
+            //                    //return item.TextValue;
+            //                    //return item.MetaDataText;
 
-            public string CaseTitle
-            {
-                get
-                {
-                    foreach (MetaData item in this.MetaDataCollection)
-                    {
-                        if (item.AssocTypeSystemCode != null)
-                        {
-                            if (item.AssocTypeSystemCode.ToUpper().Trim() == "TITLE")
-                            {
-                                // TODO Why is this alternating?
-                                //return item.TextValue;
-                                //return item.MetaDataText;
+            //                    //return !string.IsNullOrEmpty(item.TextValue) ? item.TextValue : item.MetaDataText;
+            //                    return item.TextValue;
+            //                }
+            //            }
+            //        }
+            //        return "NO TITLE PROVIDED";
 
-                                //return !string.IsNullOrEmpty(item.TextValue) ? item.TextValue : item.MetaDataText;
-                                return item.TextValue;
-                            }
-                        }
-                    }
-                    return "NO TITLE PROVIDED";
-
-                }
-            }
+            //    }
+            //}
 
             public string CaseTitleLink
             {

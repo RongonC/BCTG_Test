@@ -1776,23 +1776,7 @@ namespace StemmonsMobile.Views.Cases
                     }
 
                     lbl_createname.FormattedText = (s);
-
-                    var create_trgr = new TapGestureRecognizer();
-                    create_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Create_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Create_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_createname.GestureRecognizers.Add(create_trgr);
-                    #endregion
+                    #endregion  
 
                     #region Assigned to Name
                     s = new FormattedString();
@@ -1804,21 +1788,7 @@ namespace StemmonsMobile.Views.Cases
                     }
 
                     lbl_assignto.FormattedText = (s);
-                    var assign_trgr = new TapGestureRecognizer();
-                    assign_trgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Assign_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Assign_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_assignto.GestureRecognizers.Add(assign_trgr);
+
                     #endregion
 
                     #region Owned By Name
@@ -1832,21 +1802,6 @@ namespace StemmonsMobile.Views.Cases
 
                     lbl_ownername.FormattedText = (s);
 
-                    var ownern_tgr = new TapGestureRecognizer();
-                    ownern_tgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Owner_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Owner_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_ownername.GestureRecognizers.Add(ownern_tgr);
 
                     #endregion
 
@@ -1860,21 +1815,6 @@ namespace StemmonsMobile.Views.Cases
 
                     lbl_modifiedname.FormattedText = (s);
 
-                    var modified_tgr = new TapGestureRecognizer();
-                    modified_tgr.Tapped += async (se, e) =>
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(Modify_Sam))
-                            {
-                                await this.Navigation.PushAsync(new UserDetail(Modify_Sam));
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    };
-                    lbl_modifiedname.GestureRecognizers.Add(modified_tgr);
                     #endregion
                 }
 
@@ -5032,22 +4972,24 @@ namespace StemmonsMobile.Views.Cases
 
         }
 
-        private async void btn_crtnam(object sender, EventArgs e)
+
+
+        private async void lbl_createname_tapped(object sender, EventArgs e)
         {
             try
             {
                 if (!string.IsNullOrEmpty(Create_Sam))
                 {
                     await this.Navigation.PushAsync(new UserDetail(Create_Sam));
+                    //   this.finish();
                 }
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_assinam(object sender, EventArgs e)
+        private async void lbl_assignto_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -5058,11 +5000,10 @@ namespace StemmonsMobile.Views.Cases
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_ownam(object sender, EventArgs e)
+        private async void lbl_ownername_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -5073,11 +5014,10 @@ namespace StemmonsMobile.Views.Cases
             }
             catch (Exception)
             {
-
             }
         }
 
-        private async void btn_modinam(object sender, EventArgs e)
+        private async void lbl_modifiedname_tapped(object sender, EventArgs e)
         {
             try
             {
@@ -5088,10 +5028,8 @@ namespace StemmonsMobile.Views.Cases
             }
             catch (Exception)
             {
-
             }
         }
-
 
     }
 

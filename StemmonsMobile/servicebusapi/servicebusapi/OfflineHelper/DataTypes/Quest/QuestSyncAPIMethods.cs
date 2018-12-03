@@ -1,4 +1,5 @@
-﻿using DataServiceBus.OfflineHelper.DataTypes.Common;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Cases;
+using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -52,22 +53,28 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
 
+                        
+
                         #region Delete Data Before Master Sync
                         var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
                         CaseDate.Wait();
                         if (CaseDate.Result.Count > 0)
                         {
-                            foreach (var item in CaseDate.Result)
-                            {
-                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
 
-                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                                EDS.Wait();
-                                foreach (var itm in EDS.Result)
-                                {
-                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                                }
-                            }
+                            var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                            CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MultiId);
+                            //foreach (var item in CaseDate.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                            //    var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                            //    EDS.Wait();
+                            //    foreach (var itm in EDS.Result)
+                            //    {
+                            //        DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                            //    }
+                            //}
 
                         }
                         #endregion

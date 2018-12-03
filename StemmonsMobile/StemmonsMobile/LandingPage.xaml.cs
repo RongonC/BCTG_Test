@@ -266,6 +266,14 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
+                                    HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                                }
+                                catch (Exception)
+                                {
+                                }
+                                try
+                                {
+
                                     string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 
                                     if (!string.IsNullOrEmpty(str))
@@ -1607,27 +1615,89 @@ namespace StemmonsMobile
             }
         }
 
-        void HomePageCount()
+        async void HomePageCount()
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {
                 HomeScreenCount appCount = new HomeScreenCount();
 
-                Task.Run(() =>
+                await Task.Run(() =>
                 {
-                    Task.Run(() =>
-                    {
-                        HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-                    }).Wait();
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        UpdateCount(appCount);
-                    });
+                    appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
                 });
 
-                //UpdateCount(appCount);
+                //this.IsBusy = false;
+
+                if (appCount == null)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                    return;
+                }
+
+                if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        CaseNotification.Text = appCount.CasesCount.ToString();
+                    });
+                }
+                else
+                {
+                    CaseNotification.IsVisible = false;
+                }
+
+                if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        associationNotification.Text = appCount.EntityCount.ToString();
+                    });
+
+                }
+                else
+                {
+                    associationNotification.IsVisible = false;
+                }
+
+                if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        standardNotification.Text = appCount.StandardCount.ToString();
+                    });
+
+                }
+                else
+                {
+                    standardNotification.IsVisible = false;
+                }
+
+                if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        formNotification.Text = appCount.QuestCount.ToString();
+                    });
+
+                }
+                else
+                {
+                    formNotification.IsVisible = false;
+                }
+                if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        teamNotification.Text = appCount.DepartmentCount.ToString();
+                    });
+
+                    teamNotification.IsVisible = true;
+                }
+                else
+                {
+                    teamNotification.IsVisible = false;
+                }
             }
             catch (Exception)
             {
@@ -1638,9 +1708,9 @@ namespace StemmonsMobile
         public async void UpdateCount(HomeScreenCount appCount)
         {
             Task.Run(() =>
-            {
-                appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-            });
+             {
+                 appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+             }).Wait();
             if (appCount == null)
             {
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);

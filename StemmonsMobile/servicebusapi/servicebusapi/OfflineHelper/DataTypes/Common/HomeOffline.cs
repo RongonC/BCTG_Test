@@ -27,7 +27,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                 {
                     string ResponseContent = Convert.ToString(Result.GetValue("ResponseContent"));
                     sError = ResponseContent;
-                    DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllHomeCount", username, DateTime.Now.ToString());
+                    //DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllHomeCount", username, DateTime.Now.ToString());
 
                     INSTANCE_USER_ASSOC _AppTypeInfoList = new INSTANCE_USER_ASSOC();
                     _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = INSTANCE_USER_ASSOC_ID ?? default(int); ;

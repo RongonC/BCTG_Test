@@ -169,12 +169,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     // if that record already synced then no need to go for sync.
                     int? precessID = rsItemTranInfoList.Result?.Select(t => t.PROCESS_ID)?.FirstOrDefault();
 
-                    if (precessID > 0)
+                    if (precessID != 0)
                     {
                         // this record is already sync.
                         return;
                     }
                 }
+
+                #region Update Process ID Which Shows that item has been Processed
+                SQLiteAsyncConnection UP_db = new SQLiteAsyncConnection(dbPath);
+                var temItem = itemTranInfo;
+                temItem.PROCESS_ID = -1;
+                UP_db.UpdateAsync(temItem);
+
+                #endregion
 
                 if (rsAppTypeInfoList.Result.Count > 0)
                 {

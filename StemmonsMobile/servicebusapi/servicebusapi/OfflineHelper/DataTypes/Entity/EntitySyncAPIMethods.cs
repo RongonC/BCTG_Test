@@ -3,6 +3,7 @@ using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SQLite;
 using StemmonsMobile.DataTypes.DataType.Entity;
 
 using System;
@@ -55,33 +56,41 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     {
 
                         #region Delete Data Before Master Sync
-                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(EntityInstance, "G1_G2_Entity_Cate_TypeDetails", _DBPath);
-                        CaseDate.Wait();
-                        if (CaseDate.Result.Count > 0)
+                        var Data = DBHelper.GetAppTypeInfoListBySystemName(EntityInstance, "G1_G2_Entity_Cate_TypeDetails", _DBPath);
+                        Data.Wait();
+                        if (Data.Result.Count > 0)
                         {
-                            foreach (var item in CaseDate.Result)
-                            {
-                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                                EDS.Wait();
-                                foreach (var itm in EDS.Result)
-                                {
-                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                                }
-                            }
+                            var MId = string.Join(",", Data.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                            CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MId);
+
+                            //foreach (var item in Data.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                            //    var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                            //    EDS.Wait();
+                            //    foreach (var itm in EDS.Result)
+                            //    {
+                            //        DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                            //    }
+                            //}
                         }
                         #endregion
-
 
                         //CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
                         CommonConstants.MasterOfflineStore_withEDSTable(ResponseContent, _DBPath);
 
                         var record = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, EntityType_CountDetails, _DBPath);
                         record.Wait();
-                        foreach (var itemREc in record.Result)
-                        {
-                            DBHelper.DeleteAppTypeInfoListById(itemREc, _DBPath).Wait();
-                        }
+
+                       var MultiId = string.Join(",", record.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                        var db = new SQLiteAsyncConnection(_DBPath);
+                        db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                        //foreach (var itemREc in record.Result)
+                        //{
+                        //    DBHelper.DeleteAppTypeInfoListById(itemREc, _DBPath).Wait();
+                        //}
 
                         GetMasterEntityCount(User, _DBPath);
                     }
@@ -176,60 +185,83 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         CaseDate.Wait();
                         if (CaseDate.Result.Count > 0)
                         {
-                            foreach (var item in CaseDate.Result)
+                            try
                             {
-                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityitemView", Convert.ToInt32(item.ID), _DBPath, null);
-                                Basic.Wait();
+                                var db = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                foreach (var Tempitem in Basic.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
+                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
+                                //var db2 = new SQLiteAsyncConnection(_DBPath);
+                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('G8_EntityitemView','G8_EntityItemNotes','G8_EntityRelatedApplications','G10_GetEntityRelatedTypes','G10_GetEntitiesRelationData','G10_GetCasesRelationData','G10_GetQuestRelationData') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                Appinf.Wait();
 
-                                var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityItemNotes", Convert.ToInt32(item.ID), _DBPath, null);
-                                note.Wait();
-                                foreach (var Tempitem in note.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
+                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityRelatedApplications", Convert.ToInt32(item.ID), _DBPath, null);
-                                Activity.Wait();
-                                foreach (var Tempitem in Activity.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
+                                //var db3 = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                var EntityRelatedType = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntityRelatedTypes", Convert.ToInt32(item.ID), _DBPath, null);
-                                EntityRelatedType.Wait();
-                                foreach (var Tempitem in EntityRelatedType.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
 
-                                var EntitiesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntitiesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
-                                EntitiesRelationData.Wait();
-                                foreach (var Tempitem in EntitiesRelationData.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
-
-                                var CasesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetCasesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
-                                CasesRelationData.Wait();
-                                foreach (var Tempitem in CasesRelationData.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
-
-                                var QuestRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetQuestRelationData", Convert.ToInt32(item.ID), _DBPath, null);
-                                QuestRelationData.Wait();
-                                foreach (var Tempitem in QuestRelationData.Result)
-                                {
-                                    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                                }
                             }
+                            catch (Exception)
+                            {
+                            }
+
+                            //foreach (var item in CaseDate.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                            //    var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityitemView", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    Basic.Wait();
+
+                            //    foreach (var Tempitem in Basic.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityItemNotes", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    note.Wait();
+                            //    foreach (var Tempitem in note.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G8_EntityRelatedApplications", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    Activity.Wait();
+                            //    foreach (var Tempitem in Activity.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var EntityRelatedType = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntityRelatedTypes", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    EntityRelatedType.Wait();
+                            //    foreach (var Tempitem in EntityRelatedType.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var EntitiesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetEntitiesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    EntitiesRelationData.Wait();
+                            //    foreach (var Tempitem in EntitiesRelationData.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var CasesRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetCasesRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    CasesRelationData.Wait();
+                            //    foreach (var Tempitem in CasesRelationData.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+
+                            //    var QuestRelationData = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(EntityInstance, "G10_GetQuestRelationData", Convert.ToInt32(item.ID), _DBPath, null);
+                            //    QuestRelationData.Wait();
+                            //    foreach (var Tempitem in QuestRelationData.Result)
+                            //    {
+                            //        DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //    }
+                            //}
                         }
                         #endregion
 
@@ -1197,8 +1229,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                             Task<List<AppTypeInfoList>> record = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.EntityInstance, EntityType_CountDetails, _DBPath);
                             record.Wait();
-                          
-                           
+
+
 
                             var ischeck = record.Result.Where(v => v.SYSTEM == EntityInstance && v.TYPE_SCREEN_INFO == EntityType_CountDetails && v.TYPE_ID == Convert.ToInt32(EntitysList[0].EntityTypeID) && v.CategoryId == Convert.ToInt32(item.CategoryId ?? default(int)) && v.TYPE_NAME == EntitysList[0].EntityTypeName).FirstOrDefault();
 

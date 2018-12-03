@@ -2,6 +2,7 @@
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SQLite;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using System;
 using System.Collections.Generic;
@@ -56,15 +57,18 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         CaseDate.Wait();
                         if (CaseDate.Result.Count > 0)
                         {
-                            foreach (var item in CaseDate.Result)
+                            //foreach (var item in CaseDate.Result)
                             {
-                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-                                var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                                EDS.Wait();
-                                foreach (var itm in EDS.Result)
-                                {
-                                    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                                }
+                                //DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                                DeleteRecordBeforeSync(_DBPath, MultiId);
+                                //var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
+                                //EDS.Wait();
+                                //foreach (var itm in EDS.Result)
+                                //{
+                                //    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
+                                //}
                             }
 
                         }
@@ -82,6 +86,26 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 DefaultAPIMethod.AddLog("Result Exception Log => " + Convert.ToString(Result), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
             }
             return sError;
+        }
+
+        public static void DeleteRecordBeforeSync(string _DBPath, string MultiId)
+        {
+            try
+            {
+                var db = new SQLiteAsyncConnection(_DBPath);
+                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+                //var db2 = new SQLiteAsyncConnection(_DBPath);
+                var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                EDS.Wait();
+
+                MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
+                //var db1 = new SQLiteAsyncConnection(_DBPath);
+                db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+            }
+            catch (Exception)
+            {
+            }
         }
         #endregion
 
@@ -162,7 +186,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
             try
             {
-                lstResult = CommonConstants.ReturnListResult<OriginationCenterDataResponse.OriginationCenterData>(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
+                var GetResult = DBHelper.GetAppTypeInfoListByNameTypeScreenInfo(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
+                GetResult.Wait();
+                lstResult = GetResult.Result?.ASSOC_FIELD_INFO == null ? new List<OriginationCenterDataResponse.OriginationCenterData>() : JsonConvert.DeserializeObject<List<OriginationCenterDataResponse.OriginationCenterData>>(GetResult.Result.ASSOC_FIELD_INFO.ToString());
+
+               // lstResult = CommonConstants.ReturnListResult<OriginationCenterDataResponse.OriginationCenterData>(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
             }
             catch (Exception ex)
             {
@@ -2984,35 +3012,58 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
 
                     #region Delete Data Before Master Sync
-                    var CaseDate = DBHelper.GetAppTypeInfoListBySystemName("CASES", "E2_GetCaseList" + screenName, _DBPath);
+                    var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
                     CaseDate.Wait();
                     if (CaseDate.Result.Count > 0)
                     {
-                        foreach (var item in CaseDate.Result)
+                        //foreach (var item in CaseDate.Result)
                         {
-                            DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-
-                            var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C8_GetCaseBasicInfo", Convert.ToInt32(item.ID), _DBPath, null);
-                            Basic.Wait();
-
-                            foreach (var Tempitem in Basic.Result)
+                            try
                             {
-                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                                var db = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+
+                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
+                                // var db2 = new SQLiteAsyncConnection(_DBPath);
+                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                Appinf.Wait();
+
+                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                                //var db3 = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                            }
+                            catch (Exception)
+                            {
                             }
 
-                            var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C4_GetCaseNotes", Convert.ToInt32(item.ID), _DBPath, null);
-                            note.Wait();
-                            foreach (var Tempitem in note.Result)
-                            {
-                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                            }
 
-                            var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo("CASES", "C10_GetCaseActivity", Convert.ToInt32(item.ID), _DBPath, null);
-                            Activity.Wait();
-                            foreach (var Tempitem in Activity.Result)
-                            {
-                                DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                            }
+                            //DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+
+                            //var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C8_GetCaseBasicInfo", Convert.ToInt32(item.ID), _DBPath, null);
+                            //Basic.Wait();
+
+                            //foreach (var Tempitem in Basic.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //}
+
+                            //var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C4_GetCaseNotes", Convert.ToInt32(item.ID), _DBPath, null);
+                            //note.Wait();
+                            //foreach (var Tempitem in note.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //}
+
+                            //var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C10_GetCaseActivity", Convert.ToInt32(item.ID), _DBPath, null);
+                            //Activity.Wait();
+                            //foreach (var Tempitem in Activity.Result)
+                            //{
+                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
+                            //}
                         }
                     }
                     #endregion

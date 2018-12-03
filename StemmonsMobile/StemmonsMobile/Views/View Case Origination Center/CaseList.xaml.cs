@@ -34,7 +34,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         string scrnName = string.Empty;
         bool isOnlineCall = true;
         int? _pageindex = 1;
-        int? _pagenumber = 20;
+        int? _pagenumber = 50;
 
         public CaseList(string _parametername, string _value, string _searchvalue, string _Titile = "", string _uname = "")
         {
@@ -110,34 +110,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                     lstfooter_indicator.IsVisible = false;
                                 });
                             }
-                            //    try
-                            //    {
-                            //        int cn = lst.Count;
-                            //        for (int i = 0; i < 20; i++)
-                            //        {
-                            //            try
-                            //            {
-                            //                GetCaseTypesResponse.BasicCase ob = new GetCaseTypesResponse.BasicCase();
-                            //                ob.CaseTitle = "lazy Load - " + (cn++);
-                            //                ob.CaseTypeID = 15;
-                            //                ob.ListID = i;
-
-                            //                lst.Add(ob);
-                            //            }
-                            //            catch (Exception f)
-                            //            {
-                            //            }
-                            //        }
-
-                            //    }
-                            //    catch (Exception ex)
-                            //    {
-                            //    }
-                            //    Device.BeginInvokeOnMainThread(() =>
-                            //    {
-                            //        listdata.ItemsSource = null;
-                            //        this.listdata.ItemsSource = lst;
-                            //    });
                         }
                     }
                 }
@@ -227,7 +199,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         {
             try
             {
-                BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>();
+                // BasicCase_lst.Clear();
 
                 #region Variable Settings
 
@@ -349,9 +321,9 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 1, _pagenumber);
                     result.Wait();
 
-                    BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                         listdata.IsRefreshing = true;
                     });
                 });
@@ -367,9 +339,9 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                             var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 1, _pagenumber);
                             result.Wait();
 
-                            BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                             Device.BeginInvokeOnMainThread(() =>
                             {
+                                BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                                 listdata.IsRefreshing = true;
                             });
                         });
@@ -419,7 +391,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     listdata.IsRefreshing = false;
                     return false; // True = Repeat again, False = Stop the timer
                 });
-                this.listdata.ItemsSource = null;
+                //this.listdata.ItemsSource = null;
                 if (BasicCase_lst.Count > 0)
                     this.listdata.ItemsSource = BasicCase_lst;
                 else
@@ -729,7 +701,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         {
                             dynamic result = null;
 
-                            result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 0, 0);
+                            result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 0, _pagenumber);
                             result.Wait();
                             Device.BeginInvokeOnMainThread(() =>
                             {
