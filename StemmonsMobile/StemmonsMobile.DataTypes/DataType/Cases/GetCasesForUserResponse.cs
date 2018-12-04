@@ -29,6 +29,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         public string LIST_CASE_CREATED_BY_DISPLAY_NAME { get; set; }
         public System.DateTime LIST_CASE_MODIFIED_DATETIME { get; set; }
         public string LIST_CASE_MODIFIED_BY_DISPLAY_NAME { get; set; }
+        public string LIST_CASE_PRIORITY_VALUE { get; set; }
         public int Total_Case { get; set; }
 
         public string LIST_CASE_OWNER_SAM { get; set; }

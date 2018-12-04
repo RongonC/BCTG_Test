@@ -1217,7 +1217,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         GetCaseTypesResponse.CaseData ls = new GetCaseTypesResponse.CaseData()
                         {
                             CaseTypeID = viewCaselist.FirstOrDefault().CaseTypeID,
-                            CreateBy = _UserName,
+                            CreateBySam = _UserName,
                             CaseOwner = _UserName,
                             CaseOwnerDateTime = DateTime.Now,
                             MetaDataCollection = viewCase.MetaDataCollection,
@@ -1585,12 +1585,12 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             av.CaseAssignedTo = (objAssignCase != null && isApproveCase == false && isDeclineCase == false) ? ob.DisplayName : lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
                             av.CaseAssignedToDisplayName = objAssignCase != null && isApproveCase == false && isDeclineCase == false ? ob.DisplayName : lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
                             av.CaseTypeID = lstResultBasicInfo.FirstOrDefault().CaseTypeID;
-                            av.CreateBy = lstResultBasicInfo.FirstOrDefault().CreateBy;
+                            av.CreateBySam = lstResultBasicInfo.FirstOrDefault().CreateBy;
                             av.ListID = lstResultBasicInfo.FirstOrDefault().ListID;
                             av.CaseOwner = lstResultBasicInfo.FirstOrDefault().CaseOwner;
                             av.CaseOwnerDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseOwnerDateTime);
                             av.MetaDataCollection = viewCase.MetaDataCollection;
-                            av.ModifiedBy = FullName;
+                            av.ModifiedBySam = FullName;
                             av.ModifiedByDisplayName = FullName;
                             av.ModifiedDateTime = DateTime.Now;
                             av.CaseClosedBy = lstResultBasicInfo.FirstOrDefault().CaseClosedByDisplayName;
@@ -2019,12 +2019,12 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                                     av.CaseAssignedTo = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
                                                     av.CaseAssignedToDisplayName = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
                                                     av.CaseTypeID = lstResult.FirstOrDefault().CaseTypeID;
-                                                    av.CreateBy = _UserName;
+                                                    av.CreateBySam = _UserName;
                                                     av.ListID = lstResult.FirstOrDefault().ListID;
                                                     av.CaseOwner = lstResult.FirstOrDefault().CaseOwnerDisplayName;
                                                     av.CaseOwnerDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseOwnerDateTime);
                                                     av.MetaDataCollection = lstResult.FirstOrDefault().MetaDataCollection;
-                                                    av.ModifiedBy = lstResult.FirstOrDefault().CaseModifiedBySAM;
+                                                    av.ModifiedBySam = lstResult.FirstOrDefault().CaseModifiedBySAM;
                                                     av.ModifiedByDisplayName = lstResult.FirstOrDefault().CaseModifiedByDisplayName;
                                                     av.ModifiedDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseModifiedDateTime);
                                                     av.CaseClosedBy = lstResult.FirstOrDefault().CaseClosedByDisplayName;

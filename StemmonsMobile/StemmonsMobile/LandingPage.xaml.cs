@@ -190,60 +190,6 @@ namespace StemmonsMobile
                 {
                     if (CrossConnectivity.Current.IsConnected)
                     {
-                        #region Cases Sync
-                        //Cases Sync
-                        if (!IsClosed)
-                        {
-                            try
-                            {
-                                Device.BeginInvokeOnMainThread(() =>
-                                {
-                                    dlg.PercentComplete = Percentage;
-                                    dlg.Title = "Cases Items Sync Operation " + 1 + " of " + itemCount + " in Progress";
-                                });
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-
-                        try
-                        {
-                            await Task.Run(() =>
-                            {
-                                try
-                                {
-                                    string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
-                                    if (!string.IsNullOrEmpty(str))
-                                        Functions.ShowtoastAlert("Cases Items Sync Success.");
-                                    else
-                                        Functions.ShowtoastAlert("Cases Items Sync having issue.");
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-                            });
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        if (!IsClosed)
-                        {
-                            try
-                            {
-                                Device.BeginInvokeOnMainThread(() =>
-                                {
-                                    dlg.PercentComplete = Percentage * 2;
-                                    dlg.Title = "Case Types and Items Sync Operation " + 1 + " of " + itemCount + " completed";
-                                });
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        #endregion
-
                         #region Cases Origination Sync
                         //Cases Originaation Sync
                         if (!IsClosed)
@@ -252,7 +198,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Case Types Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " in Progress";
                                 });
                             }
                             catch (Exception)
@@ -295,8 +241,62 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
+                                    dlg.PercentComplete = Percentage * 2;
+                                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
+                                });
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        #endregion
+
+                        #region Cases Sync
+                        //Cases Sync
+                        if (!IsClosed)
+                        {
+                            try
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    dlg.PercentComplete = Percentage;
+                                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                });
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+
+                        try
+                        {
+                            await Task.Run(() =>
+                            {
+                                try
+                                {
+                                    string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
+                                    if (!string.IsNullOrEmpty(str))
+                                        Functions.ShowtoastAlert("Cases Items Sync Success.");
+                                    else
+                                        Functions.ShowtoastAlert("Cases Items Sync having issue.");
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                            });
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        if (!IsClosed)
+                        {
+                            try
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
                                     dlg.PercentComplete = Percentage * 3;
-                                    dlg.Title = "Case Types Sync Operation Sync Operation " + 2 + " of " + itemCount + " completed";
+                                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " completed";
                                 });
                             }
                             catch (Exception)

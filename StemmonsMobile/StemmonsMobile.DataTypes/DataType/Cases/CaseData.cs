@@ -308,10 +308,10 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public DateTime? CaseClosedDateTime { get; set; }
             public string CaseClosedBy { get; set; }
             public DateTime CreateDateTime { get; set; }
-            public string CreateBy { get; set; }
+            public string CreateBySam { get; set; }
             public string CaseCreatedDisplayName { get; set; }
             public DateTime ModifiedDateTime { get; set; }
-            public string ModifiedBy { get; set; }
+            public string ModifiedBySam { get; set; }
             public string CaseModifiedByDisplayName { get; set; }
             public char NewestNoteOnTop { get; set; }
             public bool LockWhenUnowned { get; set; }
@@ -415,21 +415,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                 }
             }
             public string CaseStatusValue { get; set; }
-            public string CaseStatus
-            {
-                get
-                {
-                    if (!string.IsNullOrEmpty(this.CaseStatusValue))
-                    {
-                        return $"{"Status : "}{CaseStatusValue}";
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
 
-                }
-            }
             public string CaseLifeDHM { get; set; }
             public MetaData Column1 { get { if (MetaDataCollection.Count >= 1 && MetaDataCollection[0] != null) return MetaDataCollection[0]; else return new MetaData() { AssociatedDecodeName = String.Empty }; } }
             public MetaData Column2 { get { if (MetaDataCollection.Count >= 2 && MetaDataCollection[1] != null) return MetaDataCollection[1]; else return new MetaData() { AssociatedDecodeName = String.Empty }; } }
@@ -484,6 +470,167 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public List<string> CaseTypeSecurityGroups { get; set; }
 
             public string SceurityType { get; set; }
+
+            public string CaseStatus
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseStatusValue))
+                    {
+                        return $"{"Status : "}{CaseStatusValue}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+                }
+            }
+            public string CasePriorityValue { get; set; }
+            public string PriorityValue
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CasePriorityValue))
+                    {
+                        return $"{"Priority : "}{CasePriorityValue}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+
+            public string AssignedTo
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseAssignedToDisplayName))
+                    {
+                        return $"{"Assigned To : "}{CaseAssignedToDisplayName}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+            public string CaseDueDateTimeDateOnly
+            {
+                get { return GetDateOnly(strCaseDue); }
+            }
+            public string DueDate
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseDueDateTimeDateOnly))
+                    {
+                        return $"{"DueDate : "}{CaseDueDateTimeDateOnly}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+
+            public string CreateBy
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseCreatedDisplayName))
+                    {
+                        return $"{"Created By : "}{CaseCreatedDisplayName}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+
+                }
+            }
+            public string CaseCreatedDateTime { get; set; }
+            public string CaseCreatedDateTimeDateOnly
+            {
+                get { return GetDateOnly(CaseCreatedDateTime); }
+            }
+            public string CreatedOn
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseCreatedDateTimeDateOnly))
+                    {
+                        return $"{"Created On : "}{CaseCreatedDateTimeDateOnly}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+                }
+            }
+
+            public string ModifiedBy
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseModifiedByDisplayName))
+                    {
+                        return $"{"Modified By : "}{CaseModifiedByDisplayName}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+
+                }
+            }
+            public string CaseModifiedDateTime { get; set; }
+            public string CaseModifiedDateTimeDateOnly
+            {
+                get
+                {
+                    return GetDateOnly(CaseModifiedDateTime);
+                }
+            }
+
+
+            public string ModifiedOn
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseModifiedDateTimeDateOnly))
+                    {
+                        return $"{"Modified On : "}{CaseModifiedDateTimeDateOnly}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+
+            private string GetDateOnly(string value)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(value) && value.Length > 5)
+                    {
+                        int spaceIsAt = value.IndexOf(' ');
+                        if (spaceIsAt > 0)
+                        {
+                            return value.Substring(0, spaceIsAt);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+                return string.Empty;
+            }
 
         }
         #endregion

@@ -21,7 +21,6 @@ namespace StemmonsMobile.Views.People_Screen
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserDetail : ContentPage
     {
-        List<GetCaseTypesResponse.BasicCase> lst = new List<GetCaseTypesResponse.BasicCase>();
         GetUserInfoResponse.UserInfo User_Details = new GetUserInfoResponse.UserInfo();
         String UserName = string.Empty;
         String navScreenNAme = string.Empty;

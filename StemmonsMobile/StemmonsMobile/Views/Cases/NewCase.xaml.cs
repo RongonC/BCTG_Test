@@ -2514,7 +2514,7 @@ namespace StemmonsMobile.Views.Cases
                 action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
                 CaseData casedata = new CaseData();
-                casedata.CreateBy = Functions.UserName;
+                casedata.CreateBySam = Functions.UserName;
                 casedata.CaseTypeID = Convert.ToInt32(Casetypeid);
 
                 CreateCaseOptimizedRequest.CreateCaseModelOptimized createcase = new CreateCaseOptimizedRequest.CreateCaseModelOptimized();
