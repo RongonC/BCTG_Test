@@ -91,7 +91,7 @@ namespace StemmonsMobile.Views.Entity
                         FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_createname.FormattedText = Convert.ToString(FrmtText);
-                   
+
                     #endregion
 
                     #region Assigned to Name
@@ -104,7 +104,7 @@ namespace StemmonsMobile.Views.Entity
                     }
                     lbl_assignto.FormattedText = Convert.ToString(FrmtText);
 
-                    
+
                     #endregion
 
                     #region Owned By name
@@ -119,7 +119,7 @@ namespace StemmonsMobile.Views.Entity
                     lbl_ownername.FormattedText = Convert.ToString(FrmtText);
 
 
-                    
+
                     #endregion
 
                     #region Modified by Name
@@ -132,7 +132,7 @@ namespace StemmonsMobile.Views.Entity
                     }
                     lbl_modifiedname.FormattedText = Convert.ToString(FrmtText);
 
-                 
+
                     #endregion
 
                 }
@@ -270,8 +270,10 @@ namespace StemmonsMobile.Views.Entity
                                     };
 
                                     pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
+                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
+                                    _list_ed1.Add(EDSDefaultValue);
+                                    pk.ItemsSource = _list_ed1;
                                     pk.SelectedIndex = 0;
-
                                     RightLyout.Children.Add(pk);
 
                                     /*Bind list in Dropdown*/
@@ -398,7 +400,6 @@ namespace StemmonsMobile.Views.Entity
                                         pk_button.CornerRadius = 5;
                                     }
                                     pk_button.BackgroundColor = Color.White;
-                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
 
                                     if (!fieldLeveSecurity_Create)
                                         pk_button.IsEnabled = false;
@@ -1482,7 +1483,7 @@ namespace StemmonsMobile.Views.Entity
                     List<EXTERNAL_DATASOURCE1> lst = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower() == (btn.Text.ToLower())).ToList();
 
                     e_pik.ItemsSource = lst;
-                    e_pik.SelectedIndex = 0;
+                    e_pik.SelectedIndex = 1;
 
                     EXTERNAL_DATASOURCE1 lsa = e_pik.SelectedItem as EXTERNAL_DATASOURCE1;
 
@@ -2986,13 +2987,15 @@ namespace StemmonsMobile.Views.Entity
                                     pick_Ext_datasrc = (Picker)cnt;
                                 }
                                 //var btn_value = btn_Ext_datasrc.Text as EXTERNAL_DATASOURCE1;
-                                var pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
+                                EXTERNAL_DATASOURCE1 pick_value = new EXTERNAL_DATASOURCE1();
+                                if (pick_Ext_datasrc.SelectedItem != null)
+                                    pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
                                 //if (pick_value == null)
                                 //    break;
                                 AssociationMetaData Asso_metadata_value = new AssociationMetaData();
                                 Asso_metadata_value.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
 
-                                if (btnCnt.Text == "--Select Item--")
+                                if (btnCnt.Text == "-- Select Item --")
                                 //if (ItmSrc.Count == 0)
                                 {
                                     Asso_metadata_value.ExternalDatasourceObjectID = "0";
@@ -3557,7 +3560,7 @@ namespace StemmonsMobile.Views.Entity
             await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
         }
 
-      
+
 
         private async void lbl_createname_tapped(object sender, EventArgs e)
         {

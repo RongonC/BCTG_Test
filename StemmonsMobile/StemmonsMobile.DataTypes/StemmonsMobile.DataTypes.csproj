@@ -204,6 +204,7 @@
     <Compile Include="DataType\Default\ResponseToken.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
+    <Compile Include="DataType\Entity\Entity_Type_List.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListRequest.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListResponse.cs" />
     <Compile Include="DataType\Entity\GetEntityByAssingToSAMRequest.cs" />
@@ -622,8 +623,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1-beta3\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
@@ -646,17 +647,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DatatypeAssembly\HtmlAgilityPack.dll" />
-    <Content Include="DatatypeAssembly\Newtonsoft.Json.dll" />
-    <Content Include="DatatypeAssembly\System.Net.Http.dll" />
-    <Content Include="DatatypeAssembly\System.Net.Http.Extensions.dll" />
-    <Content Include="DatatypeAssembly\System.Net.Http.Formatting.dll" />
-    <Content Include="DatatypeAssembly\System.Net.Http.Primitives.dll" />
-    <Content Include="DatatypeAssembly\Xamarin.Forms.Core.dll" />
-    <Content Include="DatatypeAssembly\Xamarin.Forms.Platform.dll" />
-    <Content Include="DatatypeAssembly\Xamarin.Forms.Xaml.dll" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\cs\Microsoft.DependencyValidation.Analyzers.resources.dll" />

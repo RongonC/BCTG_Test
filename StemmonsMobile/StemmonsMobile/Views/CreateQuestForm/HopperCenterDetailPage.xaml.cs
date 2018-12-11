@@ -47,7 +47,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         public HopperCenterDetailPage(string type) : this()
         {
             Title = $"{type} Form";
-            CreateFormName.Text = "Create New " + $"{type} Form";            
+            //CreateFormName.Text = "Create New " + $"{type} Form";            
         }
 
         void Handle_Clicked(object sender, System.EventArgs e)

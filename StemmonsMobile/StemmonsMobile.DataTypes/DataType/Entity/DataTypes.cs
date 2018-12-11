@@ -2094,7 +2094,7 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
             return entityType;
         }
 
-        private int eNTITY_TYPE_IDField;
+       private int eNTITY_TYPE_IDField;
 
         private string eNTITY_TYPE_SYSTEM_CODEField;
 
@@ -4361,7 +4361,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string EntityTypeHelpURL { get; set; }
         public bool EntityTypeIsActive { get; set; }
         public bool HasExternalEntityAssocType { get; set; }
-
         public string EntityTypeSecurityType { get; set; }
         public string EntityTypeCreatedDateTime { get; set; }
         public string EntityTypeCreatedBySAM { get; set; }
@@ -4369,11 +4368,8 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string EntityTypeModifiedBySAM { get; set; }
         public int EntityTypeID { get; set; }
         public List<AssociationField> AssociationFieldCollection { get; set; }
-
         public List<EntityTypeRelationship> EntityTypeRelationship { get; set; }
-
         public List<EntityTypeTemplate> EntityTypeTemplates { get; set; }
-
         public string EntityTypeSystemCode { get; set; }
     }
 
@@ -4386,21 +4382,16 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string SHOW_ENTITIES_INACTIVE_BY_USER { get; set; }
         public int EXTERNAL_DATASOURCE_OBJECT_ID_ENTITY { get; set; }
         public List<int> ENTITY_TYPE { get; set; }
-
-
         public string SYSTEM_CODE_ENTITY_TYPE { get; set; }
-
         public List<EntityType> EntityTypeValue { get; set; }
 
         [System.Xml.Serialization.XmlArray("FILTER_COLUMNS", IsNullable = true)]
         [System.Xml.Serialization.XmlArrayItem("FILTER_COLUMN", IsNullable = true)]
         public List<FilterParameterInfo> FilterInformation { get; set; }
 
-
         [System.Xml.Serialization.XmlArray("FILTER_COLUMNS_STATIC", IsNullable = true)]
         [System.Xml.Serialization.XmlArrayItem("FILTER_COLUMN", IsNullable = true)]
         public List<FilterParameterInfo> FilterInformationForStaticFields { get; set; }
-
 
         public FILTER_VALUE()
         {
@@ -4409,8 +4400,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
             FilterInformation = new List<FilterParameterInfo>();
             FilterInformationForStaticFields = new List<FilterParameterInfo>();
         }
-
-
     }
 
     public class FilterParameterInfo
@@ -4438,27 +4427,16 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
     public class AssociationField
     {
         public int AssocTypeID { get; set; }
-
         public int EntityTypeID { get; set; }
-
         public string SecurityType { get; set; }
-
         public string FieldType { get; set; }
-
         public string AssocName { get; set; }
-
         public int? CurrencyTypeID { get; set; }
-
         public string CurrencyIndicator { get; set; }
-
         public int? DecimalPrecesion { get; set; }
-
         public int? ExternalDataSourceID { get; set; }
-
         public string AssocSystemCode { get; set; }
-
         public string AssocSystemCodeName { get; set; }
-
         private int? _ListDesktopPriorityValue = 5000;
         public int? ListDesktopPriorityValue
         {
@@ -4940,7 +4918,7 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public int? ListID { get; set; }
         public int? EntityTypeID { get; set; }
         public string EntityTypeName { get; set; }
-        
+
         public string EntityCreatedByUserName { get; set; }
         public string EntityCreatedDateTime { get; set; }
 

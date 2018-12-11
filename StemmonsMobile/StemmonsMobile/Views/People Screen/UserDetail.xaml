@@ -23,28 +23,29 @@
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelDisplayName" 
+                            <Label x:Name="labelDisplayName" Text="{Binding DisplayName}"
                        Style="{StaticResource defaultLabelSize_16}" />
                             <!--Text="William E. Daugherty II"-->
                             <Label Text="Display Name" FontSize="10" />
 
                             <Label BackgroundColor="LightGray" HeightRequest="1"  />
 
-                            <Label x:Name="labelRealName"  
+                            <Label x:Name="labelRealName"   Text="{Binding DisplayName}"
                        Style="{StaticResource defaultLabelSize_16}"/>
                             <!--Text="William Daugherty"-->
                             <Label Text="Real Name" FontSize="10"/>
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelDepartmentName" 
+                            <Label x:Name="labelDepartmentName" Text="{Binding Department}"
                        Style="{StaticResource defaultLabelSize_16}"/>
                             <!--Text="Application Development"-->
                             <Label Text="Department Name" FontSize="10"/>
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelJobTitle"  Style="{StaticResource defaultLabelSize_16}"/>
+                            <Label x:Name="labelJobTitle" Text="{Binding PrimaryJobTitle}"
+                                   Style="{StaticResource defaultLabelSize_16}"/>
                             <!--Text="Director, Application Development"-->
                             <Label Text="Job Title" FontSize="10"/>
 
@@ -59,7 +60,7 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label x:Name="OfficePhone"  
+                                <Label x:Name="OfficePhone"  Text="{Binding OfficePhone}"
                            Style="{StaticResource defaultLabelSize_16}" />
                                 <!--Text="(713) 589-4298"-->
                                 <Label Text="Office Phone" FontSize="10" Grid.Row="1" />
@@ -81,13 +82,13 @@
                            Style="{StaticResource defaultLabelSize_16}" />
                                 <!--Text="(713) 962-0445"-->
 
-                                <Label Text="Office Phone" FontSize="10" Grid.Row="1"/>
+                                <Label Text="Office Phone" FontSize="10" Grid.Row="1"  />
                                 <Button Image="Assets/Phone.png"  BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="CellPhoneClicked"/>
                             </Grid>
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="CityState" 
+                            <Label x:Name="CityState" Text="{Binding CityState}"
                        Style="{StaticResource defaultLabelSize_16}"/>
                             <!--Text="Houston, TX"-->
                             <Label Text="City, State" FontSize="10" />
@@ -103,7 +104,7 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label x:Name="EmailAddress"  Style="{StaticResource defaultLabelSize_16}" />
+                                <Label x:Name="EmailAddress" Text="{Binding Email}"  Style="{StaticResource defaultLabelSize_16}" />
                                 <!--Text="william.daugherty@stemmons.com"-->
                                 <Label Text="Email Address" FontSize="10" Grid.Row="1"/>
                                 <Button Image="Assets/Email.png"  BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="SendMail"/>
@@ -118,7 +119,7 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="lbl_supervisor"  Style="{StaticResource defaultLabelSize_16}" Clicked="Manager_clicked" TextColor="Black" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" />
+                                <Button x:Name="lbl_supervisor" Text="{Binding Supervisor}" Style="{StaticResource defaultLabelSize_16}" Clicked="Manager_clicked" TextColor="Black" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" />
                                 <!--Text="william.daugherty@stemmons.com"-->
                                 <Label Text="Manager / Supervisor" FontSize="10" Grid.Row="1" />
                                 <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25" Margin="0,0,5,0"  Grid.Column="1" Grid.RowSpan="2" Clicked="Manager_clickd"/>

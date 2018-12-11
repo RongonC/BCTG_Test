@@ -59,12 +59,12 @@
                         <ColumnDefinition Width="9*"/>
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-                    <Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" />
+                    <!--<Label BackgroundColor="LightGray" HeightRequest="1" Grid.ColumnSpan="2" />
                     <Label x:Name="CreateFormName" Text="Create New Form" FontSize="16" LineBreakMode="TailTruncation"
 
                            VerticalOptions="Center" Grid.Row="1" Grid.Column="0" />
                     <Button Image="Assets/plussign.png" BackgroundColor="Transparent" 
-                            Grid.Row="1" Grid.Column="1" HeightRequest="40" WidthRequest="40" Clicked="Handle_Clicked"/>
+                            Grid.Row="1" Grid.Column="1" HeightRequest="40" WidthRequest="40" Clicked="Handle_Clicked"/>-->
                 </Grid>
                     </StackLayout>
                 </ListView.Footer>
@@ -74,6 +74,7 @@
         
         <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
             <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked"  HorizontalOptions="CenterAndExpand" />
+            <Button x:Name="btn_add" Text="+" FontSize="50" IsVisible="True" Clicked="Handle_Clicked" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
             <Button Image="Assets/menuicon.png" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
         </StackLayout>
     </StackLayout>

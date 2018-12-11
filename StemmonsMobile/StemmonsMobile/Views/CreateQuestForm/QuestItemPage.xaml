@@ -78,7 +78,8 @@
 
             <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">
                 <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" x:Name="btn_home" Clicked="btn_home_Clicked" HorizontalOptions="CenterAndExpand" />
-                <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
+                    <Button x:Name="btn_add" Text="+" FontSize="50" IsVisible="True" Clicked="btn_add_Clicked" CommandParameter="{Binding .}" BackgroundColor="Transparent"  HorizontalOptions="CenterAndExpand" />
+                    <Button Image="Assets/menuicon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" x:Name="btn_more" Clicked="btn_more_Clicked"/>
             </StackLayout>
                      </Grid>
 

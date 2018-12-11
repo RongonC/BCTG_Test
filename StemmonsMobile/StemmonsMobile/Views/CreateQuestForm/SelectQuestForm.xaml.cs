@@ -212,23 +212,59 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
         private void FormList_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+            //try
+            //{
+            //    ListView l = (ListView)sender;
+            //    var sd = (ItemsByAreaID)l.SelectedItem;
+            //    if (sd.securityType.ToUpper().Contains("R") || sd.securityType.ToUpper().Contains("OPEN"))
+            //    {
+            //        this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId)));
+            //    }
+            //    else
+            //    {
+            //        DisplayAlert("Quest Form", "You dont have sufficient rights to view this page.", "Ok");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+
+            //ArpanB
             try
             {
                 ListView l = (ListView)sender;
                 var sd = (ItemsByAreaID)l.SelectedItem;
-                if (sd.securityType.ToUpper().Contains("R") || sd.securityType.ToUpper().Contains("OPEN"))
+
+                if (LandingPage.IsCreateEntity)
                 {
-                    this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId)));
+                    if (sd.securityType.ToUpper().Contains("C") || sd.securityType.ToUpper().Contains("OPEN"))
+                    {
+                        this.Navigation.PushAsync(new NewQuestForm(sd.intItemID, Convert.ToString(AreaId)));
+                    }
+                    else
+                    {
+                        DisplayAlert("Quest Form", "You dont have suffiecient rights to view this page.", "Ok");
+                    }
                 }
                 else
                 {
-                    DisplayAlert("Quest Form", "You dont have sufficient rights to view this page.", "Ok");
+                    if (sd.securityType.ToUpper().Contains("R") || sd.securityType.ToUpper().Contains("OPEN"))
+                    {
+                        //this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId)));
+                        this.Navigation.PushAsync(new QuestItemPage((String)sd.strItemName, sd.intItemID, Convert.ToString(AreaId), (string)sd.securityType));
+                    }
+                    else
+                    {
+                        DisplayAlert("Quest Form", "You dont have sufficient rights to view this page.", "Ok");
+                    }
                 }
             }
             catch (Exception ex)
             {
 
             }
+            //ArpanB
         }
     }
 

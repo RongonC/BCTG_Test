@@ -2322,6 +2322,7 @@ namespace StemmonsMobile
             }
             else if (applicationtype.ApplicationName == "Quest")
             {
+                IsCreateEntity = false;
                 await Navigation.PushAsync(new SelectQuestArea());
             }
 
@@ -2377,6 +2378,7 @@ namespace StemmonsMobile
             }
             else if (applicationtype.ApplicationName == "Quest")
             {
+                IsCreateEntity = true;
                 await this.Navigation.PushAsync(new SelectQuestArea());
             }
         }

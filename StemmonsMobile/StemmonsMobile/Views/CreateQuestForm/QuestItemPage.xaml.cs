@@ -26,6 +26,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         List<GetItemInstanceTranResponse.ItemInstanceTran> QuestItemlst = new List<GetItemInstanceTranResponse.ItemInstanceTran>();
         string Itmid = string.Empty;
         string scatId = string.Empty;
+        string Sec_Type = string.Empty;
         public QuestItemPage(string frompage, string username, string type, string itemid)
         {
             InitializeComponent();
@@ -83,14 +84,26 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        public QuestItemPage(string questArea, int intItemId, string catId = "")
+        //public QuestItemPage(string questArea, int intItemId, string catId = "")
+        //{
+        //    InitializeComponent();
+        //    this.Title = questArea;
+        //    ItemIdData = intItemId;
+        //    scatId = catId;
+        //    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+        //}
+
+        //ArpanB
+        public QuestItemPage(string questArea, int intItemId, string catId = "", string secType = "")
         {
             InitializeComponent();
             this.Title = questArea;
             ItemIdData = intItemId;
             scatId = catId;
+            Sec_Type = secType;
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
         }
+        //ArpanB
 
         void FocusedEvent(object sender, Xamarin.Forms.FocusEventArgs e)
         {
@@ -128,6 +141,28 @@ namespace StemmonsMobile.Views.CreateQuestForm
             {
             }
         }
+
+        //ArpanB
+        private void btn_add_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                //var mi = ((Button)sender);
+                //var value = mi.CommandParameter as ItemInstanceTran;
+                if (Sec_Type.ToUpper().Contains("C") || Sec_Type.ToUpper().Contains("OPEN"))
+                {
+                    this.Navigation.PushAsync(new NewQuestForm(ItemIdData, scatId));
+                }
+                else
+                {
+                    DisplayAlert("Quest Form", "You dont have suffiecient rights to view this page.", "Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        //ArpanB
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {

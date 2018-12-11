@@ -48,11 +48,13 @@
                                            Style="{StaticResource defaultLabelSize_16}" VerticalOptions="Center" Margin="0,5,0,0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
 
 
-                                        <Button Image="Assets/plussign.png" BackgroundColor="Transparent"  
+                                        <!--<Button Image="Assets/plussign.png" BackgroundColor="Transparent"  
                                             CommandParameter="{Binding .}" HeightRequest="25" WidthRequest="25"  VerticalOptions="Center" Grid.RowSpan="2" 
                                            Grid.Column="1" 
                                                 Clicked="CreateQuest_Clicked"
-                                           HorizontalOptions="End"  Margin="0,5,0,0" />
+                                           HorizontalOptions="End"  Margin="0,5,0,0" />-->
+                                        <Image Source="Assets/dropdowniconClose.png"  Grid.RowSpan="2" 
+                                           Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
 
                                     </Grid>
                                 </ViewCell>
