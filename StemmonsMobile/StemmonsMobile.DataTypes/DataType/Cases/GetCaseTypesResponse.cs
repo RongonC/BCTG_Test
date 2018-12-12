@@ -299,6 +299,14 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public string CasePrioritySystemCode { get; set; }
             public string CaseCost { get; set; }
             public string strCaseDue { get; set; }
+            private string _bg_color="Black";
+
+            public string bg_color
+            {
+                get { return _bg_color; }
+                set { _bg_color = value; }
+            }
+
             public DateTime? CaseDue { get; set; }
 
             public string CaseDueDateTimeDateOnly
@@ -321,7 +329,6 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public string CaseTypeInstanceNamePlural { get; set; }
             public bool DebugMode { get; set; }
             public List<MetaData> MetaDataCollection { get; set; }
-
             public BasicCase()
             {
                 this.MetaDataCollection = new List<MetaData>();
@@ -445,6 +452,39 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                 }
             }
 
+            public string CASETYPE
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseTypeName))
+                    {
+                        return $"{"Case Type : "}{CaseTypeName}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+                }
+            }
+
+
+            public string CASELIFE
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseLifeDHM))
+                    {
+                        return $"{"Case Life : "}{CaseLifeDHM}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+                }
+            }
+
             public string PriorityValue
             {
                 get
@@ -474,6 +514,15 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
                     }
                 }
             }
+
+            private bool _duedatevisibility;
+
+            public bool DueDateVisibility
+            {
+                get { return _duedatevisibility; }
+                set { _duedatevisibility = value; }
+            }
+
 
             public string DueDate
             {

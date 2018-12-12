@@ -9,6 +9,7 @@ using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using PCLStorage;
 using Plugin.Connectivity;
+using Rg.Plugins.Popup.Services;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.DataTypes.DataType.Default;
@@ -1634,70 +1635,70 @@ namespace StemmonsMobile
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     return;
                 }
+                BindingContext = appCount;
+                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.CasesCount)))
+                //{
+                //    Device.BeginInvokeOnMainThread(() =>
+                //    {
+                //        CaseNotification.Text = appCount.CasesCount.ToString();
+                //    });
+                //}
+                //else
+                //{
+                //    CaseNotification.IsVisible = false;
+                //}
 
-                if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        CaseNotification.Text = appCount.CasesCount.ToString();
-                    });
-                }
-                else
-                {
-                    CaseNotification.IsVisible = false;
-                }
+                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.EntityCount)))
+                //{
+                //    Device.BeginInvokeOnMainThread(() =>
+                //    {
+                //        associationNotification.Text = appCount.EntityCount.ToString();
+                //    });
 
-                if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        associationNotification.Text = appCount.EntityCount.ToString();
-                    });
+                //}
+                //else
+                //{
+                //    associationNotification.IsVisible = false;
+                //}
 
-                }
-                else
-                {
-                    associationNotification.IsVisible = false;
-                }
+                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.StandardCount)))
+                //{
+                //    Device.BeginInvokeOnMainThread(() =>
+                //    {
+                //        standardNotification.Text = appCount.StandardCount.ToString();
+                //    });
 
-                if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        standardNotification.Text = appCount.StandardCount.ToString();
-                    });
+                //}
+                //else
+                //{
+                //    standardNotification.IsVisible = false;
+                //}
 
-                }
-                else
-                {
-                    standardNotification.IsVisible = false;
-                }
+                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.QuestCount)))
+                //{
+                //    Device.BeginInvokeOnMainThread(() =>
+                //    {
+                //        formNotification.Text = appCount.QuestCount.ToString();
+                //    });
 
-                if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        formNotification.Text = appCount.QuestCount.ToString();
-                    });
+                //}
+                //else
+                //{
+                //    formNotification.IsVisible = false;
+                //}
+                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.DepartmentCount)))
+                //{
+                //    Device.BeginInvokeOnMainThread(() =>
+                //    {
+                //        teamNotification.Text = appCount.DepartmentCount.ToString();
+                //    });
 
-                }
-                else
-                {
-                    formNotification.IsVisible = false;
-                }
-                if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        teamNotification.Text = appCount.DepartmentCount.ToString();
-                    });
-
-                    teamNotification.IsVisible = true;
-                }
-                else
-                {
-                    teamNotification.IsVisible = false;
-                }
+                //    teamNotification.IsVisible = true;
+                //}
+                //else
+                //{
+                //    teamNotification.IsVisible = false;
+                //}
             }
             catch (Exception)
             {
@@ -1716,7 +1717,7 @@ namespace StemmonsMobile
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 return;
             }
-
+           
             if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
             {
                 Device.BeginInvokeOnMainThread(() =>
@@ -1795,11 +1796,35 @@ namespace StemmonsMobile
             project = new List<string>();
             if (App.IsLoginCall)
             {
-                SyncAllRecorsToSQLite();
+                //SyncAllRecorsToSQLite();
+                SyncAllRecorsToSQLite_New();
                 App.IsLoginCall = false;
             }
             HomePageCount();
         }
+
+        //JigarRp
+        public async void SyncAllRecorsToSQLite_New()
+        {
+            try
+            {
+                var page = new Sync_Popup();
+                await PopupNavigation.Instance.PushAsync(page);
+                HomePageCount();
+            }
+            catch (Exception ex)
+            {
+                Functions.AppStartCount = 1;
+                Application.Current.Properties["AppStartCount"] = 1;
+            }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            // Yes, we want to stay.
+            return true;
+        }
+        //JigarRp
 
         private void SetUserPicture()
         {

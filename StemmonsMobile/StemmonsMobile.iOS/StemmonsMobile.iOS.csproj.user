@@ -23,6 +23,6 @@
 </TargetiOSDevice>
     <DeveloperId />
     <DevelopmentTeamId />
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
 </Project>

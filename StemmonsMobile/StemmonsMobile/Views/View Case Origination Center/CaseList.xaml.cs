@@ -324,7 +324,24 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
-                        listdata.IsRefreshing = true;
+                        listdata.IsRefreshing = false;
+                        //Code by BipinP
+                        var tm = BasicCase_lst.Select(i =>
+                        {
+                            if (!string.IsNullOrEmpty(i.strCaseDue))
+                            {
+                                i.bg_color = Convert.ToDateTime(App.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                i.DueDateVisibility = true;
+                            }
+                            else
+                            {
+                                i.bg_color = "Black";
+                                i.DueDateVisibility = false;
+                            }
+                            return i;
+                        });
+
+                        BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(tm);
                     });
                 });
 

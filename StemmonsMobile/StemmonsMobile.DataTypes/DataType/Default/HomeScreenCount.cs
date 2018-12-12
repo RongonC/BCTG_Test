@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,13 +16,22 @@ namespace StemmonsMobile.DataTypes.DataType.Default
         private int _casesCount = 0;
         private int _departmentCount = 0;
 
+        public HomeScreenCount()
+        {
+            this.CasesCount = 0;
+            this.DepartmentCount = 0;
+            this.EntityCount = 0;
+            this.QuestCount = 0;
+            this.StandardCount = 0;
+        }
+
         public int EntityCount
         {
             get => _entityCount;
             set
             {
                 _entityCount = value;
-                OnPropertyChanged("EntityCount");
+                NotifyPropertyChanged();
             }
         }
 
@@ -31,7 +41,7 @@ namespace StemmonsMobile.DataTypes.DataType.Default
             set
             {
                 _standardCount = value;
-                OnPropertyChanged("StandardCount");
+                NotifyPropertyChanged();
             }
         }
 
@@ -41,7 +51,7 @@ namespace StemmonsMobile.DataTypes.DataType.Default
             set
             {
                 _questCount = value;
-                OnPropertyChanged("QuestCount");
+                NotifyPropertyChanged();
             }
         }
 
@@ -51,7 +61,7 @@ namespace StemmonsMobile.DataTypes.DataType.Default
             set
             {
                 _casesCount = value;
-                OnPropertyChanged("CasesCount");
+                NotifyPropertyChanged();
             }
         }
 
@@ -61,18 +71,15 @@ namespace StemmonsMobile.DataTypes.DataType.Default
             set
             {
                 _departmentCount = value;
-                OnPropertyChanged("DepartmentCount");
+                NotifyPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(String propertyName)
+
+        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

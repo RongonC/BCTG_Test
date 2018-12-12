@@ -17,7 +17,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
         public static string GetAllHomeCount(string username, int INSTANCE_ID, string _DBPath, int? INSTANCE_USER_ASSOC_ID)
         {
             string sError = string.Empty;
-           
+
             JObject Result = null;
             try
             {
@@ -30,7 +30,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     //DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllHomeCount", username, DateTime.Now.ToString());
 
                     INSTANCE_USER_ASSOC _AppTypeInfoList = new INSTANCE_USER_ASSOC();
-                    _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = INSTANCE_USER_ASSOC_ID ?? default(int); ;
+                    _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = INSTANCE_USER_ASSOC_ID ?? default(int);
+                    ;
                     _AppTypeInfoList.HOME_SCREEN_INFO = ResponseContent;
                     _AppTypeInfoList.USER = username;
                     _AppTypeInfoList.INSTANCE_ID = INSTANCE_ID;
@@ -62,6 +63,17 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     result.Wait();
                     if (result.Result != null)
                         Response = JsonConvert.DeserializeObject<HomeScreenCount>(result.Result.HOME_SCREEN_INFO);
+
+                    if (string.IsNullOrEmpty(result.Result.HOME_SCREEN_INFO))
+                    {
+                        try
+                        {
+                            HomeOffline.GetAllHomeCount(username, INSTANCE_ID, _DBPath, INSTANCE_USER_ASSOC_ID);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
                 }
             }
             catch (Exception ex)

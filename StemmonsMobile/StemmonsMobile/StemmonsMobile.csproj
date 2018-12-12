@@ -85,6 +85,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDataStore.cs" />
     <Compile Include="Services\MockDataStore.cs" />
+    <Compile Include="Sync_Popup.xaml.cs">
+      <DependentUpon>Sync_Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ApplicationListViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CaseTypeViewModel.cs" />
@@ -675,6 +678,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Entity\ViewEntityNotes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sync_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

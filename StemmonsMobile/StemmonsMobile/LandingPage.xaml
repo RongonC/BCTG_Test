@@ -18,8 +18,8 @@
                         <On Platform="iOS" Value="0,20,0,0" />
                         <On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />
                     </OnPlatform>
-                    </Grid.Margin>
-                    <Grid.RowDefinitions>
+                </Grid.Margin>
+                <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="5" />
                     <RowDefinition Height="auto" />
@@ -52,7 +52,7 @@
                        VerticalOptions="Center" Margin="20,0,0,0" Source="Assets/boxerlogo.png" />
 
 
-                 
+
                     <Button x:Name="btn_setting" Clicked="Setting_Clicked"
                             Grid.Row="0" Grid.Column="2"
                             Image="Assets/setting.png" 
@@ -175,7 +175,7 @@
                            HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                     </StackLayout>
 
-                    <me:RoundRectLabel x:Name="CaseNotification" Text = "0" 
+                    <local:RoundRectLabel x:Name="CaseNotification" Text = "{Binding CasesCount}" 
                                    BackgroundColor = "Orange" 
                                    Grid.Row="0" Grid.Column = "1" 
                                    HeightRequest="19" WidthRequest="25"
@@ -210,7 +210,7 @@
                            HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                     </StackLayout>
 
-                    <me:RoundRectLabel x:Name="associationNotification" Text = "0" 
+                    <local:RoundRectLabel x:Name="associationNotification" Text = "{Binding EntityCount}" 
                                        BackgroundColor = "Orange" 
                                    Grid.Row="0" Grid.Column = "2" 
                                    HeightRequest="19" WidthRequest="25" 
@@ -246,7 +246,7 @@
                            HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                     </StackLayout>
 
-                    <me:RoundRectLabel x:Name="teamNotification" Text = "0" 
+                    <local:RoundRectLabel x:Name="teamNotification" Text = "{Binding DepartmentCount}" 
                                        BackgroundColor = "Orange" 
                                    Grid.Row="0" Grid.Column = "3" 
                                    HeightRequest="19" WidthRequest="25" 
@@ -279,7 +279,8 @@
                            FontSize="12" Grid.Row="0" Grid.Column="0" TextColor="Black" WidthRequest="70" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                     </StackLayout>
 
-                    <me:RoundRectLabel x:Name="standardNotification" Text = "0" BackgroundColor = "Orange" 
+                    <local:RoundRectLabel x:Name="standardNotification" Text = "{Binding StandardCount}"
+                                          BackgroundColor = "Orange" 
                                    Grid.Row="0" Grid.Column = "4" 
                                    HeightRequest="19" WidthRequest="25"
                                    HorizontalOptions="Start" VerticalOptions="Start"
@@ -311,10 +312,10 @@
                             </Button.WidthRequest>
                         </Button>
                         <Label Text="My Forms" Margin="0,-4,0,0" 
-                           FontSize="12" Grid.Row="0" Grid.Column="0" TextColor="Black" WidthRequest="50" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                           FontSize="12" Grid.Row="0" Grid.Column="0" TextColor="Black" WidthRequest="50" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                     </StackLayout>
 
-                    <me:RoundRectLabel x:Name="formNotification" Text = "0" 
+                    <local:RoundRectLabel x:Name="formNotification" Text = "{Binding QuestCount}" 
                                        BackgroundColor = "Orange" 
                                    Grid.Row="0" Grid.Column = "5" 
                                    HeightRequest="19" WidthRequest="25" 
@@ -325,10 +326,10 @@
 
                 </Grid>
 
-                <ScrollView VerticalOptions="FillAndExpand" 
-                            IsClippedToBounds="True" Grid.ColumnSpan="3" Grid.Row="4">
+                <!--<ScrollView VerticalOptions="FillAndExpand" 
+                            IsClippedToBounds="True" Grid.ColumnSpan="3" Grid.Row="4">-->
                     <ListView x:Name="Applicationlist" ItemTapped="Applicationlist_ItemTapped"
-                              ItemAppearing="Applicationlist_ItemAppearing" 
+                              ItemAppearing="Applicationlist_ItemAppearing" Grid.ColumnSpan="3" Grid.Row="4"
                               RowHeight="100" SeparatorVisibility="None" 
                               Margin="0,10,0,0">
                         <ListView.ItemTemplate>
@@ -352,7 +353,7 @@
                                                              VerticalOptions="Center">
 
                                                 <Button Image="{Binding ApplicationIcon}" 
-                                                    HeightRequest="70" WidthRequest="80" 
+                                                      WidthRequest="80" 
                                                     Grid.Row="0"  BackgroundColor="Transparent"
                                                     Grid.Column="1" HorizontalOptions="Center" 
                                                     VerticalOptions="Center"  Clicked="cases_Clicked">
@@ -376,7 +377,7 @@
                                                              VerticalOptions="Center">
                                                 <Button x:Name="btn_my" Image="{Binding My_Icon}"
                                                    
-                                                    HeightRequest="45" WidthRequest="45" 
+                                                    
                                                     Grid.Row="0" Grid.Column="1" 
                                                     HorizontalOptions="Center" VerticalOptions="Center" 
                                                     BackgroundColor="Transparent"
@@ -505,10 +506,10 @@
                             </StackLayout>
                         </ListView.Footer>
                     </ListView>
-                </ScrollView>
+                <!--</ScrollView>-->
 
 
-                
+
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" IsVisible="False"
                          IsClippedToBounds="True" Grid.ColumnSpan="3" Grid.Row="6" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" >
 

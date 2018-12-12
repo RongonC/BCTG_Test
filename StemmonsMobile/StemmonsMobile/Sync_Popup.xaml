@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="StemmonsMobile.Sync_Popup" CloseWhenBackgroundIsClicked="False">
+    <Grid VerticalOptions="End" HorizontalOptions="Fill" Padding="10" BackgroundColor="#CC000000" RowSpacing="0" ColumnSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="lbl_status" Grid.Row="0" Text="Entity  Types and Items Sync Operation 3 of 12 in Progress..." TextColor="White" HorizontalOptions="CenterAndExpand" />
+        <Grid Grid.Row="2" RowSpacing="0" ColumnSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="lbl_Percentage"
+                           Grid.Column="0"
+                           FontSize="10" 
+                           Font="10" 
+                           TextColor="#2296F4" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center" />
+            <ProgressBar x:Name="Sync_ProgressBar" HeightRequest="10" HorizontalOptions="Fill" VerticalOptions="Center" ProgressColor="#2296F4" BackgroundColor="Transparent"
+                                       Grid.Column="2" />
+
+
+        </Grid>
+        <Button x:Name="btn_close"
+                Grid.Row="3"
+                Text="Run in Background" 
+                TextColor="#2296F4" 
+                Font="Bold"                
+                BorderColor="#2296F4" 
+                BorderWidth="0" 
+                BackgroundColor="Transparent" 
+                HorizontalOptions="Fill"                        
+                Clicked="OnBackGround_Click" />
+    </Grid>
+
+</pages:PopupPage>
