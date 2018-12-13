@@ -42,7 +42,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
                 if (Result != null)
                 {
-                    //Debug.WriteLine("GetAllCaseTypeWithID ==> " + Convert.ToString(Result));
                     DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
 
                     string Res = Convert.ToString(Result.GetValue("ResponseContent"));
@@ -57,20 +56,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         CaseDate.Wait();
                         if (CaseDate.Result.Count > 0)
                         {
-                            //foreach (var item in CaseDate.Result)
-                            {
-                                //DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                            var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                DeleteRecordBeforeSync(_DBPath, MultiId);
-                                //var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                                //EDS.Wait();
-                                //foreach (var itm in EDS.Result)
-                                //{
-                                //    DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                                //}
-                            }
-
+                            DeleteRecordBeforeSync(_DBPath, MultiId);
                         }
                         #endregion
 
@@ -190,7 +178,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 GetResult.Wait();
                 lstResult = GetResult.Result?.ASSOC_FIELD_INFO == null ? new List<OriginationCenterDataResponse.OriginationCenterData>() : JsonConvert.DeserializeObject<List<OriginationCenterDataResponse.OriginationCenterData>>(GetResult.Result.ASSOC_FIELD_INFO.ToString());
 
-               // lstResult = CommonConstants.ReturnListResult<OriginationCenterDataResponse.OriginationCenterData>(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
+                // lstResult = CommonConstants.ReturnListResult<OriginationCenterDataResponse.OriginationCenterData>(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
             }
             catch (Exception ex)
             {

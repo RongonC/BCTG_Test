@@ -69,6 +69,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
         public List<FREQUENT> ExternalDatasourceinfo { get; set; }
 
+        private System.Nullable<int> _ExternalDataSourceEntityTypeID;
+
         public spi_MobileApp_GetTypesByCaseTypeResult()
         {
         }

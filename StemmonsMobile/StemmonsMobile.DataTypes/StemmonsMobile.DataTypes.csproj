@@ -42,6 +42,7 @@
     <Compile Include="DataType\Cases\AssigntomeRequest.cs" />
     <Compile Include="DataType\Cases\AssigntomeResponse.cs" />
     <Compile Include="DataType\Cases\CaseData.cs" />
+    <Compile Include="DataType\Cases\ExternalDSOptimized.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateRequest.cs" />
     <Compile Include="DataType\Cases\AcceptCaseRequest.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateResponse.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="DataType\Default\RequestToken.cs" />
     <Compile Include="DataType\Default\HomeScreenCountResponse.cs" />
     <Compile Include="DataType\Default\ResponseToken.cs" />
+    <Compile Include="DataType\EDSDataType.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
     <Compile Include="DataType\Entity\Entity_Type_List.cs" />

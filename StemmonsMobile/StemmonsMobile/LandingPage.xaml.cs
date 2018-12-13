@@ -260,7 +260,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.PercentComplete = Percentage;
+                                    //dlg.PercentComplete = Percentage;
                                     dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " in Progress";
                                 });
                             }

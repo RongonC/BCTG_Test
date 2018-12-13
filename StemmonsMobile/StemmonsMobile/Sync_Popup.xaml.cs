@@ -46,15 +46,18 @@ namespace StemmonsMobile
             {
                 if (CrossConnectivity.Current.IsConnected)
                 {
-                    #region Cases Origination Sync
-                    //Cases Originaation Sync
+
+                    #region Home Count Sync
+                    //Home Count Sync
                     if (!IsClosed)
                     {
                         try
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " in Progress";
+                                Sync_ProgressBar.Progress = 0.04;
+                                lbl_Percentage.Text = "5%";
+                                lbl_status.Text = "Origination Center Data Sync Operation " + 1 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -68,11 +71,58 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+                                var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Origination Center Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Origination Center Sync having issue.");
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                             }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                Sync_ProgressBar.Progress = 0.08;
+                                lbl_Percentage.Text = Convert.ToString(Percentage * 1) + "%";
+                                lbl_status.Text = "Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
+                            });
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Cases Origination Sync
+                    //Cases Originaation Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                lbl_status.Text = "Cases Origination Center Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                            });
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
                             try
                             {
                                 string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
@@ -96,9 +146,9 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                Sync_ProgressBar.Progress = 0.08;
-                                lbl_Percentage.Text = Convert.ToString(Percentage * 1) + "%";
-                                lbl_status.Text = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
+                                Sync_ProgressBar.Progress = 0.16;
+                                lbl_Percentage.Text = Convert.ToString(Percentage * 2) + "%";
+                                lbl_status.Text = "Cases Origination Center Sync Operation " + 2 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -115,8 +165,8 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                Sync_ProgressBar.Progress = 0.16;
-                                lbl_Percentage.Text = Convert.ToString(Percentage * 2) + "%";
+                                //Sync_ProgressBar.Progress = 0.16;
+                                //lbl_Percentage.Text = Convert.ToString(Percentage * 2) + "%";
                                 lbl_status.Text = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " in Progress";
                             });
                         }
@@ -154,7 +204,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.24;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 3) + "%";
-                                lbl_status.Text = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Case Types and Items Sync Operation " + 3 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -171,8 +221,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " in Progress";
-                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 4 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -208,7 +257,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.32;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 4) + "%";
-                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 4 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -225,7 +274,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 5 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -264,7 +313,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.40;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 5) + "%";
-                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 5 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -281,7 +330,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 6 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -319,7 +368,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.48;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 6) + "%";
-                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 6 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -336,7 +385,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 7 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -379,7 +428,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.56;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 7) + "%";
-                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 7 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -396,7 +445,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Entity Types and Items Sync Operation " + 8 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -433,7 +482,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.64;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 8) + "%";
-                                lbl_status.Text = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Entity Types and Items Sync Operation " + 8 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -450,7 +499,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 9 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -489,7 +538,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.72;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 9) + "%";
-                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 9 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -506,7 +555,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 10 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -543,7 +592,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.80;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 10) + "%";
-                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 10 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -560,7 +609,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Standard Application Data Sync Operation " + 10 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Standard Application Data Sync Operation " + 11 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -598,7 +647,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.88;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 11) + "%";
-                                lbl_status.Text = "Standard Application Data Sync Operation " + 10 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Standard Application Data Sync Operation " + 11 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -615,7 +664,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Employee Data Sync Operation " + 11 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Employee Data Sync Operation " + 12 + " of " + itemCount + " in Progress";
                             });
                         }
                         catch (Exception)
@@ -655,63 +704,9 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                Sync_ProgressBar.Progress = 0.96;
-                                lbl_Percentage.Text = Convert.ToString(Percentage * 12) + "%";
-                                lbl_status.Text = "Employee Data Sync Operation " + 11 + " of " + itemCount + " completed";
-                            });
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                    #endregion
-
-                    #region Home Count Sync
-                    //Home Count Sync
-                    if (!IsClosed)
-                    {
-                        try
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                lbl_status.Text = "Origination Center Data Sync Operation " + 12 + " of " + itemCount + " in Progress";
-                            });
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-
-                    try
-                    {
-                        await Task.Run(() =>
-                        {
-                            try
-                            {
-                                var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-
-                                if (!String.IsNullOrEmpty(str))
-                                    Functions.ShowtoastAlert("Origination Center Sync Success.");
-                                else
-                                    Functions.ShowtoastAlert("Origination Center Sync having issue.");
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        });
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    if (!IsClosed)
-                    {
-                        try
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
                                 Sync_ProgressBar.Progress = 1;
                                 lbl_Percentage.Text = "100%";
-                                lbl_status.Text = "Origination Center Sync Operation " + 12 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Employee Data Sync Operation " + 12 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -719,6 +714,8 @@ namespace StemmonsMobile
                         }
                     }
                     #endregion
+
+
                 }
                 await PopupNavigation.Instance.PopAsync();
                 Functions.AppStartCount = Functions.AppStartCount + 1;

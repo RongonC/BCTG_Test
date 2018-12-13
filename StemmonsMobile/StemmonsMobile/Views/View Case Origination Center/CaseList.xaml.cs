@@ -506,49 +506,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             }
         }
 
-        //private async Task SelectUser1(string name)
-        //{
-        //    try
-        //    {
-        //        var result1 = CasesAPIMethods.GetTeamMembers(name);
-        //        var temp = result1.GetValue("ResponseContent");
-
-        //        List<TeamMateData> lst1 = new List<TeamMateData>();
-        //        foreach (var item in temp)
-        //        {
-        //            TeamMateData casestdata;
-        //            casestdata = Newtonsoft.Json.JsonConvert.DeserializeObject<TeamMateData>(item.ToString());
-        //            lst1.Add(casestdata);
-        //            TeamUserList.Add(casestdata.SAMName);
-        //        }
-
-        //        var count = TeamUserList.Count();
-        //        var options = new List<string>(TeamUserList.Take(count + 1));
-        //        options.Add("Search for User...");
-        //        var userAction = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
-        //        if (userAction == "Search for User...")
-        //        {
-
-        //            var result = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle(
-        //                  "Please search for a user to show the cases assigned to.").SetInputMode(
-        //                  InputType.Name).SetOkText("Find"));
-
-        //            if (result.Ok)
-        //            {
-        //                SearchAgain(result.Text);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Getcaselistdatafromapi("caseAssgnSAM", userAction, "");
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-
-        //}
-
         private async Task SelectUser(string name)
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -567,8 +524,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     var options = new List<string>();
                     options.AddRange(Userlist.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.SAMName?.Trim()));
 
-                    //var count = project.Count();
-                    //var options = new List<string>(project.Take(count + 1));
                     options.Add("Search for User.");
                     var userAction = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
 
@@ -614,31 +569,12 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                      data = JsonConvert.DeserializeObject<List<UserDataCall>>(responseData.ToString());
                  });
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                //if (responseData != null && responseData.ToString() != "[]")
-                //{
-                //    UserDataCall userdata;
-                //    List<UserDataCall> d = new List<UserDataCall>();
-
-                //    foreach (var item in responseData)
-                //    {
-                //        userdata = JsonConvert.DeserializeObject<UserDataCall>(item.ToString());
-                //        d.Add(userdata);
-                //        TeamUserList.Add(userdata.UserID);
-                //    }
-                //}
-
-                //var count1 = TeamUserList.Count();
-                //var options1 = new List<string>(TeamUserList.Take(count1 + 1));
-                //options1.Add("Search Again...");
 
                 var options = new List<string>();
 
                 options.AddRange(data.Select(v => v.DisplayName?.Trim() != null ? v.DisplayName?.Trim() : v.UserID?.Trim()));
 
-                //var count = project.Count();
-                //var options = new List<string>(project.Take(count + 1));
                 options.Add("Search for User.");
-
 
                 var userAction1 = await this.DisplayActionSheet(null, "Cancel", null, options.ToArray());
                 if (userAction1 == "Search Again...")
