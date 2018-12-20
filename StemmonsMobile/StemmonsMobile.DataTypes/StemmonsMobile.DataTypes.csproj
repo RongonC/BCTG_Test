@@ -206,6 +206,7 @@
     <Compile Include="DataType\EDSDataType.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
+    <Compile Include="DataType\Entity\Entity_List.cs" />
     <Compile Include="DataType\Entity\Entity_Type_List.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListRequest.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListResponse.cs" />

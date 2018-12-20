@@ -36,7 +36,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         public string LIST_CASE_ASSGN_TO_SAM { get; set; }
         public string LIST_CASE_CREATED_BY_SAM { get; set; }
         public string LIST_CASE_MODIFIED_BY_SAM { get; set; }
-
+        public char NEWEST_NOTES_ON_TOP { get; set; }
     }
 
 }

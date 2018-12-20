@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Plugin.Connectivity;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
+using StemmonsMobile.Models;
 using StemmonsMobile.Views.Cases;
 using StemmonsMobile.Views.LoginProcess;
 using StemmonsMobile.Views.Search;
@@ -27,6 +28,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
     {
 
         ObservableCollection<GetCaseTypesResponse.BasicCase> BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>();
+        ObservableCollection<Group_Caselist> Master_list = new ObservableCollection<Group_Caselist>();
+        private ObservableCollection<Group_Caselist> _expandedGroups;
         List<string> TeamUserList = new List<string>();
         string parametername; string value; string searchvalue;
         string Team_Username = string.Empty;
@@ -96,8 +99,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                             {
                                                 BasicCase_lst.Add(ite);
                                             }
-
-                                            this.listdata.ItemsSource = BasicCase_lst;
+                                            Master_List_Function(BasicCase_lst);
+                                            //this.listdata.ItemsSource = BasicCase_lst;
                                         }
                                         catch (Exception)
                                         {
@@ -410,7 +413,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 });
                 //this.listdata.ItemsSource = null;
                 if (BasicCase_lst.Count > 0)
-                    this.listdata.ItemsSource = BasicCase_lst;
+                    // this.listdata.ItemsSource = BasicCase_lst;
+                    Master_List_Function(BasicCase_lst);
                 else
                 {
                     listdata.IsRefreshing = false;
@@ -431,7 +435,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 {
                     if (string.IsNullOrEmpty(e.NewTextValue))
                     {
-                        listdata.ItemsSource = BasicCase_lst;
+                        Master_List_Function(BasicCase_lst);
+                        //listdata.ItemsSource = BasicCase_lst;
                     }
                     else
                     {
@@ -439,7 +444,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         var list = rt.Where(x => x.CaseTitle != null && x.CaseTitle.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
                         if (list.Count > 0)
                         {
-                            listdata.ItemsSource = list;
+                            Master_List_Function(new ObservableCollection<GetCaseTypesResponse.BasicCase>(list));
+                            //listdata.ItemsSource = list;
                         }
                         else
                         {
@@ -483,18 +489,21 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     case "Assigned to me":
 
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseAssignedToSAM.ToLower().Contains(Functions.UserName));
+                        //this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseAssignedToSAM.ToLower().Contains(Functions.UserName));
+                        Master_List_Function(new ObservableCollection<GetCaseTypesResponse.BasicCase>(BasicCase_lst.Where(x => x.CaseAssignedToSAM.ToLower().Contains(Functions.UserName))));
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         break;
                     case "Created by me":
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                        this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseCreatedSAM.ToLower().Contains(Functions.UserName));
+                        //this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseCreatedSAM.ToLower().Contains(Functions.UserName));
+                        Master_List_Function(new ObservableCollection<GetCaseTypesResponse.BasicCase>(BasicCase_lst.Where(x => x.CaseCreatedSAM.ToLower().Contains(Functions.UserName))));
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                         Getcaselistdatafromapi("caseCreateBySAM", Functions.UserName, "");
                         break;
                     case "Owned by me":
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                        this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseOwnerSAM.ToLower().Contains(Functions.UserName));
+                        //this.listdata.ItemsSource = BasicCase_lst.Where(x => x.CaseOwnerSAM.ToLower().Contains(Functions.UserName));
+                        Master_List_Function(new ObservableCollection<GetCaseTypesResponse.BasicCase>(BasicCase_lst.Where(x => x.CaseOwnerSAM.ToLower().Contains(Functions.UserName))));
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
                         break;
@@ -667,7 +676,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                         var t = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
                                         BasicCase_lst = t;
                                     }
-                                    this.listdata.ItemsSource = BasicCase_lst;
+                                    Master_List_Function(BasicCase_lst);
+                                    //this.listdata.ItemsSource = BasicCase_lst;
                                 }
                                 catch (Exception)
                                 {
@@ -683,6 +693,68 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             }
         }
         #endregion
+
+        private void Master_List_Function(ObservableCollection<GetCaseTypesResponse.BasicCase> basicCase_Item)
+        {
+            Master_list.Clear();
+            var Grp = basicCase_Item.GroupBy(v => v.CaseTypeName);
+            foreach (var item in Grp)
+            {
+                Group_Caselist fav_case = new Group_Caselist(item.Key);
+                foreach (var ite in item)
+                {
+                    fav_case.Add(ite);
+                }
+                Master_list.Add(fav_case);
+            }
+            UpdateListContent();
+        }
+
+        private void UpdateListContent()
+        {
+            try
+            {
+                _expandedGroups = new ObservableCollection<Group_Caselist>();
+                foreach (var group in Master_list)
+                {
+                    //Create new FoodGroups so we do not alter original list
+                    Group_Caselist newGroup = new Group_Caselist(group.Title, group.Expanded);
+                    //Add the count of food items for Lits Header Titles to use
+
+                    if (group.Expanded)
+                    {
+                        foreach (var ite in group)
+                        {
+                            newGroup.Add(ite);
+                        }
+                    }
+                    _expandedGroups.Add(newGroup);
+                }
+                //listdata.SelectedItem = null;
+
+                listdata.ItemsSource = _expandedGroups;
+                // Case_type_List.HeightRequest = 250;
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void HeaderTapped(object sender, ItemTappedEventArgs e)
+        {
+            try
+            {
+                int selectedIndex = _expandedGroups.IndexOf(
+               ((Group_Caselist)((Button)sender).CommandParameter));
+                Master_list[selectedIndex].Expanded = !Master_list[selectedIndex].Expanded;
+                UpdateListContent();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 
     public class HopperData

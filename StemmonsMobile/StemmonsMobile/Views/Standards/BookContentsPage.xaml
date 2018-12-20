@@ -29,28 +29,12 @@
                                 <adapt:ItemTemplateInfo.ItemTemplate>
                                     <DataTemplate>
                                         <StackLayout Orientation="Horizontal">
-                                            <Label Text="{Binding Path=APP_ASSOC_META_DATA_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=TYPE_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=TYPE_NAME}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
                                             <Label Text="{Binding Path=NAME}" LineBreakMode="TailTruncation"
 										   HorizontalOptions="StartAndExpand" VerticalOptions="Center"  
-                                               FontSize="16" TextColor="Black" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=PARENT_META_DATA_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=DISPLAY_ORDER}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=CREATED_DATETIME}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=CREATED_BY}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=IS_ACTIVE}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=PARENT_LEVEL}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=APP_ID}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=METADATA_DESC}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=METADATA_SUMMARY}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=METADATA_CONTENT}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-                                            <Label Text="{Binding Path=HAS_DETAILS}" IsVisible="False" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
-
+                                               FontSize="16" TextColor="Black"/>
                                             <Image Source="Assets/dropdowniconClose.png" BackgroundColor="Transparent" Margin="3" />
                                         </StackLayout>
                                     </DataTemplate>
-                           
                                 </adapt:ItemTemplateInfo.ItemTemplate>
                             </adapt:ItemTemplateInfo>
                         </adapt:AdaptTreeViewItemProvider.ItemsTemplates>
@@ -64,7 +48,7 @@
                 <Button Image="Assets/menuicon.png" HorizontalOptions="CenterAndExpand"  BackgroundColor="Transparent" x:Name="btn_more" Clicked="btn_more_Clicked"/>
             </StackLayout>
         </Grid>
-        
+
         <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">

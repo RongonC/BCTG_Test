@@ -52,34 +52,22 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
 
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
-
-
-
-                        #region Delete Data Before Master Sync
-                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
-                        CaseDate.Wait();
-                        if (CaseDate.Result.Count > 0)
+                        Task.Run(() =>
                         {
+                            #region Delete Data Before Master Sync
+                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+                            CaseDate.Wait();
+                            if (CaseDate.Result.Count > 0)
+                            {
 
-                            var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                            CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MultiId);
-                            //foreach (var item in CaseDate.Result)
-                            //{
-                            //    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MultiId);
+                            }
+                            #endregion
 
-                            //    var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                            //    EDS.Wait();
-                            //    foreach (var itm in EDS.Result)
-                            //    {
-                            //        DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                            //    }
-                            //}
-
-                        }
-                        #endregion
-
-                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                            CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                        });
                     }
                 }
                 else
@@ -1220,40 +1208,40 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     }
                 }
 
-                    //if (_IsOnline)
-                    //{
-                    //    var result = QuestAPIMethods.GetItemsByAreaIDFormList(AreaId, user);
+                //if (_IsOnline)
+                //{
+                //    var result = QuestAPIMethods.GetItemsByAreaIDFormList(AreaId, user);
 
-                    //    var temp = result.GetValue("ResponseContent");
+                //    var temp = result.GetValue("ResponseContent");
 
-                    //    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
-                    //    {
-                    //        ItemsByAreaIDFormList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(temp.ToString());
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (AreaId != null)
-                    //    {
-                    //        Task<List<AppTypeInfoList>> Result = DBHelper.GetAppTypeInfoListByCategoryId(QuestInstance, Convert.ToInt32(AreaId), "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
-                    //        Result.Wait();
+                //    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
+                //    {
+                //        ItemsByAreaIDFormList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemsByAreaIDResponse.ItemsByAreaID>>(temp.ToString());
+                //    }
+                //}
+                //else
+                //{
+                //    if (AreaId != null)
+                //    {
+                //        Task<List<AppTypeInfoList>> Result = DBHelper.GetAppTypeInfoListByCategoryId(QuestInstance, Convert.ToInt32(AreaId), "H1_H2_H3_QUEST_AREA_FORM", _DBPath);
+                //        Result.Wait();
 
-                    //        var lst = Result.Result?.Select(v => new { v.TYPE_ID, v.TYPE_NAME })?.Distinct();
-                    //        int cnt = 0;
-                    //        foreach (var item in lst)
-                    //        {
-                    //            var temp = JsonConvert.DeserializeObject<List<ItemInfoField>>(Result.Result[cnt].ASSOC_FIELD_INFO).FirstOrDefault();
-                    //            if (item.TYPE_ID > 0)
-                    //                ItemsByAreaIDFormList.Add(new ItemsByAreaIDResponse.ItemsByAreaID
-                    //                {
-                    //                    intItemID = Convert.ToInt32(item.TYPE_ID),
-                    //                    strItemName = item.TYPE_NAME,
-                    //                    securityType = temp.FIELD_SECURITY
-                    //                });
-                    //            cnt++;
-                    //        }
-                    //    }
-                    //}
+                //        var lst = Result.Result?.Select(v => new { v.TYPE_ID, v.TYPE_NAME })?.Distinct();
+                //        int cnt = 0;
+                //        foreach (var item in lst)
+                //        {
+                //            var temp = JsonConvert.DeserializeObject<List<ItemInfoField>>(Result.Result[cnt].ASSOC_FIELD_INFO).FirstOrDefault();
+                //            if (item.TYPE_ID > 0)
+                //                ItemsByAreaIDFormList.Add(new ItemsByAreaIDResponse.ItemsByAreaID
+                //                {
+                //                    intItemID = Convert.ToInt32(item.TYPE_ID),
+                //                    strItemName = item.TYPE_NAME,
+                //                    securityType = temp.FIELD_SECURITY
+                //                });
+                //            cnt++;
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -2537,7 +2525,5 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             return ItemList;
         }
         #endregion
-
-
     }
 }

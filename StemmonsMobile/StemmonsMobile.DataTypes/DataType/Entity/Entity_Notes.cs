@@ -4,7 +4,8 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 {
     public class Entity_Notes
     {
-
+        public int EntityId { get; set; }
+        public int EntityTypeId { get; set; }
         public string ID { get; set; }
         public string Entity { get; set; }
         public string EntityNoteType { get; set; }

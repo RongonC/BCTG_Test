@@ -19,9 +19,9 @@
                     <SearchBar x:Name="txt_seacrhbar" Placeholder="Search" TextChanged="Txt_seacrhbar_TextChanged"  ></SearchBar>
 
                     <ListView  x:Name="Case_type_List"
-                    GroupDisplayBinding="{Binding Title}"
-                    HasUnevenRows="True"
-                    IsGroupingEnabled="True" ItemTapped="Case_lst_ItemTapped">
+                             GroupDisplayBinding="{Binding Title}"
+                             HasUnevenRows="True"
+                             IsGroupingEnabled="True" ItemTapped="Case_lst_ItemTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

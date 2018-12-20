@@ -144,6 +144,16 @@ namespace DataServiceBus.OfflineHelper.DataTypes
         #endregion
 
 
+        #region Get AppTypeInfoList By SYSTEM == TYPE_ID == ID == INSTANCE_USER_ASSOC_ID == TYPE_SCREEN_INFO
+        public static Task<AppTypeInfoList> GetAppTypeInfoListBy_systemtypeidScreen(string SystemName, int? TypeId, int? ID, string dbPath, string ScreenName, int INSTANCE_USER_ASSOC_ID)
+        {
+            SQLiteAsyncConnection conn = new SQLiteAsyncConnection(dbPath);
+            return conn.Table<AppTypeInfoList>().Where(i => i.SYSTEM.ToUpper() == SystemName.ToUpper() && i.TYPE_ID == TypeId && i.ID == ID && i.TYPE_SCREEN_INFO == ScreenName && i.INSTANCE_USER_ASSOC_ID == INSTANCE_USER_ASSOC_ID).FirstOrDefaultAsync();
+        }
+        #endregion
+
+
+
         #region Get AppTypeInfoList By ID and System Name
         public static Task<AppTypeInfoList> GetAppTypeInfoListByID(int id, string System, string dbPath)
         {

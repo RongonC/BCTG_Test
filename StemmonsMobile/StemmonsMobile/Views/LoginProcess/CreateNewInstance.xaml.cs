@@ -72,7 +72,7 @@ namespace StemmonsMobile.Views.LoginProcess
 
                     string[] suffexes =
                      {
-                        "","/","/mobileapi/token","mobileapi/token","/token","token"
+                        "","/","/mobileapi/token","mobileapi/token","/token","token","/mobileapitest/token","mobileapitest/token"
                     };
 
                     foreach (string prefix in prefixes)
@@ -92,7 +92,14 @@ namespace StemmonsMobile.Views.LoginProcess
                     }
 
                     posibilities.RemoveAll(v => v.ToLower().Contains("/mobileapi/mobileapi/token"));
-                    var te = posibilities.FindAll(v => v.ToLower().Contains("/mobileapi/token"));
+                    try
+                    {
+                        posibilities.RemoveAll(v => v.ToLower().Contains("/mobileapitest/mobileapitest/token"));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    var te = posibilities.FindAll(v => v.ToLower().Contains("/mobileapi/token") || v.ToLower().Contains("/mobileapitest/token"));
                     foreach (string item in te)
                     {
                         try

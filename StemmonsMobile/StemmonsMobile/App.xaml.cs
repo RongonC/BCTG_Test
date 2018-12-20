@@ -59,7 +59,6 @@ namespace StemmonsMobile
                 };
             }
             SetConnectionFlag();
-
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
         }
         private void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
@@ -305,7 +304,6 @@ namespace StemmonsMobile
             CreateDataBase();
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
-
             //Crashes Report 
             AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
                 "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +

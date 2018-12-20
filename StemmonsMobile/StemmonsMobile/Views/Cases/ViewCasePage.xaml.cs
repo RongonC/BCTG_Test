@@ -623,7 +623,7 @@ namespace StemmonsMobile.Views.Cases
                                             case "d":
                                                 Picker pkr = new Picker();
                                                 pkr.WidthRequest = 200;
-                                                pkr.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
+                                                pkr.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID;// + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
 
                                                 try
                                                 {
@@ -647,7 +647,7 @@ namespace StemmonsMobile.Views.Cases
                                                     Request.systemCode = ControlsItem.SYSTEM_CODE;
                                                     var result_extdatasource1 = CasesSyncAPIMethods.GetTypeValuesByAssocCaseType(Onlineflag, Request, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
                                                     result_extdatasource1.Wait();
-                                                    if (result_extdatasource1.Result != null && result_extdatasource1.Result.ToString() != "[]")
+                                                    if (result_extdatasource1.Result.Count > 0)
                                                     {
                                                         lst_SSsource = result_extdatasource1?.Result;
                                                     }
@@ -1829,9 +1829,10 @@ namespace StemmonsMobile.Views.Cases
                 lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBy) + " at " + Convert.ToString(Dout.ToString());
 
                 Assign_Sam = _Casedata.CaseAssignedTo;
-                Create_Sam = _Casedata.CreateBy;
-                Modify_Sam = _Casedata.ModifiedBy;
+                Create_Sam = _Casedata.CreateBySam;
+                Modify_Sam = _Casedata.ModifiedBySam;
                 Owner_Sam = _Casedata.CaseOwner;
+
             }
             catch (Exception)
             {

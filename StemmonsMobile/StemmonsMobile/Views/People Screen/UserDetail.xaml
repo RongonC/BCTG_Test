@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:StemmonsMobile"
-            xmlns:me="clr-namespace:StemmonsMobile.Views;assebly=StemmonsMobile"
              x:Class="StemmonsMobile.Views.People_Screen.UserDetail" Title="User Profile">
     <ContentPage.Content>
         <AbsoluteLayout  Margin="10,0,0,0" >
-            <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+            <Grid x:Name="masterGrid"  
+                  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                   AbsoluteLayout.LayoutFlags="All" 
                   ColumnSpacing="1" RowSpacing="1" >
                 <Grid.RowDefinitions>
@@ -23,29 +22,33 @@
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelDisplayName" Text="{Binding DisplayName}"
+                            <Label x:Name="labelDisplayName"  
                        Style="{StaticResource defaultLabelSize_16}" />
-                            <!--Text="William E. Daugherty II"-->
+                            <!--Text="William E. Daugherty II" -->
+                            <!--Text="{Binding DisplayName}"-->
                             <Label Text="Display Name" FontSize="10" />
 
                             <Label BackgroundColor="LightGray" HeightRequest="1"  />
 
-                            <Label x:Name="labelRealName"   Text="{Binding DisplayName}"
+                            <Label x:Name="labelRealName"    
                        Style="{StaticResource defaultLabelSize_16}"/>
+                            <!--Text="{Binding DisplayName}"-->
                             <!--Text="William Daugherty"-->
                             <Label Text="Real Name" FontSize="10"/>
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelDepartmentName" Text="{Binding Department}"
+                            <Label x:Name="labelDepartmentName" 
                        Style="{StaticResource defaultLabelSize_16}"/>
+                            <!--Text="{Binding Department}"-->
                             <!--Text="Application Development"-->
                             <Label Text="Department Name" FontSize="10"/>
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="labelJobTitle" Text="{Binding PrimaryJobTitle}"
+                            <Label x:Name="labelJobTitle"  
                                    Style="{StaticResource defaultLabelSize_16}"/>
+                            <!--Text="{Binding PrimaryJobTitle}"-->
                             <!--Text="Director, Application Development"-->
                             <Label Text="Job Title" FontSize="10"/>
 
@@ -60,9 +63,10 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label x:Name="OfficePhone"  Text="{Binding OfficePhone}"
+                                <Label x:Name="OfficePhone"  
                            Style="{StaticResource defaultLabelSize_16}" />
                                 <!--Text="(713) 589-4298"-->
+                                <!--Text="{Binding OfficePhone}"-->
                                 <Label Text="Office Phone" FontSize="10" Grid.Row="1" />
                                 <Button Image="Assets/Phone.png" BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="OfficePhoneClick"/>
                             </Grid>
@@ -88,7 +92,7 @@
 
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
 
-                            <Label x:Name="CityState" Text="{Binding CityState}"
+                            <Label x:Name="CityState" 
                        Style="{StaticResource defaultLabelSize_16}"/>
                             <!--Text="Houston, TX"-->
                             <Label Text="City, State" FontSize="10" />
@@ -104,7 +108,7 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label x:Name="EmailAddress" Text="{Binding Email}"  Style="{StaticResource defaultLabelSize_16}" />
+                                <Label x:Name="EmailAddress"   Style="{StaticResource defaultLabelSize_16}" />
                                 <!--Text="william.daugherty@stemmons.com"-->
                                 <Label Text="Email Address" FontSize="10" Grid.Row="1"/>
                                 <Button Image="Assets/Email.png"  BackgroundColor="Transparent" Grid.Column="1" Grid.RowSpan="2" Clicked="SendMail"/>
@@ -119,13 +123,16 @@
                                     <ColumnDefinition Width="9*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="lbl_supervisor" Text="{Binding Supervisor}" Style="{StaticResource defaultLabelSize_16}" Clicked="Manager_clicked" TextColor="Black" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" />
+                                <Button x:Name="lbl_supervisor"  Style="{StaticResource defaultLabelSize_16}" 
+                                        Clicked="Manager_clicked" TextColor="Black" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" />
                                 <!--Text="william.daugherty@stemmons.com"-->
                                 <Label Text="Manager / Supervisor" FontSize="10" Grid.Row="1" />
-                                <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent" HeightRequest="25" WidthRequest="25" Margin="0,0,5,0"  Grid.Column="1" Grid.RowSpan="2" Clicked="Manager_clickd"/>
+                                <Button Image="Assets/dropdowniconClose.png" BackgroundColor="Transparent"
+                                        HeightRequest="25" WidthRequest="25" Margin="0,0,5,0"  Grid.Column="1" Grid.RowSpan="2" Clicked="Manager_clickd"/>
                             </Grid>
                             <Label BackgroundColor="LightGray" HeightRequest="1" />
-                            <ListView x:Name="listdata" HeightRequest="250" VerticalOptions="Start" ItemTemplate="{StaticResource CaseDetailsTemplate}"
+                            <ListView x:Name="listdata" HeightRequest="250" VerticalOptions="Start"
+                                      ItemTemplate="{StaticResource CaseDetailsTemplate}"
                            ItemTapped="Handle_ItemTapped">
                                 <ListView.Footer>
                                     <StackLayout Orientation="Horizontal"/>

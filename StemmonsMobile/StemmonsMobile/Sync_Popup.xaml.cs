@@ -47,7 +47,7 @@ namespace StemmonsMobile
                 if (CrossConnectivity.Current.IsConnected)
                 {
 
-                    #region Home Count Sync
+                    #region Get item counts operation
                     //Home Count Sync
                     if (!IsClosed)
                     {
@@ -57,7 +57,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.04;
                                 lbl_Percentage.Text = "5%";
-                                lbl_status.Text = "Origination Center Data Sync Operation " + 1 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get item counts operation " + 1 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -74,9 +74,9 @@ namespace StemmonsMobile
                                 var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
 
                                 if (!String.IsNullOrEmpty(str))
-                                    Functions.ShowtoastAlert("Origination Center Sync Success.");
+                                    Functions.ShowtoastAlert("Item counts operation Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Origination Center Sync having issue.");
+                                    Functions.ShowtoastAlert("Item counts operation Sync having issue.");
                             }
                             catch (Exception ex)
                             {
@@ -94,7 +94,7 @@ namespace StemmonsMobile
                             {
                                 Sync_ProgressBar.Progress = 0.08;
                                 lbl_Percentage.Text = Convert.ToString(Percentage * 1) + "%";
-                                lbl_status.Text = "Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
+                                lbl_status.Text = "Get item counts operation " + 1 + " of " + itemCount + " completed";
                             });
                         }
                         catch (Exception)
@@ -111,7 +111,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Cases Origination Center Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Cases Origination Center Sync Operation " + 2 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -167,7 +167,7 @@ namespace StemmonsMobile
                             {
                                 //Sync_ProgressBar.Progress = 0.16;
                                 //lbl_Percentage.Text = Convert.ToString(Percentage * 2) + "%";
-                                lbl_status.Text = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Case Types and Items Sync Operation " + 3 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -221,7 +221,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 4 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Assigned To Me List Sync Operation " + 4 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -274,7 +274,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 5 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Created By Me List Sync Operation " + 5 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -330,7 +330,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 6 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Owned By Me List Sync Operation " + 6 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -385,7 +385,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 7 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get CaseList Assigned To My Team List Sync Operation " + 7 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -445,7 +445,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Entity Types and Items Sync Operation " + 8 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Entity Types and Items Sync Operation " + 8 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -499,7 +499,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 9 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Get Entity Associated List Sync Operation " + 9 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -555,7 +555,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 10 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Quest Area and Item List Sync Operation " + 10 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -609,7 +609,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Standard Application Data Sync Operation " + 11 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Standard Application Data Sync Operation " + 11 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -664,7 +664,7 @@ namespace StemmonsMobile
                         {
                             Device.BeginInvokeOnMainThread(() =>
                             {
-                                lbl_status.Text = "Employee Data Sync Operation " + 12 + " of " + itemCount + " in Progress";
+                                lbl_status.Text = "Employee Data Sync Operation " + 12 + " of " + itemCount;
                             });
                         }
                         catch (Exception)
@@ -714,7 +714,6 @@ namespace StemmonsMobile
                         }
                     }
                     #endregion
-
 
                 }
                 await PopupNavigation.Instance.PopAsync();

@@ -42,6 +42,9 @@ namespace StemmonsMobile
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LandingPage : ContentPage
     {
+
+        public bool Is_Popup_Open = false;
+        public bool IsClosed = false;
         ApplicationListViewModel cm;
         List<string> project = new List<string>();
 
@@ -199,7 +202,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -261,7 +264,7 @@ namespace StemmonsMobile
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
                                     //dlg.PercentComplete = Percentage;
-                                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -314,7 +317,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -366,7 +369,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -421,7 +424,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -475,7 +478,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -534,7 +537,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -587,7 +590,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -642,7 +645,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -695,7 +698,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -749,7 +752,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -807,7 +810,7 @@ namespace StemmonsMobile
                             {
                                 Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    dlg.Title = "Origination Center Data Sync Operation " + 12 + " of " + itemCount + " in Progress";
+                                    dlg.Title = "Origination Center Data Sync Operation " + 12 + " of " + itemCount;
                                 });
                             }
                             catch (Exception)
@@ -873,7 +876,6 @@ namespace StemmonsMobile
             }
         }
 
-
         #region Master Sync OLD
         //public async void SyncAllRecorsToSQLite()
         //{
@@ -926,7 +928,7 @@ namespace StemmonsMobile
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
         //                            dlg.PercentComplete = Percentage;
-        //                            dlg.Title = "Cases Items Sync Operation " + 1 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Cases Items Sync Operation " + 1 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -979,7 +981,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Case Types Sync Operation " + 2 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Case Types Sync Operation " + 2 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1032,7 +1034,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Entity Types and Items Sync Operation " + 3 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1085,7 +1087,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Quest Area and Item List Sync Operation " + 4 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1138,7 +1140,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Standard Application Data Sync Operation " + 5 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1192,7 +1194,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Employee Data Sync Operation " + 6 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1250,7 +1252,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Origination Center Data Sync Operation " + 7 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Origination Center Data Sync Operation " + 7 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1303,7 +1305,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 8 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1355,7 +1357,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Get CaseList Created By Me List Sync Operation " + 9 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1410,7 +1412,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 10 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1464,7 +1466,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 11 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1523,7 +1525,7 @@ namespace StemmonsMobile
         //                    {
         //                        Device.BeginInvokeOnMainThread(() =>
         //                        {
-        //                            dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount + " in Progress";
+        //                            dlg.Title = "Get Entity Associated List Sync Operation " + 12 + " of " + itemCount  ;
         //                        });
         //                    }
         //                    catch (Exception)
@@ -1635,70 +1637,70 @@ namespace StemmonsMobile
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     return;
                 }
-                BindingContext = appCount;
-                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.CasesCount)))
-                //{
-                //    Device.BeginInvokeOnMainThread(() =>
-                //    {
-                //        CaseNotification.Text = appCount.CasesCount.ToString();
-                //    });
-                //}
-                //else
-                //{
-                //    CaseNotification.IsVisible = false;
-                //}
+                //BindingContext = appCount;
+                if (!string.IsNullOrEmpty(Convert.ToString(appCount.CasesCount)))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        CaseNotification.Text = appCount.CasesCount.ToString();
+                    });
+                }
+                else
+                {
+                    CaseNotification.IsVisible = false;
+                }
 
-                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.EntityCount)))
-                //{
-                //    Device.BeginInvokeOnMainThread(() =>
-                //    {
-                //        associationNotification.Text = appCount.EntityCount.ToString();
-                //    });
+                if (!string.IsNullOrEmpty(Convert.ToString(appCount.EntityCount)))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        associationNotification.Text = appCount.EntityCount.ToString();
+                    });
 
-                //}
-                //else
-                //{
-                //    associationNotification.IsVisible = false;
-                //}
+                }
+                else
+                {
+                    associationNotification.IsVisible = false;
+                }
 
-                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.StandardCount)))
-                //{
-                //    Device.BeginInvokeOnMainThread(() =>
-                //    {
-                //        standardNotification.Text = appCount.StandardCount.ToString();
-                //    });
+                if (!string.IsNullOrEmpty(Convert.ToString(appCount.StandardCount)))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        standardNotification.Text = appCount.StandardCount.ToString();
+                    });
 
-                //}
-                //else
-                //{
-                //    standardNotification.IsVisible = false;
-                //}
+                }
+                else
+                {
+                    standardNotification.IsVisible = false;
+                }
 
-                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.QuestCount)))
-                //{
-                //    Device.BeginInvokeOnMainThread(() =>
-                //    {
-                //        formNotification.Text = appCount.QuestCount.ToString();
-                //    });
+                if (!string.IsNullOrEmpty(Convert.ToString(appCount.QuestCount)))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        formNotification.Text = appCount.QuestCount.ToString();
+                    });
 
-                //}
-                //else
-                //{
-                //    formNotification.IsVisible = false;
-                //}
-                //if (!string.IsNullOrEmpty(Convert.ToString(appCount.DepartmentCount)))
-                //{
-                //    Device.BeginInvokeOnMainThread(() =>
-                //    {
-                //        teamNotification.Text = appCount.DepartmentCount.ToString();
-                //    });
+                }
+                else
+                {
+                    formNotification.IsVisible = false;
+                }
+                if (!string.IsNullOrEmpty(Convert.ToString(appCount.DepartmentCount)))
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        teamNotification.Text = appCount.DepartmentCount.ToString();
+                    });
 
-                //    teamNotification.IsVisible = true;
-                //}
-                //else
-                //{
-                //    teamNotification.IsVisible = false;
-                //}
+                    teamNotification.IsVisible = true;
+                }
+                else
+                {
+                    teamNotification.IsVisible = false;
+                }
             }
             catch (Exception)
             {
@@ -1717,7 +1719,7 @@ namespace StemmonsMobile
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 return;
             }
-           
+
             if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
             {
                 Device.BeginInvokeOnMainThread(() =>
@@ -1808,8 +1810,28 @@ namespace StemmonsMobile
         {
             try
             {
-                var page = new Sync_Popup();
-                await PopupNavigation.Instance.PushAsync(page);
+                if (Functions.AppStartCount <= 1)
+                {
+                    MainGrid.BackgroundColor = new Color(211, 211, 211);
+                    MainGrid.Opacity = 0.4;
+                    MainGrid.IsEnabled = false;
+                    IsClosed = false;
+                    Is_Popup_Open = true;
+                    var page = new Sync_Popup();
+                    cnt_syncPopup.IsVisible = true;
+                    Grid_Sync_l.IsVisible = false;
+                }
+                else
+                {
+                    MainGrid.BackgroundColor = new Color(255, 255, 255);
+                    MainGrid.Opacity = 1;
+                    MainGrid.IsEnabled = true;
+                    cnt_syncPopup.IsVisible = false;
+                    IsClosed = false;
+                    Is_Popup_Open = false;
+                    Grid_Sync_l.IsVisible = true;
+                }
+                Progress1();
                 HomePageCount();
             }
             catch (Exception ex)
@@ -1817,6 +1839,649 @@ namespace StemmonsMobile
                 Functions.AppStartCount = 1;
                 Application.Current.Properties["AppStartCount"] = 1;
             }
+        }
+
+        public async void Progress1()
+        {
+            int itemCount = 12;
+            int Percentage = 100 / 13;
+            try
+            {
+                if (CrossConnectivity.Current.IsConnected)
+                {
+
+                    #region Home Count Sync
+                    //Home Count Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.04, "5%", "Origination Center Data Sync", " Operation " + 1 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Origination Center Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Origination Center Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.08, Convert.ToString(Percentage * 1) + "%", "Origination Center Sync", "Operation " + 1 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Cases Origination Sync
+                    //Cases Originaation Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Cases Origination Center Sync", "Operation " + 2 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+
+                                if (!string.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Case Types Sync Operation Success.");
+                                else
+                                    Functions.ShowtoastAlert("Case Types Sync Operation having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.16, Convert.ToString(Percentage * 2) + "%", "Cases Origination Center Sync", "Operation " + 2 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Cases Sync
+                    //Cases Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Case Types and Items Sync", "Operation " + 2 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
+                                if (!string.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Cases Items Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Cases Items Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.24, Convert.ToString(Percentage * 3) + "%", "Case Types and Items Sync", "Operation " + 3 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region CaseList Assigned To Me
+                    //Get CaseList Assigned To Me
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Get CaseList Assigned To Me List Sync", "Operation " + 4 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMe");
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.32, Convert.ToString(Percentage * 4) + "%", "Get CaseList Assigned To Me List Sync", "Operation " + 4 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region CaseList Created By Me
+                    //Get CaseList Created By Me
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Get CaseList Created By Me List Sync", "Operation " + 5 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_CreatedByMe");
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Get CaseList Created By Me List Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.40, Convert.ToString(Percentage * 5) + "%", "Get CaseList Created By Me List Sync", "Operation " + 5 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region CaseList Owned By Me
+                    //Get CaseList Owned By Me
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Get CaseList Owned By Me List Sync", "Operation " + 6 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_OwnedByMe");
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.48, Convert.ToString(Percentage * 6) + "%", "Get CaseList Owned By Me List Sync", "Operation " + 6 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region CaseList Assigned To My Team
+
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Get CaseList Assigned To My Team List Sync", "Operation " + 7 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        if (Functions.HasTeam)
+                            await Task.Run(() =>
+                            {
+                                try
+                                {
+                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMyTeam");
+
+                                    if (!String.IsNullOrEmpty(str))
+                                        Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");
+                                    else
+                                        Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync having issue.");
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            });
+                        else
+                        {
+                            DefaultAPIMethod.AddLog("No Team to bind Data", "Y", "GetCaseList_AssignedToMyTeam", Functions.UserName, DateTime.Now.ToString());
+                            Functions.ShowtoastAlert("No Team to bind Data for your team.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.56, Convert.ToString(Percentage * 7) + "%", "Get CaseList Assigned To My Team List Sync", "Operation " + 7 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Entity Sync
+                    //Entity Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.64, Convert.ToString(Percentage * 8) + "%", "Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Entity associated with Me
+                    //Get CaseList Owned By Me
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+
+                                string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.72, Convert.ToString(Percentage * 9) + "%", "Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Quest Sync
+                    //Quest Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.80, Convert.ToString(Percentage * 10) + "%", "Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + " completed");
+
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Standard Sync
+                    //Standard Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Standard Application Data Sync", "Operation " + 11 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                string str = StandardsSyncAPIMethods.GetAllStandards(Functions.UserName, App.DBPath);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Standard Application Data Sync Success.");
+                                else
+                                    Functions.ShowtoastAlert("Standard Application Data Sync having issue.");
+
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(0.88, Convert.ToString(Percentage * 11) + "%", "Standard Application Data Sync", "Operation " + 11 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+                    #region Employee Search Sync
+                    //Employee Search Sync
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChangeTitle("Employee Data Sync", "Operation " + 12 + " of " + itemCount + "");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Run(async () =>
+                        {
+                            try
+                            {
+
+                                await CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+
+                                string str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
+
+                                if (!String.IsNullOrEmpty(str))
+                                    Functions.ShowtoastAlert("Employee Data Sync Success.");
+                                else
+                                {
+                                    Functions.ShowtoastAlert("Employee Data Sync having issue.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    if (!IsClosed)
+                    {
+                        try
+                        {
+                            SyncPopupRunTimeChange(1, "100%", "Employee Data Sync", "Operation " + 12 + " of " + itemCount + " completed");
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    #endregion
+
+
+                }
+                if (Is_Popup_Open)
+                {
+                    IsClosed = true;
+                    Is_Popup_Open = false;
+                    cnt_syncPopup.IsVisible = false;
+                    MainGrid.IsEnabled = true;
+                    MainGrid.BackgroundColor = new Color(255, 255, 255);
+                    MainGrid.Opacity = 1;
+                }
+                else
+                {
+                    MainGrid.IsEnabled = true;
+                    MainGrid.BackgroundColor = new Color(255, 255, 255);
+                    MainGrid.Opacity = 1;
+                    Grid_Sync_l.IsVisible = false;
+                }
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Functions.AppStartCount = Functions.AppStartCount + 1;
+                    Application.Current.Properties["AppStartCount"] = Functions.AppStartCount;
+                });
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.Properties["AppStartCount"] = 1;
+                    Functions.AppStartCount = 1;
+                });
+            }
+        }
+
+        private void SyncPopupRunTimeChange(double prog, string per, string Title, string Count)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Sync_ProgressBar.Progress = prog;
+                C_Sync_ProgressBar.Progress = prog;
+                lbl_Percentage.Text = per;
+                C_lbl_Percentage.Text = per;
+                lbl_status.Text = Title;
+                C_lbl_status.Text = Title;
+                lbl_status_Count.Text = Count;
+                C_lbl_status_Count.Text = Count;
+            });
+        }
+        private void SyncPopupRunTimeChangeTitle(string Title, string Count)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                lbl_status.Text = Title;
+                C_lbl_status.Text = Title;
+                lbl_status_Count.Text = Count;
+                C_lbl_status_Count.Text = Count;
+            });
+        }
+
+        private void OnBackGround_Click(object sender, EventArgs e)
+        {
+            IsClosed = true;
+            Grid_Sync_l.IsVisible = false;
         }
 
         protected override bool OnBackButtonPressed()

@@ -51,18 +51,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         sError = Convert.ToString(Result);
                         //CommonConstants.MasterOfflineStore(Res, _DBPath);
 
-                        #region Delete Data Before Master Sync
-                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName("CASES", "C1_C2_CASES_CASETYPELIST", _DBPath);
-                        CaseDate.Wait();
-                        if (CaseDate.Result.Count > 0)
+                        Task.Run(() =>
                         {
-                            var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                            #region Delete Data Before Master Sync
+                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName("CASES", "C1_C2_CASES_CASETYPELIST", _DBPath);
+                            CaseDate.Wait();
+                            if (CaseDate.Result.Count > 0)
+                            {
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                            DeleteRecordBeforeSync(_DBPath, MultiId);
-                        }
-                        #endregion
-
-                        CommonConstants.MasterOfflineStore_withEDSTable(Res, _DBPath);
+                                DeleteRecordBeforeSync(_DBPath, MultiId);
+                            }
+                            #endregion
+                            CommonConstants.MasterOfflineStore_withEDSTable(Res, _DBPath);
+                        });
                     }
                 }
                 else
@@ -97,6 +99,117 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         }
         #endregion
 
+        #region Get CaseList
+        public static string GetCaseListSync(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM,
+                                                    string _PropertyID, string _TenantCode, string _TenantID, char _showOpenClosedCasesType, char _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle = "", bool SaveSql = true, string screenName = "")
+        {
+            List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
+            List<KeyValuePair<string, string>> idAndDateTime = new List<KeyValuePair<string, string>>();
+
+            try
+            {
+                Task<List<AppTypeInfoList>> AppTypeInforesult = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
+                AppTypeInforesult.Wait();
+                if (AppTypeInforesult.Result != null)
+                {
+                    foreach (var item in AppTypeInforesult.Result)
+                    {
+                        try
+                        {
+                            var it = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(item.ASSOC_FIELD_INFO).FirstOrDefault();
+
+                            if (it?.CaseAssignedToSAM?.ToLower() == _user.ToLower())
+                                idAndDateTime.Add(new KeyValuePair<string, string>(Convert.ToString(it.CaseID), Convert.ToString(Convert.ToDateTime(it.CaseModifiedDateTime))));
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            string ResponseContent = string.Empty;
+            JObject result = null;
+            try
+            {
+                result = CasesAPIMethods.GetCaseListSync(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, idAndDateTime, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, screenName, 0, 0);
+                var temp = result.GetValue("ResponseContent");
+
+                //Debug.WriteLine("GetCaseListSync||" + screenName + " ==> " + Convert.ToString(temp));
+
+                if (!string.IsNullOrEmpty(Convert.ToString(temp)) && temp?.ToString() != "[]")
+                {
+                    DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(result), "Y", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+                    ResponseContent = Convert.ToString(temp);
+
+                    MasterSyncGetAllCaseType Output = JsonConvert.DeserializeObject<MasterSyncGetAllCaseType>(ResponseContent);
+                    var DeleteItem = Output.RemoveItemList;
+
+                    ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
+
+                    Task.Run(() =>
+                    {
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
+                        {
+                            try
+                            {
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                                var db = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+                                //  //var db2 = new SQLiteAsyncConnection(_DBPath);
+                                //var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                //EDS.Wait();
+
+                                //MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
+                                ////var db1 = new SQLiteAsyncConnection(_DBPath);
+                                //db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
+                                // var db2 = new SQLiteAsyncConnection(_DBPath);
+                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                Appinf.Wait();
+
+                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+
+                                //var db3 = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+
+
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        #endregion
+                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                    });
+
+                }
+                else
+                {
+                    DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+                DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+            }
+            return ResponseContent;
+        }
+        #endregion
+
         #region Get Origination CenterForUser
         public static string GetOriginationCenterForUserSync(string _User, string _ShowAll, int _InstanceUserAssocId, string _DBPath)
         {
@@ -121,16 +234,19 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         lstResult = JsonConvert.DeserializeObject<List<OriginationCenterDataResponse.OriginationCenterData>>(ResponseContent.ToString());
                         if (lstResult.Count > 0)
                         {
-                            #region Delete Data Before Master Sync
-                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
-                            CaseDate.Wait();
-                            foreach (var item in CaseDate.Result)
+                            Task.Run(() =>
                             {
-                                DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-                            }
-                            #endregion
+                                #region Delete Data Before Master Sync
+                                var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
+                                CaseDate.Wait();
+                                foreach (var item in CaseDate.Result)
+                                {
+                                    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
+                                }
+                                #endregion
 
-                            CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C1_GetOriginationCenterForUser", INSTANCE_USER_ASSOC_ID, _DBPath, id, "", "M").Wait();
+                                CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C1_GetOriginationCenterForUser", INSTANCE_USER_ASSOC_ID, _DBPath, 0, "", "M").Wait();
+                            });
                         }
                     }
                 }
@@ -2946,131 +3062,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         }
         #endregion
 
-        #region Get CaseList
-        public static string GetCaseListSync(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM,
-                                                    string _PropertyID, string _TenantCode, string _TenantID, char _showOpenClosedCasesType, char _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle = "", bool SaveSql = true, string screenName = "")
-        {
-            List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
-            List<KeyValuePair<string, string>> idAndDateTime = new List<KeyValuePair<string, string>>();
 
-            try
-            {
-                Task<List<AppTypeInfoList>> AppTypeInforesult = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
-                AppTypeInforesult.Wait();
-                if (AppTypeInforesult.Result != null)
-                {
-                    foreach (var item in AppTypeInforesult.Result)
-                    {
-                        try
-                        {
-                            var it = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(item.ASSOC_FIELD_INFO).FirstOrDefault();
-
-                            if (it?.CaseAssignedToSAM?.ToLower() == _user.ToLower())
-                                idAndDateTime.Add(new KeyValuePair<string, string>(Convert.ToString(it.CaseID), Convert.ToString(Convert.ToDateTime(it.CaseModifiedDateTime))));
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            string ResponseContent = string.Empty;
-            JObject result = null;
-            try
-            {
-                result = CasesAPIMethods.GetCaseListSync(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, idAndDateTime, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery, screenName, 0, 0);
-                var temp = result.GetValue("ResponseContent");
-
-                //Debug.WriteLine("GetCaseListSync||" + screenName + " ==> " + Convert.ToString(temp));
-
-                if (!string.IsNullOrEmpty(Convert.ToString(temp)) && temp?.ToString() != "[]")
-                {
-                    DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(result), "Y", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
-                    ResponseContent = Convert.ToString(temp);
-
-                    MasterSyncGetAllCaseType Output = JsonConvert.DeserializeObject<MasterSyncGetAllCaseType>(ResponseContent);
-                    var DeleteItem = Output.RemoveItemList;
-
-                    ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
-
-                    #region Delete Data Before Master Sync
-                    var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
-                    CaseDate.Wait();
-                    if (CaseDate.Result.Count > 0)
-                    {
-                        //foreach (var item in CaseDate.Result)
-                        {
-                            try
-                            {
-                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
-
-                                var db = new SQLiteAsyncConnection(_DBPath);
-                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
-
-
-                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
-                                // var db2 = new SQLiteAsyncConnection(_DBPath);
-                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
-                                Appinf.Wait();
-
-                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
-
-                                //var db3 = new SQLiteAsyncConnection(_DBPath);
-                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
-                            }
-                            catch (Exception)
-                            {
-                            }
-
-
-                            //DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-
-                            //var Basic = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C8_GetCaseBasicInfo", Convert.ToInt32(item.ID), _DBPath, null);
-                            //Basic.Wait();
-
-                            //foreach (var Tempitem in Basic.Result)
-                            //{
-                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                            //}
-
-                            //var note = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C4_GetCaseNotes", Convert.ToInt32(item.ID), _DBPath, null);
-                            //note.Wait();
-                            //foreach (var Tempitem in note.Result)
-                            //{
-                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                            //}
-
-                            //var Activity = DBHelper.GetAppTypeInfoListByNameIdScreenInfo(CasesInstance, "C10_GetCaseActivity", Convert.ToInt32(item.ID), _DBPath, null);
-                            //Activity.Wait();
-                            //foreach (var Tempitem in Activity.Result)
-                            //{
-                            //    DBHelper.DeleteAppTypeInfoListById(Tempitem, _DBPath).Wait();
-                            //}
-                        }
-                    }
-                    #endregion
-
-                    CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
-                }
-                else
-                {
-                    DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
-                DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
-            }
-            return ResponseContent;
-        }
-        #endregion
 
         #region Get AssocCascade Info By CaseType
         public static async Task<List<AssocCascadeInfo>> GetAssocCascadeInfo(bool _IsOnline, string _caseTypeID, int _InstanceUserAssocId, string _DBPath)
@@ -3367,7 +3359,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         public static async Task<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>> GetTypeValuesByAssocCaseType(bool _IsOnline, object _Body_value, int _InstanceUserAssocId, string _DBPath, string _CaseTypeId)
         {
             List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue> lstResult = new List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>();
-            int id = CommonConstants.GetResultBySytemcode(ConstantsSync.CasesInstance, "C4_GetTypeValuesByAssocCaseType", _DBPath);
+            //int id = CommonConstants.GetResultBySytemcode(ConstantsSync.CasesInstance, "C4_GetTypeValuesByAssocCaseType", _DBPath);
 
             try
             {
@@ -3381,7 +3373,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         lstResult = JsonConvert.DeserializeObject<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>>(temp.ToString());
                         if (lstResult.Count > 0)
                         {
-                            var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C4_GetTypeValuesByAssocCaseType", _InstanceUserAssocId, _DBPath, id, _CaseTypeId, "M");
+                            //  var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C4_GetTypeValuesByAssocCaseType", _InstanceUserAssocId, _DBPath, id, _CaseTypeId, "M");
                         }
                     }
                 }
@@ -3572,7 +3564,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             var tempid = DBHelper.GetAppTypeInfoListByCatIdSyscodeID(ConstantsSync.CasesInstance, Convert.ToInt32(_CasetypeId), 0, _DBPath, "C8_GetCaseBasicInfo", Convert.ToInt32(_CaseID));
             tempid.Wait();
             int? id = tempid.Result?.FirstOrDefault()?.APP_TYPE_INFO_ID;
-            int Masterid = CommonConstants.GetResultBySytemcodeId(CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(_CasetypeId), _DBPath);
+            //int Masterid = CommonConstants.GetResultBySytemcodeId(CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(_CasetypeId), _DBPath);
             try
             {
 
@@ -3620,7 +3612,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             {
                                 lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
 
                                 var obj = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
@@ -3977,6 +3969,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             lstResult = JsonConvert.DeserializeObject<List<GetCaseNotesResponse.NoteData>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                         }
                     }
+
+                    if (ShowOnTop.ToString().ToLower() == "y")
+                    {
+                        lstResult = lstResult.OrderBy(v => v.CaseNoteID).ToList();
+                    }
+
+
                     Task<List<AppTypeInfoList>> offlineRecord = DBHelper.GetAppTypeInfoListByIdTransTypeSyscode_list(CasesInstance, int.Parse(_CaseTypeId), int.Parse(_CaseId), _DBPath, "C4_AddNotes", "T", null);
                     offlineRecord.Wait();
                     if (offlineRecord?.Result?.Count > 0)

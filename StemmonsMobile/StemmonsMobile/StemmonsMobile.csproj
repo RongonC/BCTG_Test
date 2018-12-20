@@ -59,6 +59,7 @@
     <Compile Include="LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Group_Caselist.cs" />
     <Compile Include="Models\Group_CaseType.cs" />
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ApplicationList.cs" />

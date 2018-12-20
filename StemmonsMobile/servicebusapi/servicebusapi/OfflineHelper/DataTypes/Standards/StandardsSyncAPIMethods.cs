@@ -49,31 +49,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
 
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
-
-                        #region Delete Data Before Master Sync
-                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.StandardInstance, "I1_I2_AllStandardData", _DBPath);
-                        CaseDate.Wait();
-                        if (CaseDate.Result.Count > 0)
+                        Task.Run(() =>
                         {
-                            var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                            #region Delete Data Before Master Sync
+                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.StandardInstance, "I1_I2_AllStandardData", _DBPath);
+                            CaseDate.Wait();
+                            if (CaseDate.Result.Count > 0)
+                            {
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                            CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MultiId);
-
-                            //foreach (var item in CaseDate.Result)
-                            //{
-                            //    DBHelper.DeleteAppTypeInfoListById(item, _DBPath).Wait();
-
-                            //    var EDS = DBHelper.GetEDSResultListwithAPP_TYPE_INFO_ID(item.APP_TYPE_INFO_ID, _DBPath);
-                            //    EDS.Wait();
-                            //    foreach (var itm in EDS.Result)
-                            //    {
-                            //        DBHelper.DeleteEDSResultListById(itm, _DBPath).Wait();
-                            //    }
-                            //}
-
-                        }
-                        #endregion
-                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                                CasesSyncAPIMethods.DeleteRecordBeforeSync(_DBPath, MultiId);
+                            }
+                            #endregion
+                            CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                        });
                     }
                 }
                 else
@@ -146,7 +135,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
             {
                 if (_IsOnline)
                 {
-                    Result = StandardsAPIMethods.BookView(TypeId.ToString(), username, "Y"); ;
+                    Result = StandardsAPIMethods.BookView(TypeId.ToString(), username, "Y");
+                    ;
 
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
 

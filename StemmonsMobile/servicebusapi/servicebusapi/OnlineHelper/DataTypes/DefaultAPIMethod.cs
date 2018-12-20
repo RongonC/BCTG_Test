@@ -10,6 +10,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 {
     public class DefaultAPIMethod
     {
+        public static bool IsAddLog = false;
 
         #region Get User Info  
         public static JObject LoginAuthenticate(string UserName, string UserPassword)
@@ -38,7 +39,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
                 return null;
         }
         #endregion
-
 
         #region GetProfilePicture 
         public static JObject GetProfilePicture(string UserName)
@@ -173,7 +173,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
-
         #region HomeScreenCount 
         public static JObject HomeScreenCount(string username)
         {
@@ -201,9 +200,12 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
-        #region HomeScreenCount 
+        #region AddLog 
         public static JObject AddLog(string txt, string isSuccess, string appName, string CreatedBy, string createdDateTime)
         {
+            if (!IsAddLog)
+                return null;
+
             try
             {
                 MobileAPIMethods Mapi = new MobileAPIMethods();
@@ -239,6 +241,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             return null;
         }
         #endregion
+
         //#region AddLog 
         //public static JObject AddLog(string txt, string isSuccess, string appName, string CreatedBy, string createdDateTime)
         //{
@@ -289,7 +292,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         //    return null;
         //}
         //#endregion
-
         public static bool CheckInstance(string Instance)
         {
             return string.IsNullOrEmpty(MobileAPIMethods.RequestToken(Instance));

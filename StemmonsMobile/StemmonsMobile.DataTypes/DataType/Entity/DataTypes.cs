@@ -492,9 +492,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
         private string nEWEST_NOTE_ON_TOPField;
 
-
-
-
         private string iS_APPLY_ASSOC_TYPE_CALCULATION_FORMULAField;
 
         private string hELP_URLField;

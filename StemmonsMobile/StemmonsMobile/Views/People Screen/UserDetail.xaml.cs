@@ -41,7 +41,7 @@ namespace StemmonsMobile.Views.People_Screen
                 };
             else
                 ProfileImg.Source = ImageSource.FromFile("Assets/userIcon.png");
-           
+
         }
         protected async override void OnAppearing()
         {
@@ -73,15 +73,15 @@ namespace StemmonsMobile.Views.People_Screen
                         listdata.ItemsSource = lst;
                     }
 
-                    //labelDisplayName.Text = User_Details.DisplayName;
-                    //labelRealName.Text = User_Details.DisplayName;
-                    //labelDepartmentName.Text = User_Details.Department;
-                    //labelJobTitle.Text = User_Details.PrimaryJobTitle;
-                    //OfficePhone.Text = User_Details.OfficePhone;
-                   // CellPhone.Text = User_Details.CellPhone;
-                    //CityState.Text = User_Details.City + ", " + User_Details.State;
-                   // EmailAddress.Text = User_Details.Email;
-                    //lbl_supervisor.Text = User_Details.Supervisor;
+                    labelDisplayName.Text = User_Details.DisplayName;
+                    labelRealName.Text = User_Details.DisplayName;
+                    labelDepartmentName.Text = User_Details.Department;
+                    labelJobTitle.Text = User_Details.PrimaryJobTitle;
+                    OfficePhone.Text = User_Details.OfficePhone;
+                    CellPhone.Text = User_Details.CellPhone;
+                    CityState.Text = User_Details.CityState;
+                    EmailAddress.Text = User_Details.Email;
+                    lbl_supervisor.Text = User_Details.Supervisor;
                 }
                 else
                 {

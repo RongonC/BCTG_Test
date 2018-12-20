@@ -1,5 +1,6 @@
 ﻿using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
+using SQLite;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using System;
@@ -27,7 +28,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                 GetAllCaseType casedata = JsonConvert.DeserializeObject<GetAllCaseType>(Res);
                 AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
                 EDSResultList EDSResultList = new EDSResultList();
-                List<KeyValuePair<int, int>> dc = new List<KeyValuePair<int, int>>();
+                List<KeyValuePair<int, int?>> dc = new List<KeyValuePair<int, int?>>();
                 if (casedata != null)
                 {
 
@@ -56,100 +57,166 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     {
                     }
 
-                    foreach (var item in casedata.AppTypeInfo)
+                    List<AppTypeInfoList> _apptypeinfolist = casedata.AppTypeInfo.Select(i => new AppTypeInfoList()
                     {
-                        try
-                        {
-                            Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
-                            record.Wait();
+                        ASSOC_FIELD_INFO = i.ASSOC_FIELD_INFO,
+                        LAST_SYNC_DATETIME = DateTime.Now,
+                        SYSTEM = i.SYSTEM,
+                        TYPE_ID = i.TYPE_ID,
+                        ID = i.ID,
+                        TYPE_NAME = i.TYPE_NAME,
+                        CategoryId = i.CategoryId,
+                        CategoryName = i.CategoryName,
+                        TransactionType = "M",
+                        TYPE_SCREEN_INFO = i.TYPE_SCREEN_INFO,
+                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                        IS_ONLINE = true,
+                        TM_Username = i.TM_Username,
+                    }).ToList();
 
-                            var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && /*v.TYPE_NAME == item.TYPE_NAME &&*/ v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
+                    if (_apptypeinfolist.Count() > 0)
+                    {
+                        SQLiteAsyncConnection database = new SQLiteAsyncConnection(_DBPath);
+                        database.InsertAllAsync(_apptypeinfolist).Wait();
+                    }
+                    //117----- 335 ms
 
-                            if (ischeck == null)
-                            {
-                                _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
-                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
-                                _AppTypeInfoList.LAST_SYNC_DATETIME = DateTime.Now;
-                                _AppTypeInfoList.SYSTEM = item.SYSTEM;
-                                _AppTypeInfoList.TYPE_ID = item.TYPE_ID;
-                                _AppTypeInfoList.ID = item.ID;
-                                _AppTypeInfoList.TYPE_NAME = item.TYPE_NAME;
-                                _AppTypeInfoList.CategoryId = item.CategoryId;
-                                _AppTypeInfoList.CategoryName = item.CategoryName;
-                                _AppTypeInfoList.TransactionType = "M";
-                                _AppTypeInfoList.TYPE_SCREEN_INFO = item.TYPE_SCREEN_INFO;
-                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                _AppTypeInfoList.IS_ONLINE = true;
-                                _AppTypeInfoList.TM_Username = item.TM_Username;
+                    dc = _apptypeinfolist.AsEnumerable().Select(item => new KeyValuePair<int, int?>(item.APP_TYPE_INFO_ID, item.TYPE_ID)).ToList();
 
-                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                                inserted.Wait();
-                                dc.Add(new KeyValuePair<int, int>(inserted.Result, item.TYPE_ID));
-                            }
-                            else
-                            {
-                                _AppTypeInfoList.LAST_SYNC_DATETIME = ischeck.LAST_SYNC_DATETIME;
-                                _AppTypeInfoList.SYSTEM = ischeck.SYSTEM;
-                                _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
-                                _AppTypeInfoList.TYPE_ID = ischeck.TYPE_ID;
-                                _AppTypeInfoList.ID = ischeck.ID;
-                                _AppTypeInfoList.TYPE_NAME = ischeck.TYPE_NAME;
-                                _AppTypeInfoList.CategoryId = ischeck.CategoryId;
-                                _AppTypeInfoList.CategoryName = ischeck.CategoryName;
-                                _AppTypeInfoList.TransactionType = "M";
-                                _AppTypeInfoList.TYPE_SCREEN_INFO = ischeck.TYPE_SCREEN_INFO;
-                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                _AppTypeInfoList.IS_ONLINE = true;
-                                _AppTypeInfoList.TM_Username = item.TM_Username;
-                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
-                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                                inserted.Wait();
-                                dc.Add(new KeyValuePair<int, int>(ischeck.APP_TYPE_INFO_ID, item.TYPE_ID));
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            serror = ex.Message;
-                        }
+                    var Edslst = casedata.EDSResult.Select(i =>
+                    {
+                        i.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                        i.APP_TYPE_INFO_ID = dc.Where(v => v.Value == Int32.Parse(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault().Key;
+                        i.ASSOC_FIELD_ID = Convert.ToString(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
+                        return i;
+                    }).ToList();
+
+                    if (Edslst.Count() > 0)
+                    {
+                        SQLiteAsyncConnection data = new SQLiteAsyncConnection(_DBPath);
+                        data.InsertAllAsync(Edslst).Wait();
                     }
 
-                    foreach (var item in casedata.EDSResult)
-                    {
-                        try
-                        {
-                            if (dc.Count > 0)
-                            {
-                                var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
-                                Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
-                                record.Wait();
+                    //foreach (var item in casedata.EDSResult)
+                    //{
+                    //    try
+                    //    {
+                    //        var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
 
-                                var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+                    //        var assoc_field_id = Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
 
-                                if (ischeck == null)
-                                {
-                                    EDSResultList.EDS_RESULT_ID = 0;
-                                    EDSResultList.APP_TYPE_INFO_ID = kvp.Key;
-                                    EDSResultList.LAST_SYNC_DATETIME = DateTime.Now;
-                                    EDSResultList.ASSOC_FIELD_ID = Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
-                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
-                                    EDSResultList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
-                                    inserted.Wait();
-                                }
-                                else
-                                {
-                                    EDSResultList = ischeck;
-                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
-                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
-                                    inserted.Wait();
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            serror = ex.Message;
-                        }
-                    }
+                    //        EDSResultList.EDS_RESULT_ID = 0;
+                    //        EDSResultList.APP_TYPE_INFO_ID = kvp.Key;
+                    //        EDSResultList.LAST_SYNC_DATETIME = DateTime.Now;
+                    //        EDSResultList.ASSOC_FIELD_ID = assoc_field_id;
+                    //        EDSResultList.EDS_RESULT = item.EDS_RESULT;
+
+                    //        EDSResultList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //        Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
+                    //        inserted.Wait();
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        serror = ex.Message;
+                    //    }
+                    //}
+
+                    #region Old Logic
+                    //foreach (var item in casedata.AppTypeInfo)
+                    //{
+                    //    try
+                    //    {
+                    //        Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
+                    //        record.Wait();
+
+                    //        var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && /*v.TYPE_NAME == item.TYPE_NAME &&*/ v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
+
+                    //        if (ischeck == null)
+                    //        {
+                    //            _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                    //            _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
+                    //            _AppTypeInfoList.LAST_SYNC_DATETIME = DateTime.Now;
+                    //            _AppTypeInfoList.SYSTEM = item.SYSTEM;
+                    //            _AppTypeInfoList.TYPE_ID = item.TYPE_ID;
+                    //            _AppTypeInfoList.ID = item.ID;
+                    //            _AppTypeInfoList.TYPE_NAME = item.TYPE_NAME;
+                    //            _AppTypeInfoList.CategoryId = item.CategoryId;
+                    //            _AppTypeInfoList.CategoryName = item.CategoryName;
+                    //            _AppTypeInfoList.TransactionType = "M";
+                    //            _AppTypeInfoList.TYPE_SCREEN_INFO = item.TYPE_SCREEN_INFO;
+                    //            _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //            _AppTypeInfoList.IS_ONLINE = true;
+                    //            _AppTypeInfoList.TM_Username = item.TM_Username;
+
+                    //            Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                    //            inserted.Wait();
+                    //            dc.Add(new KeyValuePair<int, int>(inserted.Result, item.TYPE_ID));
+                    //        }
+                    //        else
+                    //        {
+                    //            _AppTypeInfoList.LAST_SYNC_DATETIME = ischeck.LAST_SYNC_DATETIME;
+                    //            _AppTypeInfoList.SYSTEM = ischeck.SYSTEM;
+                    //            _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
+                    //            _AppTypeInfoList.TYPE_ID = ischeck.TYPE_ID;
+                    //            _AppTypeInfoList.ID = ischeck.ID;
+                    //            _AppTypeInfoList.TYPE_NAME = ischeck.TYPE_NAME;
+                    //            _AppTypeInfoList.CategoryId = ischeck.CategoryId;
+                    //            _AppTypeInfoList.CategoryName = ischeck.CategoryName;
+                    //            _AppTypeInfoList.TransactionType = "M";
+                    //            _AppTypeInfoList.TYPE_SCREEN_INFO = ischeck.TYPE_SCREEN_INFO;
+                    //            _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //            _AppTypeInfoList.IS_ONLINE = true;
+                    //            _AppTypeInfoList.TM_Username = item.TM_Username;
+                    //            _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
+                    //            Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                    //            inserted.Wait();
+                    //            dc.Add(new KeyValuePair<int, int>(ischeck.APP_TYPE_INFO_ID, item.TYPE_ID));
+                    //        }
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        serror = ex.Message;
+                    //    }
+                    //}
+
+                    //foreach (var item in casedata.EDSResult)
+                    //{
+                    //    try
+                    //    {
+                    //        if (dc.Count > 0)
+                    //        {
+                    //            var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
+                    //            Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
+                    //            record.Wait();
+
+                    //            var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+
+                    //            if (ischeck == null)
+                    //            {
+                    //                EDSResultList.EDS_RESULT_ID = 0;
+                    //                EDSResultList.APP_TYPE_INFO_ID = kvp.Key;
+                    //                EDSResultList.LAST_SYNC_DATETIME = DateTime.Now;
+                    //                EDSResultList.ASSOC_FIELD_ID = Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
+                    //                EDSResultList.EDS_RESULT = item.EDS_RESULT;
+                    //                EDSResultList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //                Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
+                    //                inserted.Wait();
+                    //            }
+                    //            else
+                    //            {
+                    //                EDSResultList = ischeck;
+                    //                EDSResultList.EDS_RESULT = item.EDS_RESULT;
+                    //                Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
+                    //                inserted.Wait();
+                    //            }
+                    //        }
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        serror = ex.Message;
+                    //    }
+                    //} 
+                    #endregion
                 }
                 sp.Stop();
                 Debug.WriteLine("Sync Count => " + (cnt++) + Environment.NewLine + "Time taken => " + sp.ElapsedMilliseconds);
@@ -173,7 +240,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                 AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
                 EDSResultList EDSResultList = new EDSResultList();
                 External_DSCache X_DSCacheList = new External_DSCache();
-                List<KeyValuePair<int, int>> dc = new List<KeyValuePair<int, int>>();
+                List<KeyValuePair<int, int?>> dc = new List<KeyValuePair<int, int?>>();
                 if (Jobj != null)
                 {
                     try
@@ -214,110 +281,51 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                     {
                     }
 
-                    foreach (var item in Jobj.AppTypeInfo)
+                    List<AppTypeInfoList> _apptypeinfolist = Jobj.AppTypeInfo.Select(i => new AppTypeInfoList()
                     {
-                        try
-                        {
-                            Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
-                            record.Wait();
+                        ASSOC_FIELD_INFO = i.ASSOC_FIELD_INFO,
+                        LAST_SYNC_DATETIME = DateTime.Now,
+                        SYSTEM = i.SYSTEM,
+                        TYPE_ID = i.TYPE_ID,
+                        ID = i.ID,
+                        TYPE_NAME = i.TYPE_NAME,
+                        CategoryId = i.CategoryId,
+                        CategoryName = i.CategoryName,
+                        TransactionType = "M",
+                        TYPE_SCREEN_INFO = i.TYPE_SCREEN_INFO,
+                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                        IS_ONLINE = true,
+                        TM_Username = i.TM_Username,
+                    }).ToList();
 
-                            var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.TYPE_ID == item.TYPE_ID && v.ID == item.ID && /*v.TYPE_NAME == item.TYPE_NAME &&*/ v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == item.TYPE_SCREEN_INFO).FirstOrDefault();
+                    SQLiteAsyncConnection database = new SQLiteAsyncConnection(_DBPath);
+                    database.InsertAllAsync(_apptypeinfolist).Wait();
+                    //117----- 335 ms
 
-                            if (ischeck == null)
-                            {
-                                _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
-                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
-                                _AppTypeInfoList.LAST_SYNC_DATETIME = DateTime.Now;
-                                _AppTypeInfoList.SYSTEM = item.SYSTEM;
-                                _AppTypeInfoList.TYPE_ID = item.TYPE_ID;
-                                _AppTypeInfoList.ID = item.ID;
-                                _AppTypeInfoList.TYPE_NAME = item.TYPE_NAME;
-                                _AppTypeInfoList.CategoryId = item.CategoryId;
-                                _AppTypeInfoList.CategoryName = item.CategoryName;
-                                _AppTypeInfoList.TransactionType = "M";
-                                _AppTypeInfoList.TYPE_SCREEN_INFO = item.TYPE_SCREEN_INFO;
-                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                _AppTypeInfoList.IS_ONLINE = true;
-                                _AppTypeInfoList.TM_Username = item.TM_Username;
+                    dc = _apptypeinfolist.AsEnumerable().Select(item => new KeyValuePair<int, int?>(item.APP_TYPE_INFO_ID, item.TYPE_ID)).ToList();
 
-                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                                inserted.Wait();
-                                dc.Add(new KeyValuePair<int, int>(inserted.Result, item.TYPE_ID));
-                            }
-                            else
-                            {
-                                _AppTypeInfoList.LAST_SYNC_DATETIME = ischeck.LAST_SYNC_DATETIME;
-                                _AppTypeInfoList.SYSTEM = ischeck.SYSTEM;
-                                _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
-                                _AppTypeInfoList.TYPE_ID = ischeck.TYPE_ID;
-                                _AppTypeInfoList.ID = ischeck.ID;
-                                _AppTypeInfoList.TYPE_NAME = ischeck.TYPE_NAME;
-                                _AppTypeInfoList.CategoryId = ischeck.CategoryId;
-                                _AppTypeInfoList.CategoryName = ischeck.CategoryName;
-                                _AppTypeInfoList.TransactionType = "M";
-                                _AppTypeInfoList.TYPE_SCREEN_INFO = ischeck.TYPE_SCREEN_INFO;
-                                _AppTypeInfoList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                _AppTypeInfoList.IS_ONLINE = true;
-                                _AppTypeInfoList.TM_Username = item.TM_Username;
-                                _AppTypeInfoList.ASSOC_FIELD_INFO = item.ASSOC_FIELD_INFO;
-                                Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                                inserted.Wait();
-                                dc.Add(new KeyValuePair<int, int>(ischeck.APP_TYPE_INFO_ID, item.TYPE_ID));
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            serror = ex.Message;
-                        }
-                    }
-
-                    foreach (var item in Jobj.EDSResult)
+                    List<EDSResultList> Edslst = Jobj.EDSResult.Select(i => new EDSResultList()
                     {
-                        try
-                        {
-                            if (dc.Count > 0)
-                            {
-                                var kvp = dc.Where(v => v.Value == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault();
-                                Task<List<EDSResultList>> record = DBHelper.GetEDSResultList(_DBPath);
-                                record.Wait();
+                        APP_TYPE_INFO_ID = dc.Where(v => v.Value == Int32.Parse(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault().Key,
+                        EDS_RESULT_ID = 0,
+                        LAST_SYNC_DATETIME = DateTime.Now,
+                        ASSOC_FIELD_ID = Convert.ToInt32(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]),
+                        EDS_RESULT = i.EDS_RESULT,
+                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                    }).ToList();
 
-                                var ischeck = record.Result.Where(v => v.APP_TYPE_INFO_ID == kvp.Key && v.ASSOC_FIELD_ID == Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]) && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+                    SQLiteAsyncConnection data = new SQLiteAsyncConnection(_DBPath);
+                    data.InsertAllAsync(Edslst).Wait();
 
-                                if (ischeck == null)
-                                {
-                                    EDSResultList.EDS_RESULT_ID = 0;
-                                    EDSResultList.APP_TYPE_INFO_ID = kvp.Key;
-                                    EDSResultList.LAST_SYNC_DATETIME = DateTime.Now;
-                                    EDSResultList.ASSOC_FIELD_ID = Int32.Parse(item.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
-                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
-                                    EDSResultList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
-                                    inserted.Wait();
-                                }
-                                else
-                                {
-                                    EDSResultList = ischeck;
-                                    EDSResultList.EDS_RESULT = item.EDS_RESULT;
-                                    Task<int> inserted = DBHelper.SaveEDSResult(EDSResultList, _DBPath);
-                                    inserted.Wait();
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            serror = ex.Message;
-                        }
-                    }
+                    // 10960ms - 715
 
                     foreach (var item in Jobj.XDSCache)
                     {
+                        var ischeck = DBHelper.GetXDSDetails(item.SYSTEM, item.EXT_DATASOURCE_ID, _DBPath);
+                        ischeck.Wait();
+                        //var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.EXT_DATASOURCE_ID == item.EXT_DATASOURCE_ID && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
-                        Task<List<External_DSCache>> record = DBHelper.GetAllXDSDetails(_DBPath);
-                        record.Wait();
-
-                        var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.EXT_DATASOURCE_ID == item.EXT_DATASOURCE_ID && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
-
-                        if (ischeck == null)
+                        if (ischeck.Result == null)
                         {
                             X_DSCacheList.EDS_CACHE_ID = 0;
                             X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
@@ -331,7 +339,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                         }
                         else
                         {
-                            X_DSCacheList.EDS_CACHE_ID = ischeck.EDS_CACHE_ID;
+                            X_DSCacheList.EDS_CACHE_ID = ischeck.Result.EDS_CACHE_ID;
                             X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
                             X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
                             X_DSCacheList.SYSTEM = item.SYSTEM;
@@ -342,6 +350,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                             inserted.Wait();
                         }
                     }
+                    //5581
+                    //4837
                 }
                 sp.Stop();
                 Debug.WriteLine("Sync Count => " + (cnt++) + Environment.NewLine + "Time taken => " + sp.ElapsedMilliseconds);
