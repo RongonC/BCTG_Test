@@ -6,6 +6,7 @@ using StemmonsMobile.Views.Cases;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -172,6 +173,31 @@ namespace StemmonsMobile
                 if (sMode == "C")
                 {
                     this.Navigation.PushAsync(new ViewCasePage(AssignCAseID.ToString(), sCaseTypeId, ""));
+
+                    //--Start ArpanB
+
+                    var existingPages = this.Navigation.NavigationStack.ToList();
+                    // Get the page before Create Case
+                    //              or
+                    // Get the Navigation Parent Page
+                    var ph = existingPages[existingPages.Count - 3];
+
+
+                    if (ph.GetType().Name.ToString().ToLower() == "newcase")
+                    {
+                        Navigation.RemovePage(ph);// remove NewCase() Page from Queue
+
+                        existingPages = this.Navigation.NavigationStack.ToList();
+                        var Rph = existingPages[existingPages.Count - 2];
+                        this.Navigation.RemovePage(Rph);//remove only assign case Page
+                    }
+                    else
+                    {
+                        this.Navigation.PopAsync();
+                    }
+
+                    //--End ArpanB
+
                 }
                 else
                     this.Navigation.PopAsync();

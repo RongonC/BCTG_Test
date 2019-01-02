@@ -17,59 +17,59 @@ namespace StemmonsMobile.Views.Setting
         public Settings()
         {
             InitializeComponent();
-            List<Settingsdata> lst = new List<Settingsdata>
+            List<Settingsdata> lst1 = new List<Settingsdata>
             {
-                new Settingsdata(0,"Enable Background-In App sync","","Assets/switchon.png"),
-                new Settingsdata(1,"Sync All Entity Data","Assets/alertIcon.png","Assets/switchon.png"),
-                new Settingsdata(2,"Entity Type to Sync All Data","","Assets/dropdowniconClose.png"),
-                new Settingsdata(3,"Case Type to Sync All Data","","Assets/dropdowniconClose.png"),
-                new Settingsdata(4,"Quest Form to Sync all Data","","Assets/dropdowniconClose.png"),
-                new Settingsdata(5,"Sync Images in Original Size","Assets/alertIcon.png","Assets/switchoff.png"),
-
+                new Settingsdata(0,"Enable Background-In App sync","Assets/alertIcon.png","Assets/switchon.png", false, true, false, false),
+                new Settingsdata(1,"Sync All Entity Data","Assets/alertIcon.png", "Assets/switchon.png", false, true, true, false),
+                new Settingsdata(2,"Entity Type to Sync All Data","Assets/alertIcon.png","Assets/dropdowniconClose.png", true, false,false, false),
+                new Settingsdata(3,"Case Type to Sync All Data","Assets/alertIcon.png","Assets/dropdowniconClose.png", true, false, false, false),
+                new Settingsdata(4,"Quest Form to Sync all Data","Assets/alertIcon.png","Assets/dropdowniconClose.png", true, false,false, false),
+                new Settingsdata(5,"Sync Images in Original Size","Assets/alertIcon.png", "Assets/switchoff.png", false, true, true, true),
             };
 
-            listdata.ItemsSource = lst;
+            list1.ItemsSource = lst1;
+
         }
 
-        void Actionbtn_Clicked(object sender, System.EventArgs e)
-        {
-            var button = sender as Button;
-            var applicationtype = button.BindingContext as Settingsdata;
+        //void Actionbtn_Clicked(object sender, System.EventArgs e)
+        //{
+        //    var button = sender as Button;
+        //    var applicationtype = button.BindingContext as Settingsdata;
 
-            if (applicationtype.settingName == "Enable Background-In App sync")
-            {
-                if (button.Image == "Assets/switchoff.png")
-                {
-                    button.Image = "Assets/switchon.png";
-                }
-                else
-                {
-                    button.Image = "Assets/switchoff.png";
-                }
-            }
-            else if (applicationtype.settingName == "Sync All Entity Data")
-            {
-                if (button.Image == "Assets/switchoff.png")
-                {
-                    button.Image = "Assets/switchon.png";
-                }
-                else
-                {
-                    button.Image = "Assets/switchoff.png";
-                }
-            }
-            else if (applicationtype.settingName == "Sync Images in Original Size")
-            {
-                if (button.Image == "Assets/switchoff.png")
-                {
-                    button.Image = "Assets/switchon.png";
-                }
-                else
-                {
-                    button.Image = "Assets/switchoff.png";
-                }
-            }
-        }
+        //    if (applicationtype.settingName == "Enable Background-In App sync")
+        //    {
+        //        if (button.Image == "Assets/switchoff.png")
+        //        {
+        //            button.Image = "Assets/switchon.png";
+        //        }
+        //        else
+        //        {
+        //            button.Image = "Assets/switchoff.png";
+        //        }
+        //    }
+        //    else if (applicationtype.settingName == "Sync All Entity Data")
+        //    {
+        //        if (button.Image == "Assets/switchoff.png")
+        //        {
+        //            button.Image = "Assets/switchon.png";
+        //        }
+        //        else
+        //        {
+        //            button.Image = "Assets/switchoff.png";
+        //        }
+        //    }
+        //    else if (applicationtype.settingName == "Sync Images in Original Size")
+        //    {
+        //        if (button.Image == "Assets/switchoff.png")
+        //        {
+        //            button.Image = "Assets/switchon.png";
+        //        }
+        //        else
+        //        {
+        //            button.Image = "Assets/switchoff.png";
+        //        }
+        //    }
+        //}
 
         private void listdata_ItemTapped(object sender, ItemTappedEventArgs e)
         {
@@ -91,6 +91,7 @@ namespace StemmonsMobile.Views.Setting
                         }
                         catch (Exception)
                         {
+
                         }
 
                         break;
@@ -122,6 +123,7 @@ namespace StemmonsMobile.Views.Setting
                     default:
                         break;
                 }
+
                 listItem.SelectedItem = null;
             }
         }
@@ -136,13 +138,21 @@ namespace StemmonsMobile.Views.Setting
         public string settingName { get; set; }
         public string alertImage { get; set; }
         public string actionImage { get; set; }
+        public bool BtnAction { get; set; }
+        public bool SwitchAction { get; set; }
+        public bool AlertAction { get; set; }
+        public bool ToggleAction { get; set; }
 
-        public Settingsdata(int actionId, string sname, string alertImg, string actionImg)
+        public Settingsdata(int actionId, string sname, string alertImg, string actionImg, bool btnAction, bool switchAction, bool alertAction, bool toggleAction)
         {
             ActionId = actionId;
             settingName = sname;
             alertImage = alertImg;
             actionImage = actionImg;
+            BtnAction = btnAction;
+            SwitchAction = switchAction;
+            AlertAction = alertAction;
+            ToggleAction = toggleAction;
         }
     }
 }

@@ -77,7 +77,6 @@ namespace StemmonsMobile.Views.Cases
             ID = 0
         };
 
-        //public static ObservableCollection<string> Exditems { get; set; }
         List<MetaData> metadatacollection = new List<MetaData>();
 
         public ViewCasePage(string CASEID, string CASETYPEID, string CASETITLE, string ToMe = "")
@@ -158,9 +157,6 @@ namespace StemmonsMobile.Views.Cases
         }
         public async Task PageAppearCall(bool isExtenderCalls)
         {
-            //if (!isExtenderCalls)
-            //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
             if (!isExtenderCalls)
             {
                 if (!string.IsNullOrEmpty(strTome))
@@ -209,7 +205,6 @@ namespace StemmonsMobile.Views.Cases
 
             DesignCaseForm_withvalue();
 
-            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         string str_CaseFooter = string.Empty;
@@ -219,8 +214,6 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                // Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
                 await Task.Run(() =>
                 {
                     try
@@ -368,25 +361,12 @@ namespace StemmonsMobile.Views.Cases
 
                     if (AssignControlsmetadata.Count > 0)
                     {
-                        //if (_Casedata != null)
-                        //{
                         metadatacollection = _Casedata?.MetaDataCollection;
-
-                        //    foreach (var iitem in metadatacollection)
-                        //    {
-                        //        var exdvalue = AssignControlsmetadata.Where(v => v.ASSOC_TYPE_ID == iitem.AssociatedTypeID).Select(a => a.ExternalDataSourceEntityTypeID);
-                        //        if (exdvalue.FirstOrDefault() != null)
-                        //        {
-                        //            if (!Onlineflag)
-                        //                metadatacollection.Where(v => v.AssociatedTypeID == iitem.AssociatedTypeID).Select(s => { s.ExternalDatasourceObjectID = exdvalue.FirstOrDefault(); return s; }).ToList();
-                        //        }
-                        //    }
-                        //}
 
                         spi_MobileApp_GetTypesByCaseTypeResult itemTypes = new spi_MobileApp_GetTypesByCaseTypeResult();
 
                         #region Draw Control on Layout
-
+                        AssignControlsmetadata = AssignControlsmetadata.OrderBy(m => m.LIST_MOBILE_PRIORITY_VALUE).ToList();
                         for (int i = 0; i < AssignControlsmetadata.Count; i++)
                         {
                             spi_MobileApp_GetTypesByCaseTypeResult ControlsItem = AssignControlsmetadata[i];
@@ -480,10 +460,6 @@ namespace StemmonsMobile.Views.Cases
 
                                                 pk.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
 
-
-
-                                                pk_button.StyleId = ControlsItem.ASSOC_FIELD_TYPE.ToLower() + "_" + ControlsItem.ASSOC_TYPE_ID + "|" + ControlsItem.EXTERNAL_DATASOURCE_ID;
-
                                                 try
                                                 {
                                                     //    pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
@@ -549,10 +525,6 @@ namespace StemmonsMobile.Views.Cases
                                                 catch (Exception)
                                                 {
                                                 }
-
-
-
-
 
                                                 RightLayout.BackgroundColor = Color.Gray;
                                                 RightLayout.Children.Add(pk_button);
@@ -1500,11 +1472,7 @@ namespace StemmonsMobile.Views.Cases
                 }
                 else
                 {
-                    //var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                    //if (assocChild.Count <= 1)
-                    {
-                        FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
-                    }
+                    FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
 
                     if (lstexternaldatasource != null)
                         Exditemslst = lstexternaldatasource.Select(v => v.NAME);
@@ -1552,37 +1520,36 @@ namespace StemmonsMobile.Views.Cases
                 popupLT.Children.Add(new StackLayout
                 {
                     Children =
+                    {
+                        new StackLayout
+                        {
+                            VerticalOptions =LayoutOptions.FillAndExpand,
+                            HorizontalOptions =LayoutOptions.FillAndExpand,
+                            Children =
                             {
-                                new StackLayout
-                                {
-                                     VerticalOptions =LayoutOptions.FillAndExpand,
-                                      HorizontalOptions =LayoutOptions.FillAndExpand,
-                                    Children=
-                                    {
-                                        ext_search
-                                    }
-                                },
-                                new StackLayout
-                                {
-                                    VerticalOptions =LayoutOptions.Center,
-                                    HorizontalOptions =LayoutOptions.Center,
-                                    Children =
-                                    {
-                                        lst_itemlookup
-                                    }
-                                },
-
-                                new StackLayout
-                                {
-                                    HorizontalOptions =LayoutOptions.EndAndExpand,
-                                    VerticalOptions =LayoutOptions.Center,
-                                    Margin = new Thickness(0,0,1,10),
-                                    Children =
-                                    {
-                                        btn_cancel
-                                    }
-                                }
+                                ext_search
                             }
+                        },
+                        new StackLayout
+                        {
+                            VerticalOptions =LayoutOptions.Center,
+                            HorizontalOptions =LayoutOptions.Center,
+                            Children =
+                            {
+                                lst_itemlookup
+                            }
+                        },
+                        new StackLayout
+                        {
+                            HorizontalOptions =LayoutOptions.EndAndExpand,
+                            VerticalOptions =LayoutOptions.Center,
+                            Margin = new Thickness(0,0,1,10),
+                            Children =
+                            {
+                                btn_cancel
+                            }
+                        }
+                    }
                 });
                 Stack_Popup.IsVisible = true;
                 masterGrid.IsVisible = false;
@@ -1916,12 +1883,6 @@ namespace StemmonsMobile.Views.Cases
             catch (Exception ex)
             {
             }
-            //if (CasesnotesGroups.Count <= 0)
-            //{
-            //    gridCasesnotes.HeightRequest = 0;
-            //}
-            //else
-            //    gridCasesnotes.HeightRequest = 700;
         }
 
         private void Date_pick_Unfocused(object sender, FocusEventArgs e)
@@ -1971,30 +1932,6 @@ namespace StemmonsMobile.Views.Cases
             catch (Exception ex)
             {
 
-            }
-
-            try
-            {
-
-                //var currText = ((Entry)sender).Text;
-
-                //string oldtext = currText;
-                //if (!string.IsNullOrEmpty(currText) && currText.Length >= 8 && currText.Length <= 10)
-                //{
-                //    oldtext = Convert.ToInt32(currText).ToString("##/##/####");
-                //    ((Entry)sender).Text = oldtext;
-                //}
-                //else if (currText.Length > 10)
-                //{
-                //    //oldtext = Convert.ToDecimal(currText).ToString("##/##/####");
-                //    ((Entry)sender).Text = e.OldTextValue;
-                //}
-                //DateTime d = new DateTime();
-                //DateTime.TryParse(((Entry)sender).Text, out d);
-                ////{01/01/01 12:00:00 AM}
-            }
-            catch (Exception c)
-            {
             }
         }
 
@@ -2576,10 +2513,6 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                //var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
-                //var AssocType = json.GetValue("ResponseContent");
-                //AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
-
                 string fieldName = string.Empty;
                 var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_PARENT == assocTypeId).ToList();
 
@@ -2588,13 +2521,8 @@ namespace StemmonsMobile.Views.Cases
                     var Bcontrol = FindPickerControls(child._CASE_ASSOC_TYPE_ID_CHILD) as Button;
                     if (Bcontrol != null)
                     {
-                        //int? externalDatasourceId = null;
 
                         var itemType = ItemTypes.Where(t => t.AssocTypeID == child._CASE_ASSOC_TYPE_ID_CHILD).FirstOrDefault();
-
-                        // get extenal datasource query
-                        //if (itemType != null)
-                        //    externalDatasourceId = itemType.ExternalDataSourceID;
 
                         if (itemType.ExternalDataSourceID != null && itemType.ExternalDataSourceID > 0 && CrossConnectivity.Current.IsConnected)
                         {
@@ -2603,26 +2531,20 @@ namespace StemmonsMobile.Views.Cases
                                 string query = string.Empty;
                                 string conn = string.Empty;
                                 string ParentExternalDatasourceName = string.Empty;
-                                // await Task.Run(() =>
-                                //{
                                 var externalDatasource = CasesSyncAPIMethods.GetExternalDataSourceItemsById(CrossConnectivity.Current.IsConnected, Convert.ToString(itemType.ExternalDataSourceID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
                                 query = externalDatasource.Result?.FirstOrDefault()?.Query;
                                 conn = externalDatasource.Result?.FirstOrDefault()?.ConnectionString;
                                 ParentExternalDatasourceName = externalDatasource?.Result?.FirstOrDefault()?.Name;
-                                // });
 
                                 string filterQueryOrg = "";
 
-                                //await Task.Run(() =>
-                                //{
                                 var Result1 = CasesSyncAPIMethods.GetConnectionString(CrossConnectivity.Current.IsConnected, itemType.ExternalDataSourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Casetypeid);
 
                                 if (!string.IsNullOrEmpty(Result1?.ToString()) && Result1.ToString() != "[]")
                                 {
                                     filterQueryOrg = Result1.Result?.FirstOrDefault()?._FILTER_QUERY;
                                 }
-                                //});
 
                                 var assocParents = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == child._CASE_ASSOC_TYPE_ID_CHILD);
                                 int parentCount = 1;
@@ -3031,13 +2953,6 @@ namespace StemmonsMobile.Views.Cases
                     Value = v.Value
                 }).ToList();
 
-                //Dictionary<int, string> dctmetaDataValues = new Dictionary<int, string>();
-                //foreach (var item in dropDownValues)
-                //{
-                //    dctmetaDataValues.Add(item.Key, Convert.ToString(item.Value));
-
-                //}
-
                 createcase.caseTitle = Casetitle;
                 createcase.currentUser = Functions.UserName;
                 createcase.caseType = Convert.ToInt32(Casetypeid);
@@ -3068,7 +2983,6 @@ namespace StemmonsMobile.Views.Cases
 
                         ReloadNotesArea();
                         SetBottomBarDetails();
-                        //OnAppearing();
                         Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
                         break;
@@ -3401,19 +3315,15 @@ namespace StemmonsMobile.Views.Cases
                     bool ISadd = false;
                     string selectedId = string.Empty;
                     string selectedname = string.Empty;
-
-                    foreach (var item in sControls.Where(v => v.AssocFieldType != 'E' || v.AssocFieldType != 'O'))
+                    var cntr = sControls.Where(v => v.AssocFieldType != 'E' || v.AssocFieldType != 'O');
+                    foreach (var item in cntr)
                     {
-
-
                         foreach (StackLayout infofield in CasesView_ControlStack.Children)
                         {
                             foreach (StackLayout sitem in infofield.Children)
                             {
-
                                 foreach (var subitem in sitem.Children)
                                 {
-
                                     Type ty = subitem.GetType();
                                     if (ty.Name.ToLower() != "stacklayout")
                                     {
@@ -3531,7 +3441,6 @@ namespace StemmonsMobile.Views.Cases
                     }
                     else if (x.Name == "DatePicker")
                     {
-
                         CalTxtbox = SetCalControls(sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId?.Split('_')[1]?.Split('|')[0])).ToList(), sControls.Where(v => v.AssocFieldType == 'C').ToList());
                     }
 
@@ -3561,7 +3470,6 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 foreach (StackLayout sitem in infofield.Children)
                                 {
-
                                     foreach (var subitem in sitem.Children)
                                     {
                                         var xy = subitem;
@@ -3605,10 +3513,8 @@ namespace StemmonsMobile.Views.Cases
                         {
                             foreach (StackLayout sitem in infofield.Children)
                             {
-
                                 foreach (var subitem in sitem.Children)
                                 {
-
                                     Type ty = subitem.GetType();
                                     if (ty.Name.ToLower() != "stacklayout")
                                     {
@@ -3650,7 +3556,6 @@ namespace StemmonsMobile.Views.Cases
                                                         assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.ID);
                                                         assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = (picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource)?.NAME;
                                                     }
-
                                                 }
                                             }
                                         }
@@ -3662,10 +3567,8 @@ namespace StemmonsMobile.Views.Cases
                                                 cntrl = subitem;
                                                 List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(CurrentStyleId))?.FirstOrDefault().Value;
 
-
                                                 try
                                                 {
-                                                    //selectedValue = picker.SelectedItem as GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue;
                                                     selectedId = lst == null ? Convert.ToString(metadatacollection.Where(v => v.AssociatedTypeID == Convert.ToInt32(CurrentStyleId)).FirstOrDefault().ExternalDatasourceObjectID) : Convert.ToString(lst?.FirstOrDefault().ID);
                                                     selectedname = Convert.ToString(btn.Text);
 
@@ -3838,7 +3741,6 @@ namespace StemmonsMobile.Views.Cases
                     sb.Append("Offline Mode");
                 else
                     sb.Append("Online Mode");
-                //   _Casedata.CaseOwner
 
                 string[] buttons;
 
@@ -3861,8 +3763,6 @@ namespace StemmonsMobile.Views.Cases
                 {
                     buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
-
-
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
@@ -3887,10 +3787,8 @@ namespace StemmonsMobile.Views.Cases
                     #region  Dynamic Control Fill 
                     foreach (StackLayout infofield in CasesView_ControlStack.Children)
                     {
-
                         foreach (StackLayout item in infofield.Children)
                         {
-
                             foreach (var subitem in item.Children)
                             {
                                 var xy = subitem;
@@ -3983,7 +3881,6 @@ namespace StemmonsMobile.Views.Cases
                                                     }
                                                     try
                                                     {
-
                                                         string isReq = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
                                                         string FiledName = AssignControlsmetadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
                                                         if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
@@ -3994,7 +3891,6 @@ namespace StemmonsMobile.Views.Cases
                                                         }
                                                         else
                                                         {
-
                                                             if (picker.StyleId.Split('_')[0].ToLower() == "o")
                                                             {
                                                                 var val = picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
@@ -4055,7 +3951,6 @@ namespace StemmonsMobile.Views.Cases
                                                 }
                                                 else
                                                 {
-
                                                     it.Name = btn.Text;
                                                     it.AssocDecodeID = Convert.ToInt32(tempassocdecodeid?.FirstOrDefault().ID);
                                                     dropDownValues.Add(Key, it);
@@ -4715,10 +4610,7 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 string[] buttons;
-                // if (Functions.Platformtype != "Android")
                 buttons = new string[] { "From Photo Gallery", "Camera" };
-                // else
-                //   buttons = new string[] { "From Photo Gallery" };
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
@@ -4747,98 +4639,95 @@ namespace StemmonsMobile.Views.Cases
                 if (App.Isonline)
                 {
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    // if (Device.RuntimePlatform != Device.Android)
+                    try
                     {
+                        await CrossMedia.Current.Initialize();
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                            return;
+                        }
+
+                        var file = await CrossMedia.Current.PickPhotoAsync();
+
+                        if (file == null)
+                        {
+                            return;
+                        }
+
+                        long size = file.Path.Length;
+                        byte[] fileBytes = null;
+                        var bytesStream = file.GetStream();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            bytesStream.CopyTo(memoryStream);
+                            fileBytes = memoryStream.ToArray();
+                        }
+                        size = fileBytes.Count();
+
+                        string File_Name = string.Empty;
+
                         try
                         {
-                            await CrossMedia.Current.Initialize();
-
-                            if (!CrossMedia.Current.IsPickPhotoSupported)
+                            if (Device.RuntimePlatform == Device.UWP)
                             {
-                                DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
-                                return;
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
                             }
+                            else
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                        }
+                        catch (Exception)
+                        {
+                        }
 
-                            var file = await CrossMedia.Current.PickPhotoAsync();
+                        string FileId = string.Empty;
+                        await Task.Run(() =>
+                        {
+                            var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
 
-                            if (file == null)
-                            {
-                                return;
-                            }
+                            FileId = d.GetValue("ResponseContent").ToString();
+                        });
 
-                            long size = file.Path.Length;
-                            byte[] fileBytes = null;
-                            var bytesStream = file.GetStream();
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                bytesStream.CopyTo(memoryStream);
-                                fileBytes = memoryStream.ToArray();
-                            }
-                            size = fileBytes.Count();
-
-                            string File_Name = string.Empty;
-
-                            try
-                            {
-                                if (Device.RuntimePlatform == Device.UWP)
-                                {
-                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                                }
-                                else
-                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
-                            }
-                            catch (Exception)
-                            {
-                            }
-
-                            string FileId = string.Empty;
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                        {
+                            string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
                             await Task.Run(() =>
                             {
-                                var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
-
-                                FileId = d.GetValue("ResponseContent").ToString();
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
                             });
 
-                            if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+
+                            if (!string.IsNullOrEmpty(txt_CasNotes.Text))
                             {
-                                string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
-                                await Task.Run(() =>
-                                {
-                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-                                });
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
 
-
-                                if (!string.IsNullOrEmpty(txt_CasNotes.Text))
-                                {
-                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-
-                                }
-                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            }
+                            Functions.ShowtoastAlert("File Attached Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+                        txt_CasNotes.Text = string.Empty;
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                             }
                             else
                             {
-                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                             }
-                            txt_CasNotes.Text = string.Empty;
-                            try
-                            {
-                                if (Device.RuntimePlatform == Device.UWP)
-                                {
-                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                                }
-                                else
-                                {
-                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                                }
 
-                            }
-                            catch (Exception)
-                            {
-                            }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
                 else
@@ -4861,104 +4750,101 @@ namespace StemmonsMobile.Views.Cases
                 if (App.Isonline)
                 {
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                    // if (Device.RuntimePlatform != Device.Android)
+                    try
                     {
+                        await CrossMedia.Current.Initialize();
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            DisplayAlert("No Camera", ":( No camera available.", "OK");
+                            return;
+                        }
+
+                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                        {
+                            Directory = "Sample",
+                            DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
+                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                        });
+
+                        if (file == null)
+                        {
+                            return;
+                        }
+
+                        long size = file.Path.Length;
+                        byte[] fileBytes = null;
+                        var bytesStream = file.GetStream();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            bytesStream.CopyTo(memoryStream);
+                            fileBytes = memoryStream.ToArray();
+                        }
+                        size = fileBytes.Count();
+
+                        string File_Name = string.Empty;
+
                         try
                         {
-                            await CrossMedia.Current.Initialize();
-
-                            if (!CrossMedia.Current.IsPickPhotoSupported)
+                            if (Device.RuntimePlatform == Device.UWP)
                             {
-                                DisplayAlert("No Camera", ":( No camera available.", "OK");
-                                return;
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
                             }
+                            else
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                        }
+                        catch (Exception)
+                        {
+                        }
 
-                            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                            {
-                                Directory = "Sample",
-                                DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
-                                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                            });
+                        string FileId = string.Empty;
+                        await Task.Run(() =>
+                        {
+                            var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
 
-                            if (file == null)
-                            {
-                                return;
-                            }
+                            FileId = d.GetValue("ResponseContent").ToString();
+                        });
 
-                            long size = file.Path.Length;
-                            byte[] fileBytes = null;
-                            var bytesStream = file.GetStream();
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                bytesStream.CopyTo(memoryStream);
-                                fileBytes = memoryStream.ToArray();
-                            }
-                            size = fileBytes.Count();
-
-                            string File_Name = string.Empty;
-
-                            try
-                            {
-                                if (Device.RuntimePlatform == Device.UWP)
-                                {
-                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                                }
-                                else
-                                    File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
-                            }
-                            catch (Exception)
-                            {
-                            }
-
-                            string FileId = string.Empty;
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                        {
+                            string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
                             await Task.Run(() =>
                             {
-                                var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
-
-                                FileId = d.GetValue("ResponseContent").ToString();
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
                             });
 
-                            if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+
+                            if (!string.IsNullOrEmpty(txt_CasNotes.Text))
                             {
-                                string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + File_Name + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
-                                await Task.Run(() =>
-                                {
-                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-                                });
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
 
+                            }
+                            Functions.ShowtoastAlert("File Attached Successfully.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
 
-                                if (!string.IsNullOrEmpty(txt_CasNotes.Text))
-                                {
-                                    CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
-
-                                }
-                                Functions.ShowtoastAlert("File Attached Successfully.");
+                        txt_CasNotes.Text = string.Empty;
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                             }
                             else
                             {
-                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                             }
 
-                            txt_CasNotes.Text = string.Empty;
-                            try
-                            {
-                                if (Device.RuntimePlatform == Device.UWP)
-                                {
-                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                                }
-                                else
-                                {
-                                    await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                                }
-
-                            }
-                            catch (Exception)
-                            {
-                            }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
                 else
@@ -4970,7 +4856,6 @@ namespace StemmonsMobile.Views.Cases
             {
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
         }
 
 
@@ -4982,7 +4867,6 @@ namespace StemmonsMobile.Views.Cases
                 if (!string.IsNullOrEmpty(Create_Sam))
                 {
                     await this.Navigation.PushAsync(new UserDetail(Create_Sam));
-                    //   this.finish();
                 }
             }
             catch (Exception)
@@ -5050,7 +4934,7 @@ namespace StemmonsMobile.Views.Cases
             get { return isBusy; }
             set
             {
-                if (isBusy == value)
+                if (isBusy == value)    
                     return;
 
                 isBusy = value;
@@ -5073,7 +4957,6 @@ namespace StemmonsMobile.Views.Cases
                     return;
 
                 IsBusy = true;
-                //ViewCasePage vc = new ViewCasePage(ViewCasePage.CaseID, ViewCasePage.Casetypeid, ViewCasePage.Casetitle, ViewCasePage.strTome);
 
                 var p = page as ViewCasePage;
                 p.Onlineflag = true;
@@ -5086,8 +4969,6 @@ namespace StemmonsMobile.Views.Cases
                 await p.ExtendedOnAppearing();
 
                 p.IsBusy = false;
-                //await vc.GetCasesData();
-                //await vc.Dynamic_Control_Generate(true, new List<MetaData>());
                 IsBusy = false;
             }
             catch (Exception)

@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:StemmonsMobile"
              x:Class="StemmonsMobile.Views.CreateQuestForm.QuestItemDetailPage" Title="View Form">
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem Name="MenuItem1" Order="Primary" Text="Save" Clicked="SaveClicked" />
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 

@@ -44,7 +44,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     await Task.Run(action: () =>
                     {
                         var result = QuestSyncAPIMethods.GetItemsByAreaIDFormList(App.Isonline, Functions.UserName, Convert.ToString(AreaId), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                        AreaIdlst = result.Result;
+                        AreaIdlst = result.Result.OrderBy(v=>v.strItemName).ToList();
                     });
 
                     FormList.ItemsSource = AreaIdlst;

@@ -47,7 +47,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 						Task<List<AreaResponse.Area>> Arealstt = QuestSyncAPIMethods.GetAreaList(App.Isonline, Functions.UserName, null, null, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 						Arealstt.Wait();
 						
-						Arealst = Arealstt.Result;
+						Arealst = Arealstt.Result.OrderBy(v=>v.strAreaName).ToList();
                     });
 					AreaList.ItemsSource = Arealst;
                 }

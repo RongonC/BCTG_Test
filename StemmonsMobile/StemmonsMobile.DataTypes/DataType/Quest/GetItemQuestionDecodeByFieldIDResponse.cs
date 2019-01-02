@@ -13,6 +13,7 @@ namespace StemmonsMobile.DataTypes.DataType.Quest
         {
             public ItemQuestionDecode()
             { }
+            public int intItemID { get; set; }
             public ItemQuestionDecode(int ITEM_QUESTION_DECODE_ID, string MEETS_STANDARDS)
             {
                 intItemQuestionDecodeID = ITEM_QUESTION_DECODE_ID;

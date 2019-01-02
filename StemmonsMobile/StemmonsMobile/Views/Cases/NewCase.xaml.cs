@@ -249,6 +249,7 @@ namespace StemmonsMobile.Views.Cases
                 if (CasetypeSecurity != null && (CasetypeSecurity.ToLower().Equals("open") || CasetypeSecurity.ToLower().Contains("c")))
                 {
                     #region Dynamic Control Generate API 
+                    CasesSchema = CasesSchema.OrderBy(m => m.LIST_MOBILE_PRIORITY_VALUE).ToList();
                     foreach (var Schemaitem in CasesSchema)
                     {
                         if ((string.IsNullOrEmpty(Schemaitem.ASSOC_SECURITY_TYPE) || Schemaitem.ASSOC_SECURITY_TYPE.ToLower() == "c") && Schemaitem.IS_REQUIRED.ToLower() == "y")
@@ -1105,7 +1106,6 @@ namespace StemmonsMobile.Views.Cases
                 }
                 securityjump:
                 int a = 0;
-
             }
             catch (Exception ex)
             {
@@ -2515,6 +2515,7 @@ namespace StemmonsMobile.Views.Cases
 
                 CaseData casedata = new CaseData();
                 casedata.CreateBySam = Functions.UserName;
+                casedata.CaseCreatedDisplayName = Functions.UserFullName;
                 casedata.CaseTypeID = Convert.ToInt32(Casetypeid);
 
                 CreateCaseOptimizedRequest.CreateCaseModelOptimized createcase = new CreateCaseOptimizedRequest.CreateCaseModelOptimized();
@@ -2536,15 +2537,11 @@ namespace StemmonsMobile.Views.Cases
                             if (ty.Name.ToLower() != "stacklayout")
                             {
                                 var en = new Entry();
-                                var picker = new Picker();
-                                var editor = new BorderEditor();
-                                var datepicker = new DatePicker();
-
                                 if (ty.Name.ToLower() == "entry")
                                 {
                                     try
                                     {
-                                        en = (Entry)xy;
+                                         en = (Entry)xy;
                                         if (en.StyleId.Split('_')[1] == Convert.ToString(CasesSchema.Where(c => c.SYSTEM_CODE == "TITLE").Select(v => v?.ASSOC_TYPE_ID)?.FirstOrDefault()))
                                         {
                                             createcase.caseTitle = en.Text;
@@ -2585,7 +2582,7 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     try
                                     {
-                                        picker = (Picker)xy;
+                                        Picker picker = (Picker)xy;
 
                                         string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
 
@@ -2680,7 +2677,7 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     try
                                     {
-                                        editor = (BorderEditor)xy;
+                                        BorderEditor editor = (BorderEditor)xy;
                                         if (editor.StyleId == _TitleFieldControlID)
                                         {
                                             createcase.caseTitle = en.Text;
@@ -2706,6 +2703,7 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     try
                                     {
+                                        //var datepicker = new DatePicker();
                                         //datepicker = (DatePicker)xy;
                                         //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
                                         //{
@@ -2726,7 +2724,7 @@ namespace StemmonsMobile.Views.Cases
                 #endregion
 
                 createcase.caseType = casedata.CaseTypeID;
-                createcase.currentUser = casedata.CreateBy;
+                createcase.currentUser = Functions.UserFullName;
                 createcase.caseNotes = "";
                 createcase.assignTo = "";
                 createcase.linkValues = linkValue;

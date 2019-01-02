@@ -18,13 +18,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QuestItemPage : ContentPage
     {
-        int ItemIdData, ViewCount;
-        string FromPage = string.Empty;
-        string Username = string.Empty;
-        string sType = string.Empty;
+        public int ItemIdData, ViewCount;
+        public static string FromPage = string.Empty;
+        public static string Username = string.Empty;
+        public static string sType = string.Empty;
 
         List<GetItemInstanceTranResponse.ItemInstanceTran> QuestItemlst = new List<GetItemInstanceTranResponse.ItemInstanceTran>();
-        string Itmid = string.Empty;
+        public static string Itmid = string.Empty;
         string scatId = string.Empty;
         string Sec_Type = string.Empty;
         public QuestItemPage(string frompage, string username, string type, string itemid)
@@ -36,7 +36,16 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Itmid = itemid;
             ViewCount = 0;
         }
-
+        //ArpanB
+        public QuestItemPage(string questArea, int intItemId, string catId = "", string secType = "") : this(FromPage, Username, sType, Itmid)
+        {
+            this.Title = questArea;
+            ItemIdData = intItemId;
+            scatId = catId;
+            Sec_Type = secType;
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+        }
+        //ArpanB
         protected async override void OnAppearing()
         {
             base.OnAppearing();
@@ -62,14 +71,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 QuestItemlst = result.Result;
                 if (QuestItemlst?.Count == 0)
                 {
-                    await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-                    await Navigation.PopAsync();
+                    //await DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+                    //await Navigation.PopAsync();
                 }
             }
             catch (Exception ex)
             {
             }
-            Functions.ShowOverlayView_Grid(overlay,false, masterGrid);
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         void listitemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
@@ -93,17 +102,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         //    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
         //}
 
-        //ArpanB
-        public QuestItemPage(string questArea, int intItemId, string catId = "", string secType = "")
-        {
-            InitializeComponent();
-            this.Title = questArea;
-            ItemIdData = intItemId;
-            scatId = catId;
-            Sec_Type = secType;
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-        }
-        //ArpanB
+
 
         void FocusedEvent(object sender, Xamarin.Forms.FocusEventArgs e)
         {

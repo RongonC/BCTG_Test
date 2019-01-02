@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
- 
+
 
 namespace StemmonsMobile.DataTypes.DataType.Quest
 {
     public class ItemInfoField
     {
+        public int IntAreaID { get; set; }
+        public string StrAreaName { get; set; }
         public int intItemInfoFieldID { get; set; }
 
         public int intItemID { get; set; }
@@ -68,7 +70,7 @@ namespace StemmonsMobile.DataTypes.DataType.Quest
         public string strIsShowAdditionalNotes { get; set; }
         public string strCreateCaseOnSaveForm { get; set; }
         public string strFieldType { get; set; }
-        
+
         public string FIELD_SECURITY { get; set; }
     }
 }

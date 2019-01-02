@@ -83,12 +83,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
 
                     dc = _apptypeinfolist.AsEnumerable().Select(item => new KeyValuePair<int, int?>(item.APP_TYPE_INFO_ID, item.TYPE_ID)).ToList();
 
-                    var Edslst = casedata.EDSResult.Select(i =>
+                    List<EDSResultList> Edslst = casedata.EDSResult.Select(i => new EDSResultList()
                     {
-                        i.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
-                        i.APP_TYPE_INFO_ID = dc.Where(v => v.Value == Int32.Parse(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault().Key;
-                        i.ASSOC_FIELD_ID = Convert.ToString(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]);
-                        return i;
+                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                        APP_TYPE_INFO_ID = dc.Where(v => v.Value == Int32.Parse(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[1])).FirstOrDefault().Key,
+                        ASSOC_FIELD_ID = Convert.ToInt32(i.ASSOC_FIELD_ID?.Split(new string[] { "|||" }, StringSplitOptions.None)[0]),
+                        EDS_RESULT = i.EDS_RESULT,
+                        LAST_SYNC_DATETIME = DateTime.Now
                     }).ToList();
 
                     if (Edslst.Count() > 0)

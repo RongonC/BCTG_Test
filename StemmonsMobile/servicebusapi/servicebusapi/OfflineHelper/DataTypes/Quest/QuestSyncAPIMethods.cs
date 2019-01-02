@@ -66,7 +66,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                             }
                             #endregion
 
-                            CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                            //CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                            CommonConstants.MasterOfflineStore_withEDSTable(ResponseContent, _DBPath);
                         });
                     }
                 }
@@ -1837,9 +1838,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         #endregion
 
         #region Get ExternalDatasource By Query
-        public async static Task<List<GetExternalDatasourceByIDResponse.ExternalDataSource>> GetExternalDatasourceByQuery(bool _IsOnline, string _itemInfoFieldIDChild, string _itemid, int _InstanceUserAssocId, string _DBPath)
+        public async static Task<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>> GetExternalDatasourceByQuery(bool _IsOnline, string _itemInfoFieldIDChild, string _itemid, int _InstanceUserAssocId, string _DBPath)
         {
-            List<GetExternalDatasourceByIDResponse.ExternalDataSource> ItemList = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+            List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> ItemList = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
             List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
             int id = CommonConstants.GetResultBySytemcode(QuestInstance, "H6_GetExternalDatasourceByQuery", _DBPath);
             try
@@ -1850,7 +1851,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     var temp = result.GetValue("ResponseContent");
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
                     {
-                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(temp.ToString());
+                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(temp.ToString());
                         if (ItemList.Count > 0)
                         {
                             var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(ItemList), QuestInstance, "H6_GetExternalDatasourceByQuery", _InstanceUserAssocId, _DBPath, id, _itemid, "M");
@@ -1859,7 +1860,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 }
                 else
                 {
-                    ItemList = CommonConstants.ReturnListResult<GetExternalDatasourceByIDResponse.ExternalDataSource>(QuestInstance, "H6_GetExternalDatasourceByQuery", _DBPath);
+                    ItemList = CommonConstants.ReturnListResult<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>(QuestInstance, "H6_GetExternalDatasourceByQuery", _DBPath);
                 }
             }
             catch (Exception ex)
@@ -1871,9 +1872,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         #endregion
 
         #region Get ExternalDatasource By ID
-        public async static Task<List<GetExternalDatasourceByIDResponse.ExternalDataSource>> GetExternalDatasourceByID(bool _IsOnline, string _ExternalDatasourceID, int _InstanceUserAssocId, string _DBPath, string itemid)
+        public async static Task<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>> GetExternalDatasourceByID(bool _IsOnline, string _ExternalDatasourceID, int _InstanceUserAssocId, string _DBPath, string itemid)
         {
-            List<GetExternalDatasourceByIDResponse.ExternalDataSource> ItemList = new List<GetExternalDatasourceByIDResponse.ExternalDataSource>();
+            List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> ItemList = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
             List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
             int id = CommonConstants.GetResultBySytemcodeId(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(itemid), _DBPath);
             try
@@ -1884,7 +1885,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     var temp = result.GetValue("ResponseContent");
                     if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
                     {
-                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(temp.ToString());
+                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(temp.ToString());
                         //if (ItemList.Count > 0)
                         //{
                         //    var inserted = CommonConstants.AddRecordOfflineStore(JsonConvert.SerializeObject(ItemList), QuestInstance, "H6_GetExternalDatasourceByID", _InstanceUserAssocId, _DBPath, id, itemid, "M");
@@ -1899,7 +1900,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     if (Result?.Result?.ASSOC_FIELD_ID > 0)
                     {
                         string jsonvalue = Result.Result.EDS_RESULT;
-                        ItemList = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDataSource>>(jsonvalue);
+                        ItemList = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(jsonvalue);
                     }
                 }
             }
@@ -1998,8 +1999,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 {
                     if (view == "")
                     {
-                        //ItemList = CommonConstants.ReturnListResult<GetItemQuestionMetadataResponse.ItemQuestionMetaData>(QuestInstance, "H15_GetItemQuestionMetaDataviewscore", _DBPath, Convert.ToString(_Typeid));
-
                         Task<List<AppTypeInfoList>> Questionlistviewscoreonline = DBHelper.GetAppTypeInfoListByCatIdTransTypeSyscodeID(QuestInstance, Convert.ToInt32(itemId), Convert.ToInt32(_scatid), _DBPath, "H15_GetItemQuestionMetaDataviewscore", "M", Convert.ToInt32(_ItemInstanceTranID));
                         Questionlistviewscoreonline.Wait();
                         if (Questionlistviewscoreonline?.Result?.Count > 0)
@@ -2038,7 +2037,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                             Questionlistviewscore.Wait();
                             if (Questionlistviewscore?.Result?.Count > 0)
                             {
-                                //int vid = Convert.ToInt32(Questionlistviewscore?.Result.Where(v => v.METHOD.ToLower() == "/api/v1/quest/addquestionsmetadata").LastOrDefault().ITEM_TRAN_INFO_ID);
                                 var Questionlistviewscores = DBHelper.GetAppTypeInfoListByCatIdTransTypeSyscodeID(QuestInstance, Convert.ToInt32(itemId), Convert.ToInt32(_scatid), _DBPath, "H15_AddQuestionsMetadata", "T", Convert.ToInt32(_ItemInstanceTranID));
                                 Questionlistviewscores.Wait();
                                 if (Questionlistviewscores?.Result?.Count > 0)
@@ -2363,7 +2361,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
             }
             return ItemList;
         }
@@ -2393,7 +2391,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                 else
                 {
                     ItemList = CommonConstants.ReturnListResult<GetItemQuestionFieldsByItemCategoryIDResponse.ItemQuestionField>(QuestInstance, "H8_GetItemQuestionFieldsByItemCategoryID", _DBPath);
-                    if (ItemList == null)
+                    if (ItemList.Count <= 0)
                     {
 
                         var Appinfo = DBHelper.GetAppTypeInfoListByCatIdTransTypeSyscode(QuestInstance, Convert.ToInt32(Itemid), Convert.ToInt32(scatid), _DBPath, "H1_H2_H3_QUEST_AREA_FORM", "M");
@@ -2496,13 +2494,13 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                     //    ItemList.AddRange(elem);
                     //}
 
-                    var Appinfoisonline = DBHelper.GetAppTypeInfoListByIsonline(QuestInstance, Convert.ToInt32(_intItemID), Convert.ToInt32(intItemInstanceTranID), Convert.ToInt32(_sCatId), id, _DBPath);
-                    Appinfoisonline.Wait();
-                    if (Appinfoisonline?.Result?.IS_ONLINE == true)
-                    {
-                        ItemList = JsonConvert.DeserializeObject<List<GetItemQuestionDecodeByFieldIDResponse.ItemQuestionDecode>>(Appinfoisonline?.Result.ASSOC_FIELD_INFO);
-                    }
-                    else
+                    //var Appinfoisonline = DBHelper.GetAppTypeInfoListByIsonline(QuestInstance, Convert.ToInt32(_intItemID), Convert.ToInt32(intItemInstanceTranID), Convert.ToInt32(_sCatId), id, _DBPath);
+                    //Appinfoisonline.Wait();
+                    //if (Appinfoisonline?.Result?.IS_ONLINE == true)
+                    //{
+                    //    ItemList = JsonConvert.DeserializeObject<List<GetItemQuestionDecodeByFieldIDResponse.ItemQuestionDecode>>(Appinfoisonline?.Result.ASSOC_FIELD_INFO);
+                    //}
+                    //else
                     {
                         var Appinfo = DBHelper.GetAppTypeInfoListByCatIdTransTypeSyscode(QuestInstance, Convert.ToInt32(_intItemID), Convert.ToInt32(_sCatId), _DBPath, "H1_H2_H3_QUEST_AREA_FORM", "M");
                         Appinfo.Wait();
