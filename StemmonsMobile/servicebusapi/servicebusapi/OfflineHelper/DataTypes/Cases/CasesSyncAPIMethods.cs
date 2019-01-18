@@ -152,49 +152,47 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
 
-                    Task.Run(() =>
-                    {
-                        #region Delete Data Before Master Sync
-                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
-                        CaseDate.Wait();
-                        if (CaseDate.Result.Count > 0)
+                        Task.Run(() =>
                         {
-                            try
+                            #region Delete Data Before Master Sync
+                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
+                            CaseDate.Wait();
+                            if (CaseDate.Result.Count > 0)
                             {
-                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                                try
+                                {
+                                    var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                var db = new SQLiteAsyncConnection(_DBPath);
-                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                                    var db = new SQLiteAsyncConnection(_DBPath);
+                                    db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                //  //var db2 = new SQLiteAsyncConnection(_DBPath);
-                                //var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
-                                //EDS.Wait();
+                                    //  //var db2 = new SQLiteAsyncConnection(_DBPath);
+                                   //var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                    //EDS.Wait();
 
-                                //MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
-                                ////var db1 = new SQLiteAsyncConnection(_DBPath);
-                                //db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                                    //MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
+                                    ////var db1 = new SQLiteAsyncConnection(_DBPath);
+                                    //db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
-                                // var db2 = new SQLiteAsyncConnection(_DBPath);
-                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
-                                Appinf.Wait();
+                                    MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
+                                    var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                    Appinf.Wait();
 
-                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                                    MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                //var db3 = new SQLiteAsyncConnection(_DBPath);
-                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
-
+                                    
+                                    db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
 
+
+                                }
+                                catch (Exception)
+                                {
+                                }
                             }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        #endregion
-                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
-                    });
-
+                            #endregion
+                            CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                        });
                 }
                 else
                 {
@@ -279,7 +277,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -298,7 +295,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -372,7 +368,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -422,7 +417,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -2286,7 +2280,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -2329,8 +2322,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -2386,8 +2377,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 // res = inserted.Result;
                 if (_IsOnline)
                 {
-
-
                     var result = CasesAPIMethods.AddFavorite(addfav);
                     var temp = result.GetValue("ResponseContent");
 
@@ -2445,7 +2434,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return Task.FromResult(res);
         }
@@ -2484,7 +2472,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return Task.FromResult(res);
         }
@@ -2543,7 +2530,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -2839,7 +2825,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return OnlineCaselist.OrderByDescending(lst => lst.CaseID).ToList();
         }
@@ -2974,8 +2959,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
         }
@@ -3055,8 +3038,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
         }
@@ -3096,8 +3077,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-
-                //throw ex;
             }
             return lstResult;
         }
@@ -3135,8 +3114,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return lstResult;
         }
@@ -3168,7 +3145,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                 id = Convert.ToInt32(onlineRecord.Result?.FirstOrDefault()?.APP_TYPE_INFO_ID);
 
                             var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C10_GetCaseActivity", _InstanceUserAssocId, _DBPath, id, Convert.ToString(_CaseTypeId), "M", _caseID);
-
                         }
                     }
                 }
@@ -3189,7 +3165,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3299,7 +3274,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3349,7 +3323,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3389,7 +3362,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3418,7 +3390,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3445,7 +3416,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                //throw ex;
             }
             return lstResult;
         }
@@ -3480,7 +3450,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3515,7 +3484,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3550,7 +3518,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3741,7 +3708,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3776,7 +3742,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -3871,7 +3836,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                // throw ex;
             }
             return lstResult;
         }
@@ -3920,7 +3884,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                //throw ex;
             }
             return lstResult;
         }
@@ -4013,7 +3976,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4091,7 +4053,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4129,7 +4090,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4167,7 +4127,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4209,7 +4168,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4245,7 +4203,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -4285,8 +4242,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception)
             {
-
-                throw;
             }
             return SearchResult;
         }
@@ -4342,8 +4297,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
             var AssocType = json.GetValue("ResponseContent");
             return JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
-
-            return null;
         }
     }
 }

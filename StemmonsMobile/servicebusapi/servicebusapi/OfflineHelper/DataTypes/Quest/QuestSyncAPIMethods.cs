@@ -195,7 +195,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return areaList;
         }
@@ -308,8 +307,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return lstResult;
         }
@@ -386,8 +383,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -703,8 +698,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -734,8 +727,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -765,8 +756,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -974,8 +963,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -1030,8 +1017,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -1082,8 +1067,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -1124,8 +1107,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -1160,7 +1141,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return insertedRecordid;
         }
@@ -1246,7 +1226,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemsByAreaIDFormList;
         }
@@ -1280,7 +1259,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1314,7 +1292,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1348,7 +1325,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1623,7 +1599,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;//.OrderByDescending(v => v.intItemInstanceTranID).ToList();
         }
@@ -1657,7 +1632,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1831,7 +1805,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1865,7 +1838,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1875,7 +1847,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
         public async static Task<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>> GetExternalDatasourceByID(bool _IsOnline, string _ExternalDatasourceID, int _InstanceUserAssocId, string _DBPath, string itemid)
         {
             List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> ItemList = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
-            List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
             int id = CommonConstants.GetResultBySytemcodeId(QuestInstance, "H1_H2_H3_QUEST_AREA_FORM", Convert.ToInt32(itemid), _DBPath);
             try
             {
@@ -1902,11 +1873,21 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
                         string jsonvalue = Result.Result.EDS_RESULT;
                         ItemList = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(jsonvalue);
                     }
+
+
+
+                    #region From EDS Cache table
+                    var ResultXDS = await DBHelper.GetXDSDetails("QUEST", Convert.ToInt32(_ExternalDatasourceID), _DBPath);
+                    if (ResultXDS != null)
+                    {
+                        string jsonvalue = ResultXDS.EDS_VALUES;
+                        ItemList = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(jsonvalue);
+                    }
+                    #endregion
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -1940,7 +1921,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -2134,7 +2114,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -2225,7 +2204,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -2259,7 +2237,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -2296,7 +2273,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return lstResult;
         }
@@ -2361,7 +2337,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                //throw ex;
             }
             return ItemList;
         }
@@ -2412,7 +2387,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }
@@ -2518,7 +2492,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Quest
             }
             catch (Exception ex)
             {
-                throw ex;
             }
             return ItemList;
         }

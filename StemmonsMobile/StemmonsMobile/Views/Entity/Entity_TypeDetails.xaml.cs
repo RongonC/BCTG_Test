@@ -41,7 +41,14 @@ namespace StemmonsMobile.Views.Entity
             lst.Add(new EntityTypeDetails("Owner", Selected_Entity.Owner?.ToString() ?? "", "Assets/dropdowniconClose.png"));
             DateTime d = Convert.ToDateTime(Selected_Entity.LastCreatedDateTime?.ToString());
             lst.Add(new EntityTypeDetails("Newest", d.ToString("d") ?? "", "Assets/dropdowniconClose.png"));
-            lst.Add(new EntityTypeDetails(Selected_Entity.NewEntityText ?? "Create Entity", "", "Assets/list_icon.png"));
+
+            if (Selected_Entity.SecurityType.ToLower() == "r")
+            {
+                
+                btn_CreateEntity.IsVisible = false;
+            }
+            else
+                lst.Add(new EntityTypeDetails(Selected_Entity.NewEntityText ?? "Create Entity", "", "Assets/list_icon.png"));
 
 
             List_EntityDetails.ItemsSource = lst;

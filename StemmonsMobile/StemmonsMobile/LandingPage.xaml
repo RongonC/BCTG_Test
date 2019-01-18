@@ -288,7 +288,7 @@
                         <Frame CornerRadius="7" 
                                BackgroundColor = "Orange"  
                                Grid.Row="0" Padding="1" HasShadow="False"
-                               Grid.Column = "3" 
+                               Grid.Column = "3" Margin="-9,8,0,0" 
                                HeightRequest="19" 
                                WidthRequest="25" HorizontalOptions="Start" VerticalOptions="Start" >
                             <Label x:Name="teamNotification"

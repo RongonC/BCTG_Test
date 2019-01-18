@@ -34,6 +34,9 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         string parametername; string value; string searchvalue;
         string Team_Username = string.Empty;
         string sTitle = string.Empty;
+        /// <summary>
+        /// scrnName = "" means call comes from Assigned to me and so on
+        /// </summary>
         string scrnName = string.Empty;
         bool isOnlineCall = true;
         int? _pageindex = 1;
@@ -121,16 +124,21 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 }
             };
         }
-
+        int count = 0;
         protected override void OnAppearing()
         {
             base.OnAppearing();
             try
             {
                 Title = sTitle;
-                SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
 
-                Getcaselistdatafromapi(parametername, value, searchvalue);
+                if (count == 0)
+                {
+                    SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
+
+                    Getcaselistdatafromapi(parametername, value, searchvalue);
+                }
+                UpdateListContent();
             }
             catch (Exception ex)
             {
@@ -411,9 +419,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     listdata.IsRefreshing = false;
                     return false; // True = Repeat again, False = Stop the timer
                 });
-                //this.listdata.ItemsSource = null;
                 if (BasicCase_lst.Count > 0)
-                    // this.listdata.ItemsSource = BasicCase_lst;
                     Master_List_Function(BasicCase_lst);
                 else
                 {
@@ -461,6 +467,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
         private async void listdata_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+            if (!string.IsNullOrEmpty(scrnName))
+                count = 1;
             ListView g = (ListView)sender;
             var sd = g.SelectedItem as GetCaseTypesResponse.BasicCase;
             await Navigation.PushAsync(new ViewCasePage(Convert.ToString(sd.CaseID), Convert.ToString(sd.CaseTypeID), sd.CaseTypeName, scrnName));
@@ -632,6 +640,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         //New Code start - ArpanB
         private async void btn_add_Clicked(object sender, EventArgs e)
         {
+            //count = 1;
             await this.Navigation.PushAsync(new NewCase("0", Convert.ToString(casetypeid)));
         }
         //New Code end

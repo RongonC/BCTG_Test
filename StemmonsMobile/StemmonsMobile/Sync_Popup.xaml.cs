@@ -26,7 +26,7 @@ namespace StemmonsMobile
         public Sync_Popup()
         {
             InitializeComponent();
-            progress();
+            //progress();
         }
 
         public async void progress()

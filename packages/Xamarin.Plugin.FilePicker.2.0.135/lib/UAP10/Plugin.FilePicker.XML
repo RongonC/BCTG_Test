@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.FilePicker</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.FilePicker.CrossFilePicker">
+            <summary>
+            Cross-platform FilePicker implementation
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.CrossFilePicker.implementation">
+            <summary>
+            Lazy-initialized file picker implementation
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.CrossFilePicker.Current">
+            <summary>
+            Current file picker instance
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.CrossFilePicker.CreateFilePicker">
+            <summary>
+            Creates file picker instance for the platform
+            </summary>
+            <returns>file picker instance</returns>
+        </member>
+        <member name="M:Plugin.FilePicker.CrossFilePicker.NotImplementedInReferenceAssembly">
+            <summary>
+            Returns new exception to throw when implementation is not found. This is the case when
+            the NuGet package is not added to the platform specific project.
+            </summary>
+            <returns>exception to throw</returns>
+        </member>
+        <member name="T:Plugin.FilePicker.FilePickerImplementation">
+            <summary>
+            Implementation for file picking on UWP
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.FilePickerImplementation.PickFile(System.String[])">
+            <summary>
+            Implementation for picking a file on UWP platform.
+            </summary>
+            <param name="allowedTypes">
+            Specifies one or multiple allowed types. When null, all file types
+            can be selected while picking.
+            On UWP, specify a list of extensions, like this: ".jpg", ".png".
+            </param>
+            <returns>
+            File data object, or null when user cancelled picking file
+            </returns>
+        </member>
+        <member name="M:Plugin.FilePicker.FilePickerImplementation.SaveFile(Plugin.FilePicker.Abstractions.FileData)">
+            <summary>
+            UWP implementation of saving a picked file to the app's local folder directory.
+            </summary>
+            <param name="fileToSave">picked file data for file to save</param>
+            <returns>true when file was saved successfully, false when not</returns>
+        </member>
+        <member name="M:Plugin.FilePicker.FilePickerImplementation.OpenFile(System.String)">
+            <summary>
+            UWP implementation of OpenFile(), opening a file already stored in the app's local
+            folder directory.
+            storage.
+            </summary>
+            <param name="fileToOpen">relative filename of file to open</param>
+        </member>
+        <member name="M:Plugin.FilePicker.FilePickerImplementation.OpenFile(Plugin.FilePicker.Abstractions.FileData)">
+            <summary>
+            UWP implementation of OpenFile(), opening a picked file in an external viewer. The
+            picked file is saved  the app's local folder directory.
+            </summary>
+            <param name="fileToOpen">picked file data</param>
+        </member>
+    </members>
+</doc>

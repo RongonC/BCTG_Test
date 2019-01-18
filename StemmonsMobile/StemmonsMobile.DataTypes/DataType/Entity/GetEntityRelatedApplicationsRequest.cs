@@ -12,8 +12,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string User { get; set; }
     }
 
-
-
     public class EntitiesRelationForEntityType
     {
         public int EntityId { get; set; }

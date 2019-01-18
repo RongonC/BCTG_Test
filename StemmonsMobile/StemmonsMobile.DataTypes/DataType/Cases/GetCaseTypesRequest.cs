@@ -104,4 +104,10 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
     {
         public object ResponseContent { get; set; }
     }
+
+    public class CaseFileResponse : Response
+    {
+        public object ResponseContent { get; set; }
+    }
+    
 }

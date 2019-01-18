@@ -162,49 +162,6 @@ namespace StemmonsMobile.Views.Cases
                             };
                             sControls.Add(itmControl);
                         }
-
-
-
-                        //Parallel.ForEach(CasesSchema, imetadata =>
-                        //{
-                        //    try
-                        //    {
-                        //        ItemType itmControl = new ItemType()
-                        //        {
-                        //            AssocFieldType = Convert.ToChar(imetadata.ASSOC_FIELD_TYPE),
-                        //            AssociatedTypeSecurity = imetadata.ASSOC_SECURITY_TYPE,
-                        //            AssocTypeID = imetadata.ASSOC_TYPE_ID,
-                        //            CalculationFormula = imetadata.CALCULATION_FORMULA,
-                        //            CalculationFrequencyMin = imetadata.CALCULATION_FREQUENCY_MIN,
-                        //            CaseTypeID = imetadata.CASE_TYPE_ID,
-                        //            Child = imetadata.CHILD_ID,
-                        //            CreatedBy = imetadata.CREATED_BY,
-                        //            CreatedDateTime = imetadata.CREATED_DATETIME,
-                        //            Description = imetadata.DESCRIPTION,
-                        //            ExternalDataSourceEntityTypeID = Convert.ToInt32(imetadata.ExternalDataSourceEntityTypeID),
-                        //            ExternalDataSourceID = imetadata.EXTERNAL_DATASOURCE_ID,
-                        //            IsActive = Convert.ToChar(imetadata.IS_ACTIVE),
-                        //            IsRequired = Convert.ToChar(imetadata.IS_REQUIRED),
-                        //            ModifiedBy = imetadata.MODIFIED_BY,
-                        //            IsFroceRecalculation = imetadata.IS_FORCE_RECALCULATION,
-                        //            ModifiedDateTime = imetadata.MODIFIED_DATETIME,
-                        //            Name = imetadata.NAME,
-                        //            Parent = imetadata.PARENT_ID,
-                        //            SecurityType = imetadata.SECURITY_TYPE,
-                        //            SeparatorCharactor = imetadata.SEPARATOR_CHARACTOR,
-                        //            ShowOnList = Convert.ToChar(imetadata.SHOW_ON_LIST == null ? "N" : imetadata.SHOW_ON_LIST),
-                        //            SystemCode = imetadata.SYSTEM_CODE,
-                        //            SystemPriority = Convert.ToInt32(imetadata.SYSTEM_PRIORITY),
-                        //            UIWidth = imetadata.UI_WIDTH,
-                        //            UseCommaSeparator = imetadata.USE_COMMA_SEPARATOR == 'Y' ? true : false,
-                        //        };
-                        //        lock (this)
-                        //            sControls.Add(itmControl);
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //    }
-                        //});
                         ContolrLst = JsonConvert.SerializeObject(sControls);
                     }
 
@@ -213,10 +170,6 @@ namespace StemmonsMobile.Views.Cases
                         var Assoc = CasesSyncAPIMethods.GetAssocCascadeInfo(CrossConnectivity.Current.IsConnected, Casetypeid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                         Assoc.Wait();
                         AssocTypeCascades = Assoc.Result;
-
-                        //var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
-                        //var AssocType = json.GetValue("ResponseContent");
-                        //AssocTypeCascades = JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
                     }
                 });
 
@@ -1186,91 +1139,83 @@ namespace StemmonsMobile.Views.Cases
                 }
                 iSelectedItemlookupId = int.Parse(btn.StyleId.Split('_')[1].Split('|')[0]);
 
-                var pickercntrl = FindPickerControls(Convert.ToInt32(iSelectedItemlookupId)) as Picker;
                 dynamic Exditemslst = null;
 
-                if (pickercntrl == null)
+                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
+
+                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+
+                lst_extdatasource.Add(extDSdefaultValues);
+
+                string fieldName = string.Empty;
+
+                var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
+                if (assocChild.Count < 1)
                 {
-                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-                    var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
-
-                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
-
-                    lst_extdatasource.Add(extDSdefaultValues);
-
-                    string fieldName = string.Empty;
-
-                    var assocChild = AssocTypeCascades.Where(t => t._CASE_ASSOC_TYPE_ID_CHILD == Ascitem.ASSOC_TYPE_ID).ToList();
-                    if (assocChild.Count < 1)
+                    await Task.Run(() =>
                     {
-                        await Task.Run(() =>
+                        var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
+
+                        temp_extdatasource.Wait();
+                        if (temp_extdatasource.Result.Count > 0)
                         {
-                            var temp_extdatasource = CasesSyncAPIMethods.GetExternalDataSourceById(CrossConnectivity.Current.IsConnected, Ascitem.EXTERNAL_DATASOURCE_ID.ToString(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToInt32(Casetypeid), Ascitem.ASSOC_TYPE_ID);
-
-                            temp_extdatasource.Wait();
-                            if (temp_extdatasource.Result.Count > 0)
-                            {
-                                lst_extdatasource.AddRange(temp_extdatasource.Result);
-                            }
-                        });
-                        lstexternaldatasource = lst_extdatasource;
-
-                        //if (!lstextdatasourceHistory.ContainsKey(iSelectedItemlookupId))
-                        //    lstextdatasourceHistory.Add(iSelectedItemlookupId, lst);
-                        //else
-                        //    lstextdatasourceHistory[iSelectedItemlookupId] = lst;
-                    }
+                            lst_extdatasource.AddRange(temp_extdatasource.Result);
+                        }
+                    });
+                    lstexternaldatasource = lst_extdatasource;
+                }
+                else
+                {
+                    FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
+                    if (lstexternaldatasource != null)
+                        Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
                     else
                     {
-                        FillChildControl(Convert.ToInt32(assocChild.FirstOrDefault()._CASE_ASSOC_TYPE_ID_PARENT), sControls);
-                        if (lstexternaldatasource != null)
-                            Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
-                        else
-                        {
-                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
 
-                            lst_extdatasourcee.Add(extDSdefaultValues);
-                            lstexternaldatasource = lst_extdatasourcee;
-                        }
-                        Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
+                        lst_extdatasourcee.Add(extDSdefaultValues);
+                        lstexternaldatasource = lst_extdatasourcee;
                     }
+                    Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
+                }
 
-                    Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
+                Exditemslst = lstexternaldatasource.OrderBy(v => v.NAME).Select(v => v.NAME);
 
-                    #region Item Lookup Initialization
+                #region Item Lookup Initialization
 
-                    lst_itemlookup.IsPullToRefreshEnabled = true;
-                    lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
-                    lst_itemlookup.Refreshing += OnRefresh;
-                    lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
+                lst_itemlookup.IsPullToRefreshEnabled = true;
+                lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
+                lst_itemlookup.Refreshing += OnRefresh;
+                lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
 
-                    lst_itemlookup.ItemsSource = Exditemslst;
-                    lst_itemlookup.BackgroundColor = Color.White;
+                lst_itemlookup.ItemsSource = Exditemslst;
+                lst_itemlookup.BackgroundColor = Color.White;
 
-                    ext_search.Text = "";
-                    ext_search.TextChanged += Ext_search_TextChanged;
-                    ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
-                    Button btn_cancel = new Button()
-                    {
-                        Text = "Cancel",
-                        WidthRequest = 100,
-                        HeightRequest = 40,
-                        TextColor = Color.Accent,
-                        BackgroundColor = Color.Transparent,
-                        HorizontalOptions = LayoutOptions.Center,
-                    };
+                ext_search.Text = "";
+                ext_search.TextChanged += Ext_search_TextChanged;
+                ext_search.HorizontalOptions = LayoutOptions.FillAndExpand;
+                Button btn_cancel = new Button()
+                {
+                    Text = "Cancel",
+                    WidthRequest = 100,
+                    HeightRequest = 40,
+                    TextColor = Color.Accent,
+                    BackgroundColor = Color.Transparent,
+                    HorizontalOptions = LayoutOptions.Center,
+                };
 
-                    btn_cancel.Clicked += Btn_cancel_Clicked;
+                btn_cancel.Clicked += Btn_cancel_Clicked;
 
-                    var temp = new DataTemplate(typeof(TextViewCell));
-                    lst_itemlookup.ItemTemplate = temp;
+                var temp = new DataTemplate(typeof(TextViewCell));
+                lst_itemlookup.ItemTemplate = temp;
 
-                    popupLT.Children.Clear();
+                popupLT.Children.Clear();
 
-                    popupLT.Children.Add(new StackLayout
-                    {
-                        Children =
+                popupLT.Children.Add(new StackLayout
+                {
+                    Children =
                             {
                                 new StackLayout
                                   {
@@ -1301,15 +1246,14 @@ namespace StemmonsMobile.Views.Cases
                                     }
                                 },
                             }
-                    });
-                    Stack_Popup.IsVisible = true;
-                    masterGrid.IsVisible = false;
+                });
+                Stack_Popup.IsVisible = true;
+                masterGrid.IsVisible = false;
 
-                    Stack_Popup.HeightRequest = this.Height - 20;
+                Stack_Popup.HeightRequest = this.Height - 20;
 
-                    Stack_Popup.WidthRequest = this.Width - 20;
-                    #endregion
-                }
+                Stack_Popup.WidthRequest = this.Width - 20;
+                #endregion
             }
             catch (Exception)
             {
@@ -2541,7 +2485,7 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     try
                                     {
-                                         en = (Entry)xy;
+                                        en = (Entry)xy;
                                         if (en.StyleId.Split('_')[1] == Convert.ToString(CasesSchema.Where(c => c.SYSTEM_CODE == "TITLE").Select(v => v?.ASSOC_TYPE_ID)?.FirstOrDefault()))
                                         {
                                             createcase.caseTitle = en.Text;
@@ -2550,7 +2494,7 @@ namespace StemmonsMobile.Views.Cases
                                         int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
                                         string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
                                         string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text) && action != "Save Favorite")
+                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text)/* && action != "Save Favorite"*/)
                                         {
                                             DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
 
@@ -2747,6 +2691,18 @@ namespace StemmonsMobile.Views.Cases
                         {
                             CASEID = status.ToString();
                             await this.Navigation.PushAsync(new ViewCasePage(CASEID, Casetypeid, ""));
+                            //--Start ArpanB 
+                            var existingPages = this.Navigation.NavigationStack.ToList();
+                            // Get the page before Create Case 
+                            //              or 
+                            // Get the Navigation Parent Page 
+                            var ph = existingPages[existingPages.Count - 2];
+
+                            if (ph.GetType().Name.ToString().ToLower() == "newcase")
+                            {
+                                Navigation.RemovePage(ph);// remove NewCase() Page from Queue 
+                            }
+                            //--End ArpanB
                         }
                         break;
                     case "Create & Assign":
@@ -2775,12 +2731,19 @@ namespace StemmonsMobile.Views.Cases
 
                     case "Save Favorite":
 
+                        AskAgain:
                         var user_dialogs = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle(
                             "Name of Favorite").
                             SetInputMode(InputType.Name).SetOkText("Create"));
 
                         if (user_dialogs.Ok)
                         {
+                            if (user_dialogs.Text == "")
+                            {
+                                await DisplayAlert("Alert", "Please Add Favourite Name.", "OK");
+                                goto AskAgain;
+                            }
+
                             string txt_search = user_dialogs.Text;
                             var fav_metadata = JsonConvert.SerializeObject(createcase);
                             Task<int> result_fav = null;
@@ -2854,16 +2817,21 @@ namespace StemmonsMobile.Views.Cases
         //    }
         //}
 
+
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="AssocID">Always be a Assoc Type Id To Find Contorl From Page</param>
+        /// <returns></returns>
+        /// 
         private object FindPickerControls(int AssocID)
         {
             try
             {
-
                 foreach (StackLayout infofield in Cases_EntryStack.Children)
                 {
                     foreach (StackLayout item in infofield.Children)
                     {
-
                         foreach (var subitem in item.Children)
                         {
                             var xy = subitem;
@@ -2872,14 +2840,14 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 Picker Picker = new Picker();
                                 Picker = (Picker)xy;
-                                if (Picker.StyleId.Contains(AssocID.ToString()))
+                                if (Picker.StyleId.Split('_')[1] == AssocID.ToString())
                                     return Picker;
                             }
                             else if (ty.Name.ToLower() == "button")
                             {
                                 Button btn = new Button();
                                 btn = (Button)xy;
-                                if (btn.StyleId.Contains(AssocID.ToString()))
+                                if (btn.StyleId.Split('_')[1] == AssocID.ToString())
                                     return btn;
                             }
                         }

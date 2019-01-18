@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.FilePicker</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.FilePicker.CrossFilePicker">
+            <summary>
+            Cross-platform FilePicker implementation
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.CrossFilePicker.implementation">
+            <summary>
+            Lazy-initialized file picker implementation
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.CrossFilePicker.Current">
+            <summary>
+            Current file picker instance
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.CrossFilePicker.CreateFilePicker">
+            <summary>
+            Creates file picker instance for the platform
+            </summary>
+            <returns>file picker instance</returns>
+        </member>
+        <member name="M:Plugin.FilePicker.CrossFilePicker.NotImplementedInReferenceAssembly">
+            <summary>
+            Returns new exception to throw when implementation is not found. This is the case when
+            the NuGet package is not added to the platform specific project.
+            </summary>
+            <returns>exception to throw</returns>
+        </member>
+    </members>
+</doc>

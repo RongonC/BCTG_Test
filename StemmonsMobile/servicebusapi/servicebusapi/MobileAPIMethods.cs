@@ -101,7 +101,9 @@ namespace DataServiceBus
                     httpContent.Content = contentPost;
 
                     response = httpClient.SendAsync(httpContent);
+                    response.Wait();
                     var result = response.Result.Content.ReadAsStringAsync();
+                    result.Wait();
                     jobj = JObject.Parse(result.Result);
                 }
             }
@@ -144,7 +146,9 @@ namespace DataServiceBus
                         httpContent = new HttpRequestMessage(HttpMethod.Get, url);
                     }
                     response = httpClient.SendAsync(httpContent);
+                    response.Wait();
                     var result = response.Result.Content.ReadAsStringAsync();
+                    result.Wait();
                     jobj = JObject.Parse(result.Result);
                 }
             }

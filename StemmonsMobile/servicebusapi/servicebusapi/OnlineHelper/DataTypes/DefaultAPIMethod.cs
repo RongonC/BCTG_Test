@@ -10,7 +10,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 {
     public class DefaultAPIMethod
     {
-        public static bool IsAddLog = false;
+        //public static bool IsAddLog = false;
 
         #region Get User Info  
         public static JObject LoginAuthenticate(string UserName, string UserPassword)
@@ -203,8 +203,8 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #region AddLog 
         public static JObject AddLog(string txt, string isSuccess, string appName, string CreatedBy, string createdDateTime)
         {
-            if (!IsAddLog)
-                return null;
+            //if (!IsAddLog)
+            //   return null;
 
             try
             {

@@ -5,7 +5,9 @@ using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using PCLStorage;
 using Plugin.Connectivity;
+using Plugin.FilePicker;
 using Plugin.Media;
+using Plugin.Media.Abstractions;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.Models;
@@ -3055,8 +3057,7 @@ namespace StemmonsMobile.Views.Cases
 
                 if (notes.ImageVisible)
                 {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
+                    await Navigation.PushAsync(new ViewAttachment(notes.ImageURL));
                 }
             }
             catch (Exception ex)
@@ -4610,12 +4611,15 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 string[] buttons;
-                buttons = new string[] { "From Photo Gallery", "Camera" };
+                buttons = new string[] { "Upload Document", "From Photo Gallery", "Camera" };
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
                 switch (action)
                 {
+                    case "Upload Document":
+                        PickFile();
+                        break;
                     case "From Photo Gallery":
                         OpenGallery();
                         break;
@@ -4629,6 +4633,113 @@ namespace StemmonsMobile.Views.Cases
             {
 
             }
+        }
+
+        async void PickFile()
+        {
+            try
+            {
+
+                if (App.Isonline)
+                {
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                    var file = await CrossFilePicker.Current.PickFile();
+
+                    byte[] fileBytes = null;
+                    long size = 0;
+
+                    if (file != null)
+                    {
+                        string FileName = file.FileName;
+
+
+                        fileBytes = file.DataArray;
+
+                        size = fileBytes.Count();
+
+                        string FileId = string.Empty;
+
+                        var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, FileName, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
+
+                        //FileId = d.GetValue("ResponseContent").ToString();
+
+                        FileId = d;
+
+                        if (FileId == null || FileId == "-1")
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in file attachment");
+                            return;
+                        }
+
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]") //FileID not null
+                        {
+                            string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + FileName + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
+
+                            await Task.Run(() =>
+                            {
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+                            });
+
+                            if (!string.IsNullOrEmpty(txt_CasNotes.Text))
+                            {
+                                CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+
+                                Functions.ShowtoastAlert("File Attached Successfully");
+                            }
+                            else
+                            {
+
+                                Functions.ShowtoastAlert("Something went wrong in file attachment. Please try again later.");
+                            }
+                        }
+
+                        #region UploadCaseTask
+                        //await Task.Run(async () =>
+                        //{
+                        //    var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, FileName, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
+
+                        //    FileId = d.GetValue("ResponseContent").ToString();
+
+                        //    if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]") //FileID not null
+                        //    {
+                        //        string Notes = "User Uploaded File: <a href=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\">" + FileName + "</a>.<br />Hash Code: <b></b><br/>Description: <br /><img src=\"/DownloadFile.aspx?CaseFileID=" + FileId + "\" alt=\"\" style=\"max-width: {PXWIDE};\" />";
+
+                        //        await Task.Run(() =>
+                        //        {
+                        //            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, Notes, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+                        //        });
+
+                        //        if (!string.IsNullOrEmpty(txt_CasNotes.Text))
+                        //        {
+                        //            CasesSyncAPIMethods.AddCasNotes(App.Isonline, Convert.ToInt32(Casetypeid), CaseID, txt_CasNotes.Text, Functions.UserName, "19", App.DBPath, Functions.UserFullName);
+
+                        //            Functions.ShowtoastAlert("File Attached Successfully");
+                        //        }
+                        //        else
+                        //        {
+
+                        //            Functions.ShowtoastAlert("Something went wrong in file attachment. Please try again later.");
+                        //        }
+                        //    }
+                        //}); //Task complete here
+
+                        #endregion
+                    }
+                    else
+                    {
+                        Functions.ShowtoastAlert("Please go online to use this functionality!");
+                    }
+
+                    ReloadNotesArea();
+                }
+            }
+            catch (Exception ex)
+            {
+                Functions.ShowtoastAlert("An exception occured");
+            }
+
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
 
@@ -4649,7 +4760,11 @@ namespace StemmonsMobile.Views.Cases
                             return;
                         }
 
-                        var file = await CrossMedia.Current.PickPhotoAsync();
+                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                        {
+                            PhotoSize = PhotoSize.Medium,
+                            CompressionQuality = 80,
+                        });
 
                         if (file == null)
                         {
@@ -4686,7 +4801,7 @@ namespace StemmonsMobile.Views.Cases
                         {
                             var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
 
-                            FileId = d.GetValue("ResponseContent").ToString();
+                            FileId = d;//.GetValue("ResponseContent").ToString();
                         });
 
                         if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
@@ -4802,7 +4917,7 @@ namespace StemmonsMobile.Views.Cases
                         {
                             var d = CasesAPIMethods.UploadFileToCase(Convert.ToInt32(CaseID), "", DateTime.Now, File_Name, size.ToString(), fileBytes, "", 'Y', "", 'y', Functions.UserName);
 
-                            FileId = d.GetValue("ResponseContent").ToString();
+                            FileId = d;//.GetValue("ResponseContent").ToString();
                         });
 
                         if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
@@ -4857,8 +4972,6 @@ namespace StemmonsMobile.Views.Cases
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
-
-
 
         private async void lbl_createname_tapped(object sender, EventArgs e)
         {
@@ -4915,12 +5028,10 @@ namespace StemmonsMobile.Views.Cases
             {
             }
         }
-
     }
 
     public class CasesPulltorefreshViewmodel : INotifyPropertyChanged
     {
-        public ObservableCollection<string> Items { get; set; }
         Page page;
         public CasesPulltorefreshViewmodel(Page page)
         {
@@ -4934,7 +5045,7 @@ namespace StemmonsMobile.Views.Cases
             get { return isBusy; }
             set
             {
-                if (isBusy == value)    
+                if (isBusy == value)
                     return;
 
                 isBusy = value;

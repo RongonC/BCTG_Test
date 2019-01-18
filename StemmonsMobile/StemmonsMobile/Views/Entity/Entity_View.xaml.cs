@@ -36,7 +36,7 @@ namespace StemmonsMobile.Views.Entity
         List<AssociationField> EntityAssocOrder = new List<AssociationField>();
         EntityClass EntityLists = new EntityClass();
         List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
-        string NavScreenname = string.Empty;// To manage Online and Offline View entity as per Screen name
+        string NavScreenname = string.Empty; // To manage Online and Offline View entity as per Screen name i.ee Associed To Me.
         public EntityListMBView _entityListMBView = new EntityListMBView();
 
         /// <summary>  Main Required Para is Below for this page Work
@@ -48,8 +48,6 @@ namespace StemmonsMobile.Views.Entity
         /// 
         public Entity_View(EntityListMBView _SelectedEntity, string _navscreenname = "")
         {
-            //_entityListMBView.EntityDetails.EntityID
-            //_entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName
             InitializeComponent();
             _entityListMBView = _SelectedEntity;
             Title = string.IsNullOrEmpty(_SelectedEntity.Title) ? "View Entity" : _SelectedEntity.Title;
@@ -287,7 +285,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                     }
                     lbl_createname.FormattedText = (s);
-                   
+
                     #endregion
 
                     #region Assign To Name
@@ -304,7 +302,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                     }
                     lbl_assignto.FormattedText = (s);
-                    
+
                     #endregion
 
                     #region Owned By Name
@@ -322,7 +320,7 @@ namespace StemmonsMobile.Views.Entity
                     }
                     lbl_ownername.FormattedText = (s);
 
-                   
+
                     #endregion
 
                     #region Modified By Name
@@ -339,7 +337,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                     }
                     lbl_modifiedname.FormattedText = (s);
-                  
+
                     #endregion
 
                 }
@@ -552,83 +550,80 @@ namespace StemmonsMobile.Views.Entity
                 });
                 if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "-1")
                 {
-                    //if (Groups.Count != 0)
-                    //{
-                    //    if (EntityNotes.Contains("<img"))
-                    //    {
-                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //            new Entity_Notes
-                    //            {
-                    //                Note = Functions.HTMLToText( EntityNotes ),
-                    //                ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
-                    //                ImageVisible = true,
-                    //                LabelVisible = true
-                    //            }
-                    //        });
-                    //    }
-                    //    else
-                    //    {
-                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //            new Entity_Notes
-                    //            {
-                    //                Note = Functions.HTMLToText( EntityNotes ),
-                    //                htmlNote = EntityNotes,
-                    //                ImageVisible = false,
-                    //                LabelVisible = true
-                    //            }
-                    //        });
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (EntityNotes.Contains("<img"))
-                    //    {
-                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //            new Entity_Notes
-                    //           {
-                    //                Note = Functions.HTMLToText( EntityNotes ),
-                    //                ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
-                    //                ImageVisible = true,
-                    //                LabelVisible = true
-                    //            }
-                    //        });
-                    //    }
-                    //    else
-                    //    {
-                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
-                    //        {
-                    //            new Entity_Notes
-                    //            {
-                    //                Note = Functions.HTMLToText( EntityNotes ),
-                    //                htmlNote = EntityNotes,
-                    //                ImageVisible = false,
-                    //                LabelVisible = true
-                    //            }
-                    //        });
-                    //    }
+                    if (Groups.Count != 0)
+                    {
+                        if (EntityNotes.Contains("<img"))
+                        {
+                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                new Entity_Notes
+                                {
+                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                                    ImageVisible = true,
+                                    LabelVisible = true
+                                }
+                            });
+                        }
+                        else
+                        {
+                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                new Entity_Notes
+                                {
+                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    htmlNote = EntityNotes,
+                                    ImageVisible = false,
+                                    LabelVisible = true
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        if (EntityNotes.Contains("<img"))
+                        {
+                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                new Entity_Notes
+                               {
+                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                                    ImageVisible = true,
+                                    LabelVisible = true
+                                }
+                            });
+                        }
+                        else
+                        {
+                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            {
+                                new Entity_Notes
+                                {
+                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    htmlNote = EntityNotes,
+                                    ImageVisible = false,
+                                    LabelVisible = true
+                                }
+                            });
+                        }
 
-                    //    gridEntitynotes.ItemsSource = Groups;
+                        gridEntitynotes.ItemsSource = Groups;
 
-                    //    FormattedString sa = new FormattedString();
-                    //    try
-                    //    {
-                    //        //if (EntityLists?.EntityModifiedByFullName != null)
-                    //        {
-                    //            sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                        FormattedString sa = new FormattedString();
+                        try
+                        {
+                            sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                            sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
 
-                    //            sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-                    //        }
-                    //        EntityLists.EntityModifiedByFullName = Functions.UserFullName;
-                    //        EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
-                    //    }
-                    //    catch (Exception)
-                    //    {
-                    //    }
-                    //    lbl_modifiedname.FormattedText = sa;
-                    //}
+                            EntityLists.EntityModifiedByFullName = Functions.UserFullName;
+                            EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        lbl_modifiedname.FormattedText = sa;
+                    }
                 }
             }
             catch (Exception)
@@ -637,40 +632,9 @@ namespace StemmonsMobile.Views.Entity
 
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-            //gridEntitynotes.ItemsSource = Groups;
-            //gridEntitynotes.HeightRequest = Groups.Count <= 0 ? 0 : 700;
             return recID;
         }
 
-        public object FindEntityControl(string type)
-        {
-            try
-            {
-                foreach (StackLayout v in TextFieldsLayout.Children)
-                {
-                    foreach (StackLayout item in v.Children)
-                    {
-                        foreach (var subitem in item.Children)
-                        {
-                            var xy = subitem.StyleId;
-                            if (xy != null)
-                            {
-                                if (xy.Contains(type))
-                                {
-                                    var d = subitem.GetType();
-                                    if ((subitem.GetType()).Name.ToLower() != "button")
-                                        return subitem;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-            return null;
-        }
         private void btn_home_Clicked(object sender, EventArgs e)
         {
             try

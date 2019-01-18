@@ -445,8 +445,8 @@ namespace StemmonsMobile.Views.Entity
                                         try
                                         {
                                             var cnt = (Entry)sender;
-                                            //var sty_id = cnt.StyleId?.Split('_')[1];
-                                            var dt_c = FindEntityControl(cnt.StyleId, "DatePicker") as DatePicker;
+                                            var sty_id = cnt.StyleId?.Split('_')[1];
+                                            var dt_c = FindEntityControl(int.Parse(sty_id), "DatePicker") as DatePicker;
                                             try
                                             {
                                                 cnt.Unfocus();
@@ -515,7 +515,7 @@ namespace StemmonsMobile.Views.Entity
                                         try
                                         {
                                             var ct = (Image)s;
-                                            C_ent = FindEntityControl(ct.StyleId.Split('_')[1]) as Entry;
+                                            C_ent = FindEntityControl(Convert.ToInt32(ct.StyleId.Split('_')[1])) as Entry;
                                             C_ent.Text = "";
                                         }
                                         catch (Exception)
@@ -796,8 +796,8 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 string _field_type = EntityListsValues.AssociationFieldCollection[i].FieldType;
 
-                                var cnt = FindEntityControl(_field_type + "_" + EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "");
-                                var cntBtn = FindEntityControl(_field_type + "_" + EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                var cnt = FindEntityControl(/*_field_type + "_" + */EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "");
+                                var cntBtn = FindEntityControl(/*_field_type + "_" + */EntityListsValues.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
                                 if (cntBtn != null)
                                 {
 
@@ -1072,6 +1072,7 @@ namespace StemmonsMobile.Views.Entity
         }
 
         int iSelectedItemlookupId = 0;
+        string _currentStyleId = string.Empty;
         List<EXTERNAL_DATASOURCE1> _list_EDS = new List<EXTERNAL_DATASOURCE1>();
         ListView lstView = new ListView();
         SearchBar ext_search = new SearchBar();
@@ -1094,7 +1095,8 @@ namespace StemmonsMobile.Views.Entity
                     }
 
                     iSelectedItemlookupId = Convert.ToInt32(btn.StyleId?.Split('_')[1]);
-                    Picker pickercntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId)) as Picker;
+                    _currentStyleId = btn.StyleId;
+                    Picker pickercntrl = FindEntityControl(iSelectedItemlookupId) as Picker;
 
                     if (pickercntrl != null)
                     {
@@ -1157,8 +1159,8 @@ namespace StemmonsMobile.Views.Entity
                                     foreach (var parentID in ParentLst)
                                     {
                                         string sSelectedValue = null;
-                                        Picker pkCntrl = FindEntityControl(Convert.ToString(parentID)) as Picker;
-                                        Button btnCntrl = FindEntityControl(Convert.ToString(parentID), "Button") as Button;
+                                        Picker pkCntrl = FindEntityControl(parentID) as Picker;
+                                        Button btnCntrl = FindEntityControl(parentID, "Button") as Button;
 
                                         if (parentID == iSelectedItemlookupId)
                                         {
@@ -1172,7 +1174,7 @@ namespace StemmonsMobile.Views.Entity
                                             {
                                                 if (!Functions.IsEditEntity)
                                                 {
-                                                    var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID);
+                                                    var cnt = FindEntityControl(/*sFieldTypeParent.ToUpper() + "_" +*/ parentID);
 
                                                     var ddlEds = (Picker)cnt;
                                                     List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
@@ -1471,8 +1473,8 @@ namespace StemmonsMobile.Views.Entity
                 this.Stack_Popup.IsVisible = false;
                 this.masterGrid.IsVisible = true;
 
-                var ctrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId), "Button") as Button;
-                var pik_cntrl = FindEntityControl(Convert.ToString(iSelectedItemlookupId));
+                var ctrl = FindEntityControl(iSelectedItemlookupId/*Convert.ToString(_currentStyleId)*/, "Button") as Button;
+                var pik_cntrl = FindEntityControl(iSelectedItemlookupId/*Convert.ToString(_currentStyleId)*/);
                 if (ctrl != null)
                 {
                     Button btn = ctrl as Button;
@@ -1509,7 +1511,7 @@ namespace StemmonsMobile.Views.Entity
                                 foreach (var j in CHildLst)
                                 {
                                     //Find child and Disable it
-                                    var cntrl = FindEntityControl(Convert.ToString(j), "Button") as Button;
+                                    var cntrl = FindEntityControl(j, "Button") as Button;
                                     if (ctrl.Text == "-- Select Item --")
                                     {
                                         cntrl.IsEnabled = false;
@@ -1727,7 +1729,7 @@ namespace StemmonsMobile.Views.Entity
 
                     foreach (var item in dds)
                     {
-                        var subitem = FindEntityControl(CurrentStyleId);
+                        var subitem = FindEntityControl(Convert.ToInt32(CurrentStyleId.Split('_')[1]));
 
                         if (subitem != null)
                         {
@@ -1814,7 +1816,7 @@ namespace StemmonsMobile.Views.Entity
                                 var Result = EntityAPIMethods.RefreshCalculationFields(rf);
                                 CalResult = Result.GetValue("ResponseContent");
 
-                                var subitem1 = FindEntityControl(sCalId);
+                                var subitem1 = FindEntityControl(Convert.ToInt32(sCalId.Split('_')[1]));
 
                                 Type typ = subitem1.GetType();
 
@@ -1855,7 +1857,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     foreach (var item in EntitySchemaListsAssociationFieldCollection)
                     {
-                        var subitem = FindEntityControl(CurrentStyleId);
+                        var subitem = FindEntityControl(Convert.ToInt32(CurrentStyleId.Split('_')[1]));
 
                         if (subitem != null)
                         {
@@ -1916,7 +1918,7 @@ namespace StemmonsMobile.Views.Entity
                                     CalResult = Result.GetValue("ResponseContent");
                                 }).Wait();
 
-                                var subitem1 = FindEntityControl(sCalId);
+                                var subitem1 = FindEntityControl(Convert.ToInt32(sCalId.Split('_')[1]));
 
                                 Type typ = subitem1?.GetType();
 
@@ -1972,7 +1974,7 @@ namespace StemmonsMobile.Views.Entity
             try
             {
                 var cnt = (DatePicker)sender;
-                var dt_Entry = FindEntityControl(cnt.StyleId.Split('_')[1]) as Entry;
+                var dt_Entry = FindEntityControl(Convert.ToInt32(cnt.StyleId.Split('_')[1])) as Entry;
                 dt_Entry.Text = cnt.Date.Date.ToString("d");
             }
             catch (Exception)
@@ -2309,7 +2311,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         var _field_type = EntitySchemaLists.AssociationFieldCollection[i].FieldType;
 
-                        var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                        var cnt = FindEntityControl(/*_field_type + "_" + */EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
                         if (cnt != null)
                         {
                             var cnt_type = cnt.GetType();
@@ -2409,7 +2411,14 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        public object FindEntityControl(string type, string controlType = "")
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="type">Its always be a Assoc Type ID</param>
+        /// <param name="controlType">It will be Control type which you want to return.For more detail check in Function.</param>
+        /// <returns></returns>
+
+        public object FindEntityControl(int type, string controlType = "")
         {
             if (string.IsNullOrEmpty(controlType))
             {
@@ -2422,7 +2431,7 @@ namespace StemmonsMobile.Views.Entity
                             var xy = subitem.StyleId;
                             if (xy != null)
                             {
-                                if (xy.Contains(type))
+                                if (xy.Split('_')[1] == Convert.ToString(type))
                                 {
                                     var d = subitem.GetType();
                                     if ((subitem.GetType()).Name.ToLower() != "button")
@@ -2447,7 +2456,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 if (ty.Name == "DatePicker")
                                 {
-                                    if (_styleId.Contains(type.Split('_')[1]))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -2471,7 +2480,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 if (ty.Name == "Image")
                                 {
-                                    if (_styleId.Contains(type.Split('_')[1]))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -2495,7 +2504,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 if (ty.Name == "Button")
                                 {
-                                    if (_styleId.Contains(type))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -2520,7 +2529,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 if (ty.Name == "Picker")
                                 {
-                                    if (_styleId.Contains(type))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -2530,126 +2539,6 @@ namespace StemmonsMobile.Views.Entity
                     }
                 }
             }
-
-            //if (string.IsNullOrEmpty(controlType))
-            //{
-            //    foreach (StackLayout v in TextFieldsLayout.Children)
-            //    {
-            //        foreach (StackLayout item in v.Children)
-            //        {
-            //            foreach (var subitem in item.Children)
-            //            {
-            //                var xy = subitem.StyleId;
-            //                if (xy != null)
-            //                {
-            //                    if (xy.Contains(type))
-            //                    {
-            //                        var d = subitem.GetType();
-            //                        if ((subitem.GetType()).Name.ToLower() != "button")
-            //                            return subitem;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //else if (controlType == "DatePicker")
-            //{
-            //    foreach (StackLayout v in TextFieldsLayout.Children)
-            //    {
-            //        foreach (StackLayout item in v.Children)
-            //        {
-            //            foreach (var subitem in item.Children)
-            //            {
-            //                var _styleId = subitem.StyleId;
-            //                Type ty = subitem.GetType();
-            //                if (_styleId != null)
-            //                {
-            //                    if (ty.Name == "DatePicker")
-            //                    {
-            //                        if (_styleId.Contains(type.Split('_')[1]))
-            //                        {
-            //                            return subitem;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //else if (controlType == "Image")
-            //{
-            //    foreach (StackLayout v in TextFieldsLayout.Children)
-            //    {
-            //        foreach (StackLayout item in v.Children)
-            //        {
-            //            foreach (var subitem in item.Children)
-            //            {
-            //                var _styleId = subitem.StyleId;
-            //                Type ty = subitem.GetType();
-            //                if (_styleId != null)
-            //                {
-            //                    if (ty.Name == "Image")
-            //                    {
-            //                        if (_styleId.Contains(type.Split('_')[1]))
-            //                        {
-            //                            return subitem;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //else if (controlType == "Button")
-            //{
-            //    foreach (StackLayout v in TextFieldsLayout.Children)
-            //    {
-            //        foreach (StackLayout item in v.Children)
-            //        {
-            //            foreach (var subitem in item.Children)
-            //            {
-            //                var _styleId = subitem.StyleId;
-            //                Type ty = subitem.GetType();
-            //                if (_styleId != null)
-            //                {
-            //                    if (ty.Name == "Button")
-            //                    {
-            //                        if (_styleId.Contains(type))
-            //                        {
-            //                            return subitem;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //else if (controlType == "Picker")
-            //{
-            //    foreach (StackLayout v in TextFieldsLayout.Children)
-            //    {
-            //        foreach (StackLayout item in v.Children)
-            //        {
-            //            foreach (var subitem in item.Children)
-            //            {
-            //                var _styleId = subitem.StyleId;
-            //                Type ty = subitem.GetType();
-            //                if (_styleId != null)
-            //                {
-            //                    if (ty.Name == "Picker")
-            //                    {
-            //                        if (_styleId.Contains(type))
-            //                        {
-            //                            return subitem;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
             return null;
         }
 
@@ -2831,8 +2720,8 @@ namespace StemmonsMobile.Views.Entity
                 {
                     var _field_type1 = EntitySchemaLists.AssociationFieldCollection[i].FieldType;
 
-                    var cnt = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
-                    var cntbtn = FindEntityControl(_field_type1 + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                    var cnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                    var cntbtn = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
                     //if (cntbtn != null)
                     //{
                     //    Type cnt_type = cntbtn.GetType();
@@ -2977,8 +2866,8 @@ namespace StemmonsMobile.Views.Entity
 
                                 //eAssociationField.AssocMetaData.Add(Asso_metadata_value);
                                 //break;
-                                var cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
-                                var btnCnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                var cnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                var btnCnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
                                 var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt.Text).ToList();
                                 Type cnt_type = cnt.GetType();
                                 var pick_Ext_datasrc = new Picker();
@@ -3033,8 +2922,8 @@ namespace StemmonsMobile.Views.Entity
 
                                 //eAssociationField.AssocMetaData.Add(Asso_metadata_value1);
                                 //break;
-                                var cnt1 = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
-                                var btnCnt1 = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
+                                var cnt1 = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                var btnCnt1 = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
                                 var ItmSrc1 = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt1.Text).ToList();
                                 Type cnt_type1 = cnt1.GetType();
                                 var pick_assocDeccod = new Picker();
@@ -3081,7 +2970,7 @@ namespace StemmonsMobile.Views.Entity
                             case "MF":
                             case "SF":
                                 AssociationMetaDataText Assoc_metatext = new AssociationMetaDataText();
-                                cnt = FindEntityControl(_field_type + "_" + EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
+                                cnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
                                 if (cnt != null)
                                 {
                                     cnt_type = cnt.GetType();
@@ -3275,8 +3164,8 @@ namespace StemmonsMobile.Views.Entity
                         string sFieldType = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == subItem)?.FirstOrDefault()?.FieldType;
                         if (sFieldType.ToUpper() == "EL" || sFieldType.ToUpper() == "SE" || sFieldType.ToUpper() == "ME")
                         {
-                            var pick = FindEntityControl(sFieldType + "_" + subItem) as Picker;
-                            var btn = FindEntityControl(sFieldType + "_" + subItem, "Button") as Button;
+                            var pick = FindEntityControl(/*sFieldType + "_" + */subItem) as Picker;
+                            var btn = FindEntityControl(/*sFieldType + "_" +*/ subItem, "Button") as Button;
                             List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
                             EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1();
                             ed1.Count = 0;
@@ -3334,7 +3223,7 @@ namespace StemmonsMobile.Views.Entity
 
                                     if (sFieldTypeParent.ToUpper() == "SE" || sFieldTypeParent.ToUpper() == "ME" || sFieldTypeParent.ToUpper() == "EL")
                                     {
-                                        var cnt = FindEntityControl(sFieldTypeParent.ToUpper() + "_" + parentID);
+                                        var cnt = FindEntityControl(/*sFieldTypeParent.ToUpper() + "_" +*/ parentID);
 
                                         var ddlEds = (Picker)cnt;
                                         List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
@@ -3442,7 +3331,7 @@ namespace StemmonsMobile.Views.Entity
                             dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
                             //});
 
-                            string controlId = sFieldType + "_" + subItem;
+                            int controlId = /*sFieldType + "_" +*/ subItem;
 
                             if (sFieldType.ToUpper() == "SE" || sFieldType.ToUpper() == "ME" || sFieldType.ToUpper() == "EL")
                             {

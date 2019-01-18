@@ -40,6 +40,11 @@ namespace StemmonsMobile.Views.Entity
                     lstResult = await EntitySyncAPIMethods.GetEntityTypeList(App.Isonline, CategoryId, Functions.UserName, null, App.DBPath);
                 });
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                if (LandingPage.IsCreateEntity)
+                {
+                    lstResult = lstResult.Where(v => v.SecurityType.ToLower() != "r").ToList();
+                }
+
                 list_entity.ItemsSource = lstResult.OrderBy(v => v.EntityTypeName);
             }
             catch (Exception ex)

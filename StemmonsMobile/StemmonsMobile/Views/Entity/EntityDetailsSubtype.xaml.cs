@@ -35,7 +35,7 @@ namespace StemmonsMobile.Views.Entity
             _Viewtype = Viewtype;
 
             List_entity_subtypes.RefreshCommand = RefreshCommand;
-
+           
             List_entity_subtypes.ItemAppearing += async (object sender, ItemVisibilityEventArgs e) =>
             {
                 if (App.Isonline)
@@ -77,6 +77,10 @@ namespace StemmonsMobile.Views.Entity
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+
+            if (_selectedlist.SecurityType.ToLower() == "r")
+                btn_addentity.IsVisible = false;
+
             App.SetConnectionFlag();
             txt_seacrhbar.Text = "";
             Functions.IsEditEntity = false;

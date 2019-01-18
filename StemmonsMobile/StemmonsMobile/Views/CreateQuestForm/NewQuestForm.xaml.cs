@@ -280,7 +280,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         var cnt = (Entry)sender;
                                         var sty_id = cnt.StyleId?.Split('_')[1];
-                                        var dt_c = FindQuestControl(sty_id, "datepicker") as DatePicker;
+                                        var dt_c = FindQuestControl(Convert.ToInt32(sty_id), "datepicker") as DatePicker;
                                         cnt.Unfocus();
                                         Device.BeginInvokeOnMainThread(() =>
                                         {
@@ -301,7 +301,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         var ct = (Image)s;
                                         var sty_id = ct.StyleId?.Split('_')[1];
-                                        C_ent = FindQuestControl(sty_id) as Entry;
+                                        C_ent = FindQuestControl(Convert.ToInt32(sty_id)) as Entry;
                                         C_ent.Text = "";
                                     }
                                     catch (Exception)
@@ -568,8 +568,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     foreach (var iChild in Child1)
                     {
-                        Picker drp1 = FindQuestControl(iChild.intItemInfoFieldID.ToString(), "picker") as Picker;
-                        Button btn1 = FindQuestControl(iChild.intItemInfoFieldID.ToString(), "button") as Button;
+                        Picker drp1 = FindQuestControl(iChild.intItemInfoFieldID, "picker") as Picker;
+                        Button btn1 = FindQuestControl(iChild.intItemInfoFieldID, "button") as Button;
 
                         var Response = QuestSyncAPIMethods.GetExternalDatasourceInfoByID(CrossConnectivity.Current.IsConnected, iChild.intExternalDatasourceID.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
                         List<DataTypes.DataType.Quest.ExternalDatasourceInfo> ls = Response.Result;
@@ -594,8 +594,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 foreach (var p in infoFieldparent)
                                 {
                                     string value = "-1";
-                                    Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent.ToString(), "picker") as Picker;
-                                    Button btn_ctrl = FindQuestControl(p.intItemInfoFieldIDParent.ToString(), "button") as Button;
+                                    Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent, "picker") as Picker;
+                                    Button btn_ctrl = FindQuestControl(p.intItemInfoFieldIDParent, "button") as Button;
 
                                     //if (btn_ctrl.Text.ToLower() != "-- select item --")
                                     {
@@ -741,8 +741,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 Stack_Popup.IsVisible = false;
                 masterGrid.IsVisible = true;
 
-                var pik_cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "picker");
-                var cntrl = FindQuestControl(iSelectedItemlookupId.ToString(), "button");
+                var pik_cntrl = FindQuestControl(iSelectedItemlookupId, "picker");
+                var cntrl = FindQuestControl(iSelectedItemlookupId, "button");
 
                 RefreshDropDownsAndLookUp(iSelectedItemlookupId);
 
@@ -772,7 +772,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     {
                         try
                         {
-                            Button btn = FindQuestControl(item.intItemInfoFieldIDChild.ToString(), "button") as Button;
+                            Button btn = FindQuestControl(item.intItemInfoFieldIDChild, "button") as Button;
                             if (q_pik.SelectedIndex != 0)
                                 btn.IsEnabled = true;
                             else
@@ -847,7 +847,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 }
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
-                var dt_Entry = FindQuestControl(sty_id) as Entry;
+                var dt_Entry = FindQuestControl(Convert.ToInt32(sty_id)) as Entry;
                 dt_Entry.Text = cnt.Date.ToString("d");
             }
             catch (Exception)
@@ -924,7 +924,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                 foreach (var item in infoFieldChild)
                 {
-                    Picker drp = FindQuestControl(item.intItemInfoFieldIDChild.ToString()) as Picker;
+                    Picker drp = FindQuestControl(item.intItemInfoFieldIDChild) as Picker;
                     if (drp != null)
                     {
                         List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> l = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
@@ -938,7 +938,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     try
                     {
-                        Button btn = FindQuestControl(item.intItemInfoFieldIDChild.ToString(), "button") as Button;
+                        Button btn = FindQuestControl(item.intItemInfoFieldIDChild, "button") as Button;
                         btn.Text = "-- Select Item --";
                         btn.IsEnabled = false;
                     }
@@ -972,7 +972,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                     foreach (var item in infoFieldChild)
                     {
-                        Picker drp = FindQuestControl(item.intItemInfoFieldIDChild.ToString()) as Picker;
+                        Picker drp = FindQuestControl(item.intItemInfoFieldIDChild ) as Picker;
 
 
                         var Response = QuestSyncAPIMethods.GetExternalDatasourceInfoByID(App.Isonline, item.intExternalDatasourceIDChild.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Convert.ToString(itemid));
@@ -998,7 +998,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 foreach (var p in infoFieldparent)
                                 {
                                     string value = "-1";
-                                    Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent.ToString()) as Picker;
+                                    Picker drpParent = FindQuestControl(p.intItemInfoFieldIDParent) as Picker;
                                     if (drpParent.SelectedItem != null)
                                     {
                                         if (drpParent.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
@@ -1121,7 +1121,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         //    return null;
         //}
 
-        public object FindQuestControl(string type, string cntrlName = "")
+        public object FindQuestControl(int type, string cntrlName = "")
         {
             if (string.IsNullOrEmpty(cntrlName))
             {
@@ -1135,7 +1135,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             Type ty = subitem.GetType();
                             if (xy != null)
                             {
-                                if (xy.Contains(type))
+                                if (xy.Split('_')[1] == Convert.ToString(type))
                                 {
                                     return subitem;
                                 }
@@ -1158,7 +1158,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 if (ty.Name.ToLower() == "picker")
                                 {
-                                    if (_styleId.Contains(type))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -1182,7 +1182,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 if (ty.Name.ToLower() == "button")
                                 {
-                                    if (_styleId.Contains(type))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -1206,7 +1206,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 if (ty.Name.ToLower() == "datepicker")
                                 {
-                                    if (_styleId.Contains(type))
+                                    if (_styleId.Split('_')[1] == Convert.ToString(type))
                                     {
                                         return subitem;
                                     }
@@ -1255,7 +1255,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         case "se":
                         case "el":
                         case "me":
-                            var cnt = FindQuestControl((_field_type) + "_" + Control_Schema[i].intItemInfoFieldID);
+                            var cnt = FindQuestControl(/*_field_type + "_" +*/ Control_Schema[i].intItemInfoFieldID);
                             Type cnt_type = cnt.GetType();
                             var pick_Ext_datasrc = new Picker();
                             if (cnt_type.Name.ToLower() == "picker")
@@ -1313,7 +1313,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         case "et":
                         case "cl":
 
-                            cnt = FindQuestControl((_field_type) + "_" + Control_Schema[i].intItemInfoFieldID);
+                            cnt = FindQuestControl(/*_field_type + "_" +*/ Control_Schema[i].intItemInfoFieldID);
                             cnt_type = cnt.GetType();
                             if (cnt_type.Name.ToLower() == "datepicker")
                             {

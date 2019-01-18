@@ -222,7 +222,6 @@ namespace StemmonsMobile.Views.Cases
                         List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>();
 
                         List<spi_MobileApp_GetTypesByCaseTypeResult> metadata = new List<spi_MobileApp_GetTypesByCaseTypeResult>();
-                        spi_MobileApp_GetTypesByCaseTypeResult itemTypes = new spi_MobileApp_GetTypesByCaseTypeResult();
                         metadata = result1.Result;
                         string DisplayAlertStr = "";
                         foreach (var iitem in metadata)

@@ -43,6 +43,8 @@
     <Compile Include="DataType\Cases\AssigntomeResponse.cs" />
     <Compile Include="DataType\Cases\CaseData.cs" />
     <Compile Include="DataType\Cases\ExternalDSOptimized.cs" />
+    <Compile Include="DataType\Cases\FileItem.cs" />
+    <Compile Include="DataType\Cases\GetCaseFileModel.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateRequest.cs" />
     <Compile Include="DataType\Cases\AcceptCaseRequest.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateResponse.cs" />
