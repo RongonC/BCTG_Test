@@ -98,7 +98,10 @@ namespace StemmonsMobile.Views.Search
                 }
                 else if (searchtype == "Search Quest")
                 {
+                    ////Need ItemInstanceTranID
 
+                    //(string itemId, string ItemInstanceTranID, string security_area, string security_item, string security_tran, bool isEditable, string CatId = "")
+                    //await Navigation.PushAsync(new QuestItemDetailPage(listitem.ITEM_ID, 0, listitem.SECURITY_AREA, listitem.SECURITY_ITEM, listitem.SECURITY_TRAN, listitem.IS_EDIT, listitem.AREA_ID));
                 }
                 else if (searchtype == "Search Employee")
                 {

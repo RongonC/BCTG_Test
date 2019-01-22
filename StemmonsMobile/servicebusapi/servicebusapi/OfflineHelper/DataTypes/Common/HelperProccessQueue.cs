@@ -657,7 +657,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
             string _CasetypeId = Convert.ToString(Result1?.Result?.TYPE_ID);
 
             //    var tm_uname = DBHelper.GetAppTypeInfo_tmname("CASES", Convert.ToInt32(caseId), Convert.ToInt32(_CasetypeId), "C8_GetCaseBasicInfo", dbPath).Result?.TM_Username;
-            GetCaseTypesResponse.CaseData lstResulttemp = new GetCaseTypesResponse.CaseData();
+            GetCaseTypesResponse.BasicCase lstResulttemp = new GetCaseTypesResponse.BasicCase();
             #region Update C8_GetCaseBasicInfo Record
 
             var CaseBasic = CasesAPIMethods.GetCaseBasicInfo(_username, Convert.ToString(caseId));
@@ -665,8 +665,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
 
             if (!string.IsNullOrEmpty(Convert.ToString(CaseBasicData)))
             {
-                List<GetCaseTypesResponse.CaseData> lstResult = new List<GetCaseTypesResponse.CaseData>();
-                lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(CaseBasicData.ToString());
+                List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
+                lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(CaseBasicData.ToString());
                 lstResult.Add(lstResulttemp);
                 if (lstResult.Count > 0)
                 {

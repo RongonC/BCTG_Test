@@ -41,7 +41,7 @@ namespace StemmonsMobile.Views.Cases
 
         ReturnCaseToLastAssigneeResponse.UserInfo casedatavalue;
         ObservableCollection<CasesNotesGroup> CasesnotesGroups = new ObservableCollection<CasesNotesGroup>();
-        CaseData _Casedata;
+        BasicCase _Casedata;
 
         public string strTome = string.Empty;
         public string Casetitle = string.Empty;
@@ -171,11 +171,12 @@ namespace StemmonsMobile.Views.Cases
 
             if (App.Isonline)
             {
+
                 await Task.Run(() =>
                 {
                     try
                     {
-                        var temp = CasesAPIMethods.GetCaseModifiedDate(Convert.ToInt32(CaseID), Convert.ToDateTime(_Casedata.ModifiedDateTime));
+                        var temp = CasesAPIMethods.GetCaseModifiedDate(Convert.ToInt32(CaseID), string.IsNullOrEmpty(_Casedata.CaseModifiedDateTime) ? DateTime.Now : Convert.ToDateTime(_Casedata.CaseModifiedDateTime));
                         if (!string.IsNullOrEmpty(Convert.ToString(temp)))
                             str_CaseFooter = Convert.ToString(temp);
                     }
@@ -188,7 +189,9 @@ namespace StemmonsMobile.Views.Cases
 
                 try
                 {
-                    if (Convert.ToDateTime(_Casedata.ModifiedDateTime) < Convert.ToDateTime(spl.Where(c => c.Contains("MODIFIED_DATETIME")).FirstOrDefault().ToString().Split('=')[1]))
+                    // var ts = string.IsNullOrEmpty(_Casedata.CaseModifiedDateTime) ? DateTime.Now : Convert.ToDateTime(_Casedata.CaseModifiedDateTime);
+
+                    if (!string.IsNullOrEmpty(_Casedata.CaseModifiedDateTime) && Convert.ToDateTime(_Casedata.CaseModifiedDateTime) < Convert.ToDateTime(spl.Where(c => c.Contains("MODIFIED_DATETIME")).FirstOrDefault().ToString().Split('=')[1]))
                     {
                         IsModifiedDate_Same = true;
                     }
@@ -1330,7 +1333,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                 if (!String.IsNullOrEmpty(Dateval))
                                                 {
-                                                    var Str = App.DateFormatStringToString(Dateval);
+                                                    var Str = CommonConstants.DateFormatStringToString(Dateval);
                                                     DO.Text = Convert.ToDateTime(Str).Date.ToString("d");
 
                                                     Device.BeginInvokeOnMainThread(() =>
@@ -1734,14 +1737,14 @@ namespace StemmonsMobile.Views.Cases
                     string CASE_OWNER = spl?.Where(c => c.Contains("CASE_OWNER"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
                     string CASE_OWNER_DATETIME = spl?.Where(c => c.Contains("CASE_OWNER_DATETIME"))?.FirstOrDefault()?.ToString()?.Split('=')[1];
 
-                    _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName ?? _Casedata.CaseAssignedTo;
+                    // _Casedata.CaseAssignedToDisplayName = _Casedata.CaseAssignedToDisplayName ?? _Casedata.CaseAssignedToDisplayName;
 
                     #region Created By Name
                     var s = new FormattedString();
-                    if (_Casedata?.CreateByDisplayName != null)
+                    if (_Casedata?.CaseCreatedDisplayName != null)
                     {
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_BY)) ? CREATED_BY + "\r\n" : _Casedata.CreateByDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(CREATED_DATETIME) : (Convert.ToDateTime(_Casedata.CreateDateTime)).ToString(), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_BY)) ? CREATED_BY + "\r\n" : _Casedata.CaseCreatedDisplayName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CREATED_DATETIME)) ? Convert.ToString(CREATED_DATETIME) : (Convert.ToDateTime(_Casedata.CaseCreatedDateTime)).ToString(), FontSize = 14 });
                     }
 
                     lbl_createname.FormattedText = (s);
@@ -1752,7 +1755,7 @@ namespace StemmonsMobile.Views.Cases
                     if (_Casedata?.CaseAssignedToDisplayName != null)
                     {
                         s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_TO)) ? CASE_ASSGN_TO + "\r\n" : _Casedata.CaseAssignedToDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_DATETIME)) ? Convert.ToString(CASE_ASSGN_DATETIME) : Convert.ToString(_Casedata.CaseAssignedDateTime == default(DateTime) ? DateTime.Now : _Casedata.CaseAssignedDateTime), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(CASE_ASSGN_DATETIME)) ? Convert.ToString(CASE_ASSGN_DATETIME) : _Casedata.CaseAssignDateTime ?? "", FontSize = 14 });
 
                     }
 
@@ -1776,10 +1779,10 @@ namespace StemmonsMobile.Views.Cases
 
                     #region Modified BY Name
                     s = new FormattedString();
-                    if (_Casedata?.ModifiedByDisplayName != null)
+                    if (_Casedata?.CaseModifiedByDisplayName != null)
                     {
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_BY)) ? MODIFIED_BY + "\r\n" : _Casedata.ModifiedByDisplayName + "\r\n", FontSize = 14 });
-                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(MODIFIED_DATETIME) : Convert.ToString(_Casedata.ModifiedDateTime), FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_BY)) ? MODIFIED_BY + "\r\n" : _Casedata.CaseModifiedByDisplayName + "\r\n", FontSize = 14 });
+                        s.Spans.Add(new Span { Text = (Onlineflag && !string.IsNullOrEmpty(MODIFIED_DATETIME)) ? Convert.ToString(MODIFIED_DATETIME) : _Casedata.CaseModifiedDateTime, FontSize = 14 });
                     }
 
                     lbl_modifiedname.FormattedText = (s);
@@ -1795,12 +1798,12 @@ namespace StemmonsMobile.Views.Cases
                 DateTime Dout = new DateTime();
                 DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out Dout);
 
-                lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBy) + " at " + Convert.ToString(Dout.ToString());
+                lbl_Casestatus.Text = "Closed By " + (_Casedata.CaseClosedByDisplayName ?? _Casedata.CaseClosedBySAM) + " at " + Convert.ToString(Dout.ToString());
 
-                Assign_Sam = _Casedata.CaseAssignedTo;
-                Create_Sam = _Casedata.CreateBySam;
-                Modify_Sam = _Casedata.ModifiedBySam;
-                Owner_Sam = _Casedata.CaseOwner;
+                Assign_Sam = _Casedata.CaseAssignedToSAM;
+                Create_Sam = _Casedata.CaseCreatedSAM;
+                Modify_Sam = _Casedata.CaseModifiedBySAM;
+                Owner_Sam = _Casedata.CaseOwnerSAM;
 
             }
             catch (Exception)
@@ -2922,7 +2925,7 @@ namespace StemmonsMobile.Views.Cases
 
                                         //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
                                         //{
-                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                        //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), CommonConstants.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
                                         //}
                                         //else
                                         //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");
@@ -3406,14 +3409,14 @@ namespace StemmonsMobile.Views.Cases
 
                                                         assocFieldValues.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId));
 
-                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                                        assocFieldTexts.Add("assoc_" + CurrentStyleId.Split('|')[0].ToUpper(), CommonConstants.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
 
                                                     }
                                                     else
                                                     {
                                                         assocFieldValues["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = item.AssocTypeID + "|" + Convert.ToString(CurrentStyleId);
 
-                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                                        assocFieldTexts["assoc_" + CurrentStyleId.Split('|')[0].ToUpper()] = CommonConstants.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
                                                     }
                                                     cntrl = subitem;
                                                 }
@@ -3745,17 +3748,17 @@ namespace StemmonsMobile.Views.Cases
 
                 string[] buttons;
 
-                if (_Casedata.CaseOwner.ToLower() == Functions.UserName && _Casedata.CaseAssignedTo.ToLower() == Functions.UserName)
+                if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName && _Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner and CaseAssignedTo to the Current User
                     buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
-                else if (_Casedata.CaseOwner.ToLower() == Functions.UserName)
+                else if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner is Current User
                     buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
-                else if (_Casedata.CaseAssignedTo.ToLower() == Functions.UserName)
+                else if (_Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if CaseAssignedTo is Current User
                     buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
@@ -3997,7 +4000,7 @@ namespace StemmonsMobile.Views.Cases
 
                                             //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
                                             //{
-                                            //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
+                                            //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), CommonConstants.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"));
                                             //}
                                             //else
                                             //    textValues.Add(int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), "");

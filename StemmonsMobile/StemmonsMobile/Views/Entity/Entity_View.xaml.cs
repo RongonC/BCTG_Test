@@ -354,7 +354,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     for (int i = 0; i < EntityListsNotes.Count; i++)
                     {
-                        string st = App.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
+                        string st = CommonConstants.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
                         Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
                         {
                             new Entity_Notes { Note = EntityListsNotes[i].Note }

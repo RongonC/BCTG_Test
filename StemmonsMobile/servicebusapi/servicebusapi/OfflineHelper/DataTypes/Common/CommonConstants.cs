@@ -6,6 +6,7 @@ using StemmonsMobile.DataTypes.DataType.Entity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1302,11 +1303,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
 
             var CaseBasic = CasesAPIMethods.GetCaseBasicInfo(_username, Convert.ToString(caseId));
             var CaseBasicData = CaseBasic.GetValue("ResponseContent");
-            GetCaseTypesResponse.CaseData lstResulttemp = new GetCaseTypesResponse.CaseData();
+            GetCaseTypesResponse.BasicCase lstResulttemp = new GetCaseTypesResponse.BasicCase();
             if (!string.IsNullOrEmpty(Convert.ToString(CaseBasicData)))
             {
-                List<GetCaseTypesResponse.CaseData> lstResult = new List<GetCaseTypesResponse.CaseData>();
-                lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(CaseBasicData.ToString());
+                List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
+                lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(CaseBasicData.ToString());
                 lstResult.Add(lstResulttemp);
                 if (lstResult.Count > 0)
                 {
@@ -1377,6 +1378,95 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
             }
             // Return char and concat substring.
             return char.ToUpper(s[0]) + s.Substring(1);
+        }
+
+        public static string DateFormatStringToString(string inputDate, string inputDateFormate = "MM/dd/yyyy", string outputDateFormate = "yyyy/MM/dd")
+        {
+            string sInput = inputDate;
+            string sOutPut = string.Empty;
+            try
+            {
+                //if (inputDate.IndexOf('-') > -1)
+                //{
+                //    try
+                //    {
+                //        inputDate = inputDate.Replace('-', '/');
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //    }
+                //}
+
+                //CultureInfo ci = new CultureInfo("en-US");
+                //var tdt = Convert.ToDateTime(inputDate);
+                //sOutPut = tdt.ToString("MM/dd/yyyy", ci);
+                DateTime Dout = new DateTime();
+                DateTime.TryParse(inputDate, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
+
+                sOutPut = Dout.Date.ToString();
+
+                // DateTime dateTime16 = DateTime.ParseExact(inputDate, new string[] { "MM.dd.yyyy", "MM-dd-yyyy", "MM/dd/yyyy" }, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None);
+                // string json = null;
+
+                // DateTime dt2 = DateTime.ParseExact(inputDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+
+
+                //inputDate = SeperatorValueReplace(inputDate);
+                //sOutPut = DateTime.ParseExact(inputDate, inputDateFormate, CultureInfo.InvariantCulture, DateTimeStyles.None).ToString(outputDateFormate);
+            }
+            catch (Exception ex)
+            {
+                return sInput;
+            }
+            return sOutPut;
+        }
+
+        public static string SeperatorValueReplace(string sInput)
+        {
+            try
+            {
+                char cSeperator = '/';
+                if (sInput.IndexOf('/') > -1)
+                {
+                    cSeperator = '/';
+                }
+                else if (sInput.IndexOf("-") > -1)
+                {
+                    cSeperator = '-';
+                }
+                else if (sInput.IndexOf(".") > -1)
+                {
+                    cSeperator = '.';
+                }
+                string[] arrinput = sInput.Split(cSeperator);
+                string[] arrOutPut = new string[arrinput.Length];
+
+
+                for (int i = 0; i <= arrinput.Length - 1; i++)
+                {
+                    if (arrinput[i].Length == 1)
+                    {
+                        arrOutPut[i] = "0" + arrinput[i] + cSeperator;
+                    }
+                    else
+                    {
+                        if (i != arrinput.Length - 1)
+                        {
+                            arrOutPut[i] = arrinput[i] + cSeperator;
+                        }
+                        else
+                        {
+                            arrOutPut[i] = arrinput[i];
+                        }
+                    }
+                }
+                return String.Concat(arrOutPut);
+            }
+            catch (Exception)
+            {
+                return sInput;
+            }
+
         }
     }
 }

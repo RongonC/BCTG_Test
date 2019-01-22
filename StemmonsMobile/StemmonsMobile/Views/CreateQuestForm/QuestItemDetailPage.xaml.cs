@@ -439,7 +439,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         //    if (ControlsValues[i].strItemInfoFieldValue != "")
                                         //    {
                                         //        string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                        //        string Date = App.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                        //        string Date = CommonConstants.DateFormatStringToString(ControlsValues[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
                                         //        DateTime sd = Convert.ToDateTime(Date);
                                         //        DO.Date = Convert.ToDateTime(Date);
                                         //    }
@@ -490,12 +490,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         //if (ControlsValues[i].strItemInfoFieldValue != "")
                                         //{
                                         //    string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                        //    string Date = App.DateFormatStringToString(ControlsValues[i - 1].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                        //    string Date = CommonConstants.DateFormatStringToString(ControlsValues[i - 1].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
                                         //    DateTime sd = Convert.ToDateTime(Date);
                                         //    var dt_c = FindQuestControl(Convert.ToString(ControlsValues[i - 1].intItemInfoFieldID), "DatePicker") as DatePicker;
                                         //    if (!String.IsNullOrEmpty(Date))
                                         //    {
-                                        //        var Str = App.DateFormatStringToString(Date);
+                                        //        var Str = CommonConstants.DateFormatStringToString(Date);
                                         //        txt_Date.Text = Str;
 
                                         //        Device.BeginInvokeOnMainThread(() =>
@@ -764,12 +764,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                                     DO.Text = ControlsValues[i].strItemInfoFieldValue;
 
                                                     //string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                                    //string Date = App.DateFormatStringToString(ControlSchema[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
+                                                    //string Date = CommonConstants.DateFormatStringToString(ControlSchema[i].strItemInfoFieldValue, "MM/dd/yyyy", "yyyy/MM/dd");
                                                     //DateTime sd = Convert.ToDateTime(Date);
                                                     //var dt_c = FindQuestControl(Convert.ToString(ControlsValues[i].intItemInfoFieldID), "DatePicker") as DatePicker;
                                                     //if (!String.IsNullOrEmpty(Date))
                                                     //{
-                                                    //    var Str = App.DateFormatStringToString(Date);
+                                                    //    var Str = CommonConstants.DateFormatStringToString(Date);
                                                     //    DO.Text = Str;
 
                                                     //    Device.BeginInvokeOnMainThread(() =>
@@ -790,7 +790,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                                 //string Dateval = (metadatacollection?.Where(c => c.AssociatedTypeID == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue);
                                                 //if (!String.IsNullOrEmpty(Dateval))
                                                 //{
-                                                //    var Str = App.DateFormatStringToString(Dateval);
+                                                //    var Str = CommonConstants.DateFormatStringToString(Dateval);
                                                 //    DateTime dt = Convert.ToDateTime(Str);
                                                 //    DO.Date = dt;
                                                 //}
@@ -1810,7 +1810,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     {
                                         strobjid += Convert.ToString(ControlSchema[i].intExternalDatasourceID) + ",";
                                         striteminfoFieldsIds += ControlSchema[i].intItemInfoFieldID + ",";
-                                        striteminfoFieldsValues += Convert.ToString(App.DateFormatStringToString(date_pick.Date.Date.ToString("MM/dd/yyyy"))) + ",";
+                                        striteminfoFieldsValues += Convert.ToString(CommonConstants.DateFormatStringToString(date_pick.Date.Date.ToString("MM/dd/yyyy"))) + ",";
                                     }
                                     else
                                     {

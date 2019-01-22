@@ -294,7 +294,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         /// <para>If populating a list, such as a GridView, use <see cref="BasicCase"/> instead.</para>
         /// </summary>
         // [Serializable]
-        public class CaseData
+        public class CaseData1
         {
             public int CaseID { get; set; }
             public int? ListID { get; set; }
@@ -307,9 +307,35 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public DateTime? CaseHopperDateTime { get; set; }
             public DateTime? CaseClosedDateTime { get; set; }
             public string CaseClosedBy { get; set; }
+
+            #region Created By members
+            public string CaseCreatedDateTime { get; set; }
+            public string CaseCreatedDateTimeDateOnly
+            {
+                get { return GetDateOnly(CaseCreatedDateTime); }
+            }
+            public string CreatedOn
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(this.CaseCreatedDateTimeDateOnly))
+                    {
+                        return $"{"Created On : "}{CaseCreatedDateTimeDateOnly}";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+
+                }
+            }
+
             public DateTime CreateDateTime { get; set; }
             public string CreateBySam { get; set; }
             public string CaseCreatedDisplayName { get; set; }
+            #endregion
+
+
             public DateTime ModifiedDateTime { get; set; }
             public string ModifiedBySam { get; set; }
             public string CaseModifiedByDisplayName { get; set; }
@@ -459,7 +485,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
             public MetaData SystemStatus { get; set; }
 
-            public CaseData()
+            public CaseData1()
             {
                 this.NoteDataCollection = new List<NoteData>();
                 this.MetaDataCollection = new List<MetaData>();
@@ -551,26 +577,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
                 }
             }
-            public string CaseCreatedDateTime { get; set; }
-            public string CaseCreatedDateTimeDateOnly
-            {
-                get { return GetDateOnly(CaseCreatedDateTime); }
-            }
-            public string CreatedOn
-            {
-                get
-                {
-                    if (!string.IsNullOrEmpty(this.CaseCreatedDateTimeDateOnly))
-                    {
-                        return $"{"Created On : "}{CaseCreatedDateTimeDateOnly}";
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
 
-                }
-            }
 
             public string ModifiedBy
             {

@@ -34,7 +34,7 @@ namespace StemmonsMobile.Views.Cases
         string Casetypeid = string.Empty;
         string Favoriteid = string.Empty;
         string fav_json = "";
-        CaseData casedatalist = new CaseData();
+        BasicCase casedatalist = new BasicCase();
         List<GetCaseTypesResponse.ItemType> sControls = new List<GetCaseTypesResponse.ItemType>();
 
         string ContolrLst = string.Empty;
@@ -511,7 +511,7 @@ namespace StemmonsMobile.Views.Cases
                                 //    {
                                 //        if (!string.IsNullOrEmpty(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value))
                                 //        {
-                                //            var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value);
+                                //            var Str = CommonConstantsDateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == item.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value);
                                 //            DateTime dt = Convert.ToDateTime(Str);
                                 //            DO.Date = dt;
                                 //        }
@@ -1005,7 +1005,7 @@ namespace StemmonsMobile.Views.Cases
                                             string DT_val = metaDatatextValues_fav?.Where(c => c.Key == Fav_iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value;
                                             if (!string.IsNullOrEmpty(DT_val))
                                             {
-                                                ent.Text = Convert.ToDateTime(App.DateFormatStringToString(DT_val)).Date.ToString();
+                                                ent.Text = Convert.ToDateTime(CommonConstants.DateFormatStringToString(DT_val)).Date.ToString();
                                             }
                                             else
                                                 ent.Text = "";
@@ -1014,7 +1014,7 @@ namespace StemmonsMobile.Views.Cases
                                             //DO = cnt as DatePicker;
                                             //DO.TextColor = Color.Gray;
                                             ////DO.FontSize = 16;
-                                            //var Str = App.DateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
+                                            //var Str = CommonConstantsDateFormatStringToString(metaDatatextValues_fav?.Where(c => c.Key == iitem.ASSOC_TYPE_ID)?.FirstOrDefault().Value);
                                             //DateTime dt = Convert.ToDateTime(Str);
                                             //DO.Date = dt;
                                         }
@@ -2206,7 +2206,7 @@ namespace StemmonsMobile.Views.Cases
                                             if (en.StyleId == CurrentStyleId)
                                             {
 
-                                                SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), Convert.ToString(CurrentStyleId), App.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"), item.AssocTypeID);
+                                                SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), Convert.ToString(CurrentStyleId), CommonConstants.DateFormatStringToString(en.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy"), item.AssocTypeID);
                                                 cntrl = subitem;
                                             }
                                         }
@@ -2457,8 +2457,8 @@ namespace StemmonsMobile.Views.Cases
 
                 action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
 
-                CaseData casedata = new CaseData();
-                casedata.CreateBySam = Functions.UserName;
+                BasicCase casedata = new BasicCase();
+                casedata.CaseCreatedSAM = Functions.UserName;
                 casedata.CaseCreatedDisplayName = Functions.UserFullName;
                 casedata.CaseTypeID = Convert.ToInt32(Casetypeid);
 
@@ -2651,7 +2651,7 @@ namespace StemmonsMobile.Views.Cases
                                         //datepicker = (DatePicker)xy;
                                         //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
                                         //{
-                                        //    string str = App.DateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                        //    string str = CommonConstantsDateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
 
                                         //    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), Value = str });
                                         //}
@@ -2840,15 +2840,32 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 Picker Picker = new Picker();
                                 Picker = (Picker)xy;
-                                if (Picker.StyleId.Split('_')[1] == AssocID.ToString())
-                                    return Picker;
+
+                                if (Picker.StyleId.Contains("|"))
+                                {
+                                    if (Picker.StyleId.Split('_')[1].Split('|')[0] == AssocID.ToString())
+                                        return Picker;
+                                }
+                                else
+                                {
+                                    if (Picker.StyleId.Split('_')[1] == AssocID.ToString())
+                                        return Picker;
+                                }
                             }
                             else if (ty.Name.ToLower() == "button")
                             {
                                 Button btn = new Button();
                                 btn = (Button)xy;
-                                if (btn.StyleId.Split('_')[1] == AssocID.ToString())
-                                    return btn;
+                                if (btn.StyleId.Contains("|"))
+                                {
+                                    if (btn.StyleId.Split('_')[1].Split('|')[0] == AssocID.ToString())
+                                        return btn;
+                                }
+                                else
+                                {
+                                    if (btn.StyleId.Split('_')[1] == AssocID.ToString())
+                                        return btn;
+                                }
                             }
                         }
                     }

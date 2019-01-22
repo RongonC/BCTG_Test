@@ -888,7 +888,7 @@ namespace StemmonsMobile.Views.Entity
                                                 try
                                                 {
                                                     string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-                                                    var Str = App.DateFormatStringToString(data[0].TextValue);
+                                                    var Str = CommonConstants.DateFormatStringToString(data[0].TextValue);
                                                     DateTime dt = Convert.ToDateTime(Str);
                                                     date_pick.Date = dt;
                                                 }
@@ -1005,7 +1005,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 for (int i = 0; i < Entity_NotesLists.Count; i++)
                                 {
-                                    string st = App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
+                                    string st = CommonConstants.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
                                     var tp = Entity_NotesLists[i].Note.ToLower().Replace("download.aspx?", "/download.aspx?");
                                     tp = tp.ToLower().Replace("/download.aspx?", "/download.aspx?");
                                     tp = tp.ToLower().Replace("/download.aspx?", App.EntityImgURL.ToLower() + "/download.aspx?");
@@ -1768,7 +1768,7 @@ namespace StemmonsMobile.Views.Entity
                                     {
                                         if (en.StyleId == CurrentStyleId)
                                         {
-                                            var sDate = App.DateFormatStringToString(en.Date.ToString());
+                                            var sDate = CommonConstants.DateFormatStringToString(en.Date.ToString());
                                             DateTime dt = Convert.ToDateTime(sDate);
                                             SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.ToUpper(), Convert.ToString(CurrentStyleId), dt.Date.ToString("MM/dd/yyyy"), item.AssocTypeID);
                                             cntrl = subitem;
@@ -2988,7 +2988,7 @@ namespace StemmonsMobile.Views.Entity
                                         date_pick = (DatePicker)cnt;
                                         if (date_pick.Date != Convert.ToDateTime("01/01/1900"))
                                         {
-                                            Assoc_metatext.TextValue = Convert.ToDateTime(App.DateFormatStringToString(date_pick.Date.ToString())).Date.ToString("MM/dd/yyyy");
+                                            Assoc_metatext.TextValue = Convert.ToDateTime(CommonConstants.DateFormatStringToString(date_pick.Date.ToString())).Date.ToString("MM/dd/yyyy");
                                         }
                                         else
                                         {

@@ -1,4 +1,5 @@
-﻿using DataServiceBus.OfflineHelper.DataTypes.Entity;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Common;
+using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using System;
@@ -45,7 +46,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     for (int i = 0; i < Entity_NotesLists.Count; i++)
                     {
-                        var st = Convert.ToDateTime(App.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime));
+                        var st = Convert.ToDateTime(CommonConstants.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime));
                         Temp.Add(new EntityNotesGroup("", st.Date.ToString("d"), Entity_NotesLists[i].CreatedBy)
                         {
                             new Entity_Notes { Note = Entity_NotesLists[i].Note }

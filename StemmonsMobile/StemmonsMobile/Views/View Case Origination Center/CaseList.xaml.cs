@@ -341,7 +341,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         {
                             if (!string.IsNullOrEmpty(i.strCaseDue))
                             {
-                                i.bg_color = Convert.ToDateTime(App.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
                                 i.DueDateVisibility = true;
                             }
                             else

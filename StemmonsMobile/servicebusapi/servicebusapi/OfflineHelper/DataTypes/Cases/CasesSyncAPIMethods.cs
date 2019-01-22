@@ -152,47 +152,47 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     ResponseContent = JsonConvert.SerializeObject(Output.GetAllCaseType);
 
-                        Task.Run(() =>
+                    Task.Run(() =>
+                    {
+                        #region Delete Data Before Master Sync
+                        var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
+                        CaseDate.Wait();
+                        if (CaseDate.Result.Count > 0)
                         {
-                            #region Delete Data Before Master Sync
-                            var CaseDate = DBHelper.GetAppTypeInfoListBySystemName(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
-                            CaseDate.Wait();
-                            if (CaseDate.Result.Count > 0)
+                            try
                             {
-                                try
-                                {
-                                    var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                                var MultiId = string.Join(",", CaseDate.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                    var db = new SQLiteAsyncConnection(_DBPath);
-                                    db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                                var db = new SQLiteAsyncConnection(_DBPath);
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                    //  //var db2 = new SQLiteAsyncConnection(_DBPath);
-                                   //var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
-                                    //EDS.Wait();
+                                //  //var db2 = new SQLiteAsyncConnection(_DBPath);
+                                //var EDS = db.QueryAsync<EDSResultList>("Select * from EDSResultList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                //EDS.Wait();
 
-                                    //MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
-                                    ////var db1 = new SQLiteAsyncConnection(_DBPath);
-                                    //db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+                                //MultiId = string.Join(",", EDS.Result.Select(x => x.EDS_RESULT_ID).ToList().ToArray());
+                                ////var db1 = new SQLiteAsyncConnection(_DBPath);
+                                //db.QueryAsync<EDSResultList>("Delete from EDSResultList where EDS_RESULT_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
-                                    MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
-                                    var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
-                                    Appinf.Wait();
+                                MultiId = string.Join(",", CaseDate.Result.Select(x => x.ID).ToList().ToArray());
+                                var Appinf = db.QueryAsync<AppTypeInfoList>("Select * from AppTypeInfoList where TYPE_SCREEN_INFO in ('C8_GetCaseBasicInfo','C4_GetCaseNotes','C10_GetCaseActivity') and ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "");
+                                Appinf.Wait();
 
-                                    MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
+                                MultiId = string.Join(",", Appinf.Result.Select(x => x.APP_TYPE_INFO_ID).ToList().ToArray());
 
-                                    
-                                    db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
+
+                                db.QueryAsync<AppTypeInfoList>("Delete from AppTypeInfoList where APP_TYPE_INFO_ID in (" + MultiId + ") and INSTANCE_USER_ASSOC_ID=" + ConstantsSync.INSTANCE_USER_ASSOC_ID + "").Wait();
 
 
 
-                                }
-                                catch (Exception)
-                                {
-                                }
                             }
-                            #endregion
-                            CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
-                        });
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        #endregion
+                        CommonConstants.MasterOfflineStore(ResponseContent, _DBPath);
+                    });
                 }
                 else
                 {
@@ -560,7 +560,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     view.CaseModifiedDateTime = DateTime.Now.ToString();
                     view.CaseID = Convert.ToInt32(_caseID);
                     view.CaseOwnerDisplayName = view.CaseOwnerDisplayName == "" ? FullName : view.CaseOwnerDisplayName;
-                    view.CaseOwnerDateTime = DateTime.Now.ToString();
+                    view.CaseOwnerDateTime = Convert.ToString(DateTime.Now);
                     view.CaseModifiedByDisplayName = FullName;
                     view.CaseModifiedBySAM = _UserName;
 
@@ -597,14 +597,14 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 Record.Wait();
                 if (Record.Result != null)
                 {
-                    var res = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(Record.Result.ASSOC_FIELD_INFO.ToString());
+                    var res = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(Record.Result.ASSOC_FIELD_INFO.ToString());
 
                     var ress = res.Where(av => av.CaseID == Convert.ToInt32(_caseID) && av.CaseTypeID == Convert.ToInt32(_caseTypeID)).Select(v =>
                     {
-                        v.CaseAssignedTo = SAMName;
+                        v.CaseAssignedToSAM = SAMName;
                         v.CaseAssignedToDisplayName = DisplayName;
-                        v.ModifiedDateTime = DateTime.Now;
-                        v.CaseAssignedDateTime = DateTime.Now;
+                        v.CaseModifiedDateTime = Convert.ToString(DateTime.Now);
+                        v.CaseAssignDateTime = Convert.ToString(DateTime.Now);
                         return v;
                     });
 
@@ -1309,20 +1309,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                         SaveViewJsonSqlite(viewCaselist, "E2_GetCaseList" + Screemname, _DBPath, Convert.ToString(_caseTypeID), Convert.ToString(insertedRecordid), 0, "", 0, CasesInstance, _IsOnline, "M", tm_uname);
 
-                        List<GetCaseTypesResponse.CaseData> lstResultBasicInfo = new List<GetCaseTypesResponse.CaseData>();
+                        List<GetCaseTypesResponse.BasicCase> lstResultBasicInfo = new List<GetCaseTypesResponse.BasicCase>();
 
 
-                        GetCaseTypesResponse.CaseData ls = new GetCaseTypesResponse.CaseData()
+                        GetCaseTypesResponse.BasicCase ls = new GetCaseTypesResponse.BasicCase()
                         {
                             CaseTypeID = viewCaselist.FirstOrDefault().CaseTypeID,
-                            CreateBySam = _UserName,
-                            CaseOwner = _UserName,
-                            CaseOwnerDateTime = DateTime.Now,
+                            CaseCreatedSAM = _UserName,
+                            CaseOwnerSAM = _UserName,
+                            CaseOwnerDateTime = DateTime.Now.ToString(),
                             MetaDataCollection = viewCase.MetaDataCollection,
                             CaseOwnerDisplayName = UserFullName,
                             CaseTypeName = viewCase.CaseTypeName,
-                            CreateDateTime = DateTime.Now,
-                            CreateByDisplayName = UserFullName,
+                            CaseCreatedDateTime = DateTime.Now.ToString(),
+                            CaseCreatedDisplayName = UserFullName,
                             CaseID = viewCase.CaseID
                         };
                         lstResultBasicInfo.Add(ls);
@@ -1505,24 +1505,24 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             List<GetCaseTypesResponse.BasicCase> jsonlist = new List<GetCaseTypesResponse.BasicCase>();
                             if (GetAppTypeInfo.Result.ASSOC_FIELD_INFO?.ToString().Trim() != "[]")
                             {
-                                List<GetCaseTypesResponse.CaseData> casedata = new List<GetCaseTypesResponse.CaseData>();
-                                casedata = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(GetAppTypeInfo.Result.ASSOC_FIELD_INFO);
+                                List<GetCaseTypesResponse.BasicCase> casedata = new List<GetCaseTypesResponse.BasicCase>();
+                                casedata = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(GetAppTypeInfo.Result.ASSOC_FIELD_INFO);
                                 GetCaseTypesResponse.BasicCase json = new GetCaseTypesResponse.BasicCase()
                                 {
                                     CaseTitle = casedata.FirstOrDefault().CaseTitle,
-                                    CaseCreatedDisplayName = casedata.FirstOrDefault().CreateByDisplayName,
-                                    CaseCreatedSAM = casedata.FirstOrDefault().CreateBy == "" ? casedata.FirstOrDefault().CaseOwner : casedata.FirstOrDefault().CreateBy,
+                                    CaseCreatedDisplayName = casedata.FirstOrDefault().CaseCreatedDisplayName,
+                                    CaseCreatedSAM = casedata.FirstOrDefault().CreateBy == "" ? casedata.FirstOrDefault().CaseOwnerSAM : casedata.FirstOrDefault().CreateBy,
                                     ListID = Convert.ToInt32(casedata.FirstOrDefault().ListID),
                                     CaseTypeID = casedata.FirstOrDefault().CaseTypeID,
                                     CaseTypeName = casedata.FirstOrDefault().CaseTypeName,
-                                    CaseAssignedToSAM = casedata.FirstOrDefault().CaseAssignedTo,
+                                    CaseAssignedToSAM = casedata.FirstOrDefault().CaseAssignedToSAM,
                                     CaseID = casedata.FirstOrDefault().CaseID,
-                                    CaseOwnerSAM = casedata.FirstOrDefault().CaseOwner,
-                                    CaseCreatedDateTime = Convert.ToString(casedata.FirstOrDefault().CreateDateTime),
+                                    CaseOwnerSAM = casedata.FirstOrDefault().CaseOwnerSAM,
+                                    CaseCreatedDateTime = Convert.ToString(casedata.FirstOrDefault().CaseCreatedDateTime),
                                     CaseAssignedToDisplayName = casedata.FirstOrDefault().CaseAssignedToDisplayName,
                                     MetaDataCollection = casedata.FirstOrDefault().MetaDataCollection,
                                     CaseModifiedBySAM = casedata.FirstOrDefault().ModifiedBy,
-                                    CaseModifiedByDisplayName = casedata.FirstOrDefault().ModifiedByDisplayName,
+                                    CaseModifiedByDisplayName = casedata.FirstOrDefault().CaseModifiedByDisplayName,
                                     SecurityType = casedata.FirstOrDefault().SceurityType,
                                 };
                                 jsonlist.Add(json);
@@ -1665,7 +1665,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             SaveViewJsonSqlite(lstResult, "E2_GetCaseList" + Screenname, _DBPath, Convert.ToString(_caseTypeID), Convert.ToString(insertedRecordid), APP_TYPE_INFO_ID, typename, 0, CasesInstance, OnlineList.Result.Count > 0 ? true : false, "M", tm_uname);
                         }
 
-                        List<GetCaseTypesResponse.CaseData> lstResultBasicInfo = new List<GetCaseTypesResponse.CaseData>();
+                        List<GetCaseTypesResponse.BasicCase> lstResultBasicInfo = new List<GetCaseTypesResponse.BasicCase>();
 
                         Task<List<AppTypeInfoList>> onlineRecord = DBHelper.GetAppTypeInfoListByIdTransTypeSyscode_list(CasesInstance, Convert.ToInt32(_caseTypeID), Convert.ToInt32(insertedRecordid), _DBPath, "C8_GetCaseBasicInfo", "M", null);
                         onlineRecord.Wait();
@@ -1673,30 +1673,30 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         {
                             if (!string.IsNullOrEmpty(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO))
                             {
-                                lstResultBasicInfo = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
+                                lstResultBasicInfo = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                             }
                         }
                         var ob = objAssignCase as GetUserInfoResponse.UserInfo;
                         lstResultBasicInfo = lstResultBasicInfo.Select(av =>
                         {
-                            av.CaseAssignedDateTime = (objAssignCase != null && isApproveCase == false && isDeclineCase == false) ? DateTime.Now : Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseAssignedDateTime);
-                            av.CaseAssignedTo = (objAssignCase != null && isApproveCase == false && isDeclineCase == false) ? ob.DisplayName : lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
+                            av.CaseAssignDateTime = (objAssignCase != null && isApproveCase == false && isDeclineCase == false) ? string.Empty : lstResultBasicInfo.FirstOrDefault().CaseAssignDateTime;
+                            //av.CaseAssignedToSAM = (objAssignCase != null && isApproveCase == false && isDeclineCase == false) ? ob.DisplayName : lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
                             av.CaseAssignedToDisplayName = objAssignCase != null && isApproveCase == false && isDeclineCase == false ? ob.DisplayName : lstResultBasicInfo.FirstOrDefault().CaseAssignedToDisplayName;
                             av.CaseTypeID = lstResultBasicInfo.FirstOrDefault().CaseTypeID;
-                            av.CreateBySam = lstResultBasicInfo.FirstOrDefault().CreateBy;
+                            av.CaseCreatedSAM = lstResultBasicInfo.FirstOrDefault().CreateBy;
                             av.ListID = lstResultBasicInfo.FirstOrDefault().ListID;
-                            av.CaseOwner = lstResultBasicInfo.FirstOrDefault().CaseOwner;
-                            av.CaseOwnerDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseOwnerDateTime);
+                            av.CaseOwnerSAM = lstResultBasicInfo.FirstOrDefault().CaseOwnerSAM;
+                            av.CaseOwnerDateTime = Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseOwnerDateTime);
                             av.MetaDataCollection = viewCase.MetaDataCollection;
-                            av.ModifiedBySam = FullName;
-                            av.ModifiedByDisplayName = FullName;
-                            av.ModifiedDateTime = DateTime.Now;
-                            av.CaseClosedBy = lstResultBasicInfo.FirstOrDefault().CaseClosedByDisplayName;
-                            av.CaseClosedDateTime = lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime == default(DateTime) ? DateTime.Now : Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime);
+                            av.CaseModifiedBySAM = FullName;
+                            av.CaseModifiedByDisplayName = FullName;
+                            av.CaseModifiedDateTime = DateTime.Now.ToString();
+                            av.CaseClosedByDisplayName = lstResultBasicInfo.FirstOrDefault().CaseClosedByDisplayName;
+                            av.CaseClosedDateTime =  string.IsNullOrEmpty(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime) ? string.Empty : Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime);
                             av.CaseOwnerDisplayName = lstResultBasicInfo.FirstOrDefault().CaseOwnerDisplayName;
                             av.CaseTypeName = lstResultBasicInfo.FirstOrDefault().CaseTypeName;
-                            av.CreateDateTime = Convert.ToDateTime(lstResultBasicInfo.FirstOrDefault().CreateDateTime);
-                            av.CreateByDisplayName = lstResultBasicInfo.FirstOrDefault().CreateByDisplayName;
+                            av.CaseCreatedDateTime = Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseCreatedDateTime);
+                            av.CaseCreatedDisplayName = lstResultBasicInfo.FirstOrDefault().CaseCreatedDisplayName;
                             return av;
                         }).ToList();
 
@@ -1914,7 +1914,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             //viewCase_Json.CaseCreatedSAM = temp.currentUser;
                         }
 
-                        List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
+
 
                         /*vishalpr*/
                         /*For Update Single List JSOn ID WISE */
@@ -1999,6 +1999,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                 searchById = Convert.ToInt32(insertedRecordid);
                         }
 
+                        List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
                         bool flg = false;
                         if (Tempjson.FindAll(v => v.CaseID == searchById)?.Count > 0)
                         {
@@ -2082,7 +2083,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         SaveViewJsonSqlite(lstResult, "E2_GetCaseList" + Screenname, _DBPath, Convert.ToString(_caseTypeID), _cid, pkId, record.Result.TYPE_NAME, 0, CasesInstance, IscheckOnlineRecordApppType?.Result?.Count == 0 ? false : true, "T", tm_uname);
 
 
-                        List<GetCaseTypesResponse.CaseData> lstResultBasicInfo = new List<GetCaseTypesResponse.CaseData>();
+                        List<GetCaseTypesResponse.BasicCase> lstResultBasicInfo = new List<GetCaseTypesResponse.BasicCase>();
 
 
                         Task<List<AppTypeInfoList>> onlineRecord = DBHelper.GetAppTypeInfoListByIdTransTypeSyscode_list(CasesInstance, Convert.ToInt32(_caseTypeID), Convert.ToInt32(_cid), _DBPath, "C8_GetCaseBasicInfo", "M", null);
@@ -2095,11 +2096,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                 /*vishalpr*/
                                 try
                                 {
-                                    lstResultBasicInfo = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
+                                    lstResultBasicInfo = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                                 }
                                 catch (Exception)
                                 {
-                                    var tp = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
+                                    var tp = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                                     lstResultBasicInfo.Add(tp);
                                 }
                             }
@@ -2114,23 +2115,23 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                                                 {
 
                                                     //av.CaseAssignedDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseAssignedToDisplayName);
-                                                    av.CaseAssignedTo = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
+                                                    av.CaseAssignedToSAM = lstResult.FirstOrDefault().CaseAssignedToSAM;
                                                     av.CaseAssignedToDisplayName = lstResult.FirstOrDefault().CaseAssignedToDisplayName;
                                                     av.CaseTypeID = lstResult.FirstOrDefault().CaseTypeID;
-                                                    av.CreateBySam = _UserName;
+                                                    av.CaseCreatedSAM = _UserName;
                                                     av.ListID = lstResult.FirstOrDefault().ListID;
-                                                    av.CaseOwner = lstResult.FirstOrDefault().CaseOwnerDisplayName;
-                                                    av.CaseOwnerDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseOwnerDateTime);
+                                                    av.CaseOwnerDisplayName = lstResult.FirstOrDefault().CaseOwnerDisplayName;
+                                                    av.CaseOwnerDateTime = Convert.ToString(lstResult.FirstOrDefault().CaseOwnerDateTime);
                                                     av.MetaDataCollection = lstResult.FirstOrDefault().MetaDataCollection;
-                                                    av.ModifiedBySam = lstResult.FirstOrDefault().CaseModifiedBySAM;
-                                                    av.ModifiedByDisplayName = lstResult.FirstOrDefault().CaseModifiedByDisplayName;
-                                                    av.ModifiedDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseModifiedDateTime);
-                                                    av.CaseClosedBy = lstResult.FirstOrDefault().CaseClosedByDisplayName;
-                                                    av.CaseClosedDateTime = string.IsNullOrEmpty(lstResult.FirstOrDefault().CaseClosedDateTime) ? DateTime.Now : Convert.ToDateTime(lstResult.FirstOrDefault().CaseClosedDateTime);
+                                                    av.CaseModifiedBySAM = lstResult.FirstOrDefault().CaseModifiedBySAM;
+                                                    av.CaseModifiedByDisplayName = lstResult.FirstOrDefault().CaseModifiedByDisplayName;
+                                                    av.CaseModifiedDateTime = Convert.ToString(lstResult.FirstOrDefault().CaseModifiedDateTime);
+                                                    av.CaseClosedByDisplayName = lstResult.FirstOrDefault().CaseClosedByDisplayName;
+                                                    av.CaseClosedDateTime = lstResult.FirstOrDefault().CaseClosedDateTime;
                                                     av.CaseOwnerDisplayName = lstResult.FirstOrDefault().CaseOwnerDisplayName;
                                                     av.CaseTypeName = lstResult.FirstOrDefault().CaseTypeName;
-                                                    av.CreateDateTime = Convert.ToDateTime(lstResult.FirstOrDefault().CaseCreatedDateTime);
-                                                    av.CreateByDisplayName = lstResult.FirstOrDefault().CaseCreatedDisplayName;
+                                                    av.CaseCreatedDateTime = Convert.ToString(lstResult.FirstOrDefault().CaseCreatedDateTime);
+                                                    av.CaseCreatedDisplayName = lstResult.FirstOrDefault().CaseCreatedDisplayName;
                                                     return av;
                                                 }).ToList();
 
@@ -2830,221 +2831,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         }
         #endregion
 
-        #region Get CaseList To Me
-        //public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseListToMe(bool _Isonline, string screenName, string _DBPath, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId)
-        //{
-        //    List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
-        //    screenName = "E2_GetCaseList" + screenName;
-
-        //    try
-        //    {
-        //        if (_Isonline)
-        //        {
-        //            var results = CasesAPIMethods.GetCaseList(_user, _CaseTypeID, _CaseOwnerSAM, _AssignedToSAM, _ClosedBySAM, _CreatedBySAM, _PropertyID, _TenantCode, _TenantID, _showOpenClosedCasesType, _showPastDueDate, _SearchQuery);
-        //            var temp = results.GetValue("ResponseContent");
-
-        //            if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
-        //            {
-        //                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(temp.ToString());
-        //                if (lstResult.Count > 0)
-        //                {
-        //                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
-        //                    result.Wait();
-
-        //                    if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-        //                    {
-        //                        string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-        //                        var lstResults = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
-
-        //                        string lstt = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-        //                        var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lstt);
-
-        //                        string lstnote = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
-        //                        var lstResultsnotes = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lstnote);
-
-        //                        var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResults) + "|||" + JsonConvert.SerializeObject(templstResult) + "|||" + JsonConvert.SerializeObject(lstResultsnotes), CasesInstance, screenName, _InstanceUserAssocId, _DBPath, result.Result.APP_TYPE_INFO_ID, "", "M", "", 0, "", "", true);
-        //                    }
-
-        //                }
-        //            }
-        //        }
-
-        //        else
-        //        {
-        //            Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, screenName, _DBPath);
-        //            result.Wait();
-
-        //            if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-        //            {
-        //                string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-        //                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(lst);
-
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //    return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
-        //}
-        #endregion
-
-        #region Get CaseList To Me Metadata
-        public static async Task<List<GetCaseTypesResponse.CaseData>> GetCaseListToMeMetadata(bool _Isonline, string _CaseID, string _screenName, string _DBPath, string _userName, string _caseTypeId, int _InstanceUserAssocId)
-        {
-            List<GetCaseTypesResponse.CaseData> lstResult = new List<GetCaseTypesResponse.CaseData>();
-            _screenName = "E2_GetCaseList" + _screenName;
-
-            try
-            {
-                if (_Isonline)
-                {
-                    var results = CasesAPIMethods.GetCaseBasicInfo(_userName, _CaseID);
-                    var temp = results.GetValue("ResponseContent");
-
-                    if (temp != null && temp.ToString() != "[]")
-                    {
-                        var lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(temp.ToString());
-                        lstResult.Add(lstResulttemp);
-                        if (lstResult != null)
-                        {
-                            Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, _screenName, _DBPath);
-
-                            if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                            {
-                                string lstcaselst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-                                var templstcaselst = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(lstcaselst);
-
-
-                                string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-                                var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
-
-                                var lstResults = templstResult.Where(v => v.CaseID == Convert.ToInt32(_CaseID)).ToList();
-
-                                List<GetCaseTypesResponse.CaseData> ls = new List<GetCaseTypesResponse.CaseData>();
-                                int i = templstResult.IndexOf(templstResult.Single(v => v.CaseID == Convert.ToInt32(_CaseID)));
-                                templstResult.RemoveAt(i);
-                                ls.Add(lstResulttemp);
-                                templstResult.AddRange(ls);
-
-                                //templstResult = templstResult.Except(lstResults).ToList();
-                                //templstResult.AddRange(lstResult);
-
-                                string lstnote = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
-                                var lstResultsnotes = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lstnote);
-
-
-                                var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(templstcaselst) + "|||" + JsonConvert.SerializeObject(templstResult) + "|||" + JsonConvert.SerializeObject(lstResultsnotes), CasesInstance, _screenName, _InstanceUserAssocId, _DBPath, result.Result.APP_TYPE_INFO_ID, "", "M", "", 0, "", "", true);
-                            }
-                        }
-                    }
-
-
-                }
-                else
-                {
-                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, _screenName, _DBPath);
-                    result.Wait();
-                    if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                    {
-                        string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-                        var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
-                        lstResult = templstResult.Where(v => v.CaseID == Convert.ToInt32(_CaseID)).ToList();
-                        //lstResult = lstResult == null ? new List<GetCaseTypesResponse.CaseData>() : lstResult;
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
-        }
-        #endregion
-
-        #region Get CaseList To Me Metadata Notes
-        public static async Task<List<GetCaseNotesResponse.NoteData>> GetCaseListToMeMetadataNotes(bool _Isonline, string _CaseID, string _screenName, string _DBPath, int _InstanceUserAssocId)
-        {
-            List<GetCaseNotesResponse.NoteData> lstResult = new List<GetCaseNotesResponse.NoteData>();
-            _screenName = "E2_GetCaseList" + _screenName;
-
-            try
-            {
-                if (_Isonline)
-                {
-                    var results = CasesAPIMethods.GetCaseNotes(_CaseID, DateTime.Now.ToString("yyyy/MM/dd"));
-                    var temp = results.GetValue("ResponseContent");
-
-                    if (temp != null && temp.ToString() != "[]")
-                    {
-                        lstResult = JsonConvert.DeserializeObject<List<GetCaseNotesResponse.NoteData>>(temp.ToString());
-                        if (lstResult != null)
-                        {
-                            Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, _screenName, _DBPath);
-
-                            if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                            {
-                                string lstcaselst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[0];
-                                var templstcaselst = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(lstcaselst);
-
-
-                                string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-                                var templstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lst);
-
-                                string lstnote = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
-
-                                var templstResultnote = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lstnote);
-
-                                List<List<GetCaseNotesResponse.NoteData>> ls = new List<List<GetCaseNotesResponse.NoteData>>();
-
-                                List<GetCaseNotesResponse.NoteData> temps = templstResultnote.SelectMany(v => v).ToList();
-
-                                List<GetCaseNotesResponse.NoteData> lstResultss = temps.Where(v => v.CaseID == Convert.ToInt32(_CaseID)).ToList();
-
-                                int i = templstResult.IndexOf(templstResult.Where(v => v.CaseID == Convert.ToInt32(_CaseID)).FirstOrDefault());
-
-                                templstResultnote.RemoveAt(i);
-                                ls.Add(lstResult);
-                                templstResultnote.AddRange(ls);
-
-
-                                var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(templstcaselst) + "|||" + JsonConvert.SerializeObject(templstResult)
-                                    + "|||" + JsonConvert.SerializeObject(templstResultnote), CasesInstance, _screenName, _InstanceUserAssocId, _DBPath, result.Result.APP_TYPE_INFO_ID, "", "M", "", 0, "", "", true);
-                            }
-                        }
-                    }
-
-
-                }
-                else
-                {
-                    Task<AppTypeInfoList> result = DBHelper.GetAppTypeInfoListByTypeID_SystemName(0, CasesInstance, _screenName, _DBPath);
-                    result.Wait();
-                    if (!string.IsNullOrEmpty(result.Result?.ToString()) && result.Result.ToString() != "[]")
-                    {
-                        string lst = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[2];
-                        var templstResult = JsonConvert.DeserializeObject<List<List<GetCaseNotesResponse.NoteData>>>(lst);
-
-                        string lstt = Convert.ToString(result.Result.ASSOC_FIELD_INFO).Split(new string[] { "|||" }, StringSplitOptions.None)[1];
-                        var templstResults = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(lstt);
-
-                        int i = templstResults.IndexOf(templstResults.Where(v => v.CaseID == Convert.ToInt32(_CaseID)).FirstOrDefault());
-                        lstResult = templstResult[i];
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return lstResult.OrderByDescending(lst => lst.CaseID).ToList();
-        }
-        #endregion
-
-
-
         #region Get AssocCascade Info By CaseType
         public static async Task<List<AssocCascadeInfo>> GetAssocCascadeInfo(bool _IsOnline, string _caseTypeID, int _InstanceUserAssocId, string _DBPath)
         {
@@ -3525,9 +3311,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
         #region Get Case Basic Information
         //view case
-        public static async Task<List<GetCaseTypesResponse.CaseData>> GetCaseBasicInfo(bool _IsOnline, string _UserName, string _CaseID, int _InstanceUserAssocId, string _DBPath, string _CasetypeId, string screenname = "")
+        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseBasicInfo(bool _IsOnline, string _UserName, string _CaseID, int _InstanceUserAssocId, string _DBPath, string _CasetypeId, string screenname = "")
         {
-            List<GetCaseTypesResponse.CaseData> lstResult = new List<GetCaseTypesResponse.CaseData>();
+            List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
             var tempid = DBHelper.GetAppTypeInfoListByCatIdSyscodeID(ConstantsSync.CasesInstance, Convert.ToInt32(_CasetypeId), 0, _DBPath, "C8_GetCaseBasicInfo", Convert.ToInt32(_CaseID));
             tempid.Wait();
             int? id = tempid.Result?.FirstOrDefault()?.APP_TYPE_INFO_ID;
@@ -3542,7 +3328,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (temp != null && temp.ToString() != "[]")
                     {
-                        var lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(temp.ToString());
+                        var lstResulttemp = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(temp.ToString());
                         lstResult.Add(lstResulttemp);
                         if (lstResult.Count > 0)
                         {
@@ -3577,12 +3363,12 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                         {
                             try
                             {
-                                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
+                                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                             }
                             catch (Exception ex)
                             {
 
-                                var obj = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
+                                var obj = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(onlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
                                 lstResult.Add(obj);
                             }
                         }
@@ -3603,69 +3389,14 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             {
                                 try
                                 {
-                                    lstResult.AddRange(JsonConvert.DeserializeObject<List<GetCaseTypesResponse.CaseData>>(item.ASSOC_FIELD_INFO));
+                                    lstResult.AddRange(JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(item.ASSOC_FIELD_INFO));
                                 }
                                 catch (Exception)
                                 {
-                                    var obj = JsonConvert.DeserializeObject<GetCaseTypesResponse.CaseData>(item.ASSOC_FIELD_INFO);
+                                    var obj = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(item.ASSOC_FIELD_INFO);
                                     lstResult.Add(obj);
                                 }
                             }
-
-                            #region MyRegion
-                            //GetCaseTypesResponse.BasicCase tempBasicCase = new GetCaseTypesResponse.BasicCase();
-                            //try
-                            //{
-                            //    tempBasicCase = JsonConvert.DeserializeObject<GetCaseTypesResponse.BasicCase>(offlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
-                            //}
-                            //catch
-                            //{
-                            //    try
-                            //    {
-                            //        var tempresult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(offlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
-                            //        tempBasicCase = tempresult.Where(v => v.CaseID == offlineRecord?.Result.FirstOrDefault().ID).FirstOrDefault();
-                            //        if (tempBasicCase == null)
-                            //            tempBasicCase = tempresult.Where(v => v.CaseID == offlineRecord?.Result.FirstOrDefault().ID).LastOrDefault();
-                            //    }
-                            //    catch
-                            //    {
-                            //        var tempresult1 = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(offlineRecord.Result?.FirstOrDefault()?.ASSOC_FIELD_INFO);
-                            //        tempBasicCase = tempresult1.FirstOrDefault();
-                            //    }
-                            //}
-
-                            //GetCaseTypesResponse.CaseData temp = new GetCaseTypesResponse.CaseData()
-                            //{
-                            //    CaseID = tempBasicCase.CaseID,
-                            //    CaseAssignedDateTime = Convert.ToDateTime(tempBasicCase.CaseAssignDateTime),
-                            //    CaseAssignedTo = tempBasicCase.CaseAssignedToDisplayName,
-                            //    CaseAssignedToDisplayName = tempBasicCase.CaseAssignedToDisplayName,
-                            //    CaseTypeID = tempBasicCase.CaseTypeID,
-                            //    CreateBy = _UserName,
-                            //    ListID = tempBasicCase.ListID,
-                            //    CaseOwner = tempBasicCase.CaseOwnerSAM,
-                            //    CaseOwnerDateTime = Convert.ToDateTime(tempBasicCase.CaseAssignDateTime),
-                            //    MetaDataCollection = tempBasicCase.MetaDataCollection,
-                            //    ModifiedBy = tempBasicCase.CaseModifiedByDisplayName,
-                            //    ModifiedByDisplayName = tempBasicCase.CaseModifiedByDisplayName,
-                            //    ModifiedDateTime = Convert.ToDateTime(tempBasicCase.CaseModifiedDateTime),
-                            //    CaseClosedBy = tempBasicCase.CaseClosedByDisplayName,
-                            //    CaseClosedDateTime = tempBasicCase.CaseClosedDateTime == "" ? DateTime.Now : Convert.ToDateTime(tempBasicCase.CaseClosedDateTime),
-                            //    CaseOwnerDisplayName = tempBasicCase.CaseOwnerDisplayName,
-                            //    CaseTypeName = tempBasicCase.CaseTypeName,
-                            //    CreateDateTime = Convert.ToDateTime(tempBasicCase.CaseCreatedDateTime),
-                            //    CreateByDisplayName = tempBasicCase.CaseCreatedDisplayName,
-                            //};
-                            ////lstResult.Add(temp);
-                            //lstResult = lstResult.Where(v => v.CaseID == temp.CaseID).Select(av =>
-                            //{
-                            //    av.CreateBy = av.CreateBy == "" ? temp.CreateBy : av.CreateBy;
-                            //    av.CreateByDisplayName = av.CreateByDisplayName == "" ? temp.CreateByDisplayName : av.CreateByDisplayName;
-                            //    av.CaseAssignedTo = temp.CaseAssignedTo;
-                            //    av.CaseAssignedToDisplayName = temp.CaseAssignedToDisplayName;
-                            //    return av;
-                            //}).ToList();
-                            #endregion
 
                             break;
                         }
@@ -3981,45 +3712,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         }
         #endregion
 
-        #region Get Hopper With Owner By Username
-        //public async static Task<List<GetCaseTypesResponse.BasicCase>> CasesHomeGetCaseListUser(bool _IsOnline, string _UserName, int _InstanceUserAssocId, string _DBPath)
-        //{
-        //    List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
-        //    int id = CommonConstants.GetResultBySytemcode(ConstantsSync.CasesInstance, "B2_CasesHomeGetCaseListUser", _DBPath);
-
-        //    try
-        //    {
-
-        //        if (_IsOnline)
-        //        {
-
-        //            var result = CasesAPIMethods.CasesHomeGetCaseListUser(_UserName);
-        //            var temp = result.GetValue("ResponseContent");
-
-        //            if (temp != null && temp.ToString() != "[]")
-        //            {
-        //                lstResult = JsonConvert.DeserializeObject<List<GetCaseTypesResponse.BasicCase>>(temp.ToString());
-        //                if (lstResult.Count > 0)
-        //                {
-
-        //                    var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "B2_CasesHomeGetCaseListUser", _InstanceUserAssocId, _DBPath, id, "", "M");
-        //                }
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            lstResult = CommonConstants.ReturnListResult<GetCaseTypesResponse.BasicCase>(CasesInstance, "B2_CasesHomeGetCaseListUser", _DBPath);
-        //            lstResult = lstResult == null ? new List<GetCaseTypesResponse.BasicCase>() : lstResult;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    return lstResult;
-        //}
-        #endregion
 
         #region Get Case Note Types
         public async static Task<List<Dictionary<string, string>>> GetCaseNoteTypes(bool _IsOnline, string _UserName, string _CasetypeId, int _InstanceUserAssocId, string _DBPath)
