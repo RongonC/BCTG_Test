@@ -82,9 +82,6 @@
     <Reference Include="SQLitePCLRaw.core, Version=1.1.11.121, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.1.11\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
     </Reference>
-    <Reference Include="StemmonsMobile.DataTypes">
-      <HintPath>..\..\StemmonsMobile.DataTypes\bin\Debug\StemmonsMobile.DataTypes.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
@@ -112,6 +109,12 @@
   <ItemGroup>
     <Analyzer Include="..\..\..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\cs\Microsoft.DependencyValidation.Analyzers.resources.dll" />
     <Analyzer Include="..\..\..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\Microsoft.DependencyValidation.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj">
+      <Project>{691f64db-a9e1-421c-81ee-a5b9895c5b6b}</Project>
+      <Name>StemmonsMobile.DataTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <!--<ItemGroup />-->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -305,9 +305,9 @@ namespace StemmonsMobile
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-            AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
-                "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
-                "android=fca1ff00-e443-4444-9305-d79b3255abd0;", typeof(Analytics), typeof(Crashes));
+           // AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
+            //    "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
+            //    "android=fca1ff00-e443-4444-9305-d79b3255abd0;", typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

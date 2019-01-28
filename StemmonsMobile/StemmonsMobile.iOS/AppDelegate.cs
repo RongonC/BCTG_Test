@@ -23,9 +23,11 @@ namespace StemmonsMobile.iOS
             Rg.Plugins.Popup.Popup.Init();
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             global::Xamarin.Forms.Forms.Init();
+            
             LoadApplication(new App());
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
             return base.FinishedLaunching(app, options);
+
         }
 
 
