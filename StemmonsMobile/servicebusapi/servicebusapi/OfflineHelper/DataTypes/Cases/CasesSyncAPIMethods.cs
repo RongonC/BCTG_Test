@@ -3,6 +3,7 @@ using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SQLite;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
         #region Get CaseList
         public static string GetCaseListSync(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM,
-                                                    string _PropertyID, string _TenantCode, string _TenantID, char _showOpenClosedCasesType, char _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle = "", bool SaveSql = true, string screenName = "")
+                                                    string _PropertyID, string _TenantCode, string _TenantID, char _showOpenClosedCasesType, char _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, bool SaveSql = true, string screenName = "")
         {
             List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
             List<KeyValuePair<string, string>> idAndDateTime = new List<KeyValuePair<string, string>>();
@@ -344,32 +345,33 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #region Favorite Offline Sync
         public static async Task<List<GetFavoriteResponse.GetFavorite>> FavoriteOfflineSync(bool _IsOnline, string _CreatedBy, int _InstanceUserAssocId, string _DBPath)
         {
-            List<GetFavoriteResponse.GetFavorite> lstResult = new List<GetFavoriteResponse.GetFavorite>();
+            //List<GetFavoriteResponse.GetFavorite> lstResult = new List<GetFavoriteResponse.GetFavorite>();
 
-            try
-            {
-                if (_IsOnline)
-                {
-                    var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy));
-                    var temp = result.GetValue("ResponseContent");
+            //try
+            //{
+            //    if (_IsOnline)
+            //    {
+            //        var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy));
+            //        var temp = result.GetValue("ResponseContent");
 
-                    if (temp != null && temp.ToString() != "[]")
-                    {
-                        lstResult = JsonConvert.DeserializeObject<List<GetFavoriteResponse.GetFavorite>>(temp.ToString());
-                        if (lstResult.Count > 0)
-                        {
-                            foreach (var item in lstResult)
-                            {
-                                var inserted = CommonConstants.FavoriteOfflineStore(0, Convert.ToString(item.TypeID), Convert.ToString(item.QuestAreaID), item.FavoriteName, item.FieldValues, item.IsActive, item.CreatedBy, Convert.ToString(item.CreatedDateTime), Convert.ToString(item.ModifiedDateTime), Convert.ToString(item.ApplicationID), Convert.ToString(item.LastSyncDateTime), Convert.ToString(_InstanceUserAssocId), _DBPath);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return lstResult;
+            //        if (temp != null && temp.ToString() != "[]")
+            //        {
+            //            lstResult = JsonConvert.DeserializeObject<List<GetFavoriteResponse.GetFavorite>>(temp.ToString());
+            //            if (lstResult.Count > 0)
+            //            {
+            //                foreach (var item in lstResult)
+            //                {
+            //                    var inserted = CommonConstants.FavoriteOfflineStore(0, Convert.ToString(item.TypeID), Convert.ToString(item.QuestAreaID), item.FavoriteName, item.FieldValues, item.IsActive, item.CreatedBy, Convert.ToString(item.CreatedDateTime), Convert.ToString(item.ModifiedDateTime), Convert.ToString(item.ApplicationID), Convert.ToString(item.LastSyncDateTime), Convert.ToString(_InstanceUserAssocId), _DBPath);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //}
+            //return lstResult;
+            return null;
         }
         #endregion
 
@@ -1692,7 +1694,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                             av.CaseModifiedByDisplayName = FullName;
                             av.CaseModifiedDateTime = DateTime.Now.ToString();
                             av.CaseClosedByDisplayName = lstResultBasicInfo.FirstOrDefault().CaseClosedByDisplayName;
-                            av.CaseClosedDateTime =  string.IsNullOrEmpty(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime) ? string.Empty : Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime);
+                            av.CaseClosedDateTime = string.IsNullOrEmpty(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime) ? string.Empty : Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseClosedDateTime);
                             av.CaseOwnerDisplayName = lstResultBasicInfo.FirstOrDefault().CaseOwnerDisplayName;
                             av.CaseTypeName = lstResultBasicInfo.FirstOrDefault().CaseTypeName;
                             av.CaseCreatedDateTime = Convert.ToString(lstResultBasicInfo.FirstOrDefault().CaseCreatedDateTime);
@@ -2479,7 +2481,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get Favorite
-        public static async Task<List<GetFavoriteResponse.GetFavorite>> GetFavorite(bool _IsOnline, string _CreatedBy, int _InstanceUserAssocId, string _DBPath)
+        public static async Task<List<GetFavoriteResponse.GetFavorite>> GetFavorite(bool _IsOnline, string _CreatedBy, int _InstanceUserAssocId, string _ApplicationId, string _DBPath)
         {
             List<GetFavoriteResponse.GetFavorite> lstResult = new List<GetFavoriteResponse.GetFavorite>();
             var GetFavoriteList = CommonConstants.GetResultBySytemcodeList(CasesInstance, "C1_GetFavorite", _DBPath);
@@ -2487,7 +2489,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             {
                 if (_IsOnline)
                 {
-                    var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy));
+                    //var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy));
+                    var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy), Convert.ToString(_ApplicationId));
                     var temp = result.GetValue("ResponseContent");
 
                     if (temp != null && temp.ToString() != "[]")
@@ -2534,11 +2537,67 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             return lstResult;
         }
+
+        //public static async Task<List<GetFavoriteResponse.GetFavorite>> GetFavorite(bool _IsOnline, string _CreatedBy, int _InstanceUserAssocId, string _DBPath)
+        //{
+        //    List<GetFavoriteResponse.GetFavorite> lstResult = new List<GetFavoriteResponse.GetFavorite>();
+        //    var GetFavoriteList = CommonConstants.GetResultBySytemcodeList(CasesInstance, "C1_GetFavorite", _DBPath);
+        //    try
+        //    {
+        //        if (_IsOnline)
+        //        {
+        //            var result = CasesAPIMethods.GetFavorite(Convert.ToString(_CreatedBy));
+        //            var temp = result.GetValue("ResponseContent");
+
+        //            if (temp != null && temp.ToString() != "[]")
+        //            {
+        //                lstResult = JsonConvert.DeserializeObject<List<GetFavoriteResponse.GetFavorite>>(temp.ToString());
+        //                DBHelper.RemoveFavorites(_CreatedBy, _DBPath);
+        //                foreach (var item in lstResult)
+        //                {
+        //                    var inserted = CommonConstants.FavoriteOfflineStore(0, item.TypeID.ToString(), null, item.FavoriteName, item.FieldValues, item.IsActive, _CreatedBy, item.CreatedDateTime.ToString(), item.ModifiedDateTime.ToString(), item.ApplicationID.ToString(), item.LastSyncDateTime.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID.ToString(), _DBPath);
+        //                }
+        //                if (lstResult.Count > 0)
+        //                {
+        //                    var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(lstResult), CasesInstance, "C1_GetFavorite", _InstanceUserAssocId, _DBPath, GetFavoriteList.Result == null ? 0 : GetFavoriteList.Result.APP_TYPE_INFO_ID, "", "M");
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //lstResult = GetFavoriteList.Result?.ASSOC_FIELD_INFO.ToString() == null ? null : JsonConvert.DeserializeObject<List<GetFavoriteResponse.GetFavorite>>(GetFavoriteList.Result?.ASSOC_FIELD_INFO.ToString());
+        //            //lstResult = CommonConstants.ReturnListResult<GetFavoriteResponse.GetFavorite>(CasesInstance, "C1_GetFavorite", _DBPath);
+        //            Task<List<AppTypeInfoList>> OnlineList = DBHelper.GetAppTypeInfoListByTransTypeSyscode_tm_username(CasesInstance, _DBPath, "C1_GetFavorite", "M");
+        //            OnlineList.Wait();
+        //            Task<List<AppTypeInfoList>> OfflineList = DBHelper.GetAppTypeInfoListByTransTypeSyscode_tm_username(CasesInstance, _DBPath, "C1_GetFavorite", "T");
+        //            OfflineList.Wait();
+        //            GetFavoriteResponse.GetFavorite records = new GetFavoriteResponse.GetFavorite();
+        //            List<GetFavoriteResponse.GetFavorite> json = new List<GetFavoriteResponse.GetFavorite>();
+        //            if (OnlineList.Result.Count > 0)
+        //            {
+        //                json = JsonConvert.DeserializeObject<List<GetFavoriteResponse.GetFavorite>>(OnlineList.Result.Select(v => v.ASSOC_FIELD_INFO).FirstOrDefault());
+        //            }
+
+        //            int cnt = 0;
+        //            foreach (var item in OfflineList.Result)
+        //            {
+        //                var temp = JsonConvert.DeserializeObject<GetFavoriteResponse.GetFavorite>(item.ASSOC_FIELD_INFO);
+        //                lstResult.Add(temp);
+        //            }
+        //            lstResult.AddRange(json);
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //    }
+        //    return lstResult;
+        //}
         #endregion
 
 
         #region Get CaseList
-        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseList(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle, bool SaveSql, string screenName, int? _pageindex, int? _pagenumber)
+        public static async Task<List<GetCaseTypesResponse.BasicCase>> GetCaseList(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, bool SaveSql, string screenName, int? _pageindex, int? _pagenumber)
         {
             List<GetCaseTypesResponse.BasicCase> OnlineCaselist = new List<GetCaseTypesResponse.BasicCase>();
             //int id = CommonConstants.GetResultBySytemcode(CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
@@ -3066,9 +3125,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get ExternalDataSource By Id
-        public static async Task<List<GetExternalDataSourceByIdResponse.ExternalDatasource>> GetExternalDataSourceById(bool _IsOnline, string _ExternalDatasourceID, string _SystemCode, int _InstanceUserAssocId, string _DBPath, int _caseTypeID = 0, int assoctypeId = 0)
+        public static async Task<List<ExternalDatasourceValue>> GetExternalDataSourceById(bool _IsOnline, string _ExternalDatasourceID, string _SystemCode, int _InstanceUserAssocId, string _DBPath, int _caseTypeID = 0, int assoctypeId = 0)
         {
-            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lstResult = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+            List<ExternalDatasourceValue> lstResult = new List<ExternalDatasourceValue>();
 
             try
             {
@@ -3079,7 +3138,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (!string.IsNullOrEmpty(Convert.ToString(temp)) && temp.ToString() != "[]")
                     {
-                        lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(temp.ToString());
+                        lstResult = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(temp.ToString());
                     }
                 }
                 else
@@ -3102,7 +3161,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     if (ResultXDS != null)
                     {
                         string jsonvalue = ResultXDS.EDS_VALUES;
-                        lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(jsonvalue);
+                        lstResult = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(jsonvalue);
                     }
                     #endregion
                 }
@@ -3712,7 +3771,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         }
         #endregion
 
-
         #region Get Case Note Types
         public async static Task<List<Dictionary<string, string>>> GetCaseNoteTypes(bool _IsOnline, string _UserName, string _CasetypeId, int _InstanceUserAssocId, string _DBPath)
         {
@@ -3938,57 +3996,5 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             return SearchResult;
         }
         #endregion
-        public static void AddCasesLogsas(string _dbpath, int ActivityTypeID, string NOTE, string CASE_ID, string CaseTypeID, string CREATED_BY_FULLNAME, string DESCRIPTION, string NAME, string MODIFIED_BY, string SystemCode)
-        {
-            //try
-            //{
-            //    GetCaseActivityResponse.Activity responseItem = new GetCaseActivityResponse.Activity();
-            //    responseItem.ActivityTypeID = ActivityTypeID;
-            //    responseItem.Note = NOTE;
-            //    responseItem.CaseID = CASE_ID;
-            //    responseItem.SystemCode = SystemCode;
-            //    responseItem.CaseTypeID = CaseTypeID;
-            //    responseItem.CreatedByFullName = CREATED_BY_FULLNAME;
-            //    responseItem.CreatedDateTime = DateTime.Now;
-            //    responseItem.Description = DESCRIPTION;
-            //    responseItem.IsActive = "Y";
-            //    responseItem.Name = NAME;
-            //    responseItem.ModifiedBy = MODIFIED_BY;
-            //    responseItem.ModifiedDateTime = DateTime.Now;
-
-            //    ActivityDetails log = new ActivityDetails
-            //    {
-            //        ID = Convert.ToInt32(CASE_ID),
-            //        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
-            //        SYSTEM = ConstantsSync.CasesInstance,
-            //        TYPE_ID = Convert.ToInt32(CaseTypeID),
-            //        ActivityType = "C10_GetCaseActivity"
-            //    };
-            //    List<GetCaseActivityResponse.Activity> lstResult = new List<GetCaseActivityResponse.Activity>();
-            //    var Rec = DBHelper.GetActivityDetails(CasesInstance, Convert.ToInt32(CASE_ID), Convert.ToInt32(CaseTypeID), _dbpath);
-            //    Rec.Wait();
-            //    if (Rec.Result != null)
-            //    {
-            //        log.ActivityId = Rec.Result.ActivityId;
-            //        lstResult = JsonConvert.DeserializeObject<List<GetCaseActivityResponse.Activity>>(Rec.Result.ActivityJson.ToString());
-            //    }
-
-            //    lstResult.Add(responseItem);
-
-            //    log.ActivityJson = JsonConvert.SerializeObject(lstResult);
-
-            //    DBHelper.SaveActivityDetails(log, _dbpath).Wait();
-            //}
-            //catch (Exception)
-            //{
-            //}
-        }
-
-        public static List<AssocCascadeInfo> GetAssocCascadeInfo(bool _IsOnline, string _user, string Casetypeid)
-        {
-            var json = CasesAPIMethods.GetAssocCascadeInfoByCaseType(Casetypeid);
-            var AssocType = json.GetValue("ResponseContent");
-            return JsonConvert.DeserializeObject<List<AssocCascadeInfo>>(AssocType.ToString());
-        }
     }
 }

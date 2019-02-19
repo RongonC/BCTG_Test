@@ -77,7 +77,6 @@ namespace DataServiceBus
             try
             {
                 var ObjectSerialize = JsonConvert.SerializeObject(ClassObject, Formatting.Indented);
-                var ObjectDeserialize = JsonConvert.DeserializeObject(ObjectSerialize).ToString();
 
                 string url = APIDetails[0].Value;
                 string _ContentType = "application/json";
@@ -158,8 +157,6 @@ namespace DataServiceBus
                 Debug.WriteLine("InnerException => " + e.InnerException);
                 Debug.WriteLine("Message => " + e.Message);
                 throw e;
-                //DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(Result), "Y", "GetAllQuest", _UserName, DateTime.Now.ToString());
-
             }
             return jobj;
         }

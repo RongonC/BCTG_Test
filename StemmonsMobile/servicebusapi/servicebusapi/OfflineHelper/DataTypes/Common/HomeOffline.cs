@@ -54,21 +54,25 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
         #region  Home Count Offline 
         public static HomeScreenCount GetHomeScreenCount(bool _IsOnline, string username, int INSTANCE_ID, string _DBPath, int? INSTANCE_USER_ASSOC_ID)
         {
-            HomeScreenCount Response = new HomeScreenCount();
+            // HomeScreenCount Response = new HomeScreenCount();
             try
             {
                 if (INSTANCE_USER_ASSOC_ID != null)
                 {
                     var result = DBHelper.GetinstanceuserassocListByUsername_Id(username, INSTANCE_ID, _DBPath);
-                    result.Wait();
+                    //result.Wait();
                     if (result.Result != null)
-                        Response = JsonConvert.DeserializeObject<HomeScreenCount>(result.Result.HOME_SCREEN_INFO);
+                        return JsonConvert.DeserializeObject<HomeScreenCount>(result.Result.HOME_SCREEN_INFO);
 
                     if (string.IsNullOrEmpty(result.Result.HOME_SCREEN_INFO))
                     {
                         try
                         {
-                            HomeOffline.GetAllHomeCount(username, INSTANCE_ID, _DBPath, INSTANCE_USER_ASSOC_ID);
+                            var Result = HomeOffline.GetAllHomeCount(username, INSTANCE_ID, _DBPath, INSTANCE_USER_ASSOC_ID);
+                            if (Result != null)
+                            {
+                                return JsonConvert.DeserializeObject<HomeScreenCount>(Result);
+                            }
                         }
                         catch (Exception)
                         {
@@ -80,7 +84,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
             {
                 throw ex;
             }
-            return Response;
+            return null;
         }
         #endregion
     }

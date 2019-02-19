@@ -4,6 +4,7 @@ using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SQLite;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Entity;
 
 using System;
@@ -291,7 +292,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 throw ex;
             }
             EntityList.Insert(0, new Entity_categoryList(0, "All", "0", "All", "y"));
-            return EntityList;
+            return EntityList.OrderBy(x => x.EntityTypeCategoryID).ToList();
         }
         #endregion
 
@@ -519,11 +520,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                                 if (ResultXDS != null)
                                 {
                                     string jsonvalue = ResultXDS.EDS_VALUES;
-                                    List<EXTERNAL_DATASOURCE1> exdDetail = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(jsonvalue);
+                                    List<ExternalDatasourceValue> exdDetail = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(jsonvalue);
                                     EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = exdDetail;
                                 }
                                 else
-                                    EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<EXTERNAL_DATASOURCE1>();
+                                    EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<ExternalDatasourceValue>();
                             }
                             else
                             {
@@ -534,11 +535,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                                     if (Result != null)
                                     {
                                         string jsonvalue = Result.EDS_RESULT;
-                                        List<EXTERNAL_DATASOURCE1> exdDetail = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(jsonvalue);
+                                        List<ExternalDatasourceValue> exdDetail = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(jsonvalue);
                                         EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = exdDetail;
                                     }
                                     else
-                                        EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<EXTERNAL_DATASOURCE1>();
+                                        EntityList.AssociationFieldCollection[i].EXTERNAL_DATASOURCE = new List<ExternalDatasourceValue>();
                                 }
                                 #endregion
                             }

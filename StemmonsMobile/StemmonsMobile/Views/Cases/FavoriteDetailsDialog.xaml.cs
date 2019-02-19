@@ -29,15 +29,15 @@ namespace StemmonsMobile.Views.Cases
         {
             try
             {
-                FavoriteID = FavoriteId;
-                var result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                if (result_fav.Result != null && result_fav.Result.ToString() != "[]")
-                {
-                    GetFavorite getfavorite;
-                    if (result_fav.Result.Count > 0)
-                    {
-                    }
-                }
+                //FavoriteID = FavoriteId;
+                //var result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                //if (result_fav.Result != null && result_fav.Result.ToString() != "[]")
+                //{
+                //    GetFavorite getfavorite;
+                //    if (result_fav.Result.Count > 0)
+                //    {
+                //    }
+                //}
             }
             catch (Exception ex)
             {

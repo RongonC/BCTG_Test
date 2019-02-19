@@ -7,6 +7,7 @@ using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using StemmonsMobile.Commonfiles;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.Views.LoginProcess;
 using StemmonsMobile.Views.View_Case_Origination_Center;
@@ -51,7 +52,7 @@ namespace StemmonsMobile.Views.Cases
         List<KeyValuePair<List<ItemType>, string>> calculationsFieldlist = new List<KeyValuePair<List<ItemType>, string>>();
         List<Tuple<List<ItemType>, string, string>> lstcalculationsFieldlist = new List<Tuple<List<ItemType>, string, string>>();
 
-        GetExternalDataSourceByIdResponse.ExternalDatasource extDSdefaultValues = new GetExternalDataSourceByIdResponse.ExternalDatasource
+        ExternalDatasourceValue extDSdefaultValues = new ExternalDatasourceValue
         {
             NAME = "-- Select Item --",
             DESCRIPTION = "-- Select Item --",
@@ -60,10 +61,10 @@ namespace StemmonsMobile.Views.Cases
 
         List<AssocCascadeInfo> AssocTypeCascades = new List<AssocCascadeInfo>();
         // public static ObservableCollection<string> Exditems { get; set; }
-        public Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>> lstexnaldatasouce = new Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>>();
-        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lstexternaldatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+        public Dictionary<int, List<ExternalDatasourceValue>> lstexnaldatasouce = new Dictionary<int, List<ExternalDatasourceValue>>();
+        List<ExternalDatasourceValue> lstexternaldatasource = new List<ExternalDatasourceValue>();
 
-        Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>> lstextdatasourceHistory = new Dictionary<int, List<GetExternalDataSourceByIdResponse.ExternalDatasource>>();
+        Dictionary<int, List<ExternalDatasourceValue>> lstextdatasourceHistory = new Dictionary<int, List<ExternalDatasourceValue>>();
 
         string _TitleFieldControlID = string.Empty;
 
@@ -117,7 +118,7 @@ namespace StemmonsMobile.Views.Cases
                 {
                     if (string.IsNullOrEmpty(Favoriteid) || Favoriteid != "0")
                     {
-                        var result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                        var result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, Convert.ToString((int)Applications.Cases), App.DBPath);
 
                         if (result_fav.Result != null && result_fav.Result.ToString() != "[]")
                         {
@@ -479,10 +480,13 @@ namespace StemmonsMobile.Views.Cases
                                 entry_notes.HeightRequest = 100;
                                 entry_notes.BorderWidth = 1;
                                 entry_notes.CornerRadius = 5;
+                                entry_notes.WidthRequest = 200;
+                                entry_notes.HorizontalOptions = LayoutOptions.Start;
+                                entry_notes.BorderColor = Color.LightGray;
+                                entry_notes.BackgroundColor = Color.Transparent;
                                 entry_notes.StyleId = Schemaitem.ASSOC_FIELD_TYPE.ToLower() + "_" + Schemaitem.ASSOC_TYPE_ID;
                                 try
                                 {
-                                    entry_notes.WidthRequest = 200;
                                     entry_notes.FontSize = 16;
                                     entry_notes.Keyboard = Keyboard.Default;
                                     entry_notes.Text = metaDatatextValues_fav?.Where(c => c.Key == Schemaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.Value;
@@ -604,7 +608,7 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         var ct = (Image)s;
                                         var sty_id = ct.StyleId?.Split('_')[1];
-                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
+                                        C_ent = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
                                         C_ent.Text = "";
                                     }
                                     catch (Exception)
@@ -787,14 +791,14 @@ namespace StemmonsMobile.Views.Cases
                                                 btncontrol.IsEnabled = true;
                                             }
 
-                                            GetExternalDataSourceByIdResponse.ExternalDatasource Ed = new GetExternalDataSourceByIdResponse.ExternalDatasource()
+                                            ExternalDatasourceValue Ed = new ExternalDatasourceValue()
                                             {
                                                 ID = 0,
                                                 NAME = btncontrol.Text,
                                                 DESCRIPTION = btncontrol.Text
                                             };
 
-                                            var lst = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>
+                                            var lst = new List<ExternalDatasourceValue>
                                             {
                                                 Ed
                                             };
@@ -998,7 +1002,7 @@ namespace StemmonsMobile.Views.Cases
                                         break;
 
                                     case "a":
-                                        var cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "Entry");
+                                        var cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID);
                                         if (cnt != null)
                                         {
                                             Entry ent = (Entry)cnt;
@@ -1021,7 +1025,7 @@ namespace StemmonsMobile.Views.Cases
                                         break;
 
                                     case "x":
-                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "BorderEditor");
+                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID);
                                         if (cnt != null)
                                         {
                                             BorderEditor bd = cnt as BorderEditor;
@@ -1033,7 +1037,7 @@ namespace StemmonsMobile.Views.Cases
                                     case "c":
                                     case "n":
                                     case "h":
-                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID, "Entry");
+                                        cnt = FindCasesControls(Fav_iitem.ASSOC_TYPE_ID);
                                         if (cnt != null)
                                         {
                                             Entry entry = cnt as Entry;
@@ -1099,7 +1103,7 @@ namespace StemmonsMobile.Views.Cases
                     try
                     {
                         var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
-                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        List<ExternalDatasourceValue> lst_extdatasource = new List<ExternalDatasourceValue>();
 
                         lst_extdatasource.Add(extDSdefaultValues);
                         await Task.Run(() =>
@@ -1129,6 +1133,7 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 var btn = sender as Button;
+               
                 btn.Focus();
                 try
                 {
@@ -1145,7 +1150,7 @@ namespace StemmonsMobile.Views.Cases
 
                 var Ascitem = CasesSchema.Where(v => v.ASSOC_TYPE_ID == iSelectedItemlookupId).FirstOrDefault();
 
-                List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                List<ExternalDatasourceValue> lst_extdatasource = new List<ExternalDatasourceValue>();
 
                 lst_extdatasource.Add(extDSdefaultValues);
 
@@ -1173,7 +1178,7 @@ namespace StemmonsMobile.Views.Cases
                         Exditemslst = lstexternaldatasource?.Select(v => v.NAME);
                     else
                     {
-                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasourcee = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        List<ExternalDatasourceValue> lst_extdatasourcee = new List<ExternalDatasourceValue>();
 
                         lst_extdatasourcee.Add(extDSdefaultValues);
                         lstexternaldatasource = lst_extdatasourcee;
@@ -1189,6 +1194,7 @@ namespace StemmonsMobile.Views.Cases
                 lst_itemlookup.RefreshCommand = PulltoRefreshCommand;
                 lst_itemlookup.Refreshing += OnRefresh;
                 lst_itemlookup.ItemSelected += lst_itemlookup_ItemSelected;
+                lst_itemlookup.HasUnevenRows = true;
 
                 lst_itemlookup.ItemsSource = Exditemslst;
                 lst_itemlookup.BackgroundColor = Color.White;
@@ -1338,9 +1344,9 @@ namespace StemmonsMobile.Views.Cases
                 }
 
                 Task.Run(() =>
-            {
-                DyanmicSetCalcexd(Convert.ToString(iSelectedItemlookupId), sControls.Where(v => (v.AssocFieldType == 'E' || v.AssocFieldType == 'O') && v.AssocTypeID == Convert.ToInt32(iSelectedItemlookupId)).ToList(), sControls.Where(v => (v.AssocFieldType == 'C')).ToList());
-            });
+                {
+                    DyanmicSetCalcexd(Convert.ToString(iSelectedItemlookupId), sControls.Where(v => (v.AssocFieldType == 'E' || v.AssocFieldType == 'O') && v.AssocTypeID == Convert.ToInt32(iSelectedItemlookupId)).ToList(), sControls.Where(v => (v.AssocFieldType == 'C')).ToList());
+                });
             }
         }
 
@@ -1350,7 +1356,7 @@ namespace StemmonsMobile.Views.Cases
             masterGrid.IsVisible = true;
         }
 
-        private object FindCasesControls(int AssocID, string Cnt_type)
+        private object FindCasesControls(int AssocID, string Cnt_type = "")
         {
             try
             {
@@ -1364,42 +1370,58 @@ namespace StemmonsMobile.Views.Cases
                             Type ty = xy.GetType();
                             if (ty.Name != "StackLayout")
                             {
-                                if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
+                                if (string.IsNullOrEmpty(Cnt_type))
+                                {
+                                    if (xy.StyleId != null)
+                                    {
+                                        var sID = xy.StyleId.Split('_')[1];
+                                        if (sID == AssocID.ToString())
+                                            return xy;
+                                    }
+                                }
+                                else if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
                                 {
                                     var sID = xy.StyleId.Split('_')[1];
                                     if (sID == AssocID.ToString())
                                         return xy;
                                 }
-                                else if (Cnt_type == "Image" && ty.Name == "Image")
-                                {
-                                    var sID = xy.StyleId.Split('_')[1];
-                                    if (sID == AssocID.ToString())
-                                        return xy;
-                                }
-                                else if (Cnt_type == "Button" && ty.Name == "Button")
-                                {
-                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
-                                    if (sID == AssocID.ToString())
-                                        return xy;
-                                }
-                                else if (Cnt_type == "Picker" && ty.Name == "Picker")
-                                {
-                                    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
-                                    if (sID == AssocID.ToString())
-                                        return xy;
-                                }
-                                else if (Cnt_type == "Entry" && ty.Name == "Entry")
-                                {
-                                    var sID = xy.StyleId.Split('_')[1];
-                                    if (sID == AssocID.ToString())
-                                        return xy;
-                                }
-                                else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
-                                {
-                                    var sID = xy.StyleId.Split('_')[1];
-                                    if (sID == AssocID.ToString())
-                                        return xy;
-                                }
+
+                                //if (Cnt_type == "DatePicker" && ty.Name == "DatePicker")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
+                                //else if (Cnt_type == "Image" && ty.Name == "Image")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
+                                //else if (Cnt_type == "Button" && ty.Name == "Button")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
+                                //else if (Cnt_type == "Picker" && ty.Name == "Picker")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1].Split('|')[0];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
+                                //else if (Cnt_type == "Entry" && ty.Name == "Entry")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
+                                //else if (Cnt_type == "BorderEditor" && ty.Name == "BorderEditor")
+                                //{
+                                //    var sID = xy.StyleId.Split('_')[1];
+                                //    if (sID == AssocID.ToString())
+                                //        return xy;
+                                //}
                                 //else if (!string.IsNullOrEmpty(xy.StyleId) && xy.StyleId.Contains(AssocID.ToString()))
                                 //    return xy;
                             }
@@ -1542,7 +1564,7 @@ namespace StemmonsMobile.Views.Cases
 
                 var cnt = (DatePicker)sender;
                 var sty_id = cnt.StyleId?.Split('_')[1];
-                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id), "Entry") as Entry;
+                var dt_Entry = FindCasesControls(Convert.ToInt32(sty_id)) as Entry;
                 DateTime dt = cnt.Date;
                 dt_Entry.Text = dt.Date.ToString("d");
                 // dt_Entry.Unfocus();
@@ -1744,7 +1766,7 @@ namespace StemmonsMobile.Views.Cases
                                 Result.Wait();
                                 if (!string.IsNullOrEmpty(Result.Result))
                                 {
-                                    var cnt = FindCasesControls(Convert.ToInt32(itm), "Entry");
+                                    var cnt = FindCasesControls(Convert.ToInt32(itm));
                                     if (cnt != null)
                                     {
                                         Entry entry = new Entry();
@@ -1860,7 +1882,7 @@ namespace StemmonsMobile.Views.Cases
                 {
 
                     Picker Picker = (Picker)sender;
-                    var sd = Picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource;
+                    var sd = Picker.SelectedItem as ExternalDatasourceValue;
                     int AssocID = int.Parse(Picker.StyleId.Split('_')[1].Split('|')[0].ToString());
 
                     if (sd != null && sd?.ID > 0)
@@ -1939,7 +1961,7 @@ namespace StemmonsMobile.Views.Cases
                             {
                                 if (Picker.SelectedItem != null)
                                 {
-                                    if ((Picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID > 0)
+                                    if ((Picker.SelectedItem as ExternalDatasourceValue).ID > 0)
                                     {
                                         //metadata
                                         FillChildControl(AssocID, sControls);
@@ -2013,7 +2035,7 @@ namespace StemmonsMobile.Views.Cases
 
                                     //parentSelectedValue = Convert.ToString((((Picker)FindPickerControls(p._CASE_ASSOC_TYPE_ID_PARENT)).SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
 
-                                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
+                                    List<ExternalDatasourceValue> lst = lstextdatasourceHistory.Where(v => v.Key == p._CASE_ASSOC_TYPE_ID_PARENT)?.FirstOrDefault().Value;
 
                                     parentSelectedValue = Convert.ToString(lst?.FirstOrDefault().ID);
 
@@ -2069,7 +2091,7 @@ namespace StemmonsMobile.Views.Cases
                                 {
                                     fieldName = itemType.Name;
 
-                                    var ItemValues = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(CasesAPIMethods.GetValuesQueryAndConnection(Casetypeid, child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), fieldName/*SelectedCaseType.Name*/,
+                                    var ItemValues = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(CasesAPIMethods.GetValuesQueryAndConnection(Casetypeid, child._CASE_ASSOC_TYPE_ID_CHILD.ToString(), fieldName/*SelectedCaseType.Name*/,
                                          (itemType.IsRequired == 'Y').ToString(), conn, query).GetValue("ResponseContent").ToString());
 
                                     //(control as Picker).ItemsSource = ItemValues;
@@ -2080,7 +2102,7 @@ namespace StemmonsMobile.Views.Cases
                         }
                         else
                         {
-                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                            List<ExternalDatasourceValue> lst_extdatasource = new List<ExternalDatasourceValue>();
                             lst_extdatasource.Add(extDSdefaultValues);
 
                             var GetAppTypeInfo = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.CasesInstance, "C1_C2_CASES_CASETYPELIST", Convert.ToInt32(Casetypeid), App.DBPath, null);
@@ -2091,7 +2113,7 @@ namespace StemmonsMobile.Views.Cases
                             if (Result?.Result?.ASSOC_FIELD_ID > 0)
                             {
                                 string jsonvalue = Result.Result.EDS_RESULT;
-                                var lstResult = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(jsonvalue);
+                                var lstResult = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(jsonvalue);
                                 lst_extdatasource.AddRange(lstResult.OrderBy(v => v.NAME));
                             }
 
@@ -2127,7 +2149,7 @@ namespace StemmonsMobile.Views.Cases
 
                     if (Childcontrol != null)// && itemType != null)
                     {
-                        List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst_extdatasource = new List<GetExternalDataSourceByIdResponse.ExternalDatasource>();
+                        List<ExternalDatasourceValue> lst_extdatasource = new List<ExternalDatasourceValue>();
 
                         lst_extdatasource.Add(extDSdefaultValues);
                         //(control as Picker).ItemsSource = lst_extdatasource;
@@ -2181,8 +2203,8 @@ namespace StemmonsMobile.Views.Cases
                                         if (picker.StyleId == CurrentStyleId)
                                         {
                                             cntrl = subitem;
-                                            selectedId = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
-                                            selectedname = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).NAME);
+                                            selectedId = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).ID);
+                                            selectedname = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).NAME);
                                             SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), selectedId, selectedname, item.AssocTypeID);
                                         }
                                     }
@@ -2295,50 +2317,80 @@ namespace StemmonsMobile.Views.Cases
                 object cntrl = new object();
                 string selectedId = string.Empty;
                 string selectedname = string.Empty;
-                foreach (var item in sControls)
+                #region Find Control Using For Loop
+                //foreach (var item in sControls)
+                //{
+                //    foreach (StackLayout infofield in Cases_EntryStack.Children)
+                //    {
+                //        foreach (StackLayout sitem in infofield.Children)
+                //        {
+                //            foreach (var subitem in sitem.Children)
+                //            {
+                //                Type ty = subitem.GetType();
+                //                if (ty.Name.ToLower() != "stacklayout")
+                //                {
+                //                    if (ty.Name.ToLower() == "picker")
+                //                    {
+                //                        var picker = (Picker)subitem;
+                //                        if (picker.StyleId == CurrentStyleId)
+                //                        {
+                //                            cntrl = subitem;
+                //                            selectedId = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
+                //                            selectedname = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).NAME);
+                //                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), selectedId, selectedname, item.AssocTypeID);
+                //                        }
+                //                    }
+                //                    else if (ty.Name.ToLower() == "button")
+                //                    {
+                //                        var btn = (Button)subitem;
+                //                        if (btn.StyleId == CurrentStyleId)
+                //                        {
+                //                            cntrl = subitem;
+                //                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(CurrentStyleId))?.FirstOrDefault().Value;
+
+                //                            selectedId = Convert.ToString(lst?.FirstOrDefault().ID);
+                //                            selectedname = Convert.ToString(btn.Text);
+                //                            var aTypeFiled = sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId)).Select(a => a.AssocFieldType)?.FirstOrDefault();
+
+                //                            SetDictionary(assocFieldValues, assocFieldTexts, aTypeFiled.ToString() + "_" + CurrentStyleId + "|" + selectedId, selectedId, selectedname, item.AssocTypeID);
+                //                        }
+                //                    }
+
+                //                }
+                //            }
+                //        }
+                //    }
+                //} 
+                #endregion
+
+                var subitem = FindPickerControls(Convert.ToInt32(CurrentStyleId));
+
+                Type Cntyp = subitem.GetType();
+                if (Cntyp.Name.ToLower() == "picker")
                 {
-                    foreach (StackLayout infofield in Cases_EntryStack.Children)
-                    {
-                        foreach (StackLayout sitem in infofield.Children)
-                        {
-                            foreach (var subitem in sitem.Children)
-                            {
+                    var picker = (Picker)subitem;
+                    cntrl = subitem;
 
-                                Type ty = subitem.GetType();
-                                if (ty.Name.ToLower() != "stacklayout")
-                                {
-                                    if (ty.Name.ToLower() == "picker")
-                                    {
-                                        var picker = (Picker)subitem;
-                                        if (picker.StyleId == CurrentStyleId)
-                                        {
-                                            cntrl = subitem;
-                                            selectedId = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).ID);
-                                            selectedname = Convert.ToString((picker.SelectedItem as GetExternalDataSourceByIdResponse.ExternalDatasource).NAME);
-                                            SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), selectedId, selectedname, item.AssocTypeID);
-                                        }
-                                    }
-                                    else if (ty.Name.ToLower() == "button")
-                                    {
-                                        var btn = (Button)subitem;
-                                        if (btn.StyleId == CurrentStyleId)
-                                        {
-                                            cntrl = subitem;
-                                            List<GetExternalDataSourceByIdResponse.ExternalDatasource> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(CurrentStyleId))?.FirstOrDefault().Value;
-
-                                            selectedId = Convert.ToString(lst?.FirstOrDefault().ID);
-                                            selectedname = Convert.ToString(btn.Text);
-                                            var aTypeFiled = sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId)).Select(a => a.AssocFieldType)?.FirstOrDefault();
-
-                                            SetDictionary(assocFieldValues, assocFieldTexts, aTypeFiled.ToString() + "_" + CurrentStyleId + "|" + selectedId, selectedId, selectedname, item.AssocTypeID);
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }
+                    selectedId = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).ID);
+                    selectedname = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).NAME);
+                    SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.Split('|')[0].ToUpper(), selectedId, selectedname, Convert.ToInt32(CurrentStyleId)/*item.AssocTypeID*/);
                 }
+                else if (Cntyp.Name == "Button")
+                {
+                    var btn = (Button)subitem;
+                    cntrl = subitem;
+                    List<ExternalDatasourceValue> lst = lstextdatasourceHistory.Where(v => v.Key == Convert.ToInt32(CurrentStyleId))?.FirstOrDefault().Value;
+
+                    selectedId = Convert.ToString(lst?.FirstOrDefault().ID);
+                    selectedname = Convert.ToString(btn.Text);
+
+                    var aTypeFiled = sControls.Where(v => v.AssocTypeID == Convert.ToInt32(CurrentStyleId)).Select(a => a.AssocFieldType)?.FirstOrDefault();
+
+                    SetDictionary(assocFieldValues, assocFieldTexts, aTypeFiled.ToString() + "_" + CurrentStyleId + "|" + selectedId, selectedId, selectedname, Convert.ToInt32(CurrentStyleId)/*item.AssocTypeID*/);
+                }
+
+
+
                 string CalTxtbox = string.Empty;
                 var x = cntrl.GetType();
                 if (x.Name == "Picker")
@@ -2370,38 +2422,50 @@ namespace StemmonsMobile.Views.Cases
                         rf.calculatedAssocId = sCalId;
                         rf.sdateFormats = "MM/dd/yyyy";
 
-                        //var CalResult = CasesAPIMethods.RefreshCalculationFields(rf);
                         var Result = CasesSyncAPIMethods.CallCalculations(App.Isonline, App.DBPath, rf);
 
                         Result.Wait();
 
-                        foreach (StackLayout infofield in Cases_EntryStack.Children)
-                        {
+                        subitem = FindCasesControls(Convert.ToInt32(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1).Split('_')[1]));
 
-                            foreach (StackLayout sitem in infofield.Children)
+                        if (subitem != null)
+                        {
+                            var en = (Entry)subitem;
+
+                            Device.BeginInvokeOnMainThread(() =>
                             {
-                                foreach (var subitem in sitem.Children)
-                                {
-                                    var xy = subitem;
-                                    Type ty = xy.GetType();
-                                    if (ty.Name.ToLower() != "stacklayout")
-                                    {
-                                        if (ty.Name.ToLower() == "entry")
-                                        {
-                                            var en = (Entry)xy;
-                                            if (en.StyleId == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
-                                            {
-                                                Device.BeginInvokeOnMainThread(() =>
-                                                {
-                                                    en.Text = Convert.ToString(Result.Result);
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                                en.Text = Convert.ToString(Result.Result);
+                            });
                         }
+
+                        #region Find Control For Set Calcilarion using For Loop
+                        //foreach (StackLayout infofield in Cases_EntryStack.Children)
+                        //{
+                        //    foreach (StackLayout sitem in infofield.Children)
+                        //    {
+                        //        foreach (var subitem in sitem.Children)
+                        //        {
+                        //            var xy = subitem;
+                        //            Type ty = xy.GetType();
+                        //            if (ty.Name.ToLower() != "stacklayout")
+                        //            {
+                        //                if (ty.Name.ToLower() == "entry")
+                        //                {
+                        //                    var en = (Entry)xy;
+                        //                    if (en.StyleId == Convert.ToString(sCalId.ToLower().Substring(sCalId.ToLower().IndexOf('_') + 1)).ToLower())
+                        //                    {
+                        //                        Device.BeginInvokeOnMainThread(() =>
+                        //                        {
+                        //                            en.Text = Convert.ToString(Result.Result);
+                        //                        });
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
                     }
+                    #endregion
                 }
             }
             catch (Exception)
@@ -2469,195 +2533,198 @@ namespace StemmonsMobile.Views.Cases
 
                 #region  Cases Fill Value
 
-                foreach (StackLayout infofield in Cases_EntryStack.Children)
+                if (action != null || action.ToLower() != "cancel")
                 {
-                    foreach (StackLayout item in infofield.Children)
+                    foreach (StackLayout infofield in Cases_EntryStack.Children)
                     {
-
-                        foreach (var subitem in item.Children)
+                        foreach (StackLayout item in infofield.Children)
                         {
-                            var xy = subitem;
-                            Type ty = xy.GetType();
-                            if (ty.Name.ToLower() != "stacklayout")
+
+                            foreach (var subitem in item.Children)
                             {
-                                var en = new Entry();
-                                if (ty.Name.ToLower() == "entry")
+                                var xy = subitem;
+                                Type ty = xy.GetType();
+                                if (ty.Name.ToLower() != "stacklayout")
                                 {
-                                    try
+                                    var en = new Entry();
+                                    if (ty.Name.ToLower() == "entry")
                                     {
-                                        en = (Entry)xy;
-                                        if (en.StyleId.Split('_')[1] == Convert.ToString(CasesSchema.Where(c => c.SYSTEM_CODE == "TITLE").Select(v => v?.ASSOC_TYPE_ID)?.FirstOrDefault()))
+                                        try
                                         {
-                                            createcase.caseTitle = en.Text;
-                                        }
-
-                                        int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
-                                        string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text)/* && action != "Save Favorite"*/)
-                                        {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-
-                                            goto requiredJump;
-                                        }
-                                        else
-                                        {
-                                            if (!en.StyleId.Contains("a_"))
+                                            en = (Entry)xy;
+                                            if (en.StyleId.Split('_')[1] == Convert.ToString(CasesSchema.Where(c => c.SYSTEM_CODE == "TITLE").Select(v => v?.ASSOC_TYPE_ID)?.FirstOrDefault()))
                                             {
-                                                textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = en.Text });
+                                                createcase.caseTitle = en.Text;
+                                            }
+
+                                            int Key = int.Parse(en.StyleId.Split('_')[1]?.ToString());
+                                            string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(en.Text)/* && action != "Save Favorite"*/)
+                                            {
+                                                DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+
+                                                goto requiredJump;
                                             }
                                             else
                                             {
-                                                var stDate = string.Empty;
-                                                if (!string.IsNullOrEmpty(en.Text))
+                                                if (!en.StyleId.Contains("a_"))
                                                 {
-                                                    var sDate = Convert.ToDateTime(en.Text);
-                                                    stDate = sDate.Date.ToString("MM/dd/yyyy");
-                                                }
-                                                textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = stDate });
-                                            }
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                    }
-                                }
-                                else if (ty.Name.ToLower() == "picker")
-                                {
-                                    try
-                                    {
-                                        Picker picker = (Picker)xy;
-
-                                        string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                        if (styletype.ToLower() == "d")
-                                        {
-                                            int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            metaDataValues.Add(Key, picker.SelectedItem.ToString());
-                                        }
-                                        else
-                                        {
-
-                                            if ((GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem != null)
-                                            {
-                                                GetExternalDataSourceByIdResponse.ExternalDatasource selectedValue = (GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem;
-
-                                                int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                                if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
-                                                {
-                                                    createcase.caseTitle = selectedValue.NAME;
+                                                    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = en.Text });
                                                 }
                                                 else
                                                 {
-                                                    string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                                    string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                                    if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                    var stDate = string.Empty;
+                                                    if (!string.IsNullOrEmpty(en.Text))
                                                     {
-                                                        DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-                                                        goto requiredJump;
+                                                        var sDate = Convert.ToDateTime(en.Text);
+                                                        stDate = sDate.Date.ToString("MM/dd/yyyy");
                                                     }
-                                                    metaDataValues.Add(Key, selectedValue.NAME.ToString().Trim());
+                                                    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = Key, Value = stDate });
                                                 }
                                             }
                                         }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //throw ex;
-                                    }
-                                }
-                                else if (ty.Name.ToLower() == "button")
-                                {
-                                    try
-                                    {
-                                        Button btn = new Button();
-                                        btn = (Button)xy;
-
-                                        if (btn != null)
+                                        catch (Exception ex)
                                         {
-                                            int Key = int.Parse(btn.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                            metaDataValues.Add(Key, btn.Text);
-                                        }
-
-                                        // string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
-
-                                        //if (styletype.ToLower() == "d")
-                                        //{
-                                        //    int Key = int.Parse(btn.StyleId.ToString());
-                                        //    metaDataValues.Add(Key, btn.Text);
-                                        //}
-                                        //else
-                                        //{
-
-                                        //    if ((GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem != null)
-                                        //    {
-                                        //        GetExternalDataSourceByIdResponse.ExternalDatasource selectedValue = (GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem;
-
-                                        //        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
-                                        //        if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
-                                        //        {
-                                        //            createcase.caseTitle = selectedValue.NAME;
-                                        //        }
-                                        //        else
-                                        //        {
-                                        //            string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
-                                        //            string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
-                                        //            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
-                                        //            {
-                                        //                DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-                                        //                goto requiredJump;
-                                        //            }
-                                        //            metaDataValues.Add(Key, selectedValue.NAME.ToString().Trim());
-                                        //        }
-                                        //    }
-                                        //}
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //throw ex;
-                                    }
-                                }
-                                else if (ty.Name.ToLower() == "bordereditor")
-                                {
-                                    try
-                                    {
-                                        BorderEditor editor = (BorderEditor)xy;
-                                        if (editor.StyleId == _TitleFieldControlID)
-                                        {
-                                            createcase.caseTitle = en.Text;
-                                        }
-                                        string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
-                                        string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
-                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
-                                        {
-                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
-
-                                            goto requiredJump;
-                                        }
-                                        else
-                                        {
-                                            textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(editor.StyleId.Split('_')[1]?.ToString()), Value = editor.Text });
                                         }
                                     }
-                                    catch (Exception ex)
+                                    else if (ty.Name.ToLower() == "picker")
                                     {
-                                    }
-                                }
-                                else if (ty.Name.ToLower() == "datepicker")
-                                {
-                                    try
-                                    {
-                                        //var datepicker = new DatePicker();
-                                        //datepicker = (DatePicker)xy;
-                                        //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
-                                        //{
-                                        //    string str = CommonConstantsDateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+                                        try
+                                        {
+                                            Picker picker = (Picker)xy;
 
-                                        //    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), Value = str });
-                                        //}
+                                            string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+
+                                            if (styletype.ToLower() == "d")
+                                            {
+                                                int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                metaDataValues.Add(Key, picker.SelectedItem.ToString());
+                                            }
+                                            else
+                                            {
+
+                                                if ((ExternalDatasourceValue)picker.SelectedItem != null)
+                                                {
+                                                    ExternalDatasourceValue selectedValue = (ExternalDatasourceValue)picker.SelectedItem;
+
+                                                    int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                    if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                                    {
+                                                        createcase.caseTitle = selectedValue.NAME;
+                                                    }
+                                                    else
+                                                    {
+                                                        string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                                        string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                                        if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                                        {
+                                                            DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                                            goto requiredJump;
+                                                        }
+                                                        metaDataValues.Add(Key, selectedValue.NAME.ToString().Trim());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //throw ex;
+                                        }
                                     }
-                                    catch (Exception ex)
+                                    else if (ty.Name.ToLower() == "button")
                                     {
+                                        try
+                                        {
+                                            Button btn = new Button();
+                                            btn = (Button)xy;
+
+                                            if (btn != null)
+                                            {
+                                                int Key = int.Parse(btn.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                                metaDataValues.Add(Key, btn.Text);
+                                            }
+
+                                            // string styletype = picker.StyleId.Split('_')[0].Split('|')[0].ToString();
+
+                                            //if (styletype.ToLower() == "d")
+                                            //{
+                                            //    int Key = int.Parse(btn.StyleId.ToString());
+                                            //    metaDataValues.Add(Key, btn.Text);
+                                            //}
+                                            //else
+                                            //{
+
+                                            //    if ((GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem != null)
+                                            //    {
+                                            //        GetExternalDataSourceByIdResponse.ExternalDatasource selectedValue = (GetExternalDataSourceByIdResponse.ExternalDatasource)picker.SelectedItem;
+
+                                            //        int Key = int.Parse(picker.StyleId.Split('_')[1].Split('|')[0].ToString());
+                                            //        if (picker.StyleId.Split('|')[0] == _TitleFieldControlID)
+                                            //        {
+                                            //            createcase.caseTitle = selectedValue.NAME;
+                                            //        }
+                                            //        else
+                                            //        {
+                                            //            string isReq = metadata.Where(c => c.ASSOC_TYPE_ID == Key).FirstOrDefault().IS_REQUIRED.ToString();
+                                            //            string FiledName = metadata.Where(c => c.ASSOC_TYPE_ID == Key)?.FirstOrDefault()?.NAME?.ToString();
+                                            //            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(FiledName))
+                                            //            {
+                                            //                DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+                                            //                goto requiredJump;
+                                            //            }
+                                            //            metaDataValues.Add(Key, selectedValue.NAME.ToString().Trim());
+                                            //        }
+                                            //    }
+                                            //}
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //throw ex;
+                                        }
+                                    }
+                                    else if (ty.Name.ToLower() == "bordereditor")
+                                    {
+                                        try
+                                        {
+                                            BorderEditor editor = (BorderEditor)xy;
+                                            if (editor.StyleId == _TitleFieldControlID)
+                                            {
+                                                createcase.caseTitle = en.Text;
+                                            }
+                                            string isReq = CasesSchema.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString())).FirstOrDefault().IS_REQUIRED.ToString();
+                                            string FiledName = CasesSchema.Where(c => c.ASSOC_TYPE_ID == int.Parse(editor.StyleId.Split('_')[1]?.ToString()))?.FirstOrDefault()?.NAME?.ToString();
+                                            if (!string.IsNullOrEmpty(isReq) && isReq.ToUpper().Trim() == "Y" && string.IsNullOrEmpty(editor.Text))
+                                            {
+                                                DisplayAlert("Field Required.", "Please enter valid data in " + FiledName, "OK");
+
+                                                goto requiredJump;
+                                            }
+                                            else
+                                            {
+                                                textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(editor.StyleId.Split('_')[1]?.ToString()), Value = editor.Text });
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                        }
+                                    }
+                                    else if (ty.Name.ToLower() == "datepicker")
+                                    {
+                                        try
+                                        {
+                                            //var datepicker = new DatePicker();
+                                            //datepicker = (DatePicker)xy;
+                                            //if (datepicker.Date != Convert.ToDateTime("01/01/1900"))
+                                            //{
+                                            //    string str = CommonConstantsDateFormatStringToString(datepicker.Date.ToString(), CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, "MM/dd/yyyy");
+
+                                            //    textValues.Add(new CreateCaseOptimizedRequest.TextValue { Key = int.Parse(datepicker.StyleId.Split('_')[1]?.ToString()), Value = str });
+                                            //}
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                        }
                                     }
                                 }
                             }
@@ -2668,7 +2735,7 @@ namespace StemmonsMobile.Views.Cases
                 #endregion
 
                 createcase.caseType = casedata.CaseTypeID;
-                createcase.currentUser = Functions.UserFullName;
+                createcase.currentUser = Functions.UserName;
                 createcase.caseNotes = "";
                 createcase.assignTo = "";
                 createcase.linkValues = linkValue;
@@ -2900,7 +2967,7 @@ namespace StemmonsMobile.Views.Cases
                                 if (Picker.StyleId.Split('|')[0] != "d_" + AssocID)
                                 {
                                     //lsPickerWithValues
-                                    GetExternalDataSourceByIdResponse.ExternalDatasource selectedValue = (GetExternalDataSourceByIdResponse.ExternalDatasource)Picker.SelectedItem;
+                                    ExternalDatasourceValue selectedValue = (ExternalDatasourceValue)Picker.SelectedItem;
                                     lsPickerWithValues.Add(new GetCaseTypesRequest.ParentSelectedValues { ParentAssocTypeId = int.Parse(Picker.StyleId.Split('|')[0].Split('_')[1]), ParentSelectedExternalDatasourceObjectId = Convert.ToString(selectedValue?.ID) });
                                     return lsPickerWithValues;
                                 }

@@ -18,7 +18,8 @@
                                  Margin="14,0,5,0" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" />
                     </StackLayout>
 
-                    <Button Text="Edit" TextColor="#FFD700"   FontAttributes="Italic" BackgroundColor="Transparent"
+                    <Button Text="Edit" TextColor="#FFD700"  
+                            FontAttributes="Italic" BackgroundColor="Transparent"
                         HorizontalOptions="End"  VerticalOptions="Center" 
                         Margin="0,0,5,0" Clicked="Editbutton_Clicked">
                         <Button.HeightRequest>
@@ -83,6 +84,7 @@
                        Grid.Row="4" Grid.Column="1" 
                        HorizontalOptions="Start" VerticalOptions="Center" />
 
+                    
                     <Button x:Name="btn_remember" Image="Assets/Checked.png" 
                          Grid.Row="4" Grid.Column="3"  
                         BackgroundColor="Transparent" Clicked="Btn_remember_Clicked"

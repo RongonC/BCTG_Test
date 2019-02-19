@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace StemmonsMobile.DataTypes.DataType.Cases
 {
-    public class CreateCaseOptimizedResponse:Response
+    public class CreateCaseOptimizedResponse : Response
     {
         public object ResponseContent { get; set; }
 
@@ -84,6 +84,8 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         #region Enum ActivityLogType
         public enum ActivityLogType
         {
+            Fix0,// for fix log issue
+            Fix1,// for fix log issue
             CreatedCase,
             ViewingCase,
             AddedNotes,
@@ -101,6 +103,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             ProjectChange,
             SeverityChange,
             CaseTitleChanged,
+            Fix19,// for fix log issue
             ClosedCase,
             ReOpenedCase,
             ExportedCasePDF,

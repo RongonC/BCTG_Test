@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 
 namespace StemmonsMobile.DataTypes.DataType.Entity
-{
+{  
     public class AreaItem
     {
         public int ItemID { get; set; }
@@ -71,6 +71,7 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public int EntityRoleAssignID { get; set; }
         public string EntityTitle { get; set; }
         public int EntityTypeID { get; set; }
+        public string Username { get; set; } // as Sam name
         public string FullName { get; set; }
         public string IsPrimary { get; set; }
         public string Operation { get; set; }
@@ -2091,7 +2092,7 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
             return entityType;
         }
 
-       private int eNTITY_TYPE_IDField;
+        private int eNTITY_TYPE_IDField;
 
         private string eNTITY_TYPE_SYSTEM_CODEField;
 
@@ -4484,7 +4485,7 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
         public List<EntityAssocTypeCascade> EntityAssocTypeCascade { get; set; }
 
-        public List<EXTERNAL_DATASOURCE1> EXTERNAL_DATASOURCE { get; set; }
+        public List<ExternalDatasourceValue> EXTERNAL_DATASOURCE { get; set; }
 
         public bool IsExternalEntityAssocType { get; set; }
 
@@ -4699,18 +4700,18 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string FieldSystemCode { get; set; }
         public string ValueSystemCode { get; set; }
 
-        public List<EXTERNAL_DATASOURCE1> List { get; set; }
+        public List<ExternalDatasourceValue> List { get; set; }
 
 
     }
 
-    public class EXTERNAL_DATASOURCE1
-    {
-        public int ID { get; set; }
-        public string EXTERNAL_DATASOURCE_NAME { get; set; }
-        public string EXTERNAL_DATASOURCE_DESCRIPTION { get; set; }
-        public int Count { get; set; }
-    }
+    //public class EXTERNAL_DATASOURCE1
+    //{
+    //    public int ID { get; set; }
+    //    public string EXTERNAL_DATASOURCE_NAME { get; set; }
+    //    public string EXTERNAL_DATASOURCE_DESCRIPTION { get; set; }
+    //    public int Count { get; set; }
+    //}
 
     public class EntityAssocTypeCascade
     {

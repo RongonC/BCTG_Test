@@ -4,7 +4,9 @@ using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using PCLStorage;
+using Plugin.FilePicker;
 using Plugin.Media;
+using Plugin.Media.Abstractions;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.Models;
@@ -355,9 +357,12 @@ namespace StemmonsMobile.Views.Entity
                     for (int i = 0; i < EntityListsNotes.Count; i++)
                     {
                         string st = CommonConstants.DateFormatStringToString(EntityListsNotes[i].CreatedDatetime);
+
+                        string NotesURl = Functions.GenerateEntityFullURL(EntityListsNotes[i].Note);
+
                         Temp.Add(new EntityNotesGroup("", st.ToString(), EntityListsNotes[i].CreatedBy)
                         {
-                            new Entity_Notes { Note = EntityListsNotes[i].Note }
+                            new Entity_Notes { Note = NotesURl }
                         });
                     }
 
@@ -368,7 +373,7 @@ namespace StemmonsMobile.Views.Entity
                             item.FirstOrDefault().ImageVisible = true;
                             item.FirstOrDefault().LabelVisible = true;
                             item.FirstOrDefault().htmlNote = item.FirstOrDefault().Note;
-                            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1]);
+                            item.FirstOrDefault().ImageURL = App.EntityImgURL + "/" + item.FirstOrDefault().Note.Replace("'", "\"").Split('\"')[1];
                             item.FirstOrDefault().Note = item.FirstOrDefault().Note;//Functions.HTMLToText(item.FirstOrDefault().Note);
                         }
                         else
@@ -422,6 +427,8 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
+
+
         private void HeaderTapped(object sender, EventArgs args)
         {
             try
@@ -460,26 +467,25 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        void EmailLink(EntityListMBView saveentity)
+        void EmailLink(string EntityTypeName)
         {
             try
             {
                 string shareurl = String.Empty;
                 if (Device.RuntimePlatform == Device.iOS)
                 {
-                    string subject = Functions.UserFullName + " wants to share this Entity with you: " + saveentity.EntityDetails.EntityTypeName;
+                    string subject = Functions.UserFullName + " wants to share this Entity with you: " + EntityTypeName;
                     subject = WebUtility.UrlEncode(subject).Replace("+", "%20");
 
                     string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityDetails.EntityID;
 
                     body = WebUtility.UrlEncode(body).Replace("+", "%20");
 
-                    var email = Regex.Replace("", @"[^\u0000-\u00FF]", string.Empty);
                     shareurl = "mailto:?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
                 }
                 else
                 {
-                    string subject = Functions.UserFullName + " wants to share this Entity with you: " + saveentity.EntityDetails.EntityTypeName;
+                    string subject = Functions.UserFullName + " wants to share this Entity with you: " + EntityTypeName;
                     string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityDetails.EntityID;
                     shareurl = "mailto:?subject=" + subject + "&body=" + body;
                 }
@@ -550,16 +556,18 @@ namespace StemmonsMobile.Views.Entity
                 });
                 if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "-1")
                 {
-                    if (Groups.Count != 0)
+
+                    if (_entityListMBView.EntityDetails.NewestNotesOnTop.ToLower() == "n")
                     {
                         if (EntityNotes.Contains("<img"))
                         {
-                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
-                                {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                               {
+                                    Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+
+                                    ImageURL = App.EntityImgURL + "/" + (EntityNotes.Replace("'", "\"").Split('\"')[1]),
                                     ImageVisible = true,
                                     LabelVisible = true
                                 }
@@ -567,11 +575,12 @@ namespace StemmonsMobile.Views.Entity
                         }
                         else
                         {
-                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
                                 {
-                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+
                                     htmlNote = EntityNotes,
                                     ImageVisible = false,
                                     LabelVisible = true
@@ -581,14 +590,15 @@ namespace StemmonsMobile.Views.Entity
                     }
                     else
                     {
+                        //Insert At Top When "Y"
                         if (EntityNotes.Contains("<img"))
                         {
-                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
-                               {
-                                    Note = Functions.HTMLToText( EntityNotes ),
-                                    ImageURL = App.EntityImgURL + "/" + Functions.HTMLToText(EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                                {
+                                   Note = EntityNotes?.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+                                    ImageURL = App.EntityImgURL + "/" + EntityNotes?.Replace("'", "\"").Split('\"')[1],
                                     ImageVisible = true,
                                     LabelVisible = true
                                 }
@@ -596,34 +606,116 @@ namespace StemmonsMobile.Views.Entity
                         }
                         else
                         {
-                            Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                            Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
                                 {
-                                    Note = Functions.HTMLToText( EntityNotes ),
+                                    Note = EntityNotes?.Replace("Download.aspx",App.EntityImgURL + "/Download.aspx").Replace("DownloadFile.aspx", App.EntityImgURL + "/DownloadFile.aspx"),
+
                                     htmlNote = EntityNotes,
                                     ImageVisible = false,
                                     LabelVisible = true
                                 }
                             });
                         }
-
-                        gridEntitynotes.ItemsSource = Groups;
-
-                        FormattedString sa = new FormattedString();
-                        try
-                        {
-                            sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
-                            sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
-
-                            EntityLists.EntityModifiedByFullName = Functions.UserFullName;
-                            EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                        lbl_modifiedname.FormattedText = sa;
                     }
+
+
+                    gridEntitynotes.ItemsSource = Groups;
+
+                    FormattedString sa = new FormattedString();
+                    try
+                    {
+                        sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                        sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
+
+                        EntityLists.EntityModifiedByFullName = Functions.UserFullName;
+                        EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    lbl_modifiedname.FormattedText = sa;
+
+
+                    #region Old Logic For Bind Notes
+                    //if (Groups.Count != 0)
+                    //{
+                    //    if (EntityNotes.Contains("<img"))
+                    //    {
+                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //               Note = EntityNotes?.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+                    //                ImageURL = App.EntityImgURL + "/" + EntityNotes?.Replace("'", "\"").Split('\"')[1],
+                    //                ImageVisible = true,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        Groups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //                Note = EntityNotes?.Replace("Download.aspx",App.EntityImgURL + "/Download.aspx").Replace("DownloadFile.aspx", App.EntityImgURL + "/DownloadFile.aspx"),
+
+                    //                htmlNote = EntityNotes,
+                    //                ImageVisible = false,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (EntityNotes.Contains("<img"))
+                    //    {
+                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //           {
+                    //                Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+
+                    //                ImageURL = App.EntityImgURL + "/" + (EntityNotes.Replace("'", "\"").Split('\"')[1]),
+                    //                ImageVisible = true,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                    //        {
+                    //            new Entity_Notes
+                    //            {
+                    //                Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+
+                    //                htmlNote = EntityNotes,
+                    //                ImageVisible = false,
+                    //                LabelVisible = true
+                    //            }
+                    //        });
+                    //    }
+
+
+                    //    FormattedString sa = new FormattedString();
+                    //    try
+                    //    {
+                    //        sa.Spans.Add(new Span { Text = Functions.UserFullName + "\r\n", FontSize = 14 });
+                    //        sa.Spans.Add(new Span { Text = (DateTime.Now).ToString(), FontSize = 14 });
+
+                    //        EntityLists.EntityModifiedByFullName = Functions.UserFullName;
+                    //        EntityLists.EntityModifiedDateTime = (DateTime.Now).ToString();
+                    //    }
+                    //    catch (Exception)
+                    //    {
+                    //    }
+                    //    lbl_modifiedname.FormattedText = sa;
+                    //} 
+                    #endregion
                 }
             }
             catch (Exception)
@@ -835,117 +927,35 @@ namespace StemmonsMobile.Views.Entity
 
                             try
                             {
-                                if (App.Isonline)
+                                string[] attach_options;
+                                attach_options = new string[] { "Upload Document", "From Photo Gallery", "Camera" };
+
+                                var attach_action = await this.DisplayActionSheet(null, "Cancel", null, attach_options);
+
+                                switch (attach_action)
                                 {
-                                    try
-                                    {
-                                        await CrossMedia.Current.Initialize();
+                                    case "Upload Document":
+                                        PickFile();
+                                        break;
+                                    case "From Photo Gallery":
+                                        AddPhoto();
+                                        break;
+                                    case "Camera":
+                                        TakePhoto();
+                                        break;
 
-                                        if (!CrossMedia.Current.IsPickPhotoSupported)
-                                        {
-                                            DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
-                                            return;
-                                        }
-
-                                        var file = await CrossMedia.Current.PickPhotoAsync();
-
-                                        if (file == null)
-                                        {
-                                            return;
-                                        }
-
-                                        long size = file.Path.Length;
-                                        byte[] fileBytes = null;
-                                        var bytesStream = file.GetStream();
-                                        using (var memoryStream = new MemoryStream())
-                                        {
-                                            bytesStream.CopyTo(memoryStream);
-                                            fileBytes = memoryStream.ToArray();
-                                        }
-                                        size = fileBytes.Count();
-
-                                        string File_Name = string.Empty;
-                                        try
-                                        {
-                                            if (Device.RuntimePlatform == Device.UWP)
-                                            {
-                                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
-                                            }
-                                            else
-                                            {
-                                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-
-                                        string FileId = string.Empty;
-                                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                                        await Task.Run(() =>
-                                        {
-                                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", DateTime.Now.Date.ToString("MM/dd/yyyy"), File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
-
-                                            FileId = d.GetValue("ResponseContent").ToString();
-                                        });
-
-                                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
-                                        {
-                                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + File_Name + "</a>";
-
-                                            var Re = await EntityAddnotes(Notes);
-                                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-
-                                            if (!string.IsNullOrEmpty(txt_EntNotes.Text))
-                                            {
-                                                await EntityAddnotes(txt_EntNotes.Text);
-                                                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                                            }
-
-                                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                                            if (!string.IsNullOrEmpty(Re))
-                                                Functions.ShowtoastAlert("File Attached Successfully.");
-                                            else
-                                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
-                                        }
-                                        else
-                                        {
-                                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
-                                        }
-
-                                        try
-                                        {
-                                            if (Device.RuntimePlatform == Device.UWP)
-                                            {
-                                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
-                                            }
-                                            else
-                                            {
-                                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
-                                            }
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                    }
                                 }
-                                else
-                                    Functions.ShowtoastAlert(Functions.Goonline_forFunc);
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+
                             }
-                            txt_EntNotes.Text = "";
-                            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                             break;
                         case "Copy Link":
                             Copylink(_entityListMBView);
                             break;
                         case "Email Link":
-                            EmailLink(_entityListMBView);
+                            EmailLink(_entityListMBView.EntityDetails.EntityTypeName);
                             break;
                     }
                 }
@@ -953,6 +963,344 @@ namespace StemmonsMobile.Views.Entity
             catch (Exception)
             {
             }
+        }
+
+
+        async void PickFile()
+        {
+            try
+            {
+
+                if (App.Isonline)
+                {
+                    //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                    var file = await CrossFilePicker.Current.PickFile();
+
+                    byte[] fileBytes = null;
+                    long size = 0;
+
+                    if (file != null)
+                    {
+                        string FileName = file.FileName;
+
+                        var type = file.GetType();
+
+
+                        fileBytes = file.DataArray;
+
+                        size = fileBytes.Count();
+
+                        string FileId = string.Empty;
+
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                        await Task.Run(() =>
+                        {
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", FileName, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+
+                            FileId = d.GetValue("ResponseContent").ToString();
+                        });
+
+                        Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
+                        if (FileId == null || FileId == "-1")
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in file attachment");
+                            return;
+                        }
+
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]") //FileID not null
+                        {
+
+                            string Notes = string.Empty;
+                            // To get Type of File 
+                            string extension = MimeTypeMap.GetMimeType(FileName.Substring(FileName.LastIndexOf(".")));
+
+                            if (extension.ToLower().Contains("image"))
+                            {
+                                Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + FileName + "</a>";
+                            }
+                            else
+                            {
+                                //Notes = "<a href =\"" + App.EntityImgURL + "Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
+
+                                Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
+                            }
+
+                            //Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
+
+                            var Re = await EntityAddnotes(Notes);
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                            if (!string.IsNullOrEmpty(txt_EntNotes.Text))
+                            {
+                                await EntityAddnotes(txt_EntNotes.Text);
+                                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            }
+
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            if (!string.IsNullOrEmpty(Re))
+                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            else
+                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+                    }
+                    else
+                    {
+                        /*Functions.ShowtoastAlert("Please go online to use this functionality!")*/
+                        ;
+                        Functions.ShowtoastAlert(Functions.Goonline_forFunc);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Functions.ShowtoastAlert("An exception occured");
+            }
+
+            txt_EntNotes.Text = "";
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        async void AddPhoto()
+        {
+            try
+            {
+                if (App.Isonline)
+                {
+                    try
+                    {
+                        await CrossMedia.Current.Initialize();
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                            return;
+                        }
+
+                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                        {
+                            PhotoSize = PhotoSize.Medium,
+                            CompressionQuality = 80,
+                        });
+
+                        if (file == null)
+                        {
+                            return;
+                        }
+
+                        long size = file.Path.Length;
+                        byte[] fileBytes = null;
+                        var bytesStream = file.GetStream();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            bytesStream.CopyTo(memoryStream);
+                            fileBytes = memoryStream.ToArray();
+                        }
+                        size = fileBytes.Count();
+
+                        string File_Name = string.Empty;
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                            }
+                            else
+                            {
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                        string FileId = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        await Task.Run(() =>
+                        {
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+
+                            FileId = d.GetValue("ResponseContent").ToString();
+                        });
+
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                        {
+                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + File_Name + "</a>";
+
+                            var Re = await EntityAddnotes(Notes);
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                            if (!string.IsNullOrEmpty(txt_EntNotes.Text))
+                            {
+                                await EntityAddnotes(txt_EntNotes.Text);
+                                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            }
+
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            if (!string.IsNullOrEmpty(Re))
+                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            else
+                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                            }
+                            else
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+                else
+                    Functions.ShowtoastAlert(Functions.Goonline_forFunc);
+            }
+            catch (Exception ex)
+            {
+                string exStr = ex.ToString();
+            }
+
+            txt_EntNotes.Text = "";
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        }
+
+        async void TakePhoto()
+        {
+            try
+            {
+                if (App.Isonline)
+                {
+                    try
+                    {
+                        await CrossMedia.Current.Initialize();
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            DisplayAlert("No Gallery", ":( No Gallery available.", "Ok");
+                            return;
+                        }
+
+                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                        {
+                            Directory = "Sample",
+                            DefaultCamera = Plugin.Media.Abstractions.CameraDevice.Rear,
+                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                        });
+
+                        if (file == null)
+                        {
+                            return;
+                        }
+
+                        long size = file.Path.Length;
+                        byte[] fileBytes = null;
+                        var bytesStream = file.GetStream();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            bytesStream.CopyTo(memoryStream);
+                            fileBytes = memoryStream.ToArray();
+                        }
+                        size = fileBytes.Count();
+
+                        string File_Name = string.Empty;
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('\\') + 1);
+                            }
+                            else
+                            {
+                                File_Name = file.Path.Substring(file.Path.LastIndexOf('/') + 1);
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                        string FileId = string.Empty;
+                        Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                        await Task.Run(() =>
+                        {
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+
+                            FileId = d.GetValue("ResponseContent").ToString();
+                        });
+
+                        if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
+                        {
+                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + File_Name + "</a>";
+
+                            var Re = await EntityAddnotes(Notes);
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+
+                            if (!string.IsNullOrEmpty(txt_EntNotes.Text))
+                            {
+                                await EntityAddnotes(txt_EntNotes.Text);
+                                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            }
+
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            if (!string.IsNullOrEmpty(Re))
+                                Functions.ShowtoastAlert("File Attached Successfully.");
+                            else
+                                Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+                        else
+                        {
+                            Functions.ShowtoastAlert("Something went wrong in File Attachment. Please try again later.");
+                        }
+
+                        try
+                        {
+                            if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                            }
+                            else
+                            {
+                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+                else
+                    Functions.ShowtoastAlert(Functions.Goonline_forFunc);
+            }
+            catch (Exception ex)
+            {
+                string exStr = ex.ToString();
+            }
+
+            txt_EntNotes.Text = "";
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         private async void List_RelationalGrid_ItemTapped(object sender, ItemTappedEventArgs e)

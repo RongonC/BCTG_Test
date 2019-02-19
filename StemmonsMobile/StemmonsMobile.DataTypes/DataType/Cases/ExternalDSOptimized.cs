@@ -11,11 +11,11 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
     public partial class EXTERNAL_DATASOURCE_DATA
     {
 
-        private EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCE[] eXTERNAL_DATASOURCEField;
+        private List<EXTERNALDATASOURCE> eXTERNAL_DATASOURCEField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EXTERNAL_DATASOURCE")]
-        public EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCE[] EXTERNAL_DATASOURCE
+        public List<EXTERNALDATASOURCE> EXTERNAL_DATASOURCE
         {
             get
             {
@@ -30,15 +30,15 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCE
+    public partial class EXTERNALDATASOURCE
     {
 
-        private ushort eXTERNAL_DATASOURCE_IDField;
+        private int? eXTERNAL_DATASOURCE_IDField;
 
-        private EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCEEXTERNAL_DATASOURCE_OBJECT[] eXTERNAL_DATASOURCE_OBJECTField;
+        private List<EXTERNAL_DATASOURCE_OBJECT> eXTERNAL_DATASOURCE_OBJECTField;
 
         /// <remarks/>
-        public ushort EXTERNAL_DATASOURCE_ID
+        public int? EXTERNAL_DATASOURCE_ID
         {
             get
             {
@@ -52,7 +52,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EXTERNAL_DATASOURCE_OBJECT")]
-        public EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCEEXTERNAL_DATASOURCE_OBJECT[] EXTERNAL_DATASOURCE_OBJECT
+        public List<EXTERNAL_DATASOURCE_OBJECT> EXTERNAL_DATASOURCE_OBJECT
         {
             get
             {
@@ -67,17 +67,17 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class EXTERNAL_DATASOURCE_DATAEXTERNAL_DATASOURCEEXTERNAL_DATASOURCE_OBJECT
+    public partial class EXTERNAL_DATASOURCE_OBJECT
     {
 
-        private uint idField;
+        private int? idField;
 
         private string nAMEField;
 
         private string dESCRIPTIONField;
 
         /// <remarks/>
-        public uint ID
+        public int? ID
         {
             get
             {

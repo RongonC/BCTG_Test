@@ -15,9 +15,13 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using StemmonsMobile.Views.Cases;
 using Plugin.DeviceInfo;
+using Xamarin.Essentials;
+using DataServiceBus.OnlineHelper.DataTypes;
+using System.IO;
 
 namespace StemmonsMobile
 {
+
     public partial class App : Application
     {
         public static bool UseMockDataStore = true;
@@ -36,6 +40,8 @@ namespace StemmonsMobile
             //MainPage = new ViewcasePage_New();
 
             //return;
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+
 
             if (Functions.IsPWDRemember && Functions.IsLogin)
             {
@@ -59,21 +65,40 @@ namespace StemmonsMobile
                 };
             }
             SetConnectionFlag();
-            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
+            //CrossConnectivity.Current.ConnectivityChanged += Connectivity_ConnectivityChanged;
         }
-        private void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+
+        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            var current = Connectivity.NetworkAccess;
+
+            if (current == NetworkAccess.Internet)
+            {
+                Isonline = true;
+                isFirstcall = true;
+                OnlineSyncRecord();
+            }
+            else
+            {
+                Isonline = false;
+            }
+        }
+
+        private void Connectivity_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
         {
             try
             {
-
                 Isonline = e.IsConnected;
                 isFirstcall = true;
                 OnlineSyncRecord();
+
             }
             catch (Exception)
             {
             }
         }
+
+
         public static bool isFirstcall = true;
         public async static void OnlineSyncRecord()
         {
@@ -300,25 +325,22 @@ namespace StemmonsMobile
 
         protected override void OnStart()
         {
-            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             CreateDataBase();
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-           // AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
-            //    "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
-            //    "android=fca1ff00-e443-4444-9305-d79b3255abd0;", typeof(Analytics), typeof(Crashes));
+            AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
+                "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
+                "android=fca1ff00-e443-4444-9305-d79b3255abd0;", typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()
         {
-            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             // Handle when your app sleeps
         }
 
         protected override void OnResume()
         {
-            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
             // Handle when your app resumes
         }
 
@@ -596,5 +618,89 @@ namespace StemmonsMobile
         {
 
         }
+
+        public static void GetImgLogo()
+        {
+            try
+            {
+                Task.Run(() =>
+                  {
+                      App.DownloadCompanyLog();
+                      DownloadUserPicture();
+                      GetBaseURLFromSQLServer();
+                  });
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void DownloadUserPicture()
+        {
+            try
+            {
+                var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                UPro.Wait();
+                string urlString = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName;
+
+                ImageHelperClass iHeleper = new ImageHelperClass();
+                var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
+                Src.Wait();
+
+                UPro.Result.Profile_Picture = Src.Result;
+
+                DBHelper.SaveInstanceUserAssoc(UPro.Result, App.DBPath).Wait();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void DownloadCompanyLog()
+        {
+            try
+            {
+                var result = DefaultAPIMethod.GetLogo();
+                var urlString = result.GetValue("ResponseContent");
+
+                ImageHelperClass iHeleper = new ImageHelperClass();
+                var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
+                Src.Wait();
+
+                var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
+                itm.Wait();
+                InstanceList ils = new InstanceList();
+                byte[] byt = Src.Result as byte[];
+
+                Image image = new Image();
+                Stream stream = new MemoryStream(byt);
+
+                ils.Instance_Logo = byt;
+                ils.InstanceID = itm.Result.InstanceID;
+                ils.InstanceName = itm.Result.InstanceName;
+                ils.InstanceUrl = itm.Result.InstanceUrl;
+
+                DBHelper.SaveInstance(ils, App.DBPath).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void GetBaseURLFromSQLServer()
+        {
+            try
+            {
+                var lst = Functions.GetImageDownloadURL();
+                App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
+                App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
+                App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
+
+
 }

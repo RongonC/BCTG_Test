@@ -11,6 +11,7 @@ using StemmonsMobile.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace StemmonsMobile.Views.LoginProcess
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
+           //App.GetImgLogo();
             if (Functions.IsPWDRemember && Functions.IsLogin)
             {
                 App.IsLoginCall = true;
@@ -70,12 +71,9 @@ namespace StemmonsMobile.Views.LoginProcess
             if (!string.IsNullOrEmpty(txt_uname.Text))
             {
                 txt_uname.Text = txt_uname.Text.ToLower();
-                //char[] letters = username.ToCharArray();
-                //letters[0] = char.ToLower(letters[0]);
-                //txt_uname.Text = new string(letters);
             }
         }
-        private async void Btn_remember_Clicked(object sender, EventArgs e)
+        private void Btn_remember_Clicked(object sender, EventArgs e)
         {
             FileImageSource img = new FileImageSource();
 
@@ -104,13 +102,10 @@ namespace StemmonsMobile.Views.LoginProcess
                     {
                         JObject val = null;
 
-                        //using (UserDialogs.Instance.Loading("Loading", null, null, true, MaskType.Black))
-                        //{
                         await Task.Run(() =>
                         {
                             val = DefaultAPIMethod.LoginAuthenticate(txt_uname.Text, txt_pwd.Text);
                         });
-                        // }
 
                         if (val != null)
                         {
@@ -128,7 +123,8 @@ namespace StemmonsMobile.Views.LoginProcess
                                 Functions.UserName = userInfo[1].ToLower();
 
                                 INSTANCE_USER_ASSOC _INSTANCE_USER_ASSOC = new INSTANCE_USER_ASSOC();
-                                _INSTANCE_USER_ASSOC.INSTANCE_USER_ASSOC_ID = default(int); ;
+                                _INSTANCE_USER_ASSOC.INSTANCE_USER_ASSOC_ID = default(int);
+                                ;
                                 _INSTANCE_USER_ASSOC.HOME_SCREEN_INFO = "";
                                 _INSTANCE_USER_ASSOC.USER = Functions.UserName;
                                 _INSTANCE_USER_ASSOC.INSTANCE_ID = Functions.Selected_Instance;
@@ -176,7 +172,6 @@ namespace StemmonsMobile.Views.LoginProcess
                     }
                     catch (Exception ex)
                     {
-                        // 
                     }
                 }
                 else
@@ -196,31 +191,11 @@ namespace StemmonsMobile.Views.LoginProcess
                 if (IsLoginSuccess)
                 {
                     App.IsLoginCall = true;
+
                     Navigation.PushAsync(new LandingPage());
                 }
             }
-
-            //CredentialCache cc = new CredentialCache();
-            //cc.Add(new Uri("http://cases-s-15.boxerproperty.com"), "NTLM", new NetworkCredential("", "", ""));
-
             Functions.ShowOverlayView_StackLayout(overlay, false, Main_Stack);
-
-
-            //var result = await CrossFingerprint.Current.IsAvailableAsync(true);
-            //if (result)
-            //{
-
-            //    var auth = await CrossFingerprint.Current.AuthenticateAsync("Authenticate Access to your Diary");
-            //    if (auth.Authenticated)
-            //    {
-            //        DisplayAlert("Authentication", "Authentication successfully done..!", "Ok");
-            //        await Navigation.PushAsync(new LandingPage());
-            //    }
-            //    else
-            //    {
-            //        DisplayAlert("Authentication", "Authentication Fail..!", "Ok");
-            //    }
-            //}
         }
 
         private void txt_uname_Completed(object sender, EventArgs e)

@@ -17,12 +17,93 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-            <SearchBar Placeholder="Search for quest form in this list" x:Name="SearchQuest" TextChanged="Handle_TextChanged" 
-                       Focused="FocusedEvent" Grid.Row = "0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+            <SearchBar Placeholder="Search for quest form" x:Name="SearchQuest" TextChanged="Handle_TextChanged" 
+                       Focused="FocusedEvent" Grid.Row = "0" />
 
      
              <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
-            <ListView x:Name="listdata" RowHeight="55" ItemTapped="listitemTapped">
+                    <ListView x:Name="listdata" ItemTapped="listitemTapped" HasUnevenRows="True" GroupDisplayBinding="{Binding Title}"
+                             IsGroupingEnabled="True">
+                        <ListView.GroupHeaderTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+
+                                    <StackLayout Padding="5,5,5,5" BackgroundColor="Transparent">
+                                        <Grid Padding="10,0,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="35" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button Image="{Binding StateIcon}" 
+                                                BackgroundColor="Transparent"
+                                                BorderColor="Transparent"
+                                                BorderWidth="0"
+                                                    Grid.Column="0"
+                                                Clicked="HeaderTapped" 
+                                                CommandParameter="{Binding .}"/>
+                                            <Button BackgroundColor="Transparent" Grid.Column="1" BorderColor="Transparent" BorderWidth="0" Clicked="HeaderTapped" 
+                                              Text="{Binding TitleWithItemCount}" FontSize="14" HorizontalOptions="StartAndExpand" VerticalOptions="Center" CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.GroupHeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <Grid Padding="10,0,0,0" >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="1*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding strItemNAme}" 
+                                               Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                               HorizontalOptions="StartAndExpand" 
+                                               Style="{StaticResource defaultLabelSize_16}" TextColor="Black" />
+                                            <Label Text="{Binding dcOverallScore}"
+                                               Grid.Row="0" Grid.Column="2"
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                                               FontSize="14" 
+                                               TextColor="{StaticResource DetailsColor}" />
+                                            <Label Text="{Binding strCol1ItemInfoFieldValue}"
+                                               Grid.Row="1" Grid.Column="0" 
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                               FontSize="14" />
+                                            <Label Text="{Binding strCol2ItemInfoFieldValue}"
+                                               Grid.Row="1" Grid.Column="1" 
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                               FontSize="14" />
+                                            <Label Text="{Binding strCol3ItemInfoFieldValue}" 
+                                               Grid.Row="1" Grid.Column="2"  
+                                               HorizontalOptions="EndAndExpand" VerticalOptions="Center" TextColor="Black"
+                                               FontSize="14" />
+                                            <Button Image="Assets/dropdowniconClose.png"
+                                                Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" 
+                                                BackgroundColor="Transparent" 
+                                                HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,5,0" />
+                                        </Grid>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <!--<ListView.Footer>
+                        <StackLayout Orientation="Vertical" Margin="15,0,0,0">
+                        <Label BackgroundColor="LightGray" HeightRequest="1" />
+                        <Button Text="Load More (Requires Internet)" />
+                        </StackLayout>
+                        </ListView.Footer>-->
+                    </ListView>
+
+                    <!--<ListView x:Name="listdata" RowHeight="55" ItemTapped="listitemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -67,13 +148,13 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <!--<ListView.Footer>
+                --><!--<ListView.Footer>
                     <StackLayout Orientation="Vertical" Margin="15,0,0,0">
                         <Label BackgroundColor="LightGray" HeightRequest="1" />
                         <Button Text="Load More (Requires Internet)" />
                     </StackLayout>
-                </ListView.Footer>-->
-            </ListView>
+                </ListView.Footer>--><!--
+            </ListView>-->
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2">

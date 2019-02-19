@@ -23,8 +23,10 @@ namespace StemmonsMobile.Views.LoginProcess
         {
             var _temp = await DBHelper.GetInstanceList(App.DBPath);
             InstanceList.ItemsSource = _temp;
+            App.GetBaseURLFromSQLServer();
             if (Functions.IsPWDRemember && Functions.IsLogin)
             {
+                //App.GetImgLogo();
                 App.IsLoginCall = true;
                 await Navigation.PushAsync(new LandingPage());
             }
@@ -42,5 +44,9 @@ namespace StemmonsMobile.Views.LoginProcess
             this.Navigation.PushAsync(new LoginPage(value) { BindingContext = value });
             InstanceList.SelectedItem = null;
         }
+
+
+
+
     }
 }

@@ -234,7 +234,7 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
@@ -289,7 +289,7 @@ namespace StemmonsMobile
                             try
                             {
 
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_CreatedByMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_CreatedByMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
@@ -344,7 +344,7 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_OwnedByMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_OwnedByMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
@@ -400,7 +400,7 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
-                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMyTeam");
+                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMyTeam");
 
                                     if (!String.IsNullOrEmpty(str))
                                         Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");

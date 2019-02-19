@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:StemmonsMobile"
-             x:Class="StemmonsMobile.Views.Entity.Entity_TypeDetails" Title="Entity Type Details">
+             x:Class="StemmonsMobile.Views.Entity.Entity_TypeDetails" 
+             Title="Entity Type Details">
 
     <ContentPage.Content>
         <StackLayout>

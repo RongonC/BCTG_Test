@@ -19,15 +19,11 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CaseOriginationCenter : ContentPage
     {
-        CaseTypeViewModel cm;
         List<GetCaseTypesResponse.CaseType> lst = new List<GetCaseTypesResponse.CaseType>();
         public CaseOriginationCenter()
         {
             InitializeComponent();
             App.SetConnectionFlag();
-            cm = new CaseTypeViewModel();
-
-
         }
 
         protected async override void OnAppearing()
@@ -108,24 +104,24 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         }
     }
 
-    public class CasesOriginationData
-    {
+    //public class CasesOriginationData
+    //{
 
-        public string CaseTypeID { get; set; }
-        public string Name { get; set; }
-        public string InstanceName { get; set; }
-        public string InstanceNamePlural { get; set; }
-        public string Description { get; set; }
-        public string SPOriginationOrverrideUrl { get; set; }
-        public string IsActive { get; set; }
-        public string CreatedDateTime { get; set; }
-        public string CreatedBy { get; set; }
-        public string ModifiedDateTime { get; set; }
-        public string ModifiedBy { get; set; }
-        public string HasSecurity { get; set; }
-        public string SecurityGroups { get; set; }
-        public string LockWhenUnowned { get; set; }
-        public string SceurityType { get; set; }
-        public string HasRightsToConfigSecurity { get; set; }
-    }
+    //    public string CaseTypeID { get; set; }
+    //    public string Name { get; set; }
+    //    public string InstanceName { get; set; }
+    //    public string InstanceNamePlural { get; set; }
+    //    public string Description { get; set; }
+    //    public string SPOriginationOrverrideUrl { get; set; }
+    //    public string IsActive { get; set; }
+    //    public string CreatedDateTime { get; set; }
+    //    public string CreatedBy { get; set; }
+    //    public string ModifiedDateTime { get; set; }
+    //    public string ModifiedBy { get; set; }
+    //    public string HasSecurity { get; set; }
+    //    public string SecurityGroups { get; set; }
+    //    public string LockWhenUnowned { get; set; }
+    //    public string SceurityType { get; set; }
+    //    public string HasRightsToConfigSecurity { get; set; }
+    //}
 }

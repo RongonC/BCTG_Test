@@ -1,10 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StemmonsMobile.Views.ViewAttachment" Title="View Attachment">
-  <ContentPage.Content>
-    <StackLayout VerticalOptions="Center">
-      <Image x:Name="img"></Image>
-    </StackLayout>
-  </ContentPage.Content>
+             xmlns:controls="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.Views.ViewAttachment" Title="View Attachment">    
+    
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                  AbsoluteLayout.LayoutFlags="All" 
+                  ColumnSpacing="1" RowSpacing="1">
+                <controls:PdfWebView x:Name="PdfView" />
+
+                <StackLayout x:Name="imgStackLayout" VerticalOptions="Center">
+                    <Image x:Name="img"></Image>
+                </StackLayout>
+
+                <ScrollView x:Name="txtScrollView" Orientation="Vertical">
+                    <Label x:Name="txtDataLabel" HorizontalOptions="FillAndExpand"
+                       VerticalOptions="FillAndExpand" LineBreakMode="WordWrap"></Label>
+                </ScrollView>
+            </Grid>
+
+            
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+                   AbsoluteLayout.LayoutFlags="All"
+                   BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                      HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator"
+                             IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black"
+                 VerticalOptions="Center" HorizontalOptions="Center"
+                 VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+
+
 </ContentPage>

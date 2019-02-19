@@ -738,110 +738,110 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
         #region Upload File To Case
-        //public static JObject UploadFileToCase(int caseNumber, string fileDescription, DateTime dateTime, string fileName, string fileSize, byte[] fileBinary, string externalURI, char addToCaseNotes, string systemCode, char isActive, string currentUser)
-        //{
-        //    #region API Details
-        //    var API_value = new List<KeyValuePair<string, string>>
-        //    {
-        //        new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.UploadFileToCase)
-        //    };
-        //    #endregion
-
-        //    #region API Body Details
-        //    UploadFileToCaseTypeModel uploadfile = new UploadFileToCaseTypeModel();
-        //    uploadfile.caseNumber = caseNumber;
-        //    uploadfile.fileDescription = fileDescription;
-        //    uploadfile.dateTime = Convert.ToDateTime(dateTime);
-        //    uploadfile.fileName = fileName;
-        //    uploadfile.fileBinary = fileBinary;
-        //    uploadfile.externalURI = externalURI;
-        //    uploadfile.addToCaseNotes = addToCaseNotes;
-        //    uploadfile.systemCode = systemCode;
-        //    uploadfile.isActive = isActive;
-        //    uploadfile.currentUser = currentUser;
-
-        //    #endregion
-        //    try
-        //    {
-        //        return Constants.ApiCommon(uploadfile, Constants.UploadFileToCase);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-        #endregion
-
-        #region Upload File to Case usign Multipart
-        public static string UploadFileToCase(int caseNumber, string fileDescription, DateTime dateTime, string fileName, string fileSize, byte[] fileBinary, string externalURI, char addToCaseNotes, string systemCode, char isActive, string currentUser)
+        public static JObject UploadFileToCase(int caseNumber, string fileDescription, DateTime dateTime, string fileName, string fileSize, byte[] fileBinary, string externalURI, char addToCaseNotes, string systemCode, char isActive, string currentUser)
         {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.UploadFileToCase)
+            };
+            #endregion
 
-            #region MyRegion
+            #region API Body Details
+            UploadFileToCaseTypeModel uploadfile = new UploadFileToCaseTypeModel();
+            uploadfile.caseNumber = caseNumber;
+            uploadfile.fileDescription = fileDescription;
+            uploadfile.dateTime = Convert.ToDateTime(dateTime);
+            uploadfile.fileName = fileName;
+            uploadfile.fileBinary = fileBinary;
+            uploadfile.externalURI = externalURI;
+            uploadfile.addToCaseNotes = addToCaseNotes;
+            uploadfile.systemCode = systemCode;
+            uploadfile.isActive = isActive;
+            uploadfile.currentUser = currentUser;
+
+            #endregion
             try
             {
-                string fileID = "-1";
-                using (HttpClient httpClient = new HttpClient())
-                {
-                    string url = Constants.Baseurl + Constants.UploadFileToCase;
-
-                    url += "?caseNumber=" + caseNumber + "&fileDescription=NewFile&dateTime=" + DateTime.Now.Date + "&externalURI=" + externalURI + "&addToCaseNotes=Y&systemCode=null&isActive=Y&currentUser=" + currentUser;
-
-
-                    httpClient.Timeout = new TimeSpan(1, 10, 0);
-                    string accessToken = MobileAPIMethods.RequestToken(Constants.Baseurl + Constants.Get_Token);
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
-
-
-                    var values = new[]
-                               {
-                                            new KeyValuePair<string, string>("caseNumber", caseNumber.ToString()),
-                                            new KeyValuePair<string, string>("fileDescription", ""),
-                                            new KeyValuePair<string, string>("dateTime", DateTime.Now.ToString()),
-                                            new KeyValuePair<string, string>("fileName", fileName),
-                                            new KeyValuePair<string, string>("fileBinary", fileBinary.ToString()),
-                                            new KeyValuePair<string, string>("externalURI", ""),
-                                            new KeyValuePair<string, string>("addToCaseNotes", "Y"),
-                                            new KeyValuePair<string, string>("systemCode", "Less"),
-                                            new KeyValuePair<string, string>("isActive", "y"),
-                                            new KeyValuePair<string, string>("currentUser", currentUser),
-
-                                        };
-
-                    HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
-                    requestMessage.Headers.ExpectContinue = false;
-
-                    MultipartFormDataContent multiPartContent = new MultipartFormDataContent("------------------------99914737809831466499882746641441");
-                    ByteArrayContent byteArrayContent = new ByteArrayContent(fileBinary);
-                    byteArrayContent.Headers.Add("Content-Type", "application/json");
-                    multiPartContent.Add(byteArrayContent, "file", fileName);
-                    multiPartContent.Add(byteArrayContent, fileName, "filename");
-                    multiPartContent.Add(byteArrayContent, "application/pdf", "type");
-                    foreach (var keyValuePair in values)
-                    {
-                        multiPartContent.Add(new StringContent(keyValuePair.Value), keyValuePair.Key);
-                    }
-                    requestMessage.Content = multiPartContent;
-
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage);
-                    HttpResponseMessage httpResponse = httpRequest.Result;
-
-                    HttpStatusCode statusCode = httpResponse.StatusCode;
-                    HttpContent responseContent = httpResponse.Content;
-
-                    var result = responseContent.ReadAsStringAsync();
-
-                    XDocument doc = XDocument.Parse(result.Result);
-                    fileID = doc.Root.Descendants().Last().Value;
-                }
-
-                return fileID;
-                #endregion                
+                return Constants.ApiCommon(uploadfile, Constants.UploadFileToCase);
             }
             catch (Exception ex)
             {
+                throw ex;
             }
-            return null;
         }
+        #endregion
+
+        #region Upload File to Case usign Multipart
+        //public static string UploadFileToCase(int caseNumber, string fileDescription, DateTime dateTime, string fileName, string fileSize, byte[] fileBinary, string externalURI, char addToCaseNotes, string systemCode, char isActive, string currentUser)
+        //{
+
+        //    #region MyRegion
+        //    try
+        //    {
+        //        string fileID = "-1";
+        //        using (HttpClient httpClient = new HttpClient())
+        //        {
+        //            string url = Constants.Baseurl + Constants.UploadFileToCase;
+
+        //            url += "?caseNumber=" + caseNumber + "&fileDescription=NewFile&dateTime=" + DateTime.Now.Date + "&externalURI=" + externalURI + "&addToCaseNotes=Y&systemCode=null&isActive=Y&currentUser=" + currentUser;
+
+
+        //            httpClient.Timeout = new TimeSpan(1, 10, 0);
+        //            string accessToken = MobileAPIMethods.RequestToken(Constants.Baseurl + Constants.Get_Token);
+        //            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
+
+
+        //            var values = new[]
+        //                       {
+        //                                    new KeyValuePair<string, string>("caseNumber", caseNumber.ToString()),
+        //                                    new KeyValuePair<string, string>("fileDescription", ""),
+        //                                    new KeyValuePair<string, string>("dateTime", DateTime.Now.ToString()),
+        //                                    new KeyValuePair<string, string>("fileName", fileName),
+        //                                    new KeyValuePair<string, string>("fileBinary", fileBinary.ToString()),
+        //                                    new KeyValuePair<string, string>("externalURI", ""),
+        //                                    new KeyValuePair<string, string>("addToCaseNotes", "Y"),
+        //                                    new KeyValuePair<string, string>("systemCode", "Less"),
+        //                                    new KeyValuePair<string, string>("isActive", "y"),
+        //                                    new KeyValuePair<string, string>("currentUser", currentUser),
+
+        //                                };
+
+        //            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+        //            requestMessage.Headers.ExpectContinue = false;
+
+        //            MultipartFormDataContent multiPartContent = new MultipartFormDataContent("------------------------99914737809831466499882746641441");
+        //            ByteArrayContent byteArrayContent = new ByteArrayContent(fileBinary);
+        //            byteArrayContent.Headers.Add("Content-Type", "application/json");
+        //            multiPartContent.Add(byteArrayContent, "file", fileName);
+        //            multiPartContent.Add(byteArrayContent, fileName, "filename");
+        //            multiPartContent.Add(byteArrayContent, "application/pdf", "type");
+        //            foreach (var keyValuePair in values)
+        //            {
+        //                multiPartContent.Add(new StringContent(keyValuePair.Value), keyValuePair.Key);
+        //            }
+        //            requestMessage.Content = multiPartContent;
+
+        //            Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage);
+        //            HttpResponseMessage httpResponse = httpRequest.Result;
+
+        //            HttpStatusCode statusCode = httpResponse.StatusCode;
+        //            HttpContent responseContent = httpResponse.Content;
+
+        //            var result = responseContent.ReadAsStringAsync();
+
+        //            XDocument doc = XDocument.Parse(result.Result);
+        //            fileID = doc.Root.Descendants().Last().Value;
+        //        }
+
+        //        return fileID;
+        //        #endregion                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //    }
+        //    return null;
+        //}
         #endregion
 
         #region GetConnectionString
@@ -1309,19 +1309,22 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
         #region Get Favorite
-        public static JObject GetFavorite(string _CreatedBy)
+
+        public static JObject GetFavorite(string _CreatedBy, string _ApplicationId)
         {
             #region API Details
             var API_value = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.GetFavorite)
+                //new KeyValuePair<string, string>("API_Name","http://localhost:54493/api/v1/Cases/GetFavoritesWIP")
             };
             #endregion
 
             #region API Body Details
             var Body_value = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("CreatedBy", _CreatedBy)
+                new KeyValuePair<string, string>("CreatedBy", _CreatedBy),
+                new KeyValuePair<string, string>("ApplicationId", _ApplicationId),
             };
             #endregion
 
@@ -1333,6 +1336,31 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             else
                 return null;
         }
+
+        //public static JObject GetFavorite(string _CreatedBy)
+        //{
+        //    #region API Details
+        //    var API_value = new List<KeyValuePair<string, string>>
+        //    {
+        //        new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.GetFavorite)
+        //    };
+        //    #endregion
+
+        //    #region API Body Details
+        //    var Body_value = new List<KeyValuePair<string, string>>
+        //    {
+        //        new KeyValuePair<string, string>("CreatedBy", _CreatedBy)
+        //    };
+        //    #endregion
+
+        //    var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+        //    if (Result != null)
+        //    {
+        //        return Result;
+        //    }
+        //    else
+        //        return null;
+        //}
         #endregion
 
         #region Edit Favorite
@@ -1594,7 +1622,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
-
         #region SubscribeToHopper
         public static JObject SubscribeToHopper(string pHopper, string pUser)
         {
@@ -1712,7 +1739,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
-
         #region GetAssocCascadeInfoByCaseType
         public static JObject CasesHomeGetCaseListUser(string username)
         {
@@ -1739,7 +1765,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
                 return null;
         }
         #endregion
-
 
         #region DeclienAndReturn
         public static JObject DeclienAndReturn(object Body_value)
@@ -1768,7 +1793,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             }
         }
         #endregion
-
 
         #region ApproveandReturn
         public static JObject ApproveandReturn(object Body_value)
@@ -1934,7 +1958,6 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
         #endregion
 
-
         #region GetCaseInfo
         public static JObject GetCaseInfo(string username, int CaseId)
         {
@@ -1950,6 +1973,18 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             {
                 throw ex;
             }
+        }
+        #endregion
+
+        #region Get File From Case
+        public static JObject GetFileFromCase(string fileID, string userName)
+        {
+            //RequestModel
+            GetCaseFileRequest getCaseFileModel = new GetCaseFileRequest();
+            getCaseFileModel.FileID = fileID;
+            getCaseFileModel.UserName = userName;
+
+            return Constants.ApiCommon(getCaseFileModel, Constants.GetCaseFile);
         }
         #endregion
     }

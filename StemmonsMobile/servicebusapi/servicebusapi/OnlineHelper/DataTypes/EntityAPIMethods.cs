@@ -1226,5 +1226,54 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             }
         }
         #endregion
+
+        #region GetEntityFileUsingModel
+        public static JObject GetFileFromEntity(string EntityID, string fileID, string userName)
+        {
+            //RequestModel
+            EntityFileRequest getEntityFileModel = new EntityFileRequest();
+            getEntityFileModel.EntityID = EntityID;
+            getEntityFileModel.FileID = fileID;
+            getEntityFileModel.UserName = userName;
+
+            return Constants.ApiCommon(getEntityFileModel, Constants.GetEntityFile);
+        }
+        #endregion
+
+        #region Add Entity file 
+        public static JObject AddFileToEntity(string ENTITY_ID, string DESCRIPTION, string FILE_NAME, string FILE_SIZE_BYTES, byte[] FILE_BLOB, string EXTERNAL_URI, Char SHOW_INLINE_NOTES, string SYSTEM_CODE, Char IS_ACTIVE, string CREATED_BY)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.AddFileToEntity)
+            };
+            #endregion
+
+            #region API Body Details
+
+            AddFileToEntityRequest addfile = new AddFileToEntityRequest();
+            addfile.ENTITY_ID = Convert.ToInt32(ENTITY_ID);
+            addfile.DESCRIPTION = DESCRIPTION.ToString();
+            addfile.FILE_DATE_TIME = DateTime.Now;
+            addfile.FILE_NAME = FILE_NAME;
+            addfile.FILE_SIZE_BYTES = Convert.ToInt32(FILE_SIZE_BYTES);
+            addfile.FILE_BLOB = FILE_BLOB;
+            addfile.EXTERNAL_URI = EXTERNAL_URI;
+            addfile.SHOW_INLINE_NOTES = SHOW_INLINE_NOTES;
+            addfile.SYSTEM_CODE = SYSTEM_CODE;
+            addfile.IS_ACTIVE = IS_ACTIVE;
+            addfile.CREATED_BY = CREATED_BY;
+            #endregion
+
+            var Result = Constants.ApiCommon(addfile, Constants.AddFileToEntity);
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
     }
 }

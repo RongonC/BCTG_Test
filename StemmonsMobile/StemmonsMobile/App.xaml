@@ -15,7 +15,8 @@
                     </Grid.RowDefinitions>
                     <ContentPresenter  Grid.Row="0" />
 
-                    <StackLayout x:Name="btm_stack" Grid.Row="1" Orientation="Horizontal"
+                    <StackLayout x:Name="btm_stack" Grid.Row="1" 
+                                 Orientation="Horizontal"
                                  HeightRequest="50" 
                                  VerticalOptions="EndAndExpand"
                                  IsClippedToBounds="True"   >

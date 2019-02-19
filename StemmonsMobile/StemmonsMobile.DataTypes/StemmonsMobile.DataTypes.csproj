@@ -43,7 +43,9 @@
     <Compile Include="DataType\Cases\AssigntomeResponse.cs" />
     <Compile Include="DataType\Cases\CaseData.cs" />
     <Compile Include="DataType\Cases\ExternalDSOptimized.cs" />
-    <Compile Include="DataType\Cases\FileItem.cs" />
+    <Compile Include="DataType\Entity\EntityFileResponse.cs" />
+    <Compile Include="DataType\Entity\EntityFileRequest.cs" />
+    <Compile Include="DataType\FileItem.cs" />
     <Compile Include="DataType\Cases\GetCaseFileModel.cs" />
     <Compile Include="DataType\Cases\GetCaseModifiedDateRequest.cs" />
     <Compile Include="DataType\Cases\AcceptCaseRequest.cs" />
@@ -141,8 +143,6 @@
     <Compile Include="DataType\Cases\GetExternalDataSourceByIdResponse.cs" />
     <Compile Include="DataType\Cases\GetFavoriteRequest.cs" />
     <Compile Include="DataType\Cases\GetFavoriteResponse.cs" />
-    <Compile Include="DataType\Cases\GetFavoritesRequest.cs" />
-    <Compile Include="DataType\Cases\GetFavoritesResponse.cs" />
     <Compile Include="DataType\Cases\GetFilterQuery_CasesResponse.cs" />
     <Compile Include="DataType\Cases\GetHopperWithOwnerByUsernameRequest.cs" />
     <Compile Include="DataType\Cases\GetHopperWithOwnerByUsernameResponse.cs" />
@@ -205,7 +205,7 @@
     <Compile Include="DataType\Default\RequestToken.cs" />
     <Compile Include="DataType\Default\HomeScreenCountResponse.cs" />
     <Compile Include="DataType\Default\ResponseToken.cs" />
-    <Compile Include="DataType\EDSDataType.cs" />
+    <Compile Include="DataType\ExternalDatasourceValue.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
     <Compile Include="DataType\Entity\Entity_List.cs" />
@@ -322,6 +322,7 @@
     <Compile Include="DataType\Entity\WS_GetEntityTypeListResponse.cs" />
     <Compile Include="DataType\Entity\WS_GetEntityTypeSchemaByEntityTypeIDRequest.cs" />
     <Compile Include="DataType\Entity\WS_GetEntityTypeSchemaByEntityTypeIDResponse.cs" />
+    <Compile Include="DataType\Quest\AddFavoriteRequestQuest.cs" />
     <Compile Include="DataType\Quest\GenerateCaseQueueRequest.cs" />
     <Compile Include="DataType\Quest\GenerateCaseQueueResponse.cs" />
     <Compile Include="DataType\Quest\GetAllItemQuestionDecodeByItemIDRequest.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="DataType\Quest\GetExternalDatasourceInfoByIDResponse.cs" />
     <Compile Include="DataType\Quest\GetExternalDatasourceResultRequest.cs" />
     <Compile Include="DataType\Quest\GetExternalDatasourceResultResponse.cs" />
+    <Compile Include="DataType\Quest\GetFavoriteResponse.cs" />
     <Compile Include="DataType\Quest\GetFilesByFormIDRequest.cs" />
     <Compile Include="DataType\Quest\GetFilesByFormIDResponse.cs" />
     <Compile Include="DataType\Quest\GetFilesByQuestionIDRequest.cs" />

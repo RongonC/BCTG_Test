@@ -33,7 +33,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         List<string> TeamUserList = new List<string>();
         string parametername; string value; string searchvalue;
         string Team_Username = string.Empty;
-        string sTitle = string.Empty;
         /// <summary>
         /// scrnName = "" means call comes from Assigned to me and so on
         /// </summary>
@@ -50,7 +49,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             value = _value;
             Team_Username = _uname;
             searchvalue = _searchvalue;
-            sTitle = _Titile == "" ? "Case List" : _Titile;
+            Title = _Titile == "" ? "Case List" : _Titile;
 
             if (parametername == "caseAssgnSAM" || parametername == "caseCreateBySAM" || parametername == "caseOwnerSAM")
             {
@@ -91,7 +90,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                                 {
                                     _pageindex++;
 
-                                    var result = CasesSyncAPIMethods.GetCaseList(true, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, _pageindex, _pagenumber);
+                                    var result = CasesSyncAPIMethods.GetCaseList(true, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, saveRec, scrnName, _pageindex, _pagenumber);
                                     result.Wait();
 
                                     Device.BeginInvokeOnMainThread(() =>
@@ -130,7 +129,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             base.OnAppearing();
             try
             {
-                Title = sTitle;
 
                 if (count == 0)
                 {
@@ -329,7 +327,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                 await Task.Run(() =>
                 {
-                    var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 1, _pagenumber);
+                    var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, saveRec, scrnName, 1, _pagenumber);
                     result.Wait();
 
                     Device.BeginInvokeOnMainThread(() =>
@@ -364,7 +362,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         isOnlineCall = App.Isonline;
                         await Task.Run(() =>
                         {
-                            var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 1, _pagenumber);
+                            var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, saveRec, scrnName, 1, _pagenumber);
                             result.Wait();
 
                             Device.BeginInvokeOnMainThread(() =>
@@ -390,7 +388,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     //        {
                     //            lstfooter_indicator.IsVisible = true;
                     //        });
-                    //        var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, ind, _pagenumber);
+                    //        var result = CasesSyncAPIMethods.GetCaseList(isOnlineCall, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, saveRec, scrnName, ind, _pagenumber);
                     //        result.Wait();
 
 
@@ -672,7 +670,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                         {
                             dynamic result = null;
 
-                            result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, sTitle, saveRec, scrnName, 0, _pagenumber);
+                            result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Samusername, casetypeid, caseOwnerSam, caseAssgnSam, caseClosebySam, CaseCreateBySam, propertyId, tenant_code, tenant_id, showOpenClosetype, showpastcase, searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, saveRec, scrnName, 0, _pagenumber);
                             result.Wait();
                             Device.BeginInvokeOnMainThread(() =>
                             {

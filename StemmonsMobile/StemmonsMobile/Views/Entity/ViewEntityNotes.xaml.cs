@@ -89,19 +89,19 @@ namespace StemmonsMobile.Views.Entity
 
         private async void GridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            try
-            {
-                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
-                if (notes.ImageVisible)
-                {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
-                }
-                gridEntitynotes.SelectedItem = null;
-            }
-            catch (Exception ex)
-            {
-            }
+            //try
+            //{
+            //    var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+            //    if (notes.ImageVisible)
+            //    {
+            //        await Navigation.PushAsync(new ViewAttachment
+            //        (notes.ImageURL));
+            //    }
+            //    gridEntitynotes.SelectedItem = null;
+            //}
+            //catch (Exception ex)
+            //{
+            //}
         }
     }
 }

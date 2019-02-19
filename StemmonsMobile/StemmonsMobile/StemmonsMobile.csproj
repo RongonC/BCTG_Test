@@ -51,36 +51,32 @@
     <Compile Include="Commonfiles\Constants.cs" />
     <Compile Include="Commonfiles\Functions.cs" />
     <Compile Include="Commonfiles\ImageHelperClass.cs" />
-    <Compile Include="Controls\NullableDatePicker.cs" />
+    <Compile Include="Commonfiles\MimeTypeMap.cs" />
+    <Compile Include="Controls\CustomCell.cs" />
+    <Compile Include="Controls\EntityListCustomCell.cs" />
+    <Compile Include="Controls\PdfWebView.cs" />
     <Compile Include="CustomFontExtension.cs" />
-    <Compile Include="IDatalayer.cs" />
-    <Compile Include="IKeyboardHelper.cs" />
+    <Compile Include="Interfaces\IDatalayer.cs" />
+    <Compile Include="Interfaces\IKeyboardHelper.cs" />
+    <Compile Include="Interfaces\ILocalFileProvider.cs" />
     <Compile Include="IsExpandedToImageConverter.cs" />
     <Compile Include="LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\CaseTypeData.cs" />
     <Compile Include="Models\Group_Caselist.cs" />
     <Compile Include="Models\Group_CaseType.cs" />
-    <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\ApplicationList.cs" />
-    <Compile Include="Models\Case.cs" />
-    <Compile Include="Models\CaseGroup.cs" />
-    <Compile Include="Models\Cases_extedataSource.cs" />
     <Compile Include="Models\Cases_Notes.cs" />
-    <Compile Include="Models\casetype.cs" />
-    <Compile Include="Models\CaseTypeData.cs" />
     <Compile Include="Models\ChillerEntity.cs" />
     <Compile Include="Models\ChillerEntityGroup.cs" />
     <Compile Include="Models\EntityNotesGroup.cs" />
     <Compile Include="Models\Entity_Notes.cs" />
-    <Compile Include="Models\Food.cs" />
-    <Compile Include="Models\FoodImageCell.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Group_Property.cs" />
+    <Compile Include="Models\Group_QuestForm.cs" />
     <Compile Include="Models\Group_Standards.cs" />
-    <Compile Include="Models\InstanceList.cs" />
     <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\ItemType.cs" />
     <Compile Include="Models\StaticTypes.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,10 +87,7 @@
     </Compile>
     <Compile Include="ViewModels\ApplicationListViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\CaseTypeViewModel.cs" />
-    <Compile Include="ViewModels\InstanceListViewModel.cs" />
-    <Compile Include="ViewModels\ItemDetailViewModel.cs" />
-    <Compile Include="ViewModels\ItemsViewModel.cs" />
+    <Compile Include="ViewModels\CustomlistViewModel.cs" />
     <Compile Include="Views\BaseGestureRecognizer.cs" />
     <Compile Include="Views\Cases Hopper Center\SelectCaseHopper.xaml.cs">
       <DependentUpon>SelectCaseHopper.xaml</DependentUpon>
@@ -271,6 +264,9 @@
     <Compile Include="Views\Standards\TreeView\TreeViewItem.cs" />
     <Compile Include="Views\SwipeGestureRecognizer.cs" />
     <Compile Include="Views\SwipeGestureRecognizerDirectonConverter.cs" />
+    <Compile Include="Views\VCasePage.xaml.cs">
+      <DependentUpon>VCasePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\View Case Origination Center\CaseList.xaml.cs">
       <DependentUpon>CaseList.xaml</DependentUpon>
     </Compile>
@@ -473,6 +469,9 @@
     <Reference Include="Acr.UserDialogs.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Acr.UserDialogs.6.5.1\lib\netstandard1.1\Acr.UserDialogs.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.9.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlAgilityPack.1.9.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AppCenter.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.dll</HintPath>
     </Reference>
@@ -530,11 +529,26 @@
     <Reference Include="SQLitePCLRaw.core, Version=1.1.11.121, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.11\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
     </Reference>
+    <Reference Include="StemmonsMobile.DataTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\StemmonsMobile.DataTypes\bin\Debug\StemmonsMobile.DataTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\portable-net45+win8+wp8+wpa81\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Essentials.1.0.1\lib\netstandard1.0\Xamarin.Essentials.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.Android">
       <HintPath>..\StemmonsMobile.Android\AndroidAssembly\Xamarin.Forms.Platform.Android.dll</HintPath>
@@ -547,6 +561,7 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Xaml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -563,15 +578,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\servicebusapi\servicebusapi\DataServiceBus.csproj">
-      <Project>{762417ea-4c33-4fa7-baa7-029e0450cdb4}</Project>
+      <Project>{762417EA-4C33-4FA7-BAA7-029E0450CDB4}</Project>
       <Name>DataServiceBus</Name>
     </ProjectReference>
     <ProjectReference Include="..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj">
       <Project>{691F64DB-A9E1-421C-81EE-A5B9895C5B6B}</Project>
-      <Name>StemmonsMobile.DataTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj">
-      <Project>{691f64db-a9e1-421c-81ee-a5b9895c5b6b}</Project>
       <Name>StemmonsMobile.DataTypes</Name>
     </ProjectReference>
   </ItemGroup>
@@ -687,6 +698,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Sync_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\VCasePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

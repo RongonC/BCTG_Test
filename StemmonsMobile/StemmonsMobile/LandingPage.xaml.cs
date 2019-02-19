@@ -15,6 +15,7 @@ using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.Models;
 using StemmonsMobile.ViewModels;
+using StemmonsMobile.Views;
 using StemmonsMobile.Views.Cases;
 using StemmonsMobile.Views.Cases_Hopper_Center;
 using StemmonsMobile.Views.CreateQuestForm;
@@ -53,9 +54,8 @@ namespace StemmonsMobile
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             this.SizeChanged += LandingPage_SizeChanged;
-
+            this.BindingContext = appCount;
             LandingPageCountDisplay();
-
 
             btn_usericon.GestureRecognizers.Add(new TapGestureRecognizer(img_profile_OnTap));
 
@@ -83,7 +83,19 @@ namespace StemmonsMobile
 
             Applicationlist.ItemsSource = cm.appdata;
 
-            GetBaseURLFromSQLServer();
+            //Device.StartTimer(TimeSpan.FromSeconds(5), () =>
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        appCount.CasesCount++;
+            //        appCount.EntityCount++;
+            //        appCount.DepartmentCount++;
+            //        appCount.QuestCount++;
+            //        appCount.StandardCount++;
+            //    });
+            //    return true;
+            //});
+
         }
         private void LandingPage_SizeChanged(object sender, EventArgs e)
         {
@@ -152,731 +164,730 @@ namespace StemmonsMobile
         }
 
         //Master API Call
-        public async void SyncAllRecorsToSQLite()
-        {
-            try
-            {
-                //bool IsClosed = false;
-                //ProgressDialogConfig config = new ProgressDialogConfig();
-                //IProgressDialog dlg = null;
-
-                //if (Functions.AppStartCount <= 1)
-                //{
-                //    config = new ProgressDialogConfig().SetTitle("Please Wait...")
-                //                                         // setting false will just create a spinner
-                //                                         .SetIsDeterministic(true)
-                //                                         // prevents user from clicking background
-                //                                         .SetMaskType(MaskType.Black);
-                //    // cancel text and action
-                //    //.SetCancel("Run in Background", () => { SyncAllRecorsToSQLite_Backgroud(); });
-
-                //    dlg = UserDialogs.Instance.Progress(config);
-                //    dlg.Show();
-                //}
-                //else
-                //{
-                //    config = new ProgressDialogConfig().SetTitle("Please Wait...")
-                //                                                        // setting false will just create a spinner
-                //                                                        .SetIsDeterministic(true)
-                //                                                        // prevents user from clicking background
-                //                                                        .SetMaskType(MaskType.Black)
-                //                   // cancel text and action
-                //                   .SetCancel("Run in Background", () => { IsClosed = true; dlg.Hide(); });
-
-                //    dlg = UserDialogs.Instance.Progress(config);
-                //    dlg.Show();
-                //}
-
-                //int itemCount = 12;
-                //int Percentage = 100 / 13;
-
-                //try
-                //{
-                //    if (CrossConnectivity.Current.IsConnected)
-                //    {
-                //        #region Cases Origination Sync
-                //        //Cases Originaation Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-                //                }
-                //                catch (Exception)
-                //                {
-                //                }
-                //                try
-                //                {
-
-                //                    string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-
-                //                    if (!string.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Case Types Sync Operation Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Case Types Sync Operation having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 2;
-                //                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Cases Sync
-                //        //Cases Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    //dlg.PercentComplete = Percentage;
-                //                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
-                //                    if (!string.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Cases Items Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Cases Items Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 3;
-                //                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region CaseList Assigned To Me
-                //        //Get CaseList Assigned To Me
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMe");
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 4;
-                //                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region CaseList Created By Me
-                //        //Get CaseList Created By Me
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-
-                //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_CreatedByMe");
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Get CaseList Created By Me List Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 5;
-                //                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region CaseList Owned By Me
-                //        //Get CaseList Owned By Me
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_OwnedByMe");
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 6;
-                //                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region CaseList Assigned To My Team
-
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            if (Functions.HasTeam)
-                //                await Task.Run(() =>
-                //                {
-                //                    try
-                //                    {
-                //                        string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMyTeam");
-
-                //                        if (!String.IsNullOrEmpty(str))
-                //                            Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");
-                //                        else
-                //                            Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync having issue.");
-                //                    }
-                //                    catch (Exception ex)
-                //                    {
-                //                    }
-                //                });
-                //            else
-                //            {
-                //                DefaultAPIMethod.AddLog("No Team to bind Data", "Y", "GetCaseList_AssignedToMyTeam", Functions.UserName, DateTime.Now.ToString());
-                //                Functions.ShowtoastAlert("No Team to bind Data for your team.");
-                //            }
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 7;
-                //                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Entity Sync
-                //        //Entity Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 8;
-                //                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Entity associated with Me
-                //        //Get CaseList Owned By Me
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-
-                //                    string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 9;
-                //                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Quest Sync
-                //        //Quest Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 10;
-                //                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Standard Sync
-                //        //Standard Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    string str = StandardsSyncAPIMethods.GetAllStandards(Functions.UserName, App.DBPath);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Standard Application Data Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Standard Application Data Sync having issue.");
-
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 11;
-                //                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Employee Search Sync
-                //        //Employee Search Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-
-                //                    CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-
-                //                    string str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Employee Data Sync Success.");
-                //                    else
-                //                    {
-                //                        Functions.ShowtoastAlert("Employee Data Sync having issue.");
-                //                    }
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = Percentage * 12;
-                //                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-
-                //        #region Home Count Sync
-                //        //Home Count Sync
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.Title = "Origination Center Data Sync Operation " + 12 + " of " + itemCount;
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-
-                //        try
-                //        {
-                //            await Task.Run(() =>
-                //            {
-                //                try
-                //                {
-                //                    var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-
-                //                    if (!String.IsNullOrEmpty(str))
-                //                        Functions.ShowtoastAlert("Origination Center Sync Success.");
-                //                    else
-                //                        Functions.ShowtoastAlert("Origination Center Sync having issue.");
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                }
-                //            });
-                //        }
-                //        catch (Exception)
-                //        {
-                //        }
-                //        if (!IsClosed)
-                //        {
-                //            try
-                //            {
-                //                Device.BeginInvokeOnMainThread(() =>
-                //                {
-                //                    dlg.PercentComplete = 100;
-                //                    dlg.Title = "Origination Center Sync Operation " + 12 + " of " + itemCount + " completed";
-                //                });
-                //            }
-                //            catch (Exception)
-                //            {
-                //            }
-                //        }
-                //        #endregion
-                //    }
-
-                //    dlg.Hide();
-
-                //    Functions.AppStartCount = Functions.AppStartCount + 1;
-                //    Application.Current.Properties["AppStartCount"] = Functions.AppStartCount;
-                //}
-                //catch (Exception ex)
-                //{
-                //    Application.Current.Properties["AppStartCount"] = 1;
-                //    Functions.AppStartCount = 1;
-                //}
-
-                //HomePageCount();
-            }
-            catch (Exception ex)
-            {
-                Functions.AppStartCount = 1;
-                Application.Current.Properties["AppStartCount"] = 1;
-            }
-        }
-
         #region Master Sync OLD
+        //public async void SyncAllRecorsToSQLite()
+        //{
+        //    try
+        //    {
+        //        //bool IsClosed = false;
+        //        //ProgressDialogConfig config = new ProgressDialogConfig();
+        //        //IProgressDialog dlg = null;
+
+        //        //if (Functions.AppStartCount <= 1)
+        //        //{
+        //        //    config = new ProgressDialogConfig().SetTitle("Please Wait...")
+        //        //                                         // setting false will just create a spinner
+        //        //                                         .SetIsDeterministic(true)
+        //        //                                         // prevents user from clicking background
+        //        //                                         .SetMaskType(MaskType.Black);
+        //        //    // cancel text and action
+        //        //    //.SetCancel("Run in Background", () => { SyncAllRecorsToSQLite_Backgroud(); });
+
+        //        //    dlg = UserDialogs.Instance.Progress(config);
+        //        //    dlg.Show();
+        //        //}
+        //        //else
+        //        //{
+        //        //    config = new ProgressDialogConfig().SetTitle("Please Wait...")
+        //        //                                                        // setting false will just create a spinner
+        //        //                                                        .SetIsDeterministic(true)
+        //        //                                                        // prevents user from clicking background
+        //        //                                                        .SetMaskType(MaskType.Black)
+        //        //                   // cancel text and action
+        //        //                   .SetCancel("Run in Background", () => { IsClosed = true; dlg.Hide(); });
+
+        //        //    dlg = UserDialogs.Instance.Progress(config);
+        //        //    dlg.Show();
+        //        //}
+
+        //        //int itemCount = 12;
+        //        //int Percentage = 100 / 13;
+
+        //        //try
+        //        //{
+        //        //    if (CrossConnectivity.Current.IsConnected)
+        //        //    {
+        //        //        #region Cases Origination Sync
+        //        //        //Cases Originaation Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+        //        //                }
+        //        //                catch (Exception)
+        //        //                {
+        //        //                }
+        //        //                try
+        //        //                {
+
+        //        //                    string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+
+        //        //                    if (!string.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Case Types Sync Operation Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Case Types Sync Operation having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 2;
+        //        //                    dlg.Title = "Cases Origination Center Sync Operation " + 1 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Cases Sync
+        //        //        //Cases Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    //dlg.PercentComplete = Percentage;
+        //        //                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
+        //        //                    if (!string.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Cases Items Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Cases Items Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 3;
+        //        //                    dlg.Title = "Case Types and Items Sync Operation " + 2 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region CaseList Assigned To Me
+        //        //        //Get CaseList Assigned To Me
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMe");
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 4;
+        //        //                    dlg.Title = "Get CaseList Assigned To Me List Sync Operation " + 3 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region CaseList Created By Me
+        //        //        //Get CaseList Created By Me
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+
+        //        //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_CreatedByMe");
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Get CaseList Created By Me List Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 5;
+        //        //                    dlg.Title = "Get CaseList Created By Me List Sync Operation " + 4 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region CaseList Owned By Me
+        //        //        //Get CaseList Owned By Me
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_OwnedByMe");
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 6;
+        //        //                    dlg.Title = "Get CaseList Owned By Me List Sync Operation " + 5 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region CaseList Assigned To My Team
+
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            if (Functions.HasTeam)
+        //        //                await Task.Run(() =>
+        //        //                {
+        //        //                    try
+        //        //                    {
+        //        //                        string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMyTeam");
+
+        //        //                        if (!String.IsNullOrEmpty(str))
+        //        //                            Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");
+        //        //                        else
+        //        //                            Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync having issue.");
+        //        //                    }
+        //        //                    catch (Exception ex)
+        //        //                    {
+        //        //                    }
+        //        //                });
+        //        //            else
+        //        //            {
+        //        //                DefaultAPIMethod.AddLog("No Team to bind Data", "Y", "GetCaseList_AssignedToMyTeam", Functions.UserName, DateTime.Now.ToString());
+        //        //                Functions.ShowtoastAlert("No Team to bind Data for your team.");
+        //        //            }
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 7;
+        //        //                    dlg.Title = "Get CaseList Assigned To My Team List Sync Operation " + 6 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Entity Sync
+        //        //        //Entity Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 8;
+        //        //                    dlg.Title = "Entity Types and Items Sync Operation " + 7 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Entity associated with Me
+        //        //        //Get CaseList Owned By Me
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+
+        //        //                    string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 9;
+        //        //                    dlg.Title = "Get Entity Associated List Sync Operation " + 8 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Quest Sync
+        //        //        //Quest Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 10;
+        //        //                    dlg.Title = "Quest Area and Item List Sync Operation " + 9 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Standard Sync
+        //        //        //Standard Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    string str = StandardsSyncAPIMethods.GetAllStandards(Functions.UserName, App.DBPath);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Standard Application Data Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Standard Application Data Sync having issue.");
+
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 11;
+        //        //                    dlg.Title = "Standard Application Data Sync Operation " + 10 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Employee Search Sync
+        //        //        //Employee Search Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+
+        //        //                    CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+
+        //        //                    string str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Employee Data Sync Success.");
+        //        //                    else
+        //        //                    {
+        //        //                        Functions.ShowtoastAlert("Employee Data Sync having issue.");
+        //        //                    }
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception ex)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = Percentage * 12;
+        //        //                    dlg.Title = "Employee Data Sync Operation " + 11 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+
+        //        //        #region Home Count Sync
+        //        //        //Home Count Sync
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.Title = "Origination Center Data Sync Operation " + 12 + " of " + itemCount;
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+
+        //        //        try
+        //        //        {
+        //        //            await Task.Run(() =>
+        //        //            {
+        //        //                try
+        //        //                {
+        //        //                    var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+
+        //        //                    if (!String.IsNullOrEmpty(str))
+        //        //                        Functions.ShowtoastAlert("Origination Center Sync Success.");
+        //        //                    else
+        //        //                        Functions.ShowtoastAlert("Origination Center Sync having issue.");
+        //        //                }
+        //        //                catch (Exception ex)
+        //        //                {
+        //        //                }
+        //        //            });
+        //        //        }
+        //        //        catch (Exception)
+        //        //        {
+        //        //        }
+        //        //        if (!IsClosed)
+        //        //        {
+        //        //            try
+        //        //            {
+        //        //                Device.BeginInvokeOnMainThread(() =>
+        //        //                {
+        //        //                    dlg.PercentComplete = 100;
+        //        //                    dlg.Title = "Origination Center Sync Operation " + 12 + " of " + itemCount + " completed";
+        //        //                });
+        //        //            }
+        //        //            catch (Exception)
+        //        //            {
+        //        //            }
+        //        //        }
+        //        //        #endregion
+        //        //    }
+
+        //        //    dlg.Hide();
+
+        //        //    Functions.AppStartCount = Functions.AppStartCount + 1;
+        //        //    Application.Current.Properties["AppStartCount"] = Functions.AppStartCount;
+        //        //}
+        //        //catch (Exception ex)
+        //        //{
+        //        //    Application.Current.Properties["AppStartCount"] = 1;
+        //        //    Functions.AppStartCount = 1;
+        //        //}
+
+        //        //HomePageCount();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Functions.AppStartCount = 1;
+        //        Application.Current.Properties["AppStartCount"] = 1;
+        //    }
+        //}
         //public async void SyncAllRecorsToSQLite()
         //{
         //    try
@@ -1617,202 +1628,212 @@ namespace StemmonsMobile
                 }
             }
         }
+        HomeScreenCount appCount = new HomeScreenCount();
 
-        async void HomePageCount()
-        {
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-            try
-            {
-                HomeScreenCount appCount = new HomeScreenCount();
+        //async void HomePageCount()
+        //{
+        //    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+        //    try
+        //    {
 
-                await Task.Run(() =>
-                {
-                    appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-                });
+        //        await Task.Run(() =>
+        //        {
+        //            appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
+        //        });
 
-                //this.IsBusy = false;
 
-                if (appCount == null)
-                {
-                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-                    return;
-                }
-                //BindingContext = appCount;
-                if (!string.IsNullOrEmpty(Convert.ToString(appCount.CasesCount)))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        CaseNotification.Text = appCount.CasesCount.ToString();
-                    });
-                }
-                else
-                {
-                    CaseNotification.IsVisible = false;
-                }
+        //        if (appCount == null)
+        //        {
+        //            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        //            return;
+        //        }
+        //        #region MyRegion
+        //        ////BindingContext = appCount;
+        //        //if (!string.IsNullOrEmpty(Convert.ToString(appCount.CasesCount)))
+        //        //{
+        //        //    Device.BeginInvokeOnMainThread(() =>
+        //        //    {
+        //        //        //CaseNotification.Text = appCount.CasesCount.ToString();
+        //        //    });
+        //        //}
+        //        //else
+        //        //{
+        //        //    CaseNotification.IsVisible = false;
+        //        //}
 
-                if (!string.IsNullOrEmpty(Convert.ToString(appCount.EntityCount)))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        associationNotification.Text = appCount.EntityCount.ToString();
-                    });
+        //        //if (!string.IsNullOrEmpty(Convert.ToString(appCount.EntityCount)))
+        //        //{
+        //        //    Device.BeginInvokeOnMainThread(() =>
+        //        //    {
+        //        //        // associationNotification.Text = appCount.EntityCount.ToString();
+        //        //    });
 
-                }
-                else
-                {
-                    associationNotification.IsVisible = false;
-                }
+        //        //}
+        //        //else
+        //        //{
+        //        //    associationNotification.IsVisible = false;
+        //        //}
 
-                if (!string.IsNullOrEmpty(Convert.ToString(appCount.StandardCount)))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        standardNotification.Text = appCount.StandardCount.ToString();
-                    });
+        //        //if (!string.IsNullOrEmpty(Convert.ToString(appCount.StandardCount)))
+        //        //{
+        //        //    Device.BeginInvokeOnMainThread(() =>
+        //        //    {
+        //        //        // standardNotification.Text = appCount.StandardCount.ToString();
+        //        //    });
 
-                }
-                else
-                {
-                    standardNotification.IsVisible = false;
-                }
+        //        //}
+        //        //else
+        //        //{
+        //        //    standardNotification.IsVisible = false;
+        //        //}
 
-                if (!string.IsNullOrEmpty(Convert.ToString(appCount.QuestCount)))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        formNotification.Text = appCount.QuestCount.ToString();
-                    });
+        //        //if (!string.IsNullOrEmpty(Convert.ToString(appCount.QuestCount)))
+        //        //{
+        //        //    Device.BeginInvokeOnMainThread(() =>
+        //        //    {
+        //        //        //formNotification.Text = appCount.QuestCount.ToString();
+        //        //    });
 
-                }
-                else
-                {
-                    formNotification.IsVisible = false;
-                }
-                if (!string.IsNullOrEmpty(Convert.ToString(appCount.DepartmentCount)))
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        teamNotification.Text = appCount.DepartmentCount.ToString();
-                    });
+        //        //}
+        //        //else
+        //        //{
+        //        //    formNotification.IsVisible = false;
+        //        //}
+        //        //if (!string.IsNullOrEmpty(Convert.ToString(appCount.DepartmentCount)))
+        //        //{
+        //        //    Device.BeginInvokeOnMainThread(() =>
+        //        //    {
+        //        //        //teamNotification.Text = appCount.DepartmentCount.ToString();
+        //        //    });
 
-                    teamNotification.IsVisible = true;
-                }
-                else
-                {
-                    teamNotification.IsVisible = false;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-        }
+        //        //    teamNotification.IsVisible = true;
+        //        //}
+        //        //else
+        //        //{
+        //        //    teamNotification.IsVisible = false;
+        //        //} 
+        //        #endregion
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
 
-        public async void UpdateCount(HomeScreenCount appCount)
+        //    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+        //}
+
+        public async void UpdateCount()
         {
             Task.Run(() =>
              {
                  appCount = HomeOffline.GetHomeScreenCount(App.Isonline, Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
-             }).Wait();
+
+                 Device.BeginInvokeOnMainThread(() =>
+                 {
+                     this.BindingContext = appCount;
+                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+                 });
+             });
             if (appCount == null)
             {
                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    CaseNotification.Text = appCount.CasesCount.ToString();
-                });
-            }
-            else
-            {
-                CaseNotification.IsVisible = false;
-            }
+            #region MyRegion
+            //if (!string.IsNullOrEmpty(appCount.CasesCount.ToString()))
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //CaseNotification.Text = appCount.CasesCount.ToString();
+            //    });
+            //}
+            //else
+            //{
+            //    CaseNotification.IsVisible = false;
+            //}
 
-            if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    associationNotification.Text = appCount.EntityCount.ToString();
-                });
+            //if (!string.IsNullOrEmpty(appCount.EntityCount.ToString()))
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //associationNotification.Text = appCount.EntityCount.ToString();
+            //    });
 
-            }
-            else
-            {
-                associationNotification.IsVisible = false;
-            }
+            //}
+            //else
+            //{
+            //    associationNotification.IsVisible = false;
+            //}
 
-            if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    standardNotification.Text = appCount.StandardCount.ToString();
-                });
+            //if (!string.IsNullOrEmpty(appCount.StandardCount.ToString()))
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //standardNotification.Text = appCount.StandardCount.ToString();
+            //    });
 
-            }
-            else
-            {
-                standardNotification.IsVisible = false;
-            }
+            //}
+            //else
+            //{
+            //    standardNotification.IsVisible = false;
+            //}
 
-            if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    formNotification.Text = appCount.QuestCount.ToString();
-                });
+            //if (!string.IsNullOrEmpty(appCount.QuestCount.ToString()))
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //formNotification.Text = appCount.QuestCount.ToString();
+            //    });
 
-            }
-            else
-            {
-                formNotification.IsVisible = false;
-            }
-            if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    teamNotification.Text = appCount.DepartmentCount.ToString();
-                });
+            //}
+            //else
+            //{
+            //    formNotification.IsVisible = false;
+            //}
+            //if (!string.IsNullOrEmpty(appCount.DepartmentCount.ToString()))
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //teamNotification.Text = appCount.DepartmentCount.ToString();
+            //    });
 
-                teamNotification.IsVisible = true;
-            }
-            else
-            {
-                teamNotification.IsVisible = false;
-            }
+            //    teamNotification.IsVisible = true;
+            //}
+            //else
+            //{
+            //    teamNotification.IsVisible = false;
+            //} 
+            #endregion
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            var t = Functions.UserName;
-
             // For App_Logo 
             SetCompanyLogo();
 
             SetUserPicture();
 
-            // btn_usericon.Source = ImageSource.FromFile("Assets/deletebutton.png");
             project = new List<string>();
             if (App.IsLoginCall)
             {
-                //SyncAllRecorsToSQLite();
-                SyncAllRecorsToSQLite_New();
+                SyncAllRecorsToSQLite();
                 App.IsLoginCall = false;
             }
             else
-            { UpdateCount(new HomeScreenCount()); }
+            { UpdateCount(); }
         }
 
         //JigarRp
-        public async void SyncAllRecorsToSQLite_New()
+        public async void SyncAllRecorsToSQLite()
         {
             try
             {
+                if (Functions.AppStartCount == 0)
+                {
+                    App.GetImgLogo();
+                }
 
                 if (Functions.AppStartCount <= 1)
                 {
@@ -1867,6 +1888,7 @@ namespace StemmonsMobile
                             {
                                 var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
 
+                                UpdateCount();
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Origination Center Sync Success.");
                                 else
@@ -1876,7 +1898,7 @@ namespace StemmonsMobile
                             {
                             }
                         });
-                        HomePageCount();
+                        //UpdateCount();
                         SyncPopupRunTimeChange(0.08, Convert.ToString(Percentage * 1) + "%", "Origination Center Sync", "Operation " + 1 + " of " + itemCount + " completed");
                     }
                     catch (Exception)
@@ -1956,7 +1978,7 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
@@ -1985,7 +2007,7 @@ namespace StemmonsMobile
                             try
                             {
 
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_CreatedByMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_CreatedByMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
@@ -2014,7 +2036,7 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_OwnedByMe");
+                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_OwnedByMe");
 
                                 if (!String.IsNullOrEmpty(str))
                                     Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
@@ -2045,7 +2067,7 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
-                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, "", true, "_AssignedToMyTeam");
+                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMyTeam");
 
                                     if (!String.IsNullOrEmpty(str))
                                         Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");
@@ -2177,14 +2199,16 @@ namespace StemmonsMobile
                             catch (Exception ex)
                             {
                             }
+
                         });
+
                     }
                     catch (Exception)
                     {
                     }
                     #endregion
 
-                    #region Employee Search Sync
+                    #region GetTeamMembers && GetTeamMembers Sync
                     //Employee Search Sync
 
                     try
@@ -2216,9 +2240,8 @@ namespace StemmonsMobile
                     {
                     }
                     #endregion
-
-
                 }
+
                 if (Is_Popup_Open)
                 {
                     IsClosed = true;
@@ -2235,6 +2258,7 @@ namespace StemmonsMobile
                     MainGrid.Opacity = 1;
                     Grid_Sync_l.IsVisible = false;
                 }
+
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Functions.AppStartCount = Functions.AppStartCount + 1;
@@ -2267,6 +2291,7 @@ namespace StemmonsMobile
                 C_lbl_status_Count.Text = Count;
             });
         }
+
         private void SyncPopupRunTimeChangeTitle(string Title, string Count)
         {
             Device.BeginInvokeOnMainThread(() =>
@@ -2293,112 +2318,61 @@ namespace StemmonsMobile
 
         private void SetUserPicture()
         {
+            bool Excep = false;
+
+            ExceptionCAll:
             try
             {
-                if (App.Isonline)
-                {
-                    var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                    UPro.Wait();
-                    string urlString = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName;
+                var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                UPro.Wait();
 
+                byte[] byt = UPro.Result.Profile_Picture as byte[];
 
-                    ImageHelperClass iHeleper = new ImageHelperClass();
-                    var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
-                    Src.Wait();
-
-                    UPro.Result.Profile_Picture = Src.Result;
-
-                    DBHelper.SaveInstanceUserAssoc(UPro.Result, App.DBPath).Wait();
-
-                    btn_usericon.Source = ImageSource.FromUri(new Uri(urlString));
-                }
-                else
-                {
-                    var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
-                    UPro.Wait();
-
-                    byte[] byt = UPro.Result.Profile_Picture as byte[];
-
-                    Image image = new Image();
-                    Stream stream = new MemoryStream(byt);
-                    btn_usericon.Source = ImageSource.FromStream(() => { return stream; });
-
-                    //btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
-                }
+                Image image = new Image();
+                Stream stream = new MemoryStream(byt);
+                btn_usericon.Source = ImageSource.FromStream(() => { return stream; });
+                Excep = false;
             }
             catch (Exception)
             {
+                Excep = true;
+                App.DownloadUserPicture();
                 btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
             }
+
+            if (Excep)
+                goto ExceptionCAll;
         }
+
 
         private void SetCompanyLogo()
         {
+            bool Excep = false;
+
+            ExceptionCAll:
             try
             {
-                if (App.Isonline)
-                {
-                    var result = DefaultAPIMethod.GetLogo();
-                    var urlString = result.GetValue("ResponseContent");
+                var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
+                itm.Wait();
+                InstanceList ils = new InstanceList();
+                byte[] byt = itm.Result.Instance_Logo as byte[];
 
-                    ImageHelperClass iHeleper = new ImageHelperClass();
-                    var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
-                    Src.Wait();
-
-                    var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
-                    itm.Wait();
-                    InstanceList ils = new InstanceList();
-                    byte[] byt = Src.Result as byte[];
-
-                    Image image = new Image();
-                    Stream stream = new MemoryStream(byt);
-                    App_Logo.Source = ImageSource.FromStream(() => { return stream; });
-
-                    ils.Instance_Logo = byt;
-                    ils.InstanceID = itm.Result.InstanceID;
-                    ils.InstanceName = itm.Result.InstanceName;
-                    ils.InstanceUrl = itm.Result.InstanceUrl;
-
-                    DBHelper.SaveInstance(ils, App.DBPath).ConfigureAwait(false);
-
-                }
-                else
-                {
-                    var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
-                    itm.Wait();
-                    InstanceList ils = new InstanceList();
-                    byte[] byt = itm.Result.Instance_Logo as byte[];
-
-                    Image image = new Image();
-                    Stream stream = new MemoryStream(byt);
-                    App_Logo.Source = ImageSource.FromStream(() => { return stream; });
-                    //App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
-                }
+                Image image = new Image();
+                Stream stream = new MemoryStream(byt);
+                App_Logo.Source = ImageSource.FromStream(() => { return stream; });
+                Excep = false;
             }
             catch (Exception)
             {
+                Excep = true;
+                App.DownloadCompanyLog();
                 App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
             }
+            if (Excep)
+                goto ExceptionCAll;
         }
 
-        private async void GetBaseURLFromSQLServer()
-        {
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-            try
-            {
-                await Task.Run(() =>
-                {
-                    var lst = Functions.GetImageDownloadURL();
-                    App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
-                    App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
-                    App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
-                });
-            }
-            catch (Exception)
-            {
-            }
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-        }
+
 
         //List<string> project = new List<string>();
         private async Task SelectUser(string name)
@@ -2704,7 +2678,6 @@ namespace StemmonsMobile
                         await Navigation.PushAsync(new StandardsBookPage("Whatsnew"));
                         break;
 
-
                     default:
                         break;
 
@@ -2743,7 +2716,7 @@ namespace StemmonsMobile
             try
             {
 
-                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout");
+                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout" /*,"VCasePage"*/);
 
                 if (action.ToLower().Contains("offline"))
                     action = "offline";
@@ -2752,6 +2725,9 @@ namespace StemmonsMobile
 
                 switch (action)
                 {
+                    case "VCasePage":
+                        await Navigation.PushAsync(new VCasePage());
+                        break;
                     case "Logout":
                         App.Logout(this);
                         break;
@@ -2922,10 +2898,6 @@ namespace StemmonsMobile
             await this.Navigation.PushAsync(new UserDetail(Functions.UserName));
         }
 
-        private void Applicationlist_ItemAppearing(object sender, ItemVisibilityEventArgs e)
-        {
-            Applicationlist.SelectedItem = null;
-        }
 
         private void Applicationlist_ItemTapped(object sender, ItemTappedEventArgs e)
         {

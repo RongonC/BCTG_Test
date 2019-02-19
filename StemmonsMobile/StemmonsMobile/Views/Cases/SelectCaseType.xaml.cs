@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
 using static StemmonsMobile.DataTypes.DataType.Cases.GetFavoriteResponse;
 using static StemmonsMobile.DataTypes.DataType.Cases.OriginationCenterDataResponse;
@@ -72,7 +73,9 @@ namespace StemmonsMobile.Views.Cases
                         }
                     }
 
-                    result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath).Result;
+                    //result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath).Result;
+                    result_fav = CasesSyncAPIMethods.GetFavorite(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, Convert.ToString((int)Applications.Cases), App.DBPath).Result;
+
                 });
                 #endregion
 

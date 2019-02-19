@@ -23,13 +23,16 @@ using static StemmonsMobile.DataTypes.DataType.Quest.GetItemQuestionFieldsByItem
 using static StemmonsMobile.DataTypes.DataType.Quest.GetItemInfoDependencyResponse;
 using static StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse;
 using Plugin.Connectivity;
+using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
+using Acr.UserDialogs;
+using StemmonsMobile.DataTypes.DataType;
 
 namespace StemmonsMobile.Views.CreateQuestForm
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewQuestForm : ContentPage
     {
-
+        string Favoriteid = string.Empty;
         string ItemInstanceTranId;
         int itemid = 0;
         int RequiredFieldCount = 0;
@@ -46,16 +49,16 @@ namespace StemmonsMobile.Views.CreateQuestForm
         List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId> lstcatbyitemid = new List<GetItemCategoriesByItemIDResponse.ItemCategoryByItemId>();
 
 
-        GetExternalDatasourceByIDResponse.ExternalDatasourceInfo ExdDefaultValue = new GetExternalDatasourceByIDResponse.ExternalDatasourceInfo
+        ExternalDatasourceValue ExdDefaultValue = new ExternalDatasourceValue
         {
-            strObjectID = "-1",
-            strName = "-- Select Item --",
-            strDescription = "-- Select Item --"
+            ID = 0,
+            NAME = "-- Select Item --",
+            DESCRIPTION = "-- Select Item --"
         };
         //ArpanB Start
         public static ObservableCollection<string> Exditems { get; set; }
-        public Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>> lstexnaldatasouce = new Dictionary<int, List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>();
-        List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
+        public Dictionary<int, List<ExternalDatasourceValue>> lstexnaldatasouce = new Dictionary<int, List<ExternalDatasourceValue>>();
+        List<ExternalDatasourceValue> lstexternaldatasource = new List<ExternalDatasourceValue>();
         int iSelectedItemlookupId = 0;
         ListView lstView = new ListView();
         //ArpanB End
@@ -70,6 +73,35 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Functions.questObjectData = null;
             CategoryIdList = new List<string>();
             CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
+        }
+
+        public NewQuestForm(string FAVORITEID, string arID, string CASETYPEID, string _Tittle = "")
+        {
+            InitializeComponent();
+            try
+            {
+                App.SetConnectionFlag();
+                itemid = Convert.ToInt32(CASETYPEID);
+                Favoriteid = FAVORITEID;
+
+                ViewCount = 0;
+                SaveClick = 0;
+                aredID = arID;
+                Functions.questObjectData = null;
+                CategoryIdList = new List<string>();
+                CategoryObjectlist = new List<Add_Questions_MetadataRequest>();
+                if (!string.IsNullOrEmpty(Favoriteid) && Favoriteid != "0")
+                {
+                    btn_rem_fav.IsVisible = true;
+                }
+                else
+                {
+                    btn_rem_fav.IsVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         protected async override void OnAppearing()
@@ -168,7 +200,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 {
                                     Picker pk = new Picker();
                                     pk.WidthRequest = 200;
-                                    List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> view = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
+                                    List<ExternalDatasourceValue> view = new List<ExternalDatasourceValue>();
 
                                     #region Old Code
 
@@ -583,8 +615,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
                 }
 
-                List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> lst_extdatasource = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
-                lstexternaldatasource = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
+                List<ExternalDatasourceValue> lst_extdatasource = new List<ExternalDatasourceValue>();
+                lstexternaldatasource = new List<ExternalDatasourceValue>();
 
                 lstexternaldatasource.Add(ExdDefaultValue);
 
@@ -634,9 +666,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                             if (drpParent.SelectedItem != null)
                                             {
                                                 if (drpParent.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDatasourceInfo") //=="StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
-                                                    value = (drpParent.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDatasourceInfo).strObjectID;
+                                                    value = (drpParent.SelectedItem as ExternalDatasourceValue).ID?.ToString();
                                                 else
-                                                    value = (drpParent.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource).strObjectID;
+                                                    value = (drpParent.SelectedItem as ExternalDatasourceValue).ID?.ToString();
                                             }
                                             else
                                             {
@@ -664,7 +696,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                         {
                                             var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
                                             var qResult = qUesponse.GetValue("ResponseContent");
-                                            List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(qResult.ToString());
+                                            List<ExternalDatasourceValue> l = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(qResult.ToString());
 
                                             lstexternaldatasource.AddRange(l);
                                         }
@@ -691,14 +723,15 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                 }
 
-                lstView.ItemsSource = lstexternaldatasource.Select(v => v.strName);
+                lstView.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
 
                 #region Popup initilize
                 lstView.WidthRequest = 260;
                 lstView.IsPullToRefreshEnabled = true;
                 lstView.Refreshing += OnRefresh;
-                lstView.ItemSelected += OnSelection;
+                lstView.ItemTapped += LstView_ItemTapped;
                 lstView.BackgroundColor = Color.White;
+                lstView.HasUnevenRows = true;
 
                 var temp = new DataTemplate(typeof(TextViewCell));
                 lstView.ItemTemplate = temp;
@@ -750,13 +783,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-
-
-        private void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        private void LstView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {
-                if (e.SelectedItem == null)
+                if (e.Item == null)
                 {
                     return;
                 }
@@ -780,13 +811,13 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 {
                     Button q_btn = cntrl as Button;
                     q_btn.FontSize = 16;
-                    q_btn.Text = e.SelectedItem.ToString();
+                    q_btn.Text = e.Item.ToString();
 
                     Picker q_pik = pik_cntrl as Picker;
 
-                    var lst = lstexternaldatasource.Where(t => t.strName.ToLower().Contains(q_btn.Text.ToLower())).ToList();
+                    var lst = lstexternaldatasource.Where(t => t.NAME.ToLower().Contains(q_btn.Text.ToLower())).ToList();
 
-                    if (lst?.FirstOrDefault().strName != "-- Select Item --")
+                    if (lst?.FirstOrDefault().NAME != "-- Select Item --")
                     {
                         lst.Insert(0, ExdDefaultValue);
                         q_pik.ItemsSource = lst;
@@ -813,13 +844,15 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     }
                 }
 
-                ((ListView)sender).SelectedItem = null;
+              ((ListView)sender).SelectedItem = null;
             }
             catch (Exception)
             {
                 ((ListView)sender).SelectedItem = null;
             }
         }
+
+
 
         private void Btn_cancel_Clicked(object sender, EventArgs e)
         {
@@ -837,14 +870,14 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     if (string.IsNullOrEmpty(e.NewTextValue))
                     {
                         //lstView.ItemsSource = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString())).ToList();
-                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.strName);
+                        lstView.ItemsSource = lstexternaldatasource.Select(v => v.NAME);
                     }
                     else
                     {
-                        var list = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
+                        var list = lstexternaldatasource.Where(v => v.NAME.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
                         if (list.Count > 0)
                         {
-                            lstView.ItemsSource = list.Select(v => v.strName).ToList();
+                            lstView.ItemsSource = list.Select(v => v.NAME).ToList();
                         }
                         else
                         {
@@ -911,7 +944,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 RefreshDropDownsAndLookUp(Convert.ToInt32(cnt.StyleId.Split('_')[1]));
                                 if (cnt.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
                                 {
-                                    if (Convert.ToInt32((cnt.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDatasourceInfo).strObjectID) > 0)
+                                    if (Convert.ToInt32((cnt.SelectedItem as ExternalDatasourceValue).ID) > 0)
                                     {
                                         var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                                         lstItemInfoDependancy = getInfoDepeResult.Result;
@@ -921,7 +954,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 }
                                 else
                                 {
-                                    if (Convert.ToInt32((cnt.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource).strObjectID) > 0)
+                                    if (Convert.ToInt32((cnt.SelectedItem as ExternalDatasourceValue).ID) > 0)
                                     {
                                         var getInfoDepeResult = QuestSyncAPIMethods.GetItemInfoDependency(App.Isonline, "0", itemid.ToString(), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
                                         lstItemInfoDependancy = getInfoDepeResult.Result;
@@ -957,7 +990,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                     Picker drp = FindQuestControl(item.intItemInfoFieldIDChild) as Picker;
                     if (drp != null)
                     {
-                        List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> l = new List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>();
+                        List<ExternalDatasourceValue> l = new List<ExternalDatasourceValue>();
 
                         l.Insert(0, ExdDefaultValue);
                         drp.ItemsSource = l;
@@ -1032,9 +1065,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                     if (drpParent.SelectedItem != null)
                                     {
                                         if (drpParent.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
-                                            value = (drpParent.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDatasourceInfo).strObjectID;
+                                            value = (drpParent.SelectedItem as ExternalDatasourceValue).ID?.ToString();
                                         else
-                                            value = (drpParent.SelectedItem as GetExternalDatasourceInfoByIDResponse.ExternalDataSource).strObjectID;
+                                            value = (drpParent.SelectedItem as ExternalDatasourceValue).ID?.ToString();
                                     }
 
                                     sQuery = GetQueryStringWithParamaters(sQuery, p.strExternalDatasourceNameParent, value, p.strInfoFieldDisplayNameParent);//6
@@ -1061,7 +1094,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 var qUesponse = QuestAPIMethods.GetExternalDatasourceByQuery(sQuery, Functions.GetDecodeConnectionString(sConnectionString));//API Need
                                 var qResult = qUesponse.GetValue("ResponseContent");
-                                List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo> l = JsonConvert.DeserializeObject<List<GetExternalDatasourceByIDResponse.ExternalDatasourceInfo>>(qResult.ToString());
+                                List<ExternalDatasourceValue> l = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(qResult.ToString());
 
                                 l.Insert(0, ExdDefaultValue);
                                 drp.ItemsSource = null;
@@ -1254,7 +1287,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
         {
             RequiredFieldCount = 0;
             string strobjid = string.Empty;
-            dynamic pickervalue = null;
             try
             {
                 AddFormRequest.ItemInfoFieldInfo infoobj = new AddFormRequest.ItemInfoFieldInfo();
@@ -1303,12 +1335,10 @@ namespace StemmonsMobile.Views.CreateQuestForm
                                 }
                                 else
                                 {
-                                    //if (pick_Ext_datasrc.SelectedItem?.GetType()?.FullName == "StemmonsMobile.DataTypes.DataType.Quest.GetExternalDatasourceByIDResponse+ExternalDataSource")
-                                    {
-                                        pickervalue = pick_Ext_datasrc.SelectedItem as GetExternalDatasourceByIDResponse.ExternalDatasourceInfo;
-                                        strobjid = Convert.ToString(pickervalue.strObjectID);
-                                    }
-                                    iValue.ItemInfoFieldText = pickervalue.strName;
+                                    var pickervalue = pick_Ext_datasrc.SelectedItem as ExternalDatasourceValue;
+                                    strobjid = Convert.ToString(pickervalue.ID);
+
+                                    iValue.ItemInfoFieldText = pickervalue.NAME;
                                     //iValue.externalDatasourceObjectIDs = Convert.ToString(lst_NewQuestFormFields[i].intExternalDatasourceID);
                                     iValue.externalDatasourceObjectIDs = Convert.ToString(strobjid);
                                     infoobj.ItemInfoFieldId = (Convert.ToInt32(Control_Schema[i].intItemInfoFieldID));
@@ -1555,7 +1585,8 @@ namespace StemmonsMobile.Views.CreateQuestForm
             try
             {
                 this.Unfocus();
-                var action = await this.DisplayActionSheet(null, "Cancel", null, "Save & Edit Later", "Save & Finalize");
+                //var action = await this.DisplayActionSheet(null, "Cancel", null, "Save & Edit Later", "Save & Finalize");
+                var action = await this.DisplayActionSheet(null, "Cancel", null, "Save & Edit Later", "Save & Finalize", "Save Favorite");
                 switch (action)
                 {
                     case "Save & Edit Later":
@@ -1582,6 +1613,48 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         catch
                         {
 
+                        }
+                        break;
+
+                    case "Save Favorite":
+
+                        addForm = new AddFormRequest()
+                        {
+                            itemId = (Convert.ToInt32(itemid)),
+                            isEdit = true,
+                            otherComments = "",
+                            ItemInfoFieldValues = new List<AddFormRequest.ItemInfoFieldInfo>(),
+                            itemQuestionFieldIDs = "",
+                            meetsStandards = "",
+                            pointsAvailable = Convert.ToString(avpoints),
+                            pointsEarned = "0",
+                            isCaseRequested = "",
+                            createdBy = Functions.UserName,
+                            notes = ""
+                        };
+
+                        jsonaddForm = JsonConvert.SerializeObject(addForm);
+
+                        var user_dialogs = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle("Name of Favorite").
+                            SetInputMode(InputType.Name).SetOkText("Create"));
+
+                        if (user_dialogs.Ok)
+                        {
+                            string txt_search = user_dialogs.Text;
+                            Task<int> result_fav = null;
+                            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                            await Task.Run(() =>
+                            {
+                                result_fav = QuestSyncAPIMethods.AddFavorite(App.Isonline, txt_search, jsonaddForm,
+                  "Y", Functions.UserName, DateTime.Now.ToString(), DateTime.Now.ToString(), DateTime.Now.ToString(), App.DBPath, Convert.ToString(itemid), aredID, ConstantsSync.INSTANCE_USER_ASSOC_ID.ToString(), Convert.ToString((int)Applications.Quest));
+                            });
+                            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+
+                            if (result_fav != null && result_fav?.Result > 0)
+                            {
+                                DisplayAlert("Success", "Added Favourite Successfully.", "OK");
+                                this.Navigation.PopAsync();
+                            }
                         }
                         break;
 
@@ -1614,6 +1687,26 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
             catch (Exception)
             {
+            }
+        }
+
+
+        async void btn_rem_fav_Clicked(object sender, EventArgs e)
+        {
+            // remove code
+            try
+            {
+                var result = await DisplayAlert("Alert", "Would you like to remove this quest from Your favourite list?", "Yes", "No");
+
+                if (result)
+                {
+                    var res = QuestSyncAPIMethods.RemoveFavorite(App.Isonline, Favoriteid.ToString(), App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID.ToString(), Functions.UserName);
+                    await this.Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // 
             }
         }
     }

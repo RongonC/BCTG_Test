@@ -1454,7 +1454,142 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
 
+        #region Get Favorite
+        public static JObject GetFavorite(string _CreatedBy, string _ApplicationId, string _AreaId, string _TypeId)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.GetFavorite)
+            };
+            #endregion
 
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("CreatedBy", _CreatedBy),
+                new KeyValuePair<string, string>("ApplicationId", _ApplicationId),
+                new KeyValuePair<string, string>("AreaId", _AreaId),
+                new KeyValuePair<string, string>("TypeId", _TypeId),
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region Edit Favorite
+        public static JObject EditFavorite(string _FavoriteID, string AppID, string _FavoriteName, string _FieldValues, string _IsActive, string _CreatedBy, string _CreatedByDt, string _ModifiedByDt, string _LastSyncDt, string QuestAreaID, string pTypeId)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.EditFavorite)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("FavoriteID", _FavoriteID),
+                new KeyValuePair<string, string>("AppTypeInfoId", AppID),
+                new KeyValuePair<string, string>("FavoriteName", _FavoriteName),
+                new KeyValuePair<string, string>("FieldValues", _FieldValues),
+                new KeyValuePair<string, string>("IsActive", _IsActive),
+                new KeyValuePair<string, string>("CreatedBy", _CreatedBy),
+                new KeyValuePair<string, string>("CreatedByDt", _CreatedByDt),
+                new KeyValuePair<string, string>("ModifiedByDt", _ModifiedByDt),
+                new KeyValuePair<string, string>("LastSyncDt", _LastSyncDt),
+                   new KeyValuePair<string, string>("QuestAreaID", QuestAreaID),
+                new KeyValuePair<string, string>("pTypeId", pTypeId)
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region Remove Favorite
+        public static JObject RemoveFavorite(string _FavoriteID, string username)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.RemoveFavorite)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("FavoriteID", _FavoriteID),
+                 new KeyValuePair<string, string>("username", username)
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region DeleteFavorite
+        public static JObject RemoveFavorite(string _FavoriteID, string _AppTypeInfoId, string _FavoriteName, string _FieldValues, string _IsActive, string _CreatedBy, string _CreatedByDt, string _ModifiedByDt, string _LastSyncDt)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name",Constants.Baseurl + Constants.RemoveFavorite)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("FavoriteID", _FavoriteID)
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region Add Favorite
+        public static JObject AddFavorite(object Body_value)
+        {
+            try
+            {
+                return Constants.ApiCommon(Body_value, Constants.AddFavorite);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        #endregion
 
 
     }

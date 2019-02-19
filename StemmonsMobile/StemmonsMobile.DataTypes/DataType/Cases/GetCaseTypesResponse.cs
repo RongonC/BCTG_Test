@@ -111,7 +111,6 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
         #region BasicCase
         public class BasicCase
         {
-
             public char? IS_ALLOW_APPROVAL { get; set; }
             private string _caseTitle;
             public int rowID { get; set; }

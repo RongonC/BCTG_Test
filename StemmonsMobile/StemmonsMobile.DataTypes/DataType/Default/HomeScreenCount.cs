@@ -18,20 +18,29 @@ namespace StemmonsMobile.DataTypes.DataType.Default
 
         public HomeScreenCount()
         {
-            this.CasesCount = 0;
-            this.DepartmentCount = 0;
-            this.EntityCount = 0;
-            this.QuestCount = 0;
-            this.StandardCount = 0;
+            _entityCount = 0;
+            _standardCount = 0;
+            _questCount = 0;
+            _casesCount = 0;
+            _departmentCount = 0;
         }
 
         public int EntityCount
         {
-            get => _entityCount;
+            get
+            {
+                return this._entityCount;
+            }
+
             set
             {
-                _entityCount = value;
-                NotifyPropertyChanged();
+                if (value != this._entityCount)
+                {
+                    this._entityCount = value;
+                    NotifyPropertyChanged();
+                }
+                //_entityCount = value;
+                //NotifyPropertyChanged();
             }
         }
 
@@ -57,11 +66,18 @@ namespace StemmonsMobile.DataTypes.DataType.Default
 
         public int CasesCount
         {
-            get => _casesCount;
+            get
+            {
+                return _casesCount;
+            }
+
             set
             {
-                _casesCount = value;
-                NotifyPropertyChanged();
+                if (value != this._casesCount)
+                {
+                    this._casesCount = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -77,9 +93,15 @@ namespace StemmonsMobile.DataTypes.DataType.Default
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        // This method is called by the Set accessor of each property.
+        // The CallerMemberName attribute that is applied to the optional propertyName
+        // parameter causes the property name of the caller to be substituted as an argument.
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

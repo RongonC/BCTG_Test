@@ -94,23 +94,23 @@ namespace StemmonsMobile.Views.Cases
 
         private async void GridCasesnotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            try
-            {
-                string url = string.Empty;
-                var d = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl.Split(new string[] { "/mobileapi" }, StringSplitOptions.None);
-                url = d[0];
+            //try
+            //{
+            //    string url = string.Empty;
+            //    var d = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl.Split(new string[] { "/mobileapi" }, StringSplitOptions.None);
+            //    url = d[0];
 
-                var notes = gridCasesnotes.SelectedItem as GetCaseNotesResponse.NoteData;
+            //    var notes = gridCasesnotes.SelectedItem as GetCaseNotesResponse.NoteData;
 
-                if (notes.ImageVisible)
-                {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
-                }
-            }
-            catch (Exception ex)
-            {
-            }
+            //    if (notes.ImageVisible)
+            //    {
+            //        await Navigation.PushAsync(new ViewAttachment
+            //        (notes.ImageURL));
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //}
         }
     }
 }

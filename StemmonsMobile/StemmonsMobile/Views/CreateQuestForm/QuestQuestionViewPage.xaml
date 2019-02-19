@@ -37,7 +37,7 @@
                         </Grid.ColumnDefinitions>
                         <Button Image="Assets/back_icon.png" Text="Back" TextColor="White" BackgroundColor="Transparent" FontAttributes="Bold"
                                 HorizontalOptions="Start" Grid.Row="0"
-                        Margin="-10,9,0,0" Grid.Column="1" Clicked="Save_Clicked" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                        Margin="-10,9,0,0" Grid.Column="1" Clicked="Save_Clicked"/>
                       
                         <Label Text="Quest View Form"  Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="4"  TextColor="White" HorizontalOptions="Center" 
                                FontAttributes="Bold" FontSize="16" Margin="31,20,0,0" xmlns:local="clr-namespace:StemmonsMobile"/>

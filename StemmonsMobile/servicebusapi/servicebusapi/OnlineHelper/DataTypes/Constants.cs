@@ -31,7 +31,8 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
 
         #region Cases API Lists
-
+        
+        public static string GetCaseFile = "/api/v1/Cases/GetFileFromCase";
         public static string AddCaseNotes = "/api/v1/Cases/AddCaseNotes";
         public static string GetUserInfo = "/api/v1/Cases/GetUserInfo";
         public static string GetCaseNoteTypes = "/api/v1/Cases/GetCaseNoteTypes";
@@ -182,6 +183,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetTriggerGridData = "/api/v1/Entity/GetTriggerGridData";
         #endregion
 
+        public static string GetEntityFile = "/api/v1/Entity/GetFileFromEntity";
         public static string AddEntityNote = "/api/v1/Entity/AddEntityNote";
         public static string AddFileToEntity = "/api/v1/Entity/AddFileToEntity";
         public static string GetAssociatedEntityList = "/api/v1/Entity/GetAssociatedEntityList";

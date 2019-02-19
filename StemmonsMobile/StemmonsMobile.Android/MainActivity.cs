@@ -9,6 +9,7 @@ using Android.OS;
 using Acr.UserDialogs;
 using Xamarin.Forms.Xaml;
 using Plugin.CurrentActivity;
+using Android;
 
 namespace StemmonsMobile.Droid
 {
@@ -28,14 +29,28 @@ namespace StemmonsMobile.Droid
             //ImageCircleRenderer.Init();
             CrossCurrentActivity.Current.Init(this, bundle);
             //UserDialogs.Instance.ShowSuccess("True");
+
+            if (PackageManager.CheckPermission(Manifest.Permission.ReadExternalStorage, PackageName) != Permission.Granted
+            && PackageManager.CheckPermission(Manifest.Permission.WriteExternalStorage, PackageName) != Permission.Granted)
+            {
+                var permissions = new string[] { Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage };
+                RequestPermissions(permissions, 1);
+            }
+
+            Xamarin.Essentials.Platform.Init(this, bundle); // add this line to your code, it may also be called: bundle
+
+
             LoadApplication(new App());
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
 }
 

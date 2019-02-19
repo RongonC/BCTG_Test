@@ -1,6 +1,7 @@
 ﻿using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using SQLite;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using System;
@@ -561,7 +562,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
                                 exd.Wait();
                                 if (!string.IsNullOrEmpty(exd?.Result?.EDS_RESULT))
                                 {
-                                    List<GetExternalDataSourceByIdResponse.ExternalDatasource> lstexd = JsonConvert.DeserializeObject<List<GetExternalDataSourceByIdResponse.ExternalDatasource>>(exd?.Result?.EDS_RESULT.ToString());
+                                    List<ExternalDatasourceValue> lstexd = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(exd?.Result?.EDS_RESULT.ToString());
 
                                     ExternalDatasourceList.EXTERNAL_DATASOURCE_LIST Exdinfo = JsonConvert.DeserializeObject<ExternalDatasourceList.EXTERNAL_DATASOURCE_LIST>(exd.Result.EDS_RESULT);
                                     ExternalDatasourceList.EXTERNAL_DATASOURCE_LISTFREQUENTCASE_LISTCASEASSOC_TYPE exdassoc = Exdinfo?.FREQUENT?.CASE_LIST?.CASE?.ASSOC_TYPE as ExternalDatasourceList.EXTERNAL_DATASOURCE_LISTFREQUENTCASE_LISTCASEASSOC_TYPE;

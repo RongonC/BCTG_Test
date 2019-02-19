@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Plugin.Media;
 using StemmonsMobile.Commonfiles;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.Views.Cases;
 using StemmonsMobile.Views.People_Screen;
@@ -42,11 +43,11 @@ namespace StemmonsMobile.Views.Entity
 
         string ischeckcalControl = string.Empty;
         string ContolrLst = string.Empty;
-        EXTERNAL_DATASOURCE1 EDSDefaultValue = new EXTERNAL_DATASOURCE1
+        ExternalDatasourceValue EDSDefaultValue = new ExternalDatasourceValue
         {
-            Count = 0,
-            EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --",
-            EXTERNAL_DATASOURCE_NAME = "-- Select Item --",
+           
+            DESCRIPTION = "-- Select Item --",
+            NAME = "-- Select Item --",
             ID = 0
         };
 
@@ -189,6 +190,7 @@ namespace StemmonsMobile.Views.Entity
 
                 if (EntitySchemaLists == null)
                 {
+                    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     return;
                 }
 
@@ -270,7 +272,7 @@ namespace StemmonsMobile.Views.Entity
                                     };
 
                                     pk.ItemDisplayBinding = new Binding("EXTERNAL_DATASOURCE_NAME");
-                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
+                                    List<ExternalDatasourceValue> _list_ed1 = new List<ExternalDatasourceValue>();
                                     _list_ed1.Add(EDSDefaultValue);
                                     pk.ItemsSource = _list_ed1;
                                     pk.SelectedIndex = 0;
@@ -801,12 +803,12 @@ namespace StemmonsMobile.Views.Entity
                                 if (cntBtn != null)
                                 {
 
-                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
-                                    var cnttype = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
+                                    List<ExternalDatasourceValue> _list_ed1 = new List<ExternalDatasourceValue>();
+                                    var cntrlAssocMeta = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
 
-                                    if (cnttype.Count > 0)
+                                    if (cntrlAssocMeta.Count > 0)
                                     {
-                                        AssociationMetaData Assoc = cnttype[0];
+                                        AssociationMetaData Assoc = cntrlAssocMeta[0];
 
                                         if (!string.IsNullOrEmpty(Assoc.FieldValue) && !string.IsNullOrEmpty(Assoc.ExternalDatasourceObjectID))
                                         {
@@ -814,36 +816,35 @@ namespace StemmonsMobile.Views.Entity
                                         }
                                     }
 
-                                    var cnt_type = cntBtn.GetType();
-                                    if (cnt_type.Name.ToLower() == "picker")
+                                    if (cnt?.GetType().Name.ToLower() == "picker")
                                     {
                                         var pick_Ext_datasrc = new Picker();
                                         pick_Ext_datasrc = cnt as Picker;
 
-                                        var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == cntBtn.Text).ToList();
+                                        var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.NAME == cntBtn.Text).ToList();
 
                                         ///var data = EntityListsValues.AssociationFieldCollection[i].AssocMetaData;
                                         int j = 0;
                                         //pick_Ext_datasrc = (Picker)cnt;
-                                        List<EXTERNAL_DATASOURCE1> src = new List<EXTERNAL_DATASOURCE1>();
+                                        List<ExternalDatasourceValue> src = new List<ExternalDatasourceValue>();
                                         src.Add(EDSDefaultValue);
                                         if (ItmSrc.Count > 0)
                                         {
-                                            src.Add(new EXTERNAL_DATASOURCE1
+                                            src.Add(new ExternalDatasourceValue
                                             {
-                                                Count = 0,
-                                                EXTERNAL_DATASOURCE_DESCRIPTION = ItmSrc.FirstOrDefault().EXTERNAL_DATASOURCE_DESCRIPTION,
-                                                EXTERNAL_DATASOURCE_NAME = ItmSrc.FirstOrDefault().EXTERNAL_DATASOURCE_NAME,
+                                                
+                                                DESCRIPTION = ItmSrc.FirstOrDefault().DESCRIPTION,
+                                                NAME = ItmSrc.FirstOrDefault().NAME,
                                                 ID = ItmSrc.FirstOrDefault().ID
                                             });
 
                                         }
                                         pick_Ext_datasrc.ItemsSource = src;
-                                        List<EXTERNAL_DATASOURCE1> ITmsrc = pick_Ext_datasrc.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                        List<ExternalDatasourceValue> ITmsrc = pick_Ext_datasrc.ItemsSource as List<ExternalDatasourceValue>;
 
-                                        if (cnttype.Count != 0)
+                                        if (cntrlAssocMeta.Count != 0)
                                         {
-                                            var records = ItmSrc.Where(v => v.ID == (string.IsNullOrEmpty(Convert.ToString(cnttype[0]?.ExternalDatasourceObjectID)) ? 0 : Convert.ToInt32(cnttype[0]?.ExternalDatasourceObjectID))).FirstOrDefault();
+                                            var records = ItmSrc.Where(v => v.ID == (string.IsNullOrEmpty(Convert.ToString(cntrlAssocMeta[0]?.ExternalDatasourceObjectID)) ? 0 : Convert.ToInt32(cntrlAssocMeta[0]?.ExternalDatasourceObjectID))).FirstOrDefault();
                                             j = ItmSrc.IndexOf(records);//.Select(t => t.ID).FirstOrDefault();
                                         }
 
@@ -1006,14 +1007,14 @@ namespace StemmonsMobile.Views.Entity
                                 for (int i = 0; i < Entity_NotesLists.Count; i++)
                                 {
                                     string st = CommonConstants.DateFormatStringToString(Entity_NotesLists[i].CreatedDatetime);
-                                    var tp = Entity_NotesLists[i].Note.ToLower().Replace("download.aspx?", "/download.aspx?");
-                                    tp = tp.ToLower().Replace("/download.aspx?", "/download.aspx?");
-                                    tp = tp.ToLower().Replace("/download.aspx?", App.EntityImgURL.ToLower() + "/download.aspx?");
+                                    //<a href='/Download.aspx?FileID=1136&EntityId=2307' >3MB.pdf</a>
+
+                                    string NotesURl = Functions.GenerateEntityFullURL(Entity_NotesLists[i].Note);
 
                                     Temp.Add(new EntityNotesGroup("", st.ToString(), Entity_NotesLists[i].CreatedBy)
                                     {
                                         //<a href='Download.aspx?FileID=3285&EntityId=397' ><img class='entity_note_image' src='Download.aspx?FileID=3285&EntityId=397'/></a>
-                                        new Entity_Notes { Note = tp }
+                                        new Entity_Notes { Note = NotesURl }
                                     });
                                 }
 
@@ -1073,7 +1074,7 @@ namespace StemmonsMobile.Views.Entity
 
         int iSelectedItemlookupId = 0;
         string _currentStyleId = string.Empty;
-        List<EXTERNAL_DATASOURCE1> _list_EDS = new List<EXTERNAL_DATASOURCE1>();
+        List<ExternalDatasourceValue> _list_EDS = new List<ExternalDatasourceValue>();
         ListView lstView = new ListView();
         SearchBar ext_search = new SearchBar();
         private async void Pk_button_Clicked(object sender, EventArgs e)
@@ -1177,12 +1178,12 @@ namespace StemmonsMobile.Views.Entity
                                                     var cnt = FindEntityControl(/*sFieldTypeParent.ToUpper() + "_" +*/ parentID);
 
                                                     var ddlEds = (Picker)cnt;
-                                                    List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
+                                                    List<ExternalDatasourceValue> src = ddlEds.ItemsSource as List<ExternalDatasourceValue>;
                                                     dctFilter.Add(parentID, Convert.ToString(src[0].ID));
                                                 }
                                                 else
                                                 {
-                                                    var ItmSrc = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDParent).Select(m => m.EXTERNAL_DATASOURCE).ToList()[0].Where(n => n.EXTERNAL_DATASOURCE_NAME == btnCntrl.Text).ToList();
+                                                    var ItmSrc = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDParent).Select(m => m.EXTERNAL_DATASOURCE).ToList()[0].Where(n => n.NAME == btnCntrl.Text).ToList();
                                                     dctFilter.Add(parentID, Convert.ToString(ItmSrc[0].ID));
                                                 }
                                             }
@@ -1277,7 +1278,7 @@ namespace StemmonsMobile.Views.Entity
                                     }
                                     dctForumulaQuery.Add(sExternalDatasourceName, sQuery);
 
-                                    List<EXTERNAL_DATASOURCE1> dt = new List<EXTERNAL_DATASOURCE1>();
+                                    List<ExternalDatasourceValue> dt = new List<ExternalDatasourceValue>();
 
                                     //var p = EntitySchemaLists.AssociationFieldCollection.Where(t => t.AssocTypeID == AssocTypeIDChild)?.ToList()?.Select(x => x.ExternalDataSource).FirstOrDefault().ConnectionString;
 
@@ -1285,7 +1286,7 @@ namespace StemmonsMobile.Views.Entity
                                     {
                                         var Response = EntityAPIMethods.ExternalDatasourceByQuery(Functions.GetDecodeConnectionString(CurAssco.ExternalDataSource.ConnectionString), sQuery);
                                         var result = Response.GetValue("ResponseContent");
-                                        dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
+                                        dt = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(result.ToString());
                                     });
 
                                     _list_EDS.AddRange(dt);
@@ -1305,7 +1306,8 @@ namespace StemmonsMobile.Views.Entity
                         lstView.Refreshing += OnRefresh;
                         lstView.RefreshCommand = PulltoRefreshCommand;
                         lstView.ItemSelected += OnSelection;
-                        lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+                        lstView.ItemsSource = _list_EDS.Select(v => v.NAME);
+                        lstView.HasUnevenRows = true;
 
                         Button btn_cancel = new Button()
                         {
@@ -1424,7 +1426,7 @@ namespace StemmonsMobile.Views.Entity
                           _list_EDS.AddRange(CurAssco.EXTERNAL_DATASOURCE);
                       });
 
-                      lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+                      lstView.ItemsSource = _list_EDS.Select(v => v.NAME);
                   }
                   catch (Exception)
                   {
@@ -1449,7 +1451,7 @@ namespace StemmonsMobile.Views.Entity
         }
 
         Dictionary<int, List<ExternalDatasource>> lstexnaldatasouce = new Dictionary<int, List<ExternalDatasource>>();
-        Dictionary<int, List<EXTERNAL_DATASOURCE1>> lstextdatasourceHistory = new Dictionary<int, List<EXTERNAL_DATASOURCE1>>();
+        Dictionary<int, List<ExternalDatasourceValue>> lstextdatasourceHistory = new Dictionary<int, List<ExternalDatasourceValue>>();
 
         private void OnSelection(object sender, SelectedItemChangedEventArgs e)
         {
@@ -1482,12 +1484,12 @@ namespace StemmonsMobile.Views.Entity
                     btn.Focus();
                     Picker e_pik = pik_cntrl as Picker;
 
-                    List<EXTERNAL_DATASOURCE1> lst = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower() == (btn.Text.ToLower())).ToList();
+                    List<ExternalDatasourceValue> lst = _list_EDS.Where(v => v.NAME.ToLower() == (btn.Text.ToLower())).ToList();
 
                     e_pik.ItemsSource = lst;
                     e_pik.SelectedIndex = 1;
 
-                    EXTERNAL_DATASOURCE1 lsa = e_pik.SelectedItem as EXTERNAL_DATASOURCE1;
+                    ExternalDatasourceValue lsa = e_pik.SelectedItem as ExternalDatasourceValue;
 
                     if (lsa != null && lsa?.ID > 0)
                     {
@@ -1541,14 +1543,14 @@ namespace StemmonsMobile.Views.Entity
                     if (string.IsNullOrEmpty(e.NewTextValue))
                     {
                         //lstView.ItemsSource = lstexternaldatasource.Where(v => v.strName.ToLower().Contains(e.NewTextValue.ToString())).ToList();
-                        lstView.ItemsSource = _list_EDS.Select(v => v.EXTERNAL_DATASOURCE_NAME);
+                        lstView.ItemsSource = _list_EDS.Select(v => v.NAME);
                     }
                     else
                     {
-                        var list = _list_EDS.Where(v => v.EXTERNAL_DATASOURCE_NAME.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
+                        var list = _list_EDS.Where(v => v.NAME.ToLower().Contains(e.NewTextValue.ToString().ToLower())).ToList();
                         if (list.Count > 0)
                         {
-                            lstView.ItemsSource = list.Select(v => v.EXTERNAL_DATASOURCE_NAME).ToList();
+                            lstView.ItemsSource = list.Select(v => v.NAME).ToList();
                         }
                         else
                         {
@@ -1743,8 +1745,8 @@ namespace StemmonsMobile.Views.Entity
                                     if (picker.StyleId == CurrentStyleId)
                                     {
                                         cntrl = subitem;
-                                        selectedId = Convert.ToString((picker.SelectedItem as EXTERNAL_DATASOURCE1).ID);
-                                        selectedname = Convert.ToString((picker.SelectedItem as EXTERNAL_DATASOURCE1).EXTERNAL_DATASOURCE_NAME);
+                                        selectedId = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).ID);
+                                        selectedname = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).NAME);
                                         SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.ToUpper(), selectedId, selectedname, item.AssocTypeID);
                                     }
                                 }
@@ -1871,8 +1873,8 @@ namespace StemmonsMobile.Views.Entity
                                     if (picker.StyleId == CurrentStyleId)
                                     {
                                         cntrl = subitem;
-                                        selectedId = Convert.ToString((picker.SelectedItem as EXTERNAL_DATASOURCE1).ID);
-                                        selectedname = Convert.ToString((picker.SelectedItem as EXTERNAL_DATASOURCE1).EXTERNAL_DATASOURCE_NAME);
+                                        selectedId = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).ID);
+                                        selectedname = Convert.ToString((picker.SelectedItem as ExternalDatasourceValue).NAME);
                                         SetDictionary(assocFieldValues, assocFieldTexts, CurrentStyleId.ToUpper(), selectedId, selectedname, item.AssocTypeID);
                                     }
                                 }
@@ -2049,9 +2051,9 @@ namespace StemmonsMobile.Views.Entity
                         {
                             if (pk.SelectedItem != null)
                             {
-                                if ((pk.SelectedItem as EXTERNAL_DATASOURCE1).ID > 0)
+                                if ((pk.SelectedItem as ExternalDatasourceValue).ID > 0)
                                 {
-                                    EXTERNAL_DATASOURCE1 ls = pk.SelectedItem as EXTERNAL_DATASOURCE1;
+                                    ExternalDatasourceValue ls = pk.SelectedItem as ExternalDatasourceValue;
                                     var CalculatedAssocs = EntitySchemaLists.AssociationFieldCollection.Where(x => x.FieldType == "CL" || x.FieldType == "CA")?.ToList();
 
                                     //CalTxtbox = SetCalControlsForExd(EntitySchemaLists.AssociationFieldCollection.Where(v => v.AssocTypeID == Convert.ToInt32(pk.StyleId?.Split('_')[1]))?.ToList(), CalculatedAssocs, pk.StyleId?.Split('_')[0]?.ToUpper() + "_" + pk.StyleId?.Split('_')[1]);
@@ -2066,7 +2068,7 @@ namespace StemmonsMobile.Views.Entity
                                         var AssocTypeCascades = assc.EntityAssocTypeCascade.ToList();
                                         if (lstcalculationsFieldlist.Count > 0)
                                         {
-                                            if (ls?.EXTERNAL_DATASOURCE_NAME.ToLower() == "-- select item --")
+                                            if (ls?.NAME.ToLower() == "-- select item --")
                                             {
                                                 int aId = 0;
                                                 if (AssocTypeCascades.Where(v => v.EntityAssocTypeIDParent == AssocID)?.Count() > 0)
@@ -2374,8 +2376,9 @@ namespace StemmonsMobile.Views.Entity
                     Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                     if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "0")
                     {
-                        if (NotesGroups.Count != 0)
+                        if (EntitySchemaLists.NewestNotesOnTop.ToLower() == "y")
                         {
+                            //Insert At Top When "Y"
                             NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
@@ -2387,8 +2390,25 @@ namespace StemmonsMobile.Views.Entity
                             {
                                  new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
                             });
-
                         }
+
+                        #region Old Logic
+                        //if (NotesGroups.Count != 0)
+                        //{
+                        //    NotesGroups.Insert(0, new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                        //    {
+                        //        new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                        //    });
+                        //}
+                        //else
+                        //{
+                        //    NotesGroups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
+                        //    {
+                        //         new Entity_Notes { Note = txt_EntNotes.Text ,ImageVisible = false, LabelVisible = true }
+                        //    });
+
+                        //} 
+                        #endregion
                     }
                     gridEntitynotes.ItemsSource = NotesGroups;
 
@@ -2753,7 +2773,7 @@ namespace StemmonsMobile.Views.Entity
                         {
                             if (EntitySchemaLists.AssociationFieldCollection[i].IsRequired == "Y")
                             {
-                                if ((((Picker)cnt).SelectedItem as EXTERNAL_DATASOURCE1).ID == 0)
+                                if ((((Picker)cnt).SelectedItem as ExternalDatasourceValue).ID == 0)
                                 {
                                     IsRequiredFieldEmpty = true;
                                     ((Picker)cnt).Focus();
@@ -2868,7 +2888,7 @@ namespace StemmonsMobile.Views.Entity
                                 //break;
                                 var cnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
                                 var btnCnt = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
-                                var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt.Text).ToList();
+                                var ItmSrc = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.NAME == btnCnt.Text).ToList();
                                 Type cnt_type = cnt.GetType();
                                 var pick_Ext_datasrc = new Picker();
                                 if (cnt_type.Name.ToLower() == "picker")
@@ -2876,9 +2896,9 @@ namespace StemmonsMobile.Views.Entity
                                     pick_Ext_datasrc = (Picker)cnt;
                                 }
                                 //var btn_value = btn_Ext_datasrc.Text as EXTERNAL_DATASOURCE1;
-                                EXTERNAL_DATASOURCE1 pick_value = new EXTERNAL_DATASOURCE1();
+                                ExternalDatasourceValue pick_value = new ExternalDatasourceValue();
                                 if (pick_Ext_datasrc.SelectedItem != null)
-                                    pick_value = pick_Ext_datasrc.SelectedItem as EXTERNAL_DATASOURCE1;
+                                    pick_value = pick_Ext_datasrc.SelectedItem as ExternalDatasourceValue;
                                 //if (pick_value == null)
                                 //    break;
                                 AssociationMetaData Asso_metadata_value = new AssociationMetaData();
@@ -2893,7 +2913,7 @@ namespace StemmonsMobile.Views.Entity
                                 else
                                 {
                                     Asso_metadata_value.ExternalDatasourceObjectID = pick_value.ID.ToString();
-                                    Asso_metadata_value.FieldValue = pick_value.EXTERNAL_DATASOURCE_NAME;
+                                    Asso_metadata_value.FieldValue = pick_value.NAME;
                                 }
                                 Asso_metadata_value.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
 
@@ -2924,7 +2944,7 @@ namespace StemmonsMobile.Views.Entity
                                 //break;
                                 var cnt1 = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID);
                                 var btnCnt1 = FindEntityControl(/*_field_type1 + "_" +*/ EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID, "Button") as Button;
-                                var ItmSrc1 = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.EXTERNAL_DATASOURCE_NAME == btnCnt1.Text).ToList();
+                                var ItmSrc1 = EntitySchemaLists.AssociationFieldCollection[i].EXTERNAL_DATASOURCE.Where(t => t.NAME == btnCnt1.Text).ToList();
                                 Type cnt_type1 = cnt1.GetType();
                                 var pick_assocDeccod = new Picker();
                                 if (cnt_type1.Name.ToLower() == "picker")
@@ -2932,7 +2952,7 @@ namespace StemmonsMobile.Views.Entity
                                     pick_assocDeccod = (Picker)cnt1;
                                 }
 
-                                var pick_value1 = pick_assocDeccod.SelectedItem as EXTERNAL_DATASOURCE1;
+                                var pick_value1 = pick_assocDeccod.SelectedItem as ExternalDatasourceValue;
                                 AssociationMetaData Asso_metadata_value1 = new AssociationMetaData();
                                 Asso_metadata_value1.AssocTypeID = EntitySchemaLists.AssociationFieldCollection[i].AssocTypeID;
                                 if (ItmSrc1.Count == 0)
@@ -2945,7 +2965,7 @@ namespace StemmonsMobile.Views.Entity
                                 {
                                     Asso_metadata_value1.ExternalDatasourceObjectID = Convert.ToString(ItmSrc1[0].ID);
                                     Asso_metadata_value1.AssocDecodeID = ItmSrc1[0].ID;
-                                    Asso_metadata_value1.FieldValue = ItmSrc1[0].EXTERNAL_DATASOURCE_NAME;
+                                    Asso_metadata_value1.FieldValue = ItmSrc1[0].NAME;
                                 }
                                 Asso_metadata_value1.FieldName = EntitySchemaLists.AssociationFieldCollection[i].AssocName;
 
@@ -3166,11 +3186,11 @@ namespace StemmonsMobile.Views.Entity
                         {
                             var pick = FindEntityControl(/*sFieldType + "_" + */subItem) as Picker;
                             var btn = FindEntityControl(/*sFieldType + "_" +*/ subItem, "Button") as Button;
-                            List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
-                            EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1();
-                            ed1.Count = 0;
-                            ed1.EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --";
-                            ed1.EXTERNAL_DATASOURCE_NAME = "-- Select Item --";
+                            List<ExternalDatasourceValue> _list_ed1 = new List<ExternalDatasourceValue>();
+                            ExternalDatasourceValue ed1 = new ExternalDatasourceValue();
+                            
+                            ed1.DESCRIPTION = "-- Select Item --";
+                            ed1.NAME = "-- Select Item --";
                             ed1.ID = 0;
                             _list_ed1.Add(ed1);
                             pick.ItemsSource = _list_ed1;
@@ -3226,8 +3246,8 @@ namespace StemmonsMobile.Views.Entity
                                         var cnt = FindEntityControl(/*sFieldTypeParent.ToUpper() + "_" +*/ parentID);
 
                                         var ddlEds = (Picker)cnt;
-                                        List<EXTERNAL_DATASOURCE1> src = ddlEds.ItemsSource as List<EXTERNAL_DATASOURCE1>;
-                                        dctFilter.Add(parentID, src[0].EXTERNAL_DATASOURCE_NAME);
+                                        List<ExternalDatasourceValue> src = ddlEds.ItemsSource as List<ExternalDatasourceValue>;
+                                        dctFilter.Add(parentID, src[0].NAME);
                                     }
                                 }
                                 iFilter = 1;
@@ -3320,7 +3340,7 @@ namespace StemmonsMobile.Views.Entity
                                 dctForumulaQuery.Remove(sExternalDatasourceName);
                             }
                             dctForumulaQuery.Add(sExternalDatasourceName, sQuery);
-                            List<EXTERNAL_DATASOURCE1> dt = new List<EXTERNAL_DATASOURCE1>();
+                            List<ExternalDatasourceValue> dt = new List<ExternalDatasourceValue>();
 
                             //await Task.Run(() =>
                             //{
@@ -3328,7 +3348,7 @@ namespace StemmonsMobile.Views.Entity
 
                             var Response = EntityAPIMethods.ExternalDatasourceByQuery(Functions.GetDecodeConnectionString(item.ExternalDataSource.ConnectionString), sQuery);
                             var result = Response.GetValue("ResponseContent");
-                            dt = JsonConvert.DeserializeObject<List<EXTERNAL_DATASOURCE1>>(result.ToString());
+                            dt = JsonConvert.DeserializeObject<List<ExternalDatasourceValue>>(result.ToString());
                             //});
 
                             int controlId = /*sFieldType + "_" +*/ subItem;
@@ -3339,14 +3359,14 @@ namespace StemmonsMobile.Views.Entity
                                 var ddlEds = (Picker)FindEntityControl(controlId);
                                 try
                                 {
-                                    List<EXTERNAL_DATASOURCE1> _list_ed1 = new List<EXTERNAL_DATASOURCE1>();
+                                    List<ExternalDatasourceValue> _list_ed1 = new List<ExternalDatasourceValue>();
                                     ddlEds.ItemsSource = _list_ed1;
-                                    EXTERNAL_DATASOURCE1 ed1 = new EXTERNAL_DATASOURCE1();
-                                    ed1.Count = 0;
-                                    ed1.EXTERNAL_DATASOURCE_DESCRIPTION = "-- Select Item --";
-                                    ed1.EXTERNAL_DATASOURCE_NAME = "-- Select Item --";
-                                    ed1.ID = 0;
-                                    dt.Insert(0, ed1);
+                                    //ExternalDatasourceValue ed1 = new ExternalDatasourceValue();
+                                   
+                                    //ed1.DESCRIPTION = "-- Select Item --";
+                                    //ed1.NAME = "-- Select Item --";
+                                    //ed1.ID = 0;
+                                    dt.Insert(0, EDSDefaultValue);
                                     ddlEds.ItemsSource = dt;
                                     ddlEds.SelectedIndex = 0;
                                 }
@@ -3429,27 +3449,25 @@ namespace StemmonsMobile.Views.Entity
 
         private async void gridEntitynotes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            try
-            {
-                var notes = gridEntitynotes.SelectedItem as Entity_Notes;
-                if (notes.ImageVisible)
-                {
-                    await Navigation.PushAsync(new ViewAttachment
-                    (notes.ImageURL));
-                }
-                gridEntitynotes.SelectedItem = null;
-            }
-            catch (Exception ex)
-            {
-            }
+            //try
+            //{
+            //    var notes = gridEntitynotes.SelectedItem as Entity_Notes;
+            //    if (notes.ImageVisible)
+            //    {
+            //        await Navigation.PushAsync(new ViewAttachment
+            //        (notes.ImageURL));
+            //    }
+            //    gridEntitynotes.SelectedItem = null;
+            //}
+            //catch (Exception ex)
+            //{
+            //}
         }
 
         private async void Btn_viewnotes_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ViewEntityNotes(Convert.ToString(EntityID), Convert.ToString(EntityTypeID)));
         }
-
-
 
         private async void lbl_createname_tapped(object sender, EventArgs e)
         {
@@ -3510,19 +3528,4 @@ namespace StemmonsMobile.Views.Entity
 
 
     }
-    //public class TextViewCell : ViewCell
-    //{
-    //    public TextViewCell()
-    //    {
-    //        StackLayout layout = new StackLayout();
-    //        layout.BackgroundColor = Color.Transparent;
-    //        layout.Padding = new Thickness(15, 0, 15, 0);
-    //        Label label = new Label();
-    //        label.TextColor = Color.Black;
-
-    //        label.SetBinding(Label.TextProperty, ".");
-    //        layout.Children.Add(label);
-    //        View = layout;
-    //    }
-    //}
 }
