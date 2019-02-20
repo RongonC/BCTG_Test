@@ -30,6 +30,7 @@ namespace StemmonsMobile.Views.LoginProcess
                 App.IsLoginCall = true;
                 await Navigation.PushAsync(new LandingPage());
             }
+      
         }
 
         async void Handle_Clicked(object sender, System.EventArgs e)

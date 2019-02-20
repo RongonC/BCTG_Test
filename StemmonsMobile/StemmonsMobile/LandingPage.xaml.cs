@@ -1809,7 +1809,7 @@ namespace StemmonsMobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             // For App_Logo 
             SetCompanyLogo();
 
@@ -1823,6 +1823,7 @@ namespace StemmonsMobile
             }
             else
             { UpdateCount(); }
+            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
         //JigarRp
@@ -2365,6 +2366,7 @@ namespace StemmonsMobile
             catch (Exception)
             {
                 Excep = true;
+                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 App.DownloadCompanyLog();
                 App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
             }

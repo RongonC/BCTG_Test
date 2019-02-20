@@ -93,7 +93,7 @@ namespace StemmonsMobile.Views.Cases
             strTome = ToMe;
             CasesnotesGroups.Clear();
             grd_warning.Children.Clear();
-         
+
 
             CasesView_ControlStack.Children.Clear();
 
@@ -1822,7 +1822,7 @@ namespace StemmonsMobile.Views.Cases
             try
             {
                 gridCasesnotes.ItemsSource = null;
-                CasesnotesGroups.Clear();
+
                 ObservableCollection<CasesNotesGroup> Temp = new ObservableCollection<CasesNotesGroup>();
                 List<GetCaseNotesResponse.NoteData> Noteslist = new List<GetCaseNotesResponse.NoteData>();
                 await Task.Run(() =>
@@ -1846,6 +1846,8 @@ namespace StemmonsMobile.Views.Cases
                         Temp.Add(grp);
                     }
 
+
+                    CasesnotesGroups.Clear();
                     foreach (var item in Temp)
                     {
                         if (item.FirstOrDefault().Note.Contains("<img"))
@@ -2202,7 +2204,7 @@ namespace StemmonsMobile.Views.Cases
                                 }
                                 else
                                 {
-                                    if (Picker.StyleId  == AssocID.ToString())
+                                    if (Picker.StyleId == AssocID.ToString())
                                         return Picker;
                                 }
                             }
