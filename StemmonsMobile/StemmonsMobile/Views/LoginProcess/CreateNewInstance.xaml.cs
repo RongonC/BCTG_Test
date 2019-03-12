@@ -162,7 +162,7 @@ namespace StemmonsMobile.Views.LoginProcess
                         var s = await DBHelper.SaveInstance(insta, App.DBPath);
                         if (s == 1)
                         {
-                            DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = I_URL;
+                            //DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = I_URL;
                             DisplayAlert("Success", "Database Operation Succcess.\n URL: " + I_URL, "Ok");
                             Navigation.PopAsync();
                         }

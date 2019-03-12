@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Controls.CustomViewCells.EntityFieldViewCell">
+    <ViewCell.View>
+        <Grid ColumnSpacing="0" RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="1"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="EndAndExpand">
+                <Label  Text="{Binding AssocName}"  
+                        TextColor="Orange"
+                        Style="{StaticResource defaultLabelSize_16}" 
+                        LineBreakMode="TailTruncation"
+                        HorizontalOptions="StartAndExpand"/>
+            </StackLayout>
+            <StackLayout Grid.Row="2" Grid.Column="1" VerticalOptions="StartAndExpand">
+                <Label Text="{Binding FieldType}" 
+                        Style="{StaticResource defaultLabelSize_16}"                         
+                        TextColor="Black"
+                        HorizontalOptions="StartAndExpand"/>
+            </StackLayout>
+
+            <BoxView BackgroundColor="LightBlue" Grid.Row="4" Grid.ColumnSpan="3" HorizontalOptions="Fill"/>
+        </Grid>
+    </ViewCell.View>
+</ViewCell>

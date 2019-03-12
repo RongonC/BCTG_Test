@@ -56,6 +56,7 @@ namespace StemmonsMobile.Views.Entity
                      list.Wait();
                      BindList = list.Result;
                  });
+
                 if (BindList.Count > 0)
                 {
                     List_entityapp.ItemsSource = BindList;

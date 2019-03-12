@@ -11,6 +11,8 @@ using PCLStorage;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using StemmonsMobile.Commonfiles;
+using StemmonsMobile.Controls;
+using StemmonsMobile.CustomControls;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.Models;
@@ -43,24 +45,42 @@ namespace StemmonsMobile
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LandingPage : ContentPage
     {
-
         public bool Is_Popup_Open = false;
         public bool IsClosed = false;
-        ApplicationListViewModel cm;
-        List<string> project = new List<string>();
+
+        // List<string> project = new List<string>();
 
         public LandingPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
+            App.IsPropertyPage = false;
+
+            SettingButton settings = new SettingButton(null);
+            settings.HorizontalOptions = LayoutOptions.EndAndExpand;
+#pragma warning disable CS0618 // Type or member is obsolete
+            settings.Margin = new Thickness(0, Device.OnPlatform(15, 10, 10), 5, 0);
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
+            settings.HeightRequest = Device.OnPlatform(35, 45, 45);
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
+            settings.WidthRequest = Device.OnPlatform(35, 45, 50);
+#pragma warning restore CS0618 // Type or member is obsolete
+            grd_logo.Children.Add(settings);
+            Grid.SetColumn(settings, 2);
+            Grid.SetRow(settings, 0);
+
+
             this.SizeChanged += LandingPage_SizeChanged;
             this.BindingContext = appCount;
             LandingPageCountDisplay();
 
-            btn_usericon.GestureRecognizers.Add(new TapGestureRecognizer(img_profile_OnTap));
+            btn_usericon.GestureRecognizers.Add(item: new TapGestureRecognizer(tappedCallback: img_profile_OnTap));
 
-            cm = new ApplicationListViewModel();
+            var cm = new ApplicationListViewModel();
 
+            #region Functions.Platformtype == "UWP"
             if (Functions.Platformtype == "UWP")
             {
                 if (this.Width <= 320)
@@ -80,22 +100,27 @@ namespace StemmonsMobile
                     cm.appdata[4].ApplicationIcon = "Assets/320/Questblack_1.png";
                 }
             }
+            #endregion
 
             Applicationlist.ItemsSource = cm.appdata;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            // For App_Logo 
+            SetCompanyLogo();
 
-            //Device.StartTimer(TimeSpan.FromSeconds(5), () =>
-            //{
-            //    Device.BeginInvokeOnMainThread(() =>
-            //    {
-            //        appCount.CasesCount++;
-            //        appCount.EntityCount++;
-            //        appCount.DepartmentCount++;
-            //        appCount.QuestCount++;
-            //        appCount.StandardCount++;
-            //    });
-            //    return true;
-            //});
+            SetUserPicture();
 
+            if (App.IsLoginCall)
+            {
+                SyncAllRecorsToSQLite();
+                App.IsLoginCall = false;
+            }
+            else
+            { UpdateCount(); }
+            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
         private void LandingPage_SizeChanged(object sender, EventArgs e)
         {
@@ -1628,6 +1653,7 @@ namespace StemmonsMobile
                 }
             }
         }
+
         HomeScreenCount appCount = new HomeScreenCount();
 
         //async void HomePageCount()
@@ -1806,38 +1832,15 @@ namespace StemmonsMobile
             #endregion
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-            // For App_Logo 
-            SetCompanyLogo();
-
-            SetUserPicture();
-
-            project = new List<string>();
-            if (App.IsLoginCall)
-            {
-                SyncAllRecorsToSQLite();
-                App.IsLoginCall = false;
-            }
-            else
-            { UpdateCount(); }
-            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-        }
 
         //JigarRp
         public async void SyncAllRecorsToSQLite()
         {
             try
             {
-                if (Functions.AppStartCount == 0)
-                {
-                    App.GetImgLogo();
-                }
-
                 if (Functions.AppStartCount <= 1)
                 {
+                  
                     MainGrid.BackgroundColor = new Color(211, 211, 211);
                     MainGrid.Opacity = 0.4;
                     MainGrid.IsEnabled = false;
@@ -1877,6 +1880,10 @@ namespace StemmonsMobile
                 Debug.WriteLine("Master sync started ");
                 if (CrossConnectivity.Current.IsConnected)
                 {
+                    Task.Run(() =>
+                    {
+                        Functions.GetImageDownloadURL();
+                    });
 
                     #region Home Count Sync
                     //Home Count Sync
@@ -2319,9 +2326,6 @@ namespace StemmonsMobile
 
         private void SetUserPicture()
         {
-            bool Excep = false;
-
-            ExceptionCAll:
             try
             {
                 var UPro = DBHelper.GetinstanceuserassocListByID(ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
@@ -2332,25 +2336,15 @@ namespace StemmonsMobile
                 Image image = new Image();
                 Stream stream = new MemoryStream(byt);
                 btn_usericon.Source = ImageSource.FromStream(() => { return stream; });
-                Excep = false;
             }
             catch (Exception)
             {
-                Excep = true;
-                App.DownloadUserPicture();
                 btn_usericon.Source = ImageSource.FromFile("Assets/userIcon.png");
             }
-
-            if (Excep)
-                goto ExceptionCAll;
         }
-
 
         private void SetCompanyLogo()
         {
-            bool Excep = false;
-
-            ExceptionCAll:
             try
             {
                 var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
@@ -2361,22 +2355,13 @@ namespace StemmonsMobile
                 Image image = new Image();
                 Stream stream = new MemoryStream(byt);
                 App_Logo.Source = ImageSource.FromStream(() => { return stream; });
-                Excep = false;
             }
             catch (Exception)
             {
-                Excep = true;
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                App.DownloadCompanyLog();
                 App_Logo.Source = ImageSource.FromFile("Assets/boxerlogo.png");
             }
-            if (Excep)
-                goto ExceptionCAll;
         }
 
-
-
-        //List<string> project = new List<string>();
         private async Task SelectUser(string name)
         {
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -2432,7 +2417,7 @@ namespace StemmonsMobile
         {
             try
             {
-                project = new List<string>();
+                var project = new List<string>();
 
                 var otheruserApicall = CasesAPIMethods.GetEmployeesBySearch(Username);
                 var responseData = otheruserApicall.GetValue("ResponseContent");
@@ -2718,7 +2703,7 @@ namespace StemmonsMobile
             try
             {
 
-                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout" /*,"VCasePage"*/);
+                var action = await DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout" /*,"VCasePage", "Property Pages"*/);
 
                 if (action.ToLower().Contains("offline"))
                     action = "offline";
@@ -2727,6 +2712,9 @@ namespace StemmonsMobile
 
                 switch (action)
                 {
+                    case "Property Pages":
+                        await Navigation.PushAsync(new PropertyLandingPage());
+                        break;
                     case "VCasePage":
                         await Navigation.PushAsync(new VCasePage());
                         break;

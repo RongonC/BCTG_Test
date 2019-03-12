@@ -360,6 +360,7 @@ namespace StemmonsMobile.DataTypes.DataType.Cases
             public bool IsClosed { get; set; }
             public string CaseTitle { get; set; }
             public int? SystemPriority { get; set; }
+          
             //public string CaseTitle
             //{
             //    get

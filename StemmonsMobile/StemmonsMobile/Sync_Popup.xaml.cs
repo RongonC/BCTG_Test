@@ -47,6 +47,8 @@ namespace StemmonsMobile
                 if (CrossConnectivity.Current.IsConnected)
                 {
 
+                    
+
                     #region Get item counts operation
                     //Home Count Sync
                     if (!IsClosed)

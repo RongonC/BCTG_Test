@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using StemmonsMobile.DataTypes.DataType.Cases;
+using StemmonsMobile.DataTypes.DataType.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1985,6 +1986,18 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             getCaseFileModel.UserName = userName;
 
             return Constants.ApiCommon(getCaseFileModel, Constants.GetCaseFile);
+        }
+        #endregion
+
+        #region Get File From Case
+        public static JObject GetCaseListRelationDatabyentityid(int EntityId, string userName)
+        {
+            //RequestModel
+            GetCasesRelationDatabyentityidRequest req = new GetCasesRelationDatabyentityidRequest();
+            req.EntityId = EntityId;
+            req.User = userName;
+
+            return Constants.ApiCommon(req, Constants.GetCasesRelationDatabyentityid);
         }
         #endregion
     }

@@ -14,6 +14,7 @@ namespace StemmonsMobile.DataTypes.DataType.Default
 
     public class GetImageURLRequest
     {
+        public string System_Code { get; set; }
     }
     public class  MobileBranding
     {

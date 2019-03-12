@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ListView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Controls.Ungrouped_CaseList_CustomControl"
+          xmlns:local="clr-namespace:StemmonsMobile.Controls.DataTemplates"
+          xmlns:localns="clr-namespace:StemmonsMobile.ViewModels.CaseListViewModels"
+          xmlns:local1="clr-namespace:StemmonsMobile.Controls.CustomViewCells"
+          xmlns:localns1="clr-namespace:StemmonsMobile.Behavior"
+          x:Name="this"
+          IsPullToRefreshEnabled="True" 
+        HasUnevenRows="True" 
+        
+      
+        RefreshCommand="{Binding RefreshCommand}" 
+        IsRefreshing="{Binding IsRefreshing}" 
+          ItemsSource="{Binding BasicCase_lst}"
+          >
+
+    <ListView.Behaviors>
+        <localns1:InfiniteScroll LoadMoreCommand="{Binding LoadDataCommand}" />
+    </ListView.Behaviors>
+
+    <!--<ListView.GroupHeaderTemplate>
+        <DataTemplate>
+            <ViewCell>
+                <Grid Padding="5,5,5,5" BackgroundColor="Transparent" HeightRequest="40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Image="{Binding StateIcon}" 
+                      BackgroundColor="Transparent"
+                      BorderColor="Transparent"
+                      BorderWidth="0"
+                            Command="{Binding Source={x:Reference this},Path=BindingContext.HeaderTapCommand}"
+                            CommandParameter="{Binding .}" 
+                                      Grid.Column="0"/>
+                    <Button BackgroundColor="Transparent"
+                            HorizontalOptions="StartAndExpand"  
+                            BorderColor="Transparent" Grid.Column="2" BorderWidth="0" 
+                            Text="{Binding TitleWithItemCount}" FontSize="14"
+                            VerticalOptions="Center"
+                            Command="{Binding Source={x:Reference this},Path=BindingContext.HeaderTapCommand}"
+                            CommandParameter="{Binding .}" />
+
+                </Grid>
+            </ViewCell>
+        </DataTemplate>
+    </ListView.GroupHeaderTemplate>-->
+    <ListView.ItemTemplate>
+        <DataTemplate>
+            <local1:CaseList_DataTemplate/>
+        </DataTemplate>
+    </ListView.ItemTemplate>
+    <ListView.Footer>
+
+        <StackLayout x:Name="lstfooter_indicator" Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsLoading}" HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+            <ActivityIndicator IsRunning="True" IsVisible="True" Color="Black">
+                <ActivityIndicator.Margin>
+                    <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                </ActivityIndicator.Margin>
+            </ActivityIndicator>
+            <Label Text="Loading..." TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" IsVisible="True">
+                <Label.Margin>
+                    <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                </Label.Margin>
+            </Label>
+        </StackLayout>
+    </ListView.Footer>
+
+</ListView>

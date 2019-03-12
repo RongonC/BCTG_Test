@@ -28,7 +28,6 @@ namespace StemmonsMobile.iOS
             return base.FinishedLaunching(app, options);
         }
 
-
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
             // Check for new data, and display it

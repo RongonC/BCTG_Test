@@ -19,16 +19,16 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
     public partial class SelectCaseHopper : ContentPage
     {
         string _username = string.Empty;
-        string _displayfor = string.Empty;
+        string displayfor = string.Empty;
         List<GetCaseListByHopperResponse.HopperCenterData> lst = new List<GetCaseListByHopperResponse.HopperCenterData>();
-        public SelectCaseHopper(string username, string displayfor)
+        public SelectCaseHopper(string username, string _displayfor)
         {
             InitializeComponent();
             try
             {
                 App.SetConnectionFlag();
                 _username = username;
-                _displayfor = displayfor;
+                displayfor = _displayfor;
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace StemmonsMobile.Views.Cases_Hopper_Center
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 lst = new List<GetCaseListByHopperResponse.HopperCenterData>();
                 string _showall = string.Empty;
-                if (_displayfor == "MyHopper")
+                if (displayfor == "MyHopper")
                 {
                     _showall = "N";
                 }

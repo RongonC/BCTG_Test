@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.props" Condition="Exists('..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.props')" />
+  <Import Project="..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.props" Condition="Exists('..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
@@ -46,16 +46,98 @@
     <Compile Include="AssignCase.xaml.cs">
       <DependentUpon>AssignCase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behavior\InfiniteScroll.cs" />
     <Compile Include="BorderEditor.cs" />
     <Compile Include="Commonfiles\APICalls.cs" />
     <Compile Include="Commonfiles\Constants.cs" />
     <Compile Include="Commonfiles\Functions.cs" />
     <Compile Include="Commonfiles\ImageHelperClass.cs" />
     <Compile Include="Commonfiles\MimeTypeMap.cs" />
+    <Compile Include="Controls\ActivityProgressBar.xaml.cs">
+      <DependentUpon>ActivityProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CaseList_CustomControl.xaml.cs">
+      <DependentUpon>CaseList_CustomControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomCell.cs" />
+    <Compile Include="Controls\CustomHamburgerButton.xaml.cs">
+      <DependentUpon>CustomHamburgerButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomHomeButton.xaml.cs">
+      <DependentUpon>CustomHomeButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomPlusButton.xaml.cs">
+      <DependentUpon>CustomPlusButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomViewCells\CaseList_DataTemplate.xaml.cs">
+      <DependentUpon>CaseList_DataTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomViewCells\EntityFieldViewCell.xaml.cs">
+      <DependentUpon>EntityFieldViewCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EntityFieldListView.xaml.cs">
+      <DependentUpon>EntityFieldListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EntityListCustomCell.cs" />
+    <Compile Include="Controls\FooterControl.xaml.cs">
+      <DependentUpon>FooterControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PdfWebView.cs" />
+    <Compile Include="Controls\SettingButton.xaml.cs">
+      <DependentUpon>SettingButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Ungrouped_CaseList_CustomControl.xaml.cs">
+      <DependentUpon>Ungrouped_CaseList_CustomControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\CampusPage.xaml.cs">
+      <DependentUpon>CampusPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\EmpInfoPage.xaml.cs">
+      <DependentUpon>EmpInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\EmpListViewCell.xaml.cs">
+      <DependentUpon>EmpListViewCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\EntityListCustomControl.xaml.cs">
+      <DependentUpon>EntityListCustomControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\MasterSyncPopup.xaml.cs">
+      <DependentUpon>MasterSyncPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\MyPropertyList.xaml.cs">
+      <DependentUpon>MyPropertyList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\Propertypage.xaml.cs">
+      <DependentUpon>Propertypage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\EmpCustomListView.xaml.cs">
+      <DependentUpon>EmpCustomListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\PropertyInfoPage.xaml.cs">
+      <DependentUpon>PropertyInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\PropertyLandingPage.xaml.cs">
+      <DependentUpon>PropertyLandingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\PropertyViewPage.xaml.cs">
+      <DependentUpon>PropertyViewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TenantCustomListview.xaml.cs">
+      <DependentUpon>TenantCustomListview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TenantInfoPage.xaml.cs">
+      <DependentUpon>TenantInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TenantListViewCell.xaml.cs">
+      <DependentUpon>TenantListViewCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TenantViewPage.xaml.cs">
+      <DependentUpon>TenantViewPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomFontExtension.cs" />
+    <Compile Include="Datatemplates\EntityListDataTemplate.xaml.cs">
+      <DependentUpon>EntityListDataTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IDatalayer.cs" />
     <Compile Include="Interfaces\IKeyboardHelper.cs" />
     <Compile Include="Interfaces\ILocalFileProvider.cs" />
@@ -77,7 +159,8 @@
     <Compile Include="Models\Group_QuestForm.cs" />
     <Compile Include="Models\Group_Standards.cs" />
     <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\StaticTypes.cs" />
+    <Compile Include="Models\MasterSyncpopupModel.cs" />
+    <Compile Include="Models\PropLandingViewModel.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDataStore.cs" />
@@ -87,7 +170,16 @@
     </Compile>
     <Compile Include="ViewModels\ApplicationListViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CampusPageViewModel.cs" />
     <Compile Include="ViewModels\CustomlistViewModel.cs" />
+    <Compile Include="ViewModels\EmpInfoViewModel.cs" />
+    <Compile Include="ViewModels\EntityFieldViewModel.cs" />
+    <Compile Include="ViewModels\EntityListViewModel.cs" />
+    <Compile Include="ViewModels\GroupedViewModel.cs" />
+    <Compile Include="ViewModels\MyPropertypageViewModel.cs" />
+    <Compile Include="ViewModels\PropertyViewPageViewModel.cs" />
+    <Compile Include="ViewModels\PropInfoPageViewModel.cs" />
+    <Compile Include="ViewModels\UnGroupedViewModel.cs" />
     <Compile Include="Views\BaseGestureRecognizer.cs" />
     <Compile Include="Views\Cases Hopper Center\SelectCaseHopper.xaml.cs">
       <DependentUpon>SelectCaseHopper.xaml</DependentUpon>
@@ -473,7 +565,7 @@
       <HintPath>..\..\packages\HtmlAgilityPack.1.9.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AppCenter.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AppCenter.1.13.2\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AppCenter.Analytics.1.6.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.Analytics.dll</HintPath>
@@ -543,12 +635,10 @@
       <HintPath>..\..\packages\Xamarin.Essentials.1.0.1\lib\netstandard1.0\Xamarin.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Xamarin.Forms.3.4.0.1029999\lib\netstandard1.0\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Platform.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Xamarin.Forms.3.4.0.1029999\lib\netstandard1.0\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.Android">
       <HintPath>..\StemmonsMobile.Android\AndroidAssembly\Xamarin.Forms.Platform.Android.dll</HintPath>
@@ -560,8 +650,7 @@
       <HintPath>..\..\packages\Rg.Plugins.Popup.1.1.4.168\lib\netstandard1.0\Rg.Plugins.Popup.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.3.3.0.912540\lib\netstandard1.0\Xamarin.Forms.Xaml.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Xamarin.Forms.3.4.0.1029999\lib\netstandard1.0\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -708,13 +797,175 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\Propertypage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\PropertyLandingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\MasterSyncPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\PropertyViewPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\EmpInfoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\EmpCustomListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\EmpListViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\PropertyInfoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\EntityListCustomControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Datatemplates\EntityListDataTemplate.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\MyPropertyList.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ActivityProgressBar.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\SettingButton.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\TenantCustomListview.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\TenantListViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\TenantInfoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\FooterControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CustomPlusButton.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CustomHomeButton.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CustomHamburgerButton.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\CampusPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\EntityFieldListView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CustomViewCells\EntityFieldViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\TenantViewPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CaseList_CustomControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\CustomViewCells\CaseList_DataTemplate.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Ungrouped_CaseList_CustomControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.props'))" />
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.props'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.3.3.0.912540\build\Xamarin.Forms.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.3.4.0.1029999\build\Xamarin.Forms.targets')" />
 </Project>

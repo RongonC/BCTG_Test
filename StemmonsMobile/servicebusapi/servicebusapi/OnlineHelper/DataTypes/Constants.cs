@@ -31,7 +31,9 @@ namespace DataServiceBus.OnlineHelper.DataTypes
 
 
         #region Cases API Lists
+
         
+        public static string GetCasesRelationDatabyentityid = "/api/v1/Entity/GetCasesRelationDatabyentityid";
         public static string GetCaseFile = "/api/v1/Cases/GetFileFromCase";
         public static string AddCaseNotes = "/api/v1/Cases/AddCaseNotes";
         public static string GetUserInfo = "/api/v1/Cases/GetUserInfo";
@@ -177,10 +179,15 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         public static string GetEntityRelatedTypes = "/api/v1/Entity/GetEntityRelatedTypes";
         public static string GetEntityRoleRelationData = "/api/v1/Entity/GetEntityRoleRelationData";
         public static string GetEntityTypeRelationData = "/api/v1/Entity/GetEntityTypeRelationData";
+        public static string GetEntityTypeRelationDatabyentityid = "/api/v1/Entity/GetEntityTypeRelationDatabyentityid";
         public static string GetCasesRelationData = "/api/v1/Entity/GetCasesRelationData";
         public static string GetEntitiesRelationData = "/api/v1/Entity/GetEntitiesRelationData";
         public static string GetQuestRelationData = "/api/v1/Entity/GetQuestRelationData";
         public static string GetTriggerGridData = "/api/v1/Entity/GetTriggerGridData";
+        public static string GetEntityRoleAssignByEmp = "/api/v1/Entity/GetEntityRoleAssignByEmp";
+
+
+
         #endregion
 
         public static string GetEntityFile = "/api/v1/Entity/GetFileFromEntity";

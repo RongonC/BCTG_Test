@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ListView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="StemmonsMobile.CustomControls.EntityListCustomControl"
+          xmlns:ListTemplate="clr-namespace:StemmonsMobile.Datatemplates"
+          HasUnevenRows="True" 
+          IsPullToRefreshEnabled="True"
+          x:Name="listView"
+          RefreshCommand="{Binding RefreshCommand}"
+          IsRefreshing="{Binding IsBusy}"  
+          ItemsSource="{Binding ListEntityitem}"
+          SelectedItem="{Binding _elist_property}"
+          xmlns:b="clr-namespace:StemmonsMobile.Behavior">
+    <ListView.Behaviors>
+        <b:InfiniteScroll  LoadMoreCommand="{Binding LoadDataCommand}" />
+        <!--<b:InfiniteScroll ItemTapCommand="{Binding ItemTappedCommand}"/>-->
+    </ListView.Behaviors>
+    <ListView.ItemTemplate>
+        <DataTemplate>
+            <ListTemplate:EntityListDataTemplate  />
+        </DataTemplate>
+    </ListView.ItemTemplate>
+
+    <ListView.Footer>
+        <StackLayout x:Name="lstfooter_indicator"  Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsShow}"
+                          HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+            <ActivityIndicator
+                                 IsRunning="True" IsVisible="True" Color="Black">
+                <ActivityIndicator.Margin>
+                    <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                </ActivityIndicator.Margin>
+            </ActivityIndicator>
+            <Label  Text="Loading..." TextColor="Black"
+                     VerticalOptions="Center" HorizontalOptions="Center"
+                     VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                <Label.Margin>
+                    <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                </Label.Margin>
+            </Label>
+        </StackLayout>
+    </ListView.Footer>
+
+</ListView>

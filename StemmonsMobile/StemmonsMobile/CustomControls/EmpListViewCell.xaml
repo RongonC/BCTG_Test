@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.CustomControls.EmpListViewCell">
+    <ViewCell.View >
+        <Grid RowSpacing="5" ColumnSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0"/>
+                <RowDefinition Height="0"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="*"/>
+                <!--<ColumnDefinition Width="10"/>-->
+                <!--<ColumnDefinition Width="*"/>-->
+            </Grid.ColumnDefinitions>
+            <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="End">
+                <Label Text="{Binding FullName}" HorizontalOptions="Fill" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+            </StackLayout>
+            <StackLayout Grid.Row="2" Grid.Column="1" VerticalOptions="Start">
+                <Label Text="{Binding RoleName}" HorizontalOptions="Fill" Font="12"  HorizontalTextAlignment="Start"/>
+            </StackLayout>
+            <!--<BoxView BackgroundColor="LightBlue" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"  Grid.ColumnSpan="3" Grid.Row="4"/>-->
+        </Grid>
+
+    </ViewCell.View>
+    </ViewCell>

@@ -158,6 +158,9 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         standardMeet = new List<ItemQuestionDecode>();
                         Picker pk = new Picker();
+                        pk.StyleId = "PK_" + QuestionList[i].intItemQuestionFieldID;
+                        pk.TextColor = Color.Gray;
+                        pk.Margin = new Thickness(10, 0, 10, 0);
 
                         await Task.Run(() =>
                          {
@@ -166,14 +169,12 @@ namespace StemmonsMobile.Views.CreateQuestForm
                          });
 
                         pk.ItemsSource = standardMeet;
-                        pk.Margin = new Thickness(10, 0, 10, 0);
                         pk.ItemDisplayBinding = new Binding("strMeetsStandards");
-
-                        pk.StyleId = "PK_" + QuestionList[i].intItemQuestionFieldID;
-                        pk.TextColor = Color.Gray;
+                        pk.SelectedIndex = standardMeet.FindIndex(x => x.strIsDefault.ToUpper() == "Y");
                         pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
 
                         QuestionLayout.Children.Add(pk);
+
 
 
                         var pointslabel = new Label();
@@ -255,22 +256,11 @@ namespace StemmonsMobile.Views.CreateQuestForm
                         Attachment.Clicked += Attachment_Clicked;
                         Attachment.CommandParameter = QuestionList[i];
                         grid.Children.Add(Attachment, 1, 0);
-                        //  Button NewLine = new Button();
-                        //  NewLine.BackgroundColor = Color.Transparent;
-                        //  NewLine.TextColor = Color.Blue;
-                        //  NewLine.Text = "Add Commnet";
-                        ////  NewLine.Clicked += NewLine_Clicked;
-                        //NewLine.CommandParameter = QuestionList[i];
-                        //grid.Children.Add(NewLine, 2, 0);
 
                         CommentLayout.Children.Add(grid);
                         QuestionLayout.Children.Add(CommentLayout);
 
-
-
-
                         // new code for comment data
-
                         var AttachmentDLayout = new StackLayout();
                         AttachmentDLayout.Margin = new Thickness(10, 5, 0, 0);
 
@@ -329,8 +319,6 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                         }
 
-
-
                         DynamicView.Children.Add(QuestionLayout);
 
                         if (pMEETS_STANDARDS.Count > 0)
@@ -339,19 +327,18 @@ namespace StemmonsMobile.Views.CreateQuestForm
                             {
                                 if (pMEETS_STANDARDS[i] == standardMeet[j].strMeetsStandards)
                                 {
-                                    pk.SelectedIndex = j;
+                                    //pk.SelectedIndex = j;
                                 }
                             }
                         }
-                        else
-                        {
-                            pk.SelectedIndex = 1;
-                        }
+                        //else
+                        //{
+                        //    pk.SelectedIndex = 1;
+                        //}
                     }
 
                     removeComment = 0;
                 }
-
                 else
                 {
                     DisplayAlert("Quest Form", "Questionaries form data not available please edit it later.", "Ok");
@@ -856,45 +843,59 @@ namespace StemmonsMobile.Views.CreateQuestForm
                 var pick = (Picker)sender;
                 var tm = pick.SelectedItem as ItemQuestionDecode;
 
-                //var AnswerApiCall = QuestAPIMethods.GetItemQuestionDecodeByFieldID(Convert.ToString(tm.intItemQuestionFieldID));
-                //var Result = AnswerApiCall.GetValue("ResponseContent");
-
-                var AnswerApiCall = QuestSyncAPIMethods.GetItemQuestionDecodeByFieldID(App.Isonline, Convert.ToString(tm.intItemQuestionFieldID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, ItemID, iteminstancetranid, Convert.ToString(tm.intItemQuestionFieldID), scatid);
-                ls = AnswerApiCall.Result;
-                //var Result = AnswerApiCall.Result;
-
-                //ls = new List<ItemQuestionDecode>();
-                //ls = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemQuestionDecode>>(Result.ToString());
                 var cnt1 = findControl("lb_" + tm.intItemQuestionFieldID);
+                var Pointslbl = (Label)cnt1;
 
                 Type cnt_type1 = cnt1.GetType();
-                var Pointslbl = new Label();
-                Pointslbl.FontSize = 16;
-                Pointslbl = (Label)cnt1;
-
-                if (cnt_type1.Name.ToLower() == "label")
+                //Pointslbl.FontSize = 16;
+                //if (tm.strMeetsStandards == tm.strMeetsStandards)
                 {
-                    for (int i = 0; i < ls.Count; i++)
-                    {
-                        if (tm.strMeetsStandards == ls[i].strMeetsStandards)
-                        {
-                            Pointslbl.Text = "Available Point:" + Convert.ToString(ls[i].dcPointsAvailable) + " Earned :" + Convert.ToString(ls[i].dcPointsEarned);
-                            break;
-                        }
-                        else
-                        {
-                            Pointslbl.Text = "Available Point:" + Convert.ToString(tm.dcPointsAvailable) + " Earned :" + "0";
-
-                        }
-                    }
+                    Pointslbl.Text = "Available Point:" + Convert.ToString(tm.dcPointsAvailable) + " Earned :" + Convert.ToString(tm.dcPointsEarned);
+                    //break;
                 }
+                //else
+                //{
+                //    Pointslbl.Text = "Available Point:" + Convert.ToString(tm.dcPointsAvailable) + " Earned :" + "0";
+
+                //}
+
+
+                ////var AnswerApiCall = QuestAPIMethods.GetItemQuestionDecodeByFieldID(Convert.ToString(tm.intItemQuestionFieldID));
+                ////var Result = AnswerApiCall.GetValue("ResponseContent");
+
+                //var AnswerApiCall = QuestSyncAPIMethods.GetItemQuestionDecodeByFieldID(App.Isonline, Convert.ToString(tm.intItemQuestionFieldID), ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, ItemID, iteminstancetranid, Convert.ToString(tm.intItemQuestionFieldID), scatid);
+                //ls = AnswerApiCall.Result;
+                ////var Result = AnswerApiCall.Result;
+
+                ////ls = new List<ItemQuestionDecode>();
+                ////ls = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemQuestionDecode>>(Result.ToString());
+                //var cnt1 = findControl("lb_" + tm.intItemQuestionFieldID);
+
+                //Type cnt_type1 = cnt1.GetType();
+                //var Pointslbl = new Label();
+                //Pointslbl.FontSize = 16;
+                //Pointslbl = (Label)cnt1;
+
+                //if (cnt_type1.Name.ToLower() == "label")
+                //{
+                //    for (int i = 0; i < ls.Count; i++)
+                //    {
+                //        if (tm.strMeetsStandards == ls[i].strMeetsStandards)
+                //        {
+                //            Pointslbl.Text = "Available Point:" + Convert.ToString(ls[i].dcPointsAvailable) + " Earned :" + Convert.ToString(ls[i].dcPointsEarned);
+                //            break;
+                //        }
+                //        else
+                //        {
+                //            Pointslbl.Text = "Available Point:" + Convert.ToString(tm.dcPointsAvailable) + " Earned :" + "0";
+
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
-
             }
-
-
         }
 
         public string pointsReturn(string searchtype, string CurrentStandardMeet, string itemquestionfieldid)

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ListView x:Name="listview"
+          xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:VC="clr-namespace:StemmonsMobile.CustomControls"
+          xmlns:Behavior="clr-namespace:StemmonsMobile.Behavior"
+          x:Class="StemmonsMobile.CustomControls.EmpCustomListView"
+          ItemsSource="{Binding Employee_Role_List}"
+          SelectedItem="{Binding SelectedItemsEntity,Mode=TwoWay}"
+          SeparatorVisibility="Default" 
+           >
+    <ListView.ItemTemplate>
+        <DataTemplate>
+            <VC:EmpListViewCell/>
+        </DataTemplate>
+
+    </ListView.ItemTemplate>
+    <ListView.Behaviors>
+        <Behavior:InfiniteScroll LoadMoreCommand="{Binding LoadDataCommand }"/>
+    </ListView.Behaviors>
+</ListView>
+

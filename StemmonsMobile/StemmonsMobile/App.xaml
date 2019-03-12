@@ -27,7 +27,20 @@
             </ControlTemplate>
 
 
-
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="BorderColor" Value="LightBlue" />
+                <Setter Property="BorderWidth" Value="2" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+            <Style x:Key="GridPhotoBtnStyle" TargetType="Button">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="BorderColor" Value="LightBlue" />
+                <Setter Property="BorderWidth" Value="2" />
+                <!--<Setter Property="BackgroundColor" Value="LawnGreen" />-->
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
 
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="BlackBackground">#000000</Color>

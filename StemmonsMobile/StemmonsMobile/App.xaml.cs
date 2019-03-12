@@ -18,6 +18,10 @@ using Plugin.DeviceInfo;
 using Xamarin.Essentials;
 using DataServiceBus.OnlineHelper.DataTypes;
 using System.IO;
+using StemmonsMobile.CustomControls;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using StemmonsMobile.DataTypes.DataType.Default;
 
 namespace StemmonsMobile
 {
@@ -32,6 +36,8 @@ namespace StemmonsMobile
         public static bool Isonline = false;
         public static bool IsLoginCall = false;
 
+        public static bool IsPropertyPage = false;
+
         public static bool IsForceOnline = true;
         public App()
         {
@@ -43,19 +49,19 @@ namespace StemmonsMobile
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
 
 
-            if (Functions.IsPWDRemember && Functions.IsLogin)
-            {
-                InstanceList inta = new InstanceList();
-                inta.InstanceUrl = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl;
-                inta.InstanceID = Functions.Selected_Instance;
-                inta.InstanceName = Functions.InstanceName;
-                MainPage = new NavigationPage(new SelectInstancePage())
-                {
-                    BarTextColor = Color.White,
-                    BarBackgroundColor = Color.FromHex("696969"),
-                };
-            }
-            else
+            //if (Functions.IsPWDRemember && Functions.IsLogin)
+            //{
+            //    InstanceList inta = new InstanceList();
+            //    inta.InstanceUrl = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl;
+            //    inta.InstanceID = Functions.Selected_Instance;
+            //    inta.InstanceName = Functions.InstanceName;
+            //    MainPage = new NavigationPage(new SelectInstancePage())
+            //    {
+            //        BarTextColor = Color.White,
+            //        BarBackgroundColor = Color.FromHex("696969"),
+            //    };
+            //}
+            //else
             {
                 MainPage = new NavigationPage(new SelectInstancePage())
                 {
@@ -277,8 +283,6 @@ namespace StemmonsMobile
                 if (Application.Current.Properties.ContainsKey("Baseurl"))
                     DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = Convert.ToString(Application.Current.Properties["Baseurl"]);
 
-
-
                 if (Current.Properties.ContainsKey("AppStartCount"))
                 {
                     if (Application.Current.Properties["AppStartCount"] != null)
@@ -329,9 +333,16 @@ namespace StemmonsMobile
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-            AppCenter.Start("ios=2c8cf8f9-a000-49f8-9a5b-113cfa176e20;" +
-                "uwp=a94fe04c-6909-4387-a1fe-f8ab422f8e71;" +
-                "android=fca1ff00-e443-4444-9305-d79b3255abd0;", typeof(Analytics), typeof(Crashes));
+          
+
+
+            try
+            {
+                AppCenter.Start("6bdbd476-5df5-48d0-8e86-721448d10a42", typeof(Analytics), typeof(Crashes));
+            }
+            catch (Exception wd)
+            {
+            }
         }
 
         protected override void OnSleep()
@@ -435,7 +446,10 @@ namespace StemmonsMobile
 
         public static void SetConnectionFlag()
         {
-            if (CrossConnectivity.Current.IsConnected)
+            var current = Connectivity.NetworkAccess;
+
+            if (current == NetworkAccess.Internet)
+            //  if (CrossConnectivity.Current.IsConnected)
             {
                 if (IsForceOnline)
                 {
@@ -460,25 +474,34 @@ namespace StemmonsMobile
             IsForceOnline = bIsForceOnline;
         }
 
-        public static void GotoHome(Page Pg)
+        public static void GotoHome(Page Pg = null)
         {
             try
             {
                 Functions.FromHomePage = false;
-                var existingPages = Pg.Navigation.NavigationStack.ToList();
-                Page abc = new LandingPage();
+                var existingPages = Application.Current.MainPage.Navigation.NavigationStack.ToList();
+                Page abc = new Page();
+
+                if (App.IsPropertyPage)
+                {
+                    abc = new PropertyLandingPage();
+                }
+                else
+                {
+                    abc = new LandingPage();
+                }
                 if (existingPages.Count > 0)
                 {
-                    Pg.Navigation.InsertPageBefore(abc, Pg.Navigation.NavigationStack[0]);
+                    Application.Current.MainPage.Navigation.InsertPageBefore(abc, Application.Current.MainPage.Navigation.NavigationStack[0]);
 
                     for (int i = 0; i < existingPages.Count; i++)
                     {
-                        Pg.Navigation.RemovePage(existingPages[i]);
+                        Application.Current.MainPage.Navigation.RemovePage(existingPages[i]);
                     }
                 }
                 else
                 {
-                    Pg.Navigation.PopAsync();
+                    Application.Current.MainPage.Navigation.PopAsync();
                 }
             }
             catch (Exception)
@@ -619,21 +642,21 @@ namespace StemmonsMobile
 
         }
 
-        public static void GetImgLogo()
-        {
-            try
-            {
-                Task.Run(() =>
-                  {
-                      App.DownloadCompanyLog();
-                      DownloadUserPicture();
-                      GetBaseURLFromSQLServer();
-                  });
-            }
-            catch (Exception)
-            {
-            }
-        }
+        //public static void GetImgLogo()
+        //{
+        //    try
+        //    {
+        //        Task.Run(() =>
+        //          {
+        //              App.DownloadCompanyLog();
+        //              DownloadUserPicture();
+        //              GetBaseURLFromSQLServer();
+        //          });
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+        //}
 
         public static void DownloadUserPicture()
         {
@@ -686,21 +709,5 @@ namespace StemmonsMobile
             {
             }
         }
-
-        public static void GetBaseURLFromSQLServer()
-        {
-            try
-            {
-                var lst = Functions.GetImageDownloadURL();
-                App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
-                App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
-                App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
-            }
-            catch (Exception)
-            {
-            }
-        }
     }
-
-
 }

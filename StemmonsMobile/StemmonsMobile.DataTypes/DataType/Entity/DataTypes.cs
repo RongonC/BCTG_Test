@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 
 namespace StemmonsMobile.DataTypes.DataType.Entity
-{  
+{
     public class AreaItem
     {
         public int ItemID { get; set; }
@@ -4369,6 +4369,35 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public List<EntityTypeRelationship> EntityTypeRelationship { get; set; }
         public List<EntityTypeTemplate> EntityTypeTemplates { get; set; }
         public string EntityTypeSystemCode { get; set; }
+
+        public string EntityTitle
+        {
+            get
+            {
+                foreach (var item in this.AssociationFieldCollection)
+                {
+                    if (item.AssocSystemCode != null)
+                    {
+                        if (item.AssocSystemCode.ToUpper().Trim() == "TITLE")
+                        {
+                            // TODO Why is this alternating?
+                            //return item.TextValue;
+                            //return item.MetaDataText;
+
+                            //return !string.IsNullOrEmpty(item.TextValue) ? item.TextValue : item.MetaDataText;
+                            if (item.AssocMetaDataText.Count > 0)
+                                return item.AssocMetaDataText[0].TextValue;
+                            else if (item.AssocDecode.Count > 0)
+                                return item.AssocDecode[0].AssocDecodeName;
+                            else
+                                return "NO TITLE PROVIDED";
+                        }
+                    }
+                }
+                return "NO TITLE PROVIDED";
+
+            }
+        }
     }
 
     public class FILTER_VALUE
@@ -4705,14 +4734,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
     }
 
-    //public class EXTERNAL_DATASOURCE1
-    //{
-    //    public int ID { get; set; }
-    //    public string EXTERNAL_DATASOURCE_NAME { get; set; }
-    //    public string EXTERNAL_DATASOURCE_DESCRIPTION { get; set; }
-    //    public int Count { get; set; }
-    //}
-
     public class EntityAssocTypeCascade
     {
         public int EntityAssocTypeCascadeID { get; set; }
@@ -4916,7 +4937,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public int? ListID { get; set; }
         public int? EntityTypeID { get; set; }
         public string EntityTypeName { get; set; }
-
         public string EntityCreatedByUserName { get; set; }
         public string EntityCreatedDateTime { get; set; }
 
@@ -4932,8 +4952,4 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         public string Ent_ListId { get; set; }
 
     }
-
-
-
-
 }

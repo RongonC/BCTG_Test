@@ -1078,6 +1078,37 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         }
         #endregion
 
+
+        #region Get EntityType Relation Data by entityid
+        public static JObject GetEntityTypeRelationDatabyentityid(int EntityId, string User, string System_Code)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetEntityTypeRelationDatabyentityid)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+               new KeyValuePair<string, string>("EntityId", EntityId.ToString()),
+               new KeyValuePair<string, string>("User", User),
+               new KeyValuePair<string, string>("System_Code", System_Code)
+            };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+
         #endregion
 
         #region Get CalculationFields
@@ -1267,6 +1298,34 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             #endregion
 
             var Result = Constants.ApiCommon(addfile, Constants.AddFileToEntity);
+            if (Result != null)
+            {
+                return Result;
+            }
+            else
+                return null;
+        }
+        #endregion
+
+        #region Get Entity Role Relation Data
+        public static JObject GetEntityRoleAssignByEmp(string System_Code, string User)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name", Constants.Baseurl + Constants.GetEntityRoleAssignByEmp)
+            };
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+               new KeyValuePair<string, string>("System_Code", System_Code),
+                new KeyValuePair<string, string>("Username", User.ToString()),
+             };
+            #endregion
+
+            var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
             if (Result != null)
             {
                 return Result;
