@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SQLite;
 using StemmonsMobile.DataTypes.DataType;
+using StemmonsMobile.DataTypes.DataType.Departments;
 using StemmonsMobile.DataTypes.DataType.Entity;
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -395,23 +397,22 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
                         record.Wait();
                         // Check if record is Exist or not
-                        var ischeck = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
+                        var isrecordExist = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
 
-                        if (ischeck == null)
+                        if (isrecordExist == null)
                         {
                             _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
                         }
                         else
                         {
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = ischeck.APP_TYPE_INFO_ID;
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = isrecordExist.APP_TYPE_INFO_ID;
                             //Existing Record Convert to list
-                            var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(ischeck.ASSOC_FIELD_INFO);
+                            var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(isrecordExist.ASSOC_FIELD_INFO);
                             entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
                             _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
                         }
 
                         Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                        //Task<int> inserted = DBHelper.UpdateAppTypeInfoList(_AppTypeInfoList, _DBPath);
                         inserted.Wait();
                     }
                 }
@@ -1015,6 +1016,31 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
         }
         #endregion
 
+        #region #9 Get Entity Role Relation Data
+        public static ObservableCollection<EntityRoleRelationAssignment> GetEntityRoleRelationData(bool _IsOnline, string EntityID, string username, string _DBPath)
+        {
+            ObservableCollection<EntityRoleRelationAssignment> RelatedAppData = null;
+            List<string> templist = new List<string>();
+            try
+            {
+                if (_IsOnline)
+                {
+                    var Result = EntityAPIMethods.GetEntityRoleRelationData(EntityID, username);
+                    var _temp = Result.GetValue("ResponseContent");
+                    if (!string.IsNullOrEmpty(_temp?.ToString()) && _temp.ToString() != "[]")
+                    {
+                        RelatedAppData = JsonConvert.DeserializeObject<ObservableCollection<EntityRoleRelationAssignment>>(_temp.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return RelatedAppData;
+        }
+        #endregion
+
         #region Store and Create Entity
         public static async Task<int> StoreAndcreateEntity(bool _IsOnline, int _TypeID, bool isEdit, object _Body_value, string _DBPath)
         {
@@ -1543,6 +1569,33 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             catch (Exception ex)
             {
                 throw ex;
+            }
+            return lstResult;
+        }
+        #endregion
+
+        #region Get Entity Role Assign By Employee
+        public static List<EntityClass> GetEntityRoleAssignByEmp(bool _IsOnline, string _UserName, string systemcode, string _DBPath)
+        {
+            List<EntityClass> lstResult = new List<EntityClass>();
+
+            try
+            {
+                if (_IsOnline)
+                {
+                    var result = EntityAPIMethods.GetEntityRoleAssignByEmp(systemcode, _UserName);
+                    var temp = result.GetValue("ResponseContent");
+
+                    if (temp != null && temp.ToString() != "[]")
+                    {
+                        return lstResult = JsonConvert.DeserializeObject<List<EntityClass>>(temp.ToString());
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
             return lstResult;
         }

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Clist="clr-namespace:StemmonsMobile.CustomControls"
+             xmlns:contr="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.CustomControls.EmpInfoPage" 
+             Title="Employee Inforamtion">
+    <ContentPage.Content>
+        <AbsoluteLayout >
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"          >
+                <Grid x:Name="Gridview"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height= "10" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height= "8" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
+                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" 
+                           Text="{Binding SelectedEntity.EntityTitle}" />
+
+                    <!--<Label x:Name="Subtitlelbl" Grid.Row="2"  Grid.Column="1"
+                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  
+                           Text="720 North Post Oak Road"  />-->
+
+                    <ImageButton x:Name="ProfileImg" Source="Assets/boxerlogo.png" Grid.Row ="3"  Grid.Column="1" 
+                                 Aspect="AspectFit" 
+                                 BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" />
+
+                    <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
+                           Margin="0" 
+                           Padding="1" HasShadow="False">
+                        <Clist:EmpCustomListView x:Name="lst_Employee_Role"  HeightRequest="{Binding Heights}"/>
+                    </Frame>
+
+                    <contr:FooterControl x:Name="cnt_footer" Grid.ColumnSpan="3" Grid.Row="6"                            />
+                </Grid>
+            </StackLayout>
+            <contr:ActivityProgressBar IsVisible="{Binding isbusy}" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

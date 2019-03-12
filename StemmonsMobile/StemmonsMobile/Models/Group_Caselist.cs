@@ -9,7 +9,7 @@ using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
 
 namespace StemmonsMobile.Models
 {
-    class Group_Caselist : ObservableCollection<BasicCase>, INotifyPropertyChanged
+    public class Group_Caselist : ObservableCollection<BasicCase>, INotifyPropertyChanged
     {
 
         private bool _expanded;

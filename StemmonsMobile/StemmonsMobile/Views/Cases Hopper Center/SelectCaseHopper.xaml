@@ -14,7 +14,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <SearchBar Placeholder="Search Case Hopper" TextChanged="Handle_TextChanged" Grid.Row="0" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <SearchBar Placeholder="Search Case Hopper" TextChanged="Handle_TextChanged" Grid.Row="0"  />
 
                 <ListView x:Name="HopperList" ItemTapped="Handle_ItemTapped" Grid.Row="1"  HasUnevenRows="True">
                     <ListView.ItemTemplate>
@@ -37,9 +37,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Text="{Binding HopperName}"  
-                                           Style="{StaticResource defaultLabelSize_16}" TextColor="Black" 
-                                           HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" 
-                                           Margin="0,10,0,0" />
+                                           Style="{StaticResource defaultLabelSize_16}"
+                                           TextColor="Black" 
+                                           HorizontalOptions="StartAndExpand" 
+                                           VerticalOptions="CenterAndExpand"      />
                                     <Button Image="Assets/dropdowniconClose.png" Grid.Column="1"
                                             HorizontalOptions="End" Margin="0,5,5,0"
                                             BackgroundColor="Transparent" HeightRequest="25" 

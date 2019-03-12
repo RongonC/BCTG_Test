@@ -1798,6 +1798,9 @@ namespace StemmonsMobile.Views.Cases
 
                 lbl_line.IsVisible = _Casedata.IsClosed;
                 lbl_Casestatus.IsVisible = _Casedata.IsClosed;
+                ToolbarItem tl = new ToolbarItem();
+                if (_Casedata.IsClosed)
+                    this.ToolbarItems.Remove(TLBarSave);
 
                 DateTime Dout = new DateTime();
                 DateTime.TryParse(_Casedata.CaseClosedDateTime?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out Dout);
@@ -1836,13 +1839,15 @@ namespace StemmonsMobile.Views.Cases
                 {
                     for (int i = 0; i < Noteslist.Count; i++)
                     {
+                        var CsNotes = Functions.GenerateCasesFullURL(Noteslist[i].Note);
+
                         CasesNotesGroup grp = new CasesNotesGroup("", Convert.ToString(Noteslist[i].CreatedDateTime), Noteslist[i]?.CreatedByUser == null ? Functions.UserFullName : Noteslist[i]?.CreatedByUser?.DisplayName)
-                            {
+                             {
                                 new GetCaseNotesResponse.NoteData
                                 {
-                                    Note = Noteslist[i].Note.Replace("href=\"/DownloadFile.aspx?CaseFileID=","href=\""+App.CasesImgURL+"/DownloadFile.aspx?CaseFileID=")
+                                    Note = CsNotes// Noteslist[i].Note.Replace("href=\"/DownloadFile.aspx?CaseFileID=","href=\""+App.CasesImgURL+"/DownloadFile.aspx?CaseFileID=")
                                 }
-                            };
+                             };
                         Temp.Add(grp);
                     }
 
@@ -3099,9 +3104,10 @@ namespace StemmonsMobile.Views.Cases
                 {
                     string subject = Functions.UserFullName + " wants to share this " + Casetitle;
                     subject = WebUtility.UrlEncode(subject).Replace("+", "%20");
+
                     string body = "Please visit this url:  " + App.CasesImgURL + "/ViewCase.aspx?CaseID=" + CaseID;
                     body = WebUtility.UrlEncode(body).Replace("+", "%20");
-                    shareurl = "mailto:?subject=" + (subject) + "&body=" + (body);
+                    shareurl = "mailto:?subject=" + subject + "&body=" + body;
                 }
                 else
                 {
@@ -3773,21 +3779,21 @@ namespace StemmonsMobile.Views.Cases
                 if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName && _Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner and CaseAssignedTo to the Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Save As Favourite", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner is Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Save As Favourite", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else if (_Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if CaseAssignedTo is Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Save As Favourite", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else
                 {
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Close Case", "Save As Favourite", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
@@ -4422,8 +4428,8 @@ namespace StemmonsMobile.Views.Cases
                         break;
                     #endregion
 
-                    #region Close Case
-                    case "Close Case":
+                    #region Resolve & Exit
+                    case "Resolve & Exit":
                         Task<int> Close = null;
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
 
@@ -4476,7 +4482,7 @@ namespace StemmonsMobile.Views.Cases
                             if (Close != null && Close.Result > 0)
                             {
                                 Functions.ShowtoastAlert("Case Closed Successfully.");
-                                //var answer = DisplayAlert("Close Case", "Case Close Successfully.", "OK");
+                                //var answer = DisplayAlert("Resolve & Exit", "Case Close Successfully.", "OK");
                                 if (strTome == "_AssignedToMe")
                                 {
                                     await this.Navigation.PushAsync(new CaseList("caseAssgnSAM", Functions.UserName, ""));
@@ -4501,7 +4507,7 @@ namespace StemmonsMobile.Views.Cases
                             else
                             {
                                 Functions.ShowtoastAlert("Case Close Operation failed. Please Try Again Later.");
-                                // var answer = DisplayAlert("Close Case", "Case Not Close. Please Try Again Later.", "OK");
+                                // var answer = DisplayAlert("Resolve & Exit", "Case Not Close. Please Try Again Later.", "OK");
                             }
                         }
                         catch (Exception ex)

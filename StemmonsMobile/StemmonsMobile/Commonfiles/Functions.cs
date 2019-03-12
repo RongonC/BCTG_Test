@@ -377,53 +377,92 @@ namespace StemmonsMobile.Commonfiles
 
         }
 
-        public static List<MobileBranding> GetImageDownloadURL()
+        public static void GetImageDownloadURL()
         {
-            List<MobileBranding> lst = new List<MobileBranding>();
-            if (Functions.CheckInternetWithAlert())
+            try
             {
-                try
+                List<MobileBranding> lst = new List<MobileBranding>();
+                if (CrossConnectivity.Current.IsConnected)
                 {
-                    Task.Run(() =>
+                    try
                     {
-                        var Res = DefaultAPIMethod.GetImageList();
-                        var Result = Res.GetValue("ResponseContent");
-                        if (!string.IsNullOrEmpty(Convert.ToString(Result)))
+                        Task.Run(() =>
                         {
-                            lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ToString());
-                        }
-                    }).Wait();
+                            var Res = DefaultAPIMethod.GetImageList();
+                            var Result = Res.GetValue("ResponseContent");
+                            if (!string.IsNullOrEmpty(Convert.ToString(Result)))
+                            {
+                                lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ToString());
+                            }
+                        }).Wait();
 
-                    var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
-                    AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
+                        App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
+                        App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
+                        App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
 
-                    _AppTypeInfoList = new AppTypeInfoList
+                        var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+
+                        AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
+
+                        _AppTypeInfoList = new AppTypeInfoList
+                        {
+                            ASSOC_FIELD_INFO = JsonConvert.SerializeObject(lst),
+                            LAST_SYNC_DATETIME = DateTime.Now,
+                            SYSTEM = "SYSTEMCODES",
+                            TYPE_ID = 0,
+                            ID = 0,
+                            CategoryId = 0,
+                            CategoryName = "",
+                            TransactionType = "M",
+                            TYPE_SCREEN_INFO = "SYSTEMCODES",
+                            INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                            IS_ONLINE = true
+                        };
+
+                        if (Check == null)
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                        else
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
+                        var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, App.DBPath);
+
+                    }
+                    catch (Exception)
                     {
-                        ASSOC_FIELD_INFO = JsonConvert.SerializeObject(lst),
-                        LAST_SYNC_DATETIME = DateTime.Now,
-                        SYSTEM = "SYSTEMCODES",
-                        TYPE_ID = 0,
-                        ID = 0,
-                        CategoryId = 0,
-                        CategoryName = "",
-                        TransactionType = "M",
-                        TYPE_SCREEN_INFO = "SYSTEMCODES",
-                        INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
-                        IS_ONLINE = true
-                    };
-
-                    if (Check == null)
-                        _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
-                    else
-                        _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
-                    var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, App.DBPath);
-
+                    }
                 }
-                catch (Exception)
+                else
                 {
+                    try
+                    {
+                        GetBaseURLfromSQLite();
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
-            return lst;
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void GetBaseURLfromSQLite()
+        {
+            try
+            {
+                var Result = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+
+                if (!string.IsNullOrEmpty(Result.ASSOC_FIELD_INFO))
+                {
+                    var lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ASSOC_FIELD_INFO.ToString());
+                    App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
+                    App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
+                    App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public static void ClearApplocalData()
@@ -491,5 +530,24 @@ namespace StemmonsMobile.Commonfiles
                 URl = Note.ToLower();
             return URl;
         }
+
+        public static string GenerateCasesFullURL(string Note)
+        {
+            string URl = string.Empty;
+
+            if (Note.Contains("/DownloadFile.aspx"))
+                URl = Note.Replace("/DownloadFile.aspx", App.CasesImgURL + "/DownloadFile.aspx");
+            else if (Note.Contains("/downloadfile.aspx"))
+                URl = Note.Replace("/downloadfile.aspx", App.CasesImgURL + "/DownloadFile.aspx");
+            else if (Note.ToString().Contains("'DownloadFile.aspx"))
+                Note = Note.Replace("'DownloadFile.aspx", App.CasesImgURL + "/DownloadFile.aspx");
+            else if (Note.ToString().Contains("'downloadFile.aspx"))
+                Note = Note.Replace("'downloadFile.aspx", App.CasesImgURL + "/DownloadFile.aspx");
+            else
+                URl = Note;
+
+            return URl.ToString();
+        }
+
     }
 }

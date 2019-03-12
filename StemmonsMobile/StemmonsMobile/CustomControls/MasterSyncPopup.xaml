@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      x:Class="StemmonsMobile.CustomControls.MasterSyncPopup"
+      x:Name="Grid_Sync" 
+      Padding="10" 
+      RowSpacing="0" 
+      ColumnSpacing="0"      
+      VerticalOptions="End"
+      HorizontalOptions="Fill"
+      IsVisible="{Binding GrdVisibility}"
+      BackgroundColor="#CC000000">
+    <Grid.Triggers>
+        <DataTrigger TargetType="Grid"
+                     Binding="{Binding Source={x:Reference Sync_ProgressBar},
+                                       Path=Progress}"
+                     Value="1">
+            <Setter Property="IsVisible" Value="False" />
+        </DataTrigger>
+    </Grid.Triggers>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="5"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="5"/>
+    </Grid.RowDefinitions>
+    <Label x:Name="lbl_status" Grid.Row="0" Text="{Binding Title1}" TextColor="White" HorizontalOptions="CenterAndExpand" />
+    <Label x:Name="lbl_status_Count" Grid.Row="1" Text="{Binding Title2}"  TextColor="White" HorizontalOptions="CenterAndExpand" />
+    <Grid Grid.Row="3" RowSpacing="0" ColumnSpacing="0"  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="lbl_Percentage"
+               Grid.Column="0" 
+               Text="{Binding PercentageValue}"
+               FontSize="10"
+               Font="10"
+               TextColor="#2296F4"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+        <ProgressBar x:Name="Sync_ProgressBar" HorizontalOptions="Fill" VerticalOptions="Center" 
+                     ProgressColor="#2296F4" Progress="{Binding ProgressValue}" BackgroundColor="Transparent"
+                     Grid.Column="2" />
+    </Grid>
+
+    <Button x:Name="btn_close"
+                Text="Run in Background"
+                TextColor="#2296F4"
+                Font="Bold"
+                Grid.Row="4"
+                IsVisible="{Binding BtnVisibility}"
+                BorderColor="#2296F4"                
+                BorderWidth="0"
+                BackgroundColor="Transparent"
+                HorizontalOptions="Fill"/>
+
+</Grid>

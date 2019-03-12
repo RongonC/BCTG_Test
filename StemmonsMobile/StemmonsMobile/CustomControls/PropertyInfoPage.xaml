@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:CustomList="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.CustomControls.PropertyInfoPage"  
+             Title="Property Information">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid x:Name="PropertiesGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height= "10" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+                <Label x:Name="Titlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
+                       Text="{Binding EntityTitle}" Grid.Row="1" Grid.Column="1"/>
+
+                <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  Text="{Binding PropertyTitle}"  Grid.Row="2"  Grid.Column="1"/>-->
+                <ImageButton x:Name="ProfileImg" Source="Assets/boxerlogo.png" Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
+                <Frame x:Name="controlFrame"    Grid.Row="5"  Grid.Column="1"
+                        OutlineColor="LightBlue" Padding="5" HasShadow="False"  >
+                    <!--<CustomList:EntityFieldListView x:Name="lst_Property_information" />-->
+                </Frame>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

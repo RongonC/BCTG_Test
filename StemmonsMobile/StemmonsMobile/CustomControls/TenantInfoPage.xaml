@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customListview="clr-namespace:StemmonsMobile.CustomControls"
+             x:Class="StemmonsMobile.CustomControls.TenantInfoPage" 
+             Title= "Tenant Information"
+             x:Name="this" BindingContext="{x:Reference this}">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid x:Name="masterGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height= "10" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height= "8" />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
+                       HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
+
+                <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2"  Grid.Column="1"/>-->
+
+                <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1"
+                              Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200"  />
+
+                <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
+                       Margin="0" Padding="1" HasShadow="False">
+                    <!--<customListview:TenantCustomListview x:Name="lst_tenant_information" BindingContext="{Binding }" HeightRequest="{Binding Heights}"/>-->
+                    <customListview:EntityListCustomControl  BindingContext="{Binding EntityListVM}" />
+                </Frame>
+            </Grid>
+
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
+                         IsVisible="False"
+                         AbsoluteLayout.LayoutFlags="All" 
+                         BackgroundColor="Transparent">
+                <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"
+                              HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+
+                    <ActivityIndicator x:Name="activityIndicator" 
+                                       IsRunning="True" IsVisible="True" Color="Black">
+                        <ActivityIndicator.Margin>
+                            <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                        </ActivityIndicator.Margin>
+                    </ActivityIndicator>
+                    <Label Text="Loading..." TextColor="Black" 
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                        <Label.Margin>
+                            <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                        </Label.Margin>
+                    </Label>
+                </StackLayout>
+            </ContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+
+</ContentPage>

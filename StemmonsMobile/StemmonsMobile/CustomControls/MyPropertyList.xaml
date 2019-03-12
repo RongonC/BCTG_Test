@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:control="clr-namespace:StemmonsMobile.CustomControls"
+             xmlns:contr="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.CustomControls.MyPropertyList"
+               x:Name="this" BindingContext="{x:Reference this}" >
+
+    <ContentPage.Content>
+        <AbsoluteLayout >
+
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+          >
+                <Grid   >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <control:EntityListCustomControl Grid.Row="0"
+                        BindingContext="{Binding EntityListVM}" x:Name="List_entity_subtypes" />
+
+                    <contr:FooterControl x:Name="cnt_footer" 
+                           Grid.Row="1"  />
+                </Grid>
+            </StackLayout>
+
+            <contr:ActivityProgressBar IsVisible="{Binding IsBusy}" />
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

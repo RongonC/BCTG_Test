@@ -43,6 +43,9 @@
     <Compile Include="DataType\Cases\AssigntomeResponse.cs" />
     <Compile Include="DataType\Cases\CaseData.cs" />
     <Compile Include="DataType\Cases\ExternalDSOptimized.cs" />
+    <Compile Include="DataType\Departments\EntityRoleAssignmentRequest.cs" />
+    <Compile Include="DataType\Departments\EntityRoleAssignmentResponse.cs" />
+    <Compile Include="DataType\Departments\EntityRoleAssignment.cs" />
     <Compile Include="DataType\Entity\EntityFileResponse.cs" />
     <Compile Include="DataType\Entity\EntityFileRequest.cs" />
     <Compile Include="DataType\FileItem.cs" />
@@ -208,7 +211,6 @@
     <Compile Include="DataType\ExternalDatasourceValue.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsRequest.cs" />
     <Compile Include="DataType\Entity\EntityBasicDetailsResponse.cs" />
-    <Compile Include="DataType\Entity\Entity_List.cs" />
     <Compile Include="DataType\Entity\Entity_Type_List.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListRequest.cs" />
     <Compile Include="DataType\Entity\GetAssociatedEntityListResponse.cs" />

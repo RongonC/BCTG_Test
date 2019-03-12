@@ -3,11 +3,14 @@ using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using StemmonsMobile.Commonfiles;
+using StemmonsMobile.Datatemplates;
 using StemmonsMobile.DataTypes.DataType.Entity;
+using StemmonsMobile.ViewModels.EntityViewModel;
 using StemmonsMobile.Views.LoginProcess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -21,63 +24,92 @@ namespace StemmonsMobile.Views.Entity
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EntityDetailsSubtype : ContentPage
     {
+        private EntityListViewModel _EntityListviewmodel = new EntityListViewModel();
+
+        public EntityListViewModel EntityListVM
+        {
+            get
+            {
+                if (_EntityListviewmodel == null)
+                    _EntityListviewmodel = new EntityListViewModel();
+                return _EntityListviewmodel;
+            }
+
+            set
+            {
+                if (_EntityListviewmodel == value)
+                    return;
+                _EntityListviewmodel = value;
+            }
+        }
+
         ObservableCollection<EntityListMBView> List_Entityitem = new ObservableCollection<EntityListMBView>();
         EntityOrgCenterList _selectedlist;
         List<EntityClass> EntityLists = new List<EntityClass>();
         int? _pageindex = 1;
         int? pageSize = 50;
-        string _Viewtype = "";
+        static string _Viewtype = "";
+
         public EntityDetailsSubtype(EntityOrgCenterList selectedlist, string Viewtype)
         {
+
             InitializeComponent();
+
             _selectedlist = selectedlist;
             Title = _selectedlist.EntityTypeName;
-            _Viewtype = Viewtype;
+            EntityListVM._Viewtype = _Viewtype = Viewtype;
+            EntityListVM._entityTypeID = _selectedlist.EntityTypeID;
 
-            List_entity_subtypes.RefreshCommand = RefreshCommand;
-           
-            List_entity_subtypes.ItemAppearing += async (object sender, ItemVisibilityEventArgs e) =>
-            {
-                if (App.Isonline)
-                {
-                    var item = e.Item as EntityListMBView;
-                    int index = 0;
-                    try
-                    {
-                        index = List_Entityitem.IndexOf(item);
-                    }
-                    catch (Exception eqs)
-                    {
+            // List_entity_subtypes.ItemAppearing += List_entity_subtypes_ItemAppearing;
 
-                    }
-                    if (List_Entityitem.Count - 2 <= index)
-                    {
-                        if (List_Entityitem.Count == (pageSize * _pageindex))
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                lstfooter_indicator.IsVisible = true;
-                            });
+            #region Lazy Loding Logic
+            //List_entity_subtypes.ItemAppearing += async (object sender, ItemVisibilityEventArgs e) =>
+            //{
+            //    if (App.Isonline)
+            //    {
+            //        var item = e.Item as EntityListMBView;
+            //        int index = 0;
+            //        try
+            //        {
+            //            index = List_Entityitem.IndexOf(item);
+            //        }
+            //        catch (Exception eqs)
+            //        {
 
-                            _pageindex++;
-                            await LoadEntityList(_pageindex, pageSize);
+            //        }
+            //        if (List_Entityitem.Count - 2 <= index)
+            //        {
+            //            if (List_Entityitem.Count == (pageSize * _pageindex))
+            //            {
+            //                Device.BeginInvokeOnMainThread(() =>
+            //                {
+            //                    //lstfooter_indicator.IsVisible = true;
+            //                });
 
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                lstfooter_indicator.IsVisible = false;
-                            });
-                        }
+            //                _pageindex++;
+            //                await LoadEntityList(_pageindex, pageSize);
 
-                    }
-                }
-            };
+            //                Device.BeginInvokeOnMainThread(() =>
+            //                {
+            //                    //lstfooter_indicator.IsVisible = false;
+            //                });
+            //            }
+
+            //        }
+            //    }
+            //}; 
+            #endregion
         }
 
+
+        //private void List_entity_subtypes_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        //{
+        //    MessagingCenter.Send<EntityDetailsSubtype, ItemVisibilityEventArgs>(this, "LoadItems", e.Item as ItemVisibilityEventArgs);
+        //}
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
             if (_selectedlist.SecurityType.ToLower() == "r")
                 btn_addentity.IsVisible = false;
 
@@ -92,7 +124,9 @@ namespace StemmonsMobile.Views.Entity
             {
                 for (int i = 1; i <= _pageindex; i++)
                 {
-                    await LoadEntityList(i, pageSize);
+                    EntityListVM.PageIndex = i;
+                    await EntityListVM.GetEntityListwithCall();
+                    //await LoadEntityList();
                 }
             }
             catch (Exception ex)
@@ -101,116 +135,86 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
 
-        private async Task LoadEntityList(int? pageIndex, int? pageSize)
-        {
-            GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest Lazyload_request = new GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest
-            {
-                user = Functions.UserName,
-            };
+        //private async Task LoadEntityList()
+        //{
 
-            if (_Viewtype?.ToLower() == "assigned to me")
-                Lazyload_request.assignedToMe = 'Y';
-            if (_Viewtype?.ToLower() == "active")
-                Lazyload_request.isActive = 'Y';
-            if (_Viewtype?.ToLower() == "inactive")
-                Lazyload_request.isActive = 'N';
-            if (_Viewtype?.ToLower() == "created by me")
-                Lazyload_request.createdByMe = 'Y';
-            if (_Viewtype?.ToLower() == "owned by me")
-                Lazyload_request.ownedByMe = 'Y';
-            if (_Viewtype?.ToLower() == "associated by me")
-                Lazyload_request.associatedToMe = 'Y';
-            if (_Viewtype?.ToLower() == "inactivated by me")
-                Lazyload_request.inActivatedByMe = 'Y';
+        //    await EntityListVM.GetEntityListwithCall();
 
-            FILTER_VALUE fv = new FILTER_VALUE
-            {
-                SHOW_ENTITIES_ACTIVE_INACTIVE = "ALL",
-                ENTITY_TYPE = new List<int>
-                {
-                    Convert.ToInt32(_selectedlist.EntityTypeID)
-                }
-            };
-            Lazyload_request.entityTypeSchema = fv;
-            Lazyload_request.pageIndex = pageIndex;
-            Lazyload_request.pageSize = pageSize;
+        //    Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-            await Task.Run(async () =>
-            {
-                EntityLists = new List<EntityClass>();
-                EntityLists = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, Convert.ToInt32(_selectedlist.EntityTypeID), Functions.UserFullName, _Viewtype);
-            });
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-            // convert EntityLists To EntityListMBView 
-            // find Title fields ID From entityList Collection
-            if (EntityLists?.Count > 0)
-            {
-                int count = EntityLists.Count();
-                EntityListMBView mb = new EntityListMBView();
-                var AssocCollection = EntityLists.Select(t => t.AssociationFieldCollection).ToList();
-                for (int i = 0; i < EntityLists.Count; i++)
-                {
-                    var te1 = EntityLists[i].AssociationFieldCollection;
-                    for (int j = 0; j < te1.Count; j++)
-                    {
-                        switch (te1[j]?.FieldType?.ToLower())
-                        {
-                            case "se":
-                            case "el":
-                            case "me":
-                                if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                {
-                                    if (te1[j].AssocMetaData.Count != 0)
-                                        mb.Title = te1[j].AssocMetaData[0].FieldValue;
-                                    else
-                                        mb.Title = "";
-                                }
-                                break;
-                            default:
-                                if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                {
-                                    if (te1[j].AssocMetaDataText.Count != 0)
-                                    {
-                                        if (te1[j].AssocMetaDataText.Count != 0)
-                                            mb.Title = te1[j].AssocMetaDataText[0].TextValue;
-                                        else
-                                            mb.Title = "";
-                                    }
-                                    else if (te1[j].AssocDecode.Count != 0)
-                                    {
-                                        if (te1[j].AssocDecode.Count != 0)
-                                            mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
-                                        else
-                                            mb.Title = "";
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                    mb.Field2 = "Created By: " + EntityLists[i].EntityCreatedByFullName;
-                    mb.Field4 = Convert.ToDateTime(CommonConstants.DateFormatStringToString(EntityLists[i].EntityCreatedDateTime)).Date.ToString("d");
+        //    // convert EntityLists To EntityListMBView 
+        //    // find Title fields ID From entityList Collection
+        //    //if (EntityListVM.ListEntityitem?.Count > 0)
+        //    //{
+        //    //    int count = EntityListVM.ListEntityitem.Count();
+        //    //    EntityListMBView mb = new EntityListMBView();
+        //    //    var AssocCollection = EntityListVM.ListEntityitem.Select(t => t.AssociationFieldCollection).ToList();
+        //    //    for (int i = 0; i < EntityListVM.ListEntityitem.Count; i++)
+        //    //    {
+        //    //        var te1 = EntityListVM.ListEntityitem[i].AssociationFieldCollection;
+        //    //        for (int j = 0; j < te1.Count; j++)
+        //    //        {
+        //    //            switch (te1[j]?.FieldType?.ToLower())
+        //    //            {
+        //    //                case "se":
+        //    //                case "el":
+        //    //                case "me":
+        //    //                    //if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+        //    //                    if (te1[j]?.AssocMetaDataText?.Count>0)
+        //    //                    {
+        //    //                        if (te1[j].AssocMetaData.Count != 0)
+        //    //                            mb.Title = te1[j].AssocMetaData[0].FieldValue;
+        //    //                        else
+        //    //                            mb.Title = "";
+        //    //                    }
+        //    //                    break;
+        //    //                default:
+        //    //                    //if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+        //    //                    if (te1[j]?.AssocMetaDataText?.Count > 0)
+        //    //                    {
+        //    //                        if (te1[j].AssocMetaDataText.Count != 0)
+        //    //                        {
+        //    //                            if (te1[j].AssocMetaDataText.Count != 0)
+        //    //                                mb.Title = te1[j].AssocMetaDataText[0].TextValue;
+        //    //                            else
+        //    //                                mb.Title = "";
+        //    //                        }
+        //    //                        else if (te1[j].AssocDecode.Count != 0)
+        //    //                        {
+        //    //                            if (te1[j].AssocDecode.Count != 0)
+        //    //                                mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
+        //    //                            else
+        //    //                                mb.Title = "";
+        //    //                        }
+        //    //                    }
+        //    //                    break;
+        //    //            }
+        //    //        }
+        //    //        mb.Field2 = "Created By: " + EntityLists[i].EntityCreatedByFullName;
+        //    //        mb.Field4 = Convert.ToDateTime(CommonConstants.DateFormatStringToString(EntityLists[i].EntityCreatedDateTime)).Date.ToString("d");
 
-                    string a = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(EntityLists[i].ListID);
+        //    //        string a = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(EntityLists[i].ListID);
 
-                    string b = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(count++);
+        //    //        string b = Convert.ToString(EntityLists[i].EntityTypeID) + " - " + Convert.ToString(count++);
 
-                    mb.ListId = EntityLists[i].ListID.ToString() != "0" ? a : b;
+        //    //        mb.ListId = EntityLists[i].ListID.ToString() != "0" ? a : b;
 
-                    mb.EntityDetails = EntityLists[i];
-                    List_Entityitem.Add(mb);
-                    mb = new EntityListMBView();
-                }
+        //    //        mb.EntityDetails = EntityLists[i];
+        //    //        List_Entityitem.Add(mb);
+        //    //        mb = new EntityListMBView();
+        //    //    }
 
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    List_entity_subtypes.ItemsSource = List_Entityitem;
-                });
-            }
-            else
-            {
-                DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
-            }
-        }
+        //    //    Device.BeginInvokeOnMainThread(() =>
+        //    //    {
+        //    //        //List_entity_subtypes.ListSource = null;
+        //    //        //List_entity_subtypes.ListSource = EntityListVM.ListEntityitem;
+        //    //    });
+        //    //}
+        //    //else
+        //    //{
+        //    //    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
+        //    //}
+        //}
 
         private async void List_entity_subtypes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
@@ -244,7 +248,8 @@ namespace StemmonsMobile.Views.Entity
                                 {
                                     var Remove = List_Entityitem.Remove((List_Entityitem.Where(t => t.ListId == bind.ListId).ToList())[0]);
                                     if (Remove)
-                                        List_entity_subtypes.ItemsSource = List_Entityitem;
+                                    { }
+                                    //List_entity_subtypes.ListSource = List_Entityitem;
                                 }
                                 break;
                             default:
@@ -265,11 +270,14 @@ namespace StemmonsMobile.Views.Entity
             try
             {
                 if (string.IsNullOrEmpty(e.NewTextValue))
-                    List_entity_subtypes.ItemsSource = List_Entityitem;
+                {
+                    //List_entity_subtypes.ItemsSource = List_Entityitem;
+                }
+
                 else
                 {
                     var itemlist = List_Entityitem.Where(x => x.Title != null && x.Title.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
-                    List_entity_subtypes.ItemsSource = itemlist;
+                    //List_entity_subtypes.ItemsSource = itemlist;
 
                     if (itemlist.Count <= 0)
                     {
@@ -298,7 +306,7 @@ namespace StemmonsMobile.Views.Entity
             {
             }
         }
-
+        int cmnt = 0;
         private void Btn_home_Clicked(object sender, EventArgs e)
         {
             try
@@ -321,35 +329,34 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
+        //private bool _isRefreshing = false;
+        //public bool IsRefreshing
+        //{
+        //    get { return _isRefreshing; }
+        //    set
+        //    {
+        //        _isRefreshing = value;
+        //        OnPropertyChanged(nameof(IsRefreshing));
+        //    }
+        //}
 
-        private bool _isRefreshing = false;
-        public bool IsRefreshing
-        {
-            get { return _isRefreshing; }
-            set
-            {
-                _isRefreshing = value;
-                OnPropertyChanged(nameof(IsRefreshing));
-            }
-        }
+        //public ICommand RefreshCommand
+        //{
+        //    get
+        //    {
+        //        return new Command(async () =>
+        //        {
+        //            IsRefreshing = true;
 
-        public ICommand RefreshCommand
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    IsRefreshing = true;
-
-                    try
-                    {
-                        //await LoadEntityList(0, 0);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                });
-            }
-        }
+        //            try
+        //            {
+        //                //await LoadEntityList(0, 0);
+        //            }
+        //            catch (Exception)
+        //            {
+        //            }
+        //        });
+        //    }
+        //}
     }
 }

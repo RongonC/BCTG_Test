@@ -9,4 +9,9 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
     {
         public object ResponseContent { get; set; }
     }
+
+    public class GetCasesRelationDatabyentityidResponse : Response
+    {
+        public object ResponseContent { get; set; }
+    }
 }

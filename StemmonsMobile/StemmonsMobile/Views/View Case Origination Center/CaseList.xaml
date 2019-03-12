@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:StemmonsMobile" x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseList">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StemmonsMobile"
+             xmlns:local1="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.Views.View_Case_Origination_Center.CaseList"
+             x:Name="this" BindingContext="{x:Reference this}">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="Filter" Icon="Assets/filter.png" Clicked="Filter_Clicked" />
     </ContentPage.ToolbarItems>
@@ -11,180 +16,189 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                <SearchBar Placeholder="Search for a case in this list" x:Name="SearchCase" TextChanged="SearchCase_TextChanged" Grid.Row="0" />
+                <!--<SearchBar Placeholder="Search for a case in this list" x:Name="SearchCase" TextChanged="SearchCase_TextChanged" Grid.Row="0" />-->
                 <StackLayout Grid.Row="1" IsClippedToBounds="True">
-                    <ListView x:Name="listdata" 
-                              ItemTapped="listdata_ItemTapped" 
-                              IsPullToRefreshEnabled="True" 
-                              HasUnevenRows="True" 
-                              IsGroupingEnabled="True"
-                              GroupDisplayBinding="{Binding Title,Mode=TwoWay}"
-                              RefreshCommand="{Binding RefreshCommand}" 
-                              IsRefreshing="{Binding IsRefreshing}" 
-                              CachingStrategy="RecycleElement">
-                        <ListView.GroupHeaderTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid Padding="5,5,5,5" BackgroundColor="Transparent" HeightRequest="40">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="35"/>
-                                            <ColumnDefinition Width="5"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Image="{Binding StateIcon}" 
-                      BackgroundColor="Transparent"
-                      BorderColor="Transparent"
-                      BorderWidth="0"
-                                      Grid.Column="0"          
-                         Clicked="HeaderTapped" 
-                      CommandParameter="{Binding .}"/>
-                                        <Button BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" BorderColor="Transparent" Grid.Column="2" BorderWidth="0" Clicked="HeaderTapped" 
-                      Text="{Binding TitleWithItemCount}" FontSize="14" VerticalOptions="Center" CommandParameter="{Binding .}"/>
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.GroupHeaderTemplate>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid Margin="5,0,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                        <Grid Grid.Row="0" RowSpacing="0" VerticalOptions="StartAndExpand">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="10" />
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="15" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label Text="{Binding CaseTitle}" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" TextColor="{StaticResource DetailsColor}" FontSize="16" />
-                                            <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="Start">
-                                                <Grid  HorizontalOptions="EndAndExpand"  VerticalOptions="CenterAndExpand">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="Auto" />
-                                                    </Grid.RowDefinitions>
-                                                    <Label Text="{Binding DisplayListID}" Grid.Row="0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="16" TextColor="{StaticResource DetailsColor}" />
-                                                    <Label Text="{Binding CASELIFE}" Grid.Row="1" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="12" />
-                                                </Grid>
-                                            </StackLayout>
-                                        </Grid>
-                                        <Grid Grid.Row="1" VerticalOptions="StartAndExpand">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto" />
-                                                <RowDefinition Height="auto" />
-                                                <RowDefinition Height="auto" />
-                                                <RowDefinition Height="auto" />
-                                                <!--<RowDefinition Height="auto" />-->
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="5*" />
-                                                <ColumnDefinition Width="10" />
-                                                <ColumnDefinition Width="5*" />
-                                                <ColumnDefinition Width="15" />
-                                            </Grid.ColumnDefinitions>
-                                            <!--<Label Text="{Binding CASETYPE}" Grid.Row="0" Grid.Column="0"
+
+                    <local1:Ungrouped_CaseList_CustomControl BindingContext="{Binding SimpleCaseListVM}" x:Name="simpleCaseList"   SelectedItem="{Binding _clist_property, Mode=TwoWay}" />
+
+                    <local1:CaseList_CustomControl BindingContext="{Binding CaseListVM}" x:Name="CaselistGrouped"
+                    SelectedItem="{Binding _clist_property, Mode=TwoWay}"/>
+                    <!--<ListView x:Name="listdata"
+                    ItemTapped="listdata_ItemTapped"
+                    IsPullToRefreshEnabled="True"
+                    HasUnevenRows="True"
+                    IsGroupingEnabled="True"
+                    GroupDisplayBinding="{Binding Title,Mode=TwoWay}"
+                    RefreshCommand="{Binding RefreshCommand}"
+                    IsRefreshing="{Binding IsRefreshing}"
+                    CachingStrategy="RecycleElement">
+            <ListView.GroupHeaderTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <Grid Padding="5,5,5,5" BackgroundColor="Transparent" HeightRequest="40">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="35"/>
+                      <ColumnDefinition Width="5"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Image="{Binding StateIcon}"  BackgroundColor="Transparent"
+                            BorderColor="Transparent"
+                            BorderWidth="0"
+                            Grid.Column="0"                                Clicked="HeaderTapped"
+                            CommandParameter="{Binding .}"/>
+                    <Button BackgroundColor="Transparent" HorizontalOptions="StartAndExpand"
+                            BorderColor="Transparent" Grid.Column="2" BorderWidth="0"
+                            Clicked="HeaderTapped"
+                            Text="{Binding TitleWithItemCount}" FontSize="14" VerticalOptions="Center"    CommandParameter="{Binding .}"/>
+                  </Grid>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <Grid Margin="5,0,0,0">
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto" />
+                      <RowDefinition Height="auto" />
+                      <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" RowSpacing="0" VerticalOptions="StartAndExpand">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="15" />
+                      </Grid.ColumnDefinitions>
+                      <Label Text="{Binding CaseTitle}" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" TextColor="{StaticResource DetailsColor}" FontSize="16" />
+                      <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="Start">
+                        <Grid  HorizontalOptions="EndAndExpand"  VerticalOptions="CenterAndExpand">
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+                          <Label Text="{Binding DisplayListID}" Grid.Row="0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="16" TextColor="{StaticResource DetailsColor}" />
+                          <Label Text="{Binding CASELIFE}" Grid.Row="1" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="12" />
+                        </Grid>
+                      </StackLayout>
+                    </Grid>
+                    <Grid Grid.Row="1" VerticalOptions="StartAndExpand">
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        -->
+                    <!--<RowDefinition Height="auto" />-->
+                    <!--
+                      </Grid.RowDefinitions>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="15" />
+                      </Grid.ColumnDefinitions>
+                      -->
+                    <!--<Label Text="{Binding CASETYPE}" Grid.Row="0" Grid.Column="0"
                                                    HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="12" />-->
-                                            <!--<Label Text="{Binding CASELIFE}" Grid.Row="0" Grid.Column="2" 
+                    <!--<Label Text="{Binding CASELIFE}" Grid.Row="0" Grid.Column="2" 
                                              {Binding CaseStatus} {Binding PriorityValue}     HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="12" />-->
-                                            <StackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="StartAndExpand" >
-                                                <Label Text="{Binding CaseStatus}" 
-                                                       HorizontalOptions="StartAndExpand" 
-                                                       VerticalOptions="Center"
-                                                       LineBreakMode="WordWrap"
-                                                       FontSize="12" />
-                                            </StackLayout>
+                    <!--
+                      <StackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="StartAndExpand" >
+                        <Label Text="{Binding CaseStatus}"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="Center"
+                               LineBreakMode="WordWrap"
+                               FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="0" Grid.Column="2" HorizontalOptions="EndAndExpand" >
-                                                <Label Text="{Binding PriorityValue}" 
-                                                       VerticalOptions="Center" 
-                                                       HorizontalOptions="EndAndExpand" 
-                                                       LineBreakMode="WordWrap"
-                                                       FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="0" Grid.Column="2" HorizontalOptions="EndAndExpand" >
+                        <Label Text="{Binding PriorityValue}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="EndAndExpand"
+                               LineBreakMode="WordWrap"
+                               FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="StartAndExpand" >
-                                                <Label Text="{Binding AssignedTo}"                                                          HorizontalOptions="StartAndExpand"  
-                                                       VerticalOptions="Center" 
-                                                       LineBreakMode="WordWrap"
-                                                       FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="StartAndExpand" >
+                        <Label Text="{Binding AssignedTo}"                                                          HorizontalOptions="StartAndExpand"
+                               VerticalOptions="Center"
+                               LineBreakMode="WordWrap"
+                               FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="1" Grid.Column="2" 
-                                                         Orientation="Horizontal"
-                                                         HorizontalOptions="EndAndExpand"  >
-                                                <Label Text="DueDate: " 
-                                                       Grid.Column="0" 
-                                                       IsVisible="{Binding DueDateVisibility}"
-                                                       HorizontalOptions="EndAndExpand" 
-                                                       LineBreakMode="WordWrap" 
-                                                       VerticalOptions="Center" 
-                                                       FontSize="12" />
-                                                <Label Text="{Binding strCaseDue}" 
-                                                       LineBreakMode="WordWrap" 
-                                                       Grid.Column="1" 
-                                                       IsVisible="{Binding DueDateVisibility}"
-                                                       HorizontalOptions="EndAndExpand" 
-                                                       VerticalOptions="Center" 
-                                                       TextColor="{Binding bg_color}" 
-                                                       FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="1" Grid.Column="2"
+                                   Orientation="Horizontal"
+                                   HorizontalOptions="EndAndExpand"  >
+                        <Label Text="DueDate: "
+                               Grid.Column="0"
+                               IsVisible="{Binding DueDateVisibility}"
+                               HorizontalOptions="EndAndExpand"
+                               LineBreakMode="WordWrap"
+                               VerticalOptions="Center"
+                               FontSize="12" />
+                        <Label Text="{Binding strCaseDue}"
+                               LineBreakMode="WordWrap"
+                               Grid.Column="1"
+                               IsVisible="{Binding DueDateVisibility}"
+                               HorizontalOptions="EndAndExpand"
+                               VerticalOptions="Center"
+                               TextColor="{Binding bg_color}"
+                               FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="2" Grid.Column="0"  HorizontalOptions="StartAndExpand" >
-                                                <Label Text="{Binding CreateBy}"   
-                                                       HorizontalOptions="StartAndExpand" 
-                                                       VerticalOptions="Center" 
-                                                       LineBreakMode="WordWrap"
-                                                       FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="2" Grid.Column="0"  HorizontalOptions="StartAndExpand" >
+                        <Label Text="{Binding CreateBy}"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="Center"
+                               LineBreakMode="WordWrap"
+                               FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="2" Grid.Column="2"  HorizontalOptions="EndAndExpand" >
-                                                <Label Text="{Binding CreatedOn}"                                                    
-                                                   HorizontalOptions="EndAndExpand" 
-                                                   VerticalOptions="Center" 
-                                                   LineBreakMode="WordWrap"
-                                                   FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="2" Grid.Column="2"  HorizontalOptions="EndAndExpand" >
+                        <Label Text="{Binding CreatedOn}"
+                           HorizontalOptions="EndAndExpand"
+                           VerticalOptions="Center"
+                           LineBreakMode="WordWrap"
+                           FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="3" Grid.Column="0"  HorizontalOptions="StartAndExpand" >
-                                                <Label Text="{Binding ModifiedBy}"                                                   HorizontalOptions="StartAndExpand" 
-                                                   VerticalOptions="Center" 
-                                                   LineBreakMode="WordWrap"
-                                                   FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="3" Grid.Column="0"  HorizontalOptions="StartAndExpand" >
+                        <Label Text="{Binding ModifiedBy}"                                                   HorizontalOptions="StartAndExpand"
+                           VerticalOptions="Center"
+                           LineBreakMode="WordWrap"
+                           FontSize="12" />
+                      </StackLayout>
 
-                                            <StackLayout Grid.Row="3" Grid.Column="2"  HorizontalOptions="EndAndExpand" >
-                                                <Label Text="{Binding ModifiedOn}"
-                                                   HorizontalOptions="EndAndExpand" 
-                                                   VerticalOptions="Center" 
-                                                   LineBreakMode="WordWrap"
-                                                   FontSize="12" />
-                                            </StackLayout>
+                      <StackLayout Grid.Row="3" Grid.Column="2"  HorizontalOptions="EndAndExpand" >
+                        <Label Text="{Binding ModifiedOn}"
+                           HorizontalOptions="EndAndExpand"
+                           VerticalOptions="Center"
+                           LineBreakMode="WordWrap"
+                           FontSize="12" />
+                      </StackLayout>
 
-                                            <Button Image="Assets/dropdowniconClose.png" Grid.Column="3" Grid.RowSpan="4" BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="0,0,5,0" />
-                                        </Grid>
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.Footer>
-                            <StackLayout x:Name="lstfooter_indicator" Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False" HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
-                                <ActivityIndicator IsRunning="True" IsVisible="True" Color="Black">
-                                    <ActivityIndicator.Margin>
-                                        <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
-                                    </ActivityIndicator.Margin>
-                                </ActivityIndicator>
-                                <Label Text="Loading..." TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
-                                    <Label.Margin>
-                                        <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
-                                    </Label.Margin>
-                                </Label>
-                            </StackLayout>
-                        </ListView.Footer>
-                    </ListView>
+                      <Button Image="Assets/dropdowniconClose.png" Grid.Column="3" Grid.RowSpan="4" BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="0,0,5,0" />
+                    </Grid>
+                  </Grid>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+              <StackLayout x:Name="lstfooter_indicator" Orientation="Horizontal" VerticalOptions="CenterAndExpand" IsVisible="False" HorizontalOptions="CenterAndExpand" BackgroundColor="#00FFFFFF">
+                <ActivityIndicator IsRunning="True" IsVisible="True" Color="Black">
+                  <ActivityIndicator.Margin>
+                    <OnPlatform iOS="20,20,0,20" Android="25,10,0,10" Default="25,10,0,10" x:TypeArguments="Thickness" />
+                  </ActivityIndicator.Margin>
+                </ActivityIndicator>
+                <Label Text="Loading..." TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                  <Label.Margin>
+                    <OnPlatform iOS="0,20,20,20" Android="0,15,25,15" x:TypeArguments="Thickness" />
+                  </Label.Margin>
+                </Label>
+              </StackLayout>
+            </ListView.Footer>
+          </ListView>-->
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" IsClippedToBounds="True">
                     <Button Image="Assets/Home_Icon.png" BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" Clicked="HomeIcon_Click" />

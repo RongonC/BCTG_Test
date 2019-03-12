@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.CustomControls.PropertyViewPage"
+             Title="Property Page" 
+             >
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid x:Name="PropertiesGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height= "10"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label x:Name="lblTitle" Grid.Row="1" 
+                       HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"
+                       Text="{Binding  EntityDetails.EntityTitle}" />
+
+                <ScrollView Grid.Row="3" >
+                    <Grid x:Name="PropertyPageCustomGrid" RowSpacing="5" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+                        <ImageButton x:Name="PropertyPicturecodebtn" Source="XamLogo.png" 
+                                     BorderColor="LightBlue" 
+                                     BorderWidth="2" Grid.Row="0" Grid.Column="1" 
+                                     HeightRequest="200"/>
+                        <Button x:Name="Propertycasebtn" Grid.Row="1"   Grid.Column="1"              
+                                Text="Property Cases" 
+                                Command ="{Binding PropertyCaseCmd}" CommandParameter="{Binding .}"
+                                Style="{StaticResource buttonStyle}" />
+
+                        <Button x:Name="PropertyInformationbtn" Grid.Row="2"  Grid.Column="1"     
+                                Text="Property Informatiom" 
+                                Command ="{Binding PropertyinfomationCmd}"  CommandParameter="{Binding .}"
+                                Style="{StaticResource buttonStyle}"/>
+
+                        <Button x:Name="PropertyEmployeebtn"  Grid.Row="3"  Grid.Column="1"    
+                                Text="Property Employees"     
+                                Command ="{Binding PropertyEmpolyeeCmd}"  CommandParameter="{Binding .}"
+                                Style="{StaticResource buttonStyle}"/>
+
+                        <Button x:Name="PropertyTenantsbtn"    Grid.Row="4"  Grid.Column="1"       
+                                 Text="Property Tenants" 
+                                 Command ="{Binding PropertyTenantsCmd}"  CommandParameter="{Binding .}"
+                                Style="{StaticResource buttonStyle}"/>
+
+                        <Button x:Name="Availableunitbtn" Grid.Row="5"  Grid.Column="1"  
+                                Text="Available Units"    
+                                Command ="{Binding AvailableUnitsCmd}" CommandParameter="{Binding .}"
+                                Style="{StaticResource buttonStyle}"/>
+
+                        <Button x:Name="PropertyEntitybtn"     Grid.Row="6" Grid.Column="1" 
+                                 Text="Show Full Property Entity" 
+                                 Command ="{Binding  PropertyEntityCmd}"  CommandParameter="{Binding .}"
+                                 Style="{StaticResource buttonStyle}"/>
+
+                    </Grid>
+                </ScrollView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1172,7 +1172,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
         {
             try
             {
-                if (e.Item  == null)
+                if (e.Item == null)
                 {
                     return;
                 }

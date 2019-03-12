@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:StemmonsMobile;assembly=StemmonsMobile"
              Title="View Cases">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Icon="Assets/Save.png" Clicked="Menu_Clicked"/>
+        <ToolbarItem x:Name="TLBarSave" Text="Save" Icon="Assets/Save.png" Clicked="Menu_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>

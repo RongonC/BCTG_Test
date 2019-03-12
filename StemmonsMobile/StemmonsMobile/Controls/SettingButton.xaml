@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StemmonsMobile.Controls.SettingButton">
+    <ContentView.Content>
+        <Button x:Name="btnSetting" Image="Assets/setting.png"
+             BackgroundColor="Transparent">
+            <Button.HeightRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="iOS" Value="35" />
+                    <On Platform="UWP" Value="45" />
+                    <On Platform="Android" Value="45" />
+                </OnPlatform>
+            </Button.HeightRequest>
+            <Button.WidthRequest>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="iOS" Value="35" />
+                    <On Platform="UWP" Value="50" />
+                    <On Platform="Android" Value="45" />
+                </OnPlatform>
+            </Button.WidthRequest>
+        </Button>
+    </ContentView.Content>
+</ContentView>

@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
+using StemmonsMobile.CustomControls;
+using StemmonsMobile.DataTypes.DataType.Entity;
+using DataServiceBus.OfflineHelper.DataTypes.Cases;
+using static StemmonsMobile.DataTypes.DataType.Cases.GetCaseTypesResponse;
+using StemmonsMobile.Views.View_Case_Origination_Center;
+using DataServiceBus.OnlineHelper.DataTypes;
+using StemmonsMobile.Commonfiles;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using StemmonsMobile.Views.Entity;
+
+namespace StemmonsMobile.ViewModels
+{
+    public class PropertyViewPageViewModel
+    {
+        public ICommand PropertyCaseCmd { get; private set; }
+        public ICommand PropertyinfomationCmd { get; private set; }
+        public ICommand PropertyEmpolyeeCmd { get; private set; }
+        public ICommand PropertyTenantsCmd { get; private set; }
+        public ICommand AvailableUnitsCmd { get; private set; }
+        public ICommand PropertyEntityCmd { get; private set; }
+
+        public EntityClass EntityDetails { get; set; }
+
+        public PropertyViewPageViewModel()
+        {
+            PropertyCaseCmd = new Command(async (parameter) =>
+            {
+
+                //    List<GetCaseTypesResponse.BasicCase> s = null;
+
+                //    var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(EntityDetails.EntityID, Functions.UserName);
+
+                //    var result = res.GetValue("ResponseContent").ToString();
+                //    var GetCaseList = JsonConvert.DeserializeObject<ObservableCollection<BasicCase>>(result);
+                var cm = parameter as PropertyViewPageViewModel;
+                await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
+            });
+
+
+            PropertyinfomationCmd = new Command((parameter) =>
+            {
+                var cm = parameter as PropertyViewPageViewModel;
+                Application.Current.MainPage.Navigation.PushAsync(new PropertyInfoPage(cm.EntityDetails));
+            });
+            PropertyEmpolyeeCmd = new Command((parameter) =>
+            {
+                var cm = parameter as PropertyViewPageViewModel;
+
+                Application.Current.MainPage.Navigation.PushAsync(new EmpInfoPage(cm.EntityDetails));
+            });
+
+            PropertyTenantsCmd = new Command((parameter) =>
+            {
+                var cm = parameter as PropertyViewPageViewModel;
+                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "TNTLIST"));
+            });
+
+            AvailableUnitsCmd = new Command((parameter) =>
+            {
+                var cm = parameter as PropertyViewPageViewModel;
+                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails,"AVAILUNITS"));
+            });
+            // same as Tanent Page should pass System code only
+
+            PropertyEntityCmd = new Command((parameter) =>
+            {
+                var cm = parameter as PropertyViewPageViewModel;
+                EntityListMBView tem = new EntityListMBView();
+                tem.EntityDetails = cm.EntityDetails;
+                Application.Current.MainPage.Navigation.PushAsync(new Entity_View(tem));
+            });
+            // Entity View Page
+        }
+
+        private void MoveToNext()
+        {
+            //navigation.PushAsync(new PropertyInformationPage());
+
+        }
+    }
+}

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:StemmonsMobile"
-             x:Class="StemmonsMobile.Views.Entity.EntityDetailsSubtype"  Title="Location">
+             xmlns:control="clr-namespace:StemmonsMobile.CustomControls"
+             x:Class="StemmonsMobile.Views.Entity.EntityDetailsSubtype" 
+            x:Name="this" BindingContext="{x:Reference this}" >
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid x:Name="masterGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
@@ -17,7 +18,7 @@
                 <SearchBar x:Name="txt_seacrhbar" TextChanged="Txt_seacrhbar_TextChanged" Grid.Row="0" Placeholder="Search"  />
 
                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">
-                    <ListView x:Name="List_entity_subtypes" 
+                    <!--<ListView x:Name="List_entity_subtypes" 
                               IsPullToRefreshEnabled="True"
                               RefreshCommand="{Binding RefreshCommand}"
                               IsRefreshing="{Binding IsRefreshing}"
@@ -117,7 +118,8 @@
                                 </Label>
                             </StackLayout>
                         </ListView.Footer>
-                    </ListView>
+                    </ListView>-->
+                    <control:EntityListCustomControl BindingContext="{Binding EntityListVM}" x:Name="List_entity_subtypes" />
                 </StackLayout>
 
                 <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Grid.Row="2" 
@@ -129,7 +131,8 @@
 
             </Grid>
 
-            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"   IsVisible="False"
+            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
+                         IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">
                 <StackLayout  Orientation="Horizontal" VerticalOptions="CenterAndExpand"

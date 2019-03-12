@@ -416,7 +416,7 @@ namespace StemmonsMobile.Views.Entity
                 }
 
                 List_RelationalGrid.HeightRequest = (counter * 90);
-                line_relatedgrid.IsVisible = (counter * 90) <= 0 ? false : true;
+                line_relatedgrid.IsVisible =  false ;
                 #endregion
             }
             catch (Exception ex)
@@ -481,7 +481,7 @@ namespace StemmonsMobile.Views.Entity
 
                     body = WebUtility.UrlEncode(body).Replace("+", "%20");
 
-                    shareurl = "mailto:?subject=" + WebUtility.UrlEncode(subject) + "&body=" + WebUtility.UrlEncode(body);
+                    shareurl = "mailto:?subject=" + subject + "&body=" + body;
                 }
                 else
                 {
@@ -559,14 +559,16 @@ namespace StemmonsMobile.Views.Entity
 
                     if (_entityListMBView.EntityDetails.NewestNotesOnTop.ToLower() == "n")
                     {
+                        var str = ReplceDownloadFilename(EntityNotes);
                         if (EntityNotes.Contains("<img"))
                         {
+
+                            EntityNotes.ToLower().Replace("download.aspx", App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx");
                             Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
                                {
-                                    Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
-
+                                    Note = str,
                                     ImageURL = App.EntityImgURL + "/" + (EntityNotes.Replace("'", "\"").Split('\"')[1]),
                                     ImageVisible = true,
                                     LabelVisible = true
@@ -575,12 +577,15 @@ namespace StemmonsMobile.Views.Entity
                         }
                         else
                         {
+                           
+
+                            EntityNotes.ToLower().Replace("download.aspx", App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx");
+
                             Groups.Add(new EntityNotesGroup("", DateTime.Now.ToString(), Functions.UserFullName)
                             {
                                 new Entity_Notes
                                 {
-                                    Note = EntityNotes.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
-
+                                    Note = str ,
                                     htmlNote = EntityNotes,
                                     ImageVisible = false,
                                     LabelVisible = true
@@ -590,6 +595,7 @@ namespace StemmonsMobile.Views.Entity
                     }
                     else
                     {
+                        var str = ReplceDownloadFilename(EntityNotes);
                         //Insert At Top When "Y"
                         if (EntityNotes.Contains("<img"))
                         {
@@ -597,7 +603,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 new Entity_Notes
                                 {
-                                   Note = EntityNotes?.ToLower().Replace("download.aspx",App.EntityImgURL + "/download.aspx").Replace("downloadfile.aspx", App.EntityImgURL + "/downloadfile.aspx"),
+                                   Note =str,
                                     ImageURL = App.EntityImgURL + "/" + EntityNotes?.Replace("'", "\"").Split('\"')[1],
                                     ImageVisible = true,
                                     LabelVisible = true
@@ -610,8 +616,7 @@ namespace StemmonsMobile.Views.Entity
                             {
                                 new Entity_Notes
                                 {
-                                    Note = EntityNotes?.Replace("Download.aspx",App.EntityImgURL + "/Download.aspx").Replace("DownloadFile.aspx", App.EntityImgURL + "/DownloadFile.aspx"),
-
+                                    Note = str,
                                     htmlNote = EntityNotes,
                                     ImageVisible = false,
                                     LabelVisible = true
@@ -725,6 +730,30 @@ namespace StemmonsMobile.Views.Entity
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
             return recID;
+        }
+
+        public string ReplceDownloadFilename(string NotesDetails)
+        {
+            string InnerHtml = string.Empty;
+
+            if (NotesDetails.Contains("/download.aspx"))
+                InnerHtml = NotesDetails.Replace("/download.aspx", App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("'download.aspx"))
+                InnerHtml = NotesDetails.Replace("'download.aspx", "'" + App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("/Download.aspx"))
+                InnerHtml = NotesDetails.Replace("/Download.aspx", App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("'Download.aspx"))
+                InnerHtml = NotesDetails.Replace("'Download.aspx", "'" + App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("/DOWNLOAD.ASPX"))
+                InnerHtml = NotesDetails.Replace("/DOWNLOAD.ASPX", App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("'DOWNLOAD.ASPX"))
+                InnerHtml = NotesDetails.Replace("'DOWNLOAD.ASPX", "'" + App.EntityImgURL.ToLower() + "/download.aspx");
+            else if (NotesDetails.Contains("download.aspx"))
+                InnerHtml = NotesDetails.Replace("download.aspx", App.EntityImgURL.ToLower() + "/download.aspx");
+            else
+                InnerHtml = NotesDetails;
+
+            return InnerHtml;
         }
 
         private void btn_home_Clicked(object sender, EventArgs e)
@@ -1019,16 +1048,12 @@ namespace StemmonsMobile.Views.Entity
 
                             if (extension.ToLower().Contains("image"))
                             {
-                                Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + FileName + "</a>";
+                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + FileName + "</a>";
                             }
                             else
                             {
-                                //Notes = "<a href =\"" + App.EntityImgURL + "Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
-
-                                Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
+                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
                             }
-
-                            //Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
 
                             var Re = await EntityAddnotes(Notes);
                             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -1053,7 +1078,6 @@ namespace StemmonsMobile.Views.Entity
                     else
                     {
                         /*Functions.ShowtoastAlert("Please go online to use this functionality!")*/
-                        ;
                         Functions.ShowtoastAlert(Functions.Goonline_forFunc);
                     }
                 }

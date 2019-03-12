@@ -6,6 +6,7 @@ using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json.Linq;
 using StemmonsMobile.Commonfiles;
+using StemmonsMobile.CustomControls;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.Models;
 using System;
@@ -43,12 +44,20 @@ namespace StemmonsMobile.Views.LoginProcess
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-           //App.GetImgLogo();
-            if (Functions.IsPWDRemember && Functions.IsLogin)
-            {
-                App.IsLoginCall = true;
-                await Navigation.PushAsync(new LandingPage());
-            }
+
+            //Task.Run(() =>
+            //{
+            //    App.GetBaseURLFromSQLServer();
+            //});
+
+            //if (Functions.IsPWDRemember && Functions.IsLogin)
+            //{
+            //    App.IsLoginCall = true;
+            //    if (App.IsPropertyPage)
+            //        await Navigation.PushAsync(new PropertyLandingPage());
+            //    else
+            //        await Navigation.PushAsync(new LandingPage());
+            //}
             txt_uname.Focus();
         }
 
@@ -112,26 +121,33 @@ namespace StemmonsMobile.Views.LoginProcess
                             IsLoginSuccess = (Boolean)val.GetValue("Success");
                             if (IsLoginSuccess)
                             {
+                                string[] userInfo = txt_uname.Text.Split("\\".ToCharArray());
+                                string userDomain = userInfo[0].ToLower();
+                                Functions.UserName = userInfo[1].ToLower();
+
+                               
+
                                 Functions.HasTeam = (Boolean)val.GetValue("HasTeam");
 
                                 Application.Current.Properties["HasTeam"] = Functions.HasTeam;
 
                                 Functions.UserFullName = val.GetValue("result").ToString();
 
-                                string[] userInfo = txt_uname.Text.Split("\\".ToCharArray());
-                                string userDomain = userInfo[0].ToLower();
-                                Functions.UserName = userInfo[1].ToLower();
-
                                 INSTANCE_USER_ASSOC _INSTANCE_USER_ASSOC = new INSTANCE_USER_ASSOC();
                                 _INSTANCE_USER_ASSOC.INSTANCE_USER_ASSOC_ID = default(int);
-                                ;
                                 _INSTANCE_USER_ASSOC.HOME_SCREEN_INFO = "";
                                 _INSTANCE_USER_ASSOC.USER = Functions.UserName;
                                 _INSTANCE_USER_ASSOC.INSTANCE_ID = Functions.Selected_Instance;
 
                                 Task<int> t = DBHelper.Save_InstanceUserAssoc(_INSTANCE_USER_ASSOC, App.DBPath);
                                 t.Wait();
+
                                 ConstantsSync.INSTANCE_USER_ASSOC_ID = t.Result;
+
+                                await Task.Run(() =>
+                                {
+                                    App.DownloadUserPicture();
+                                });
 
                                 if (ConstantsSync.INSTANCE_USER_ASSOC_ID > 1)
                                 {
@@ -150,13 +166,11 @@ namespace StemmonsMobile.Views.LoginProcess
                                     Application.Current.Properties["IsPWDRemember"] = false;
                                 }
 
-
                                 Application.Current.Properties["UserName"] = Functions.UserName;
                                 Application.Current.Properties["UserFullName"] = Functions.UserFullName;
                                 Application.Current.Properties["IsLogin"] = true;
                                 Application.Current.Properties["UserLoginName"] = txt_uname.Text;
                                 Application.Current.Properties["UserPassword"] = txt_pwd.Text;
-
                             }
                             else
                             {
@@ -190,9 +204,12 @@ namespace StemmonsMobile.Views.LoginProcess
 
                 if (IsLoginSuccess)
                 {
-                    App.IsLoginCall = true;
 
-                    Navigation.PushAsync(new LandingPage());
+                    App.IsLoginCall = true;
+                    if (App.IsPropertyPage)
+                        await Navigation.PushAsync(new PropertyLandingPage());
+                    else
+                        await Navigation.PushAsync(new LandingPage());
                 }
             }
             Functions.ShowOverlayView_StackLayout(overlay, false, Main_Stack);
