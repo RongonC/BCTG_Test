@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 //using System.Security.Cryptography;
 
@@ -4398,6 +4400,10 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
             }
         }
+
+
+
+
     }
 
     public class FILTER_VALUE
@@ -4453,6 +4459,44 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
     public class AssociationField
     {
+        public string AsscValue
+        {
+            get
+            {
+                switch (FieldType)
+                {
+                    case "se":
+                    case "el":
+                    case "me":
+                        if (AssocMetaData?.Count > 0)
+                            return AssocMetaData[0].FieldValue;
+                        break;
+                    default:
+                        if (AssocMetaDataText?.Count > 0)
+                        {
+                            var data = AssocMetaDataText;
+                            if (data?.Count > 0)
+                            {
+                                string sb = string.Empty;
+                                for (int j = 0; j < data.Count(); j++)
+                                {
+                                    if (j < 1)
+                                        sb = data[j].TextValue;
+                                    else
+                                        sb += Environment.NewLine + data[j].TextValue;
+                                }
+                                return sb.Trim();
+                            }
+                        }
+                        break;
+                }
+                return "";
+            }
+        }
+
+
+
+
         public int AssocTypeID { get; set; }
         public int EntityTypeID { get; set; }
         public string SecurityType { get; set; }
@@ -4535,6 +4579,38 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
     public class EntityClass : EntityType
     {
+        public string CreatedByForListView
+        {
+            get
+            {
+                return "Created By: " + EntityCreatedByFullName;
+            }
+
+        }
+        public string CreatedDateForListview
+        {
+            get
+            {
+
+                DateTime Dout = new DateTime();
+                DateTime.TryParse(EntityCreatedDateTime, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out Dout);
+
+                return Dout.Date.ToString("d");
+            }
+        }
+
+
+        public string ListIdForListView
+        {
+            get
+            {
+                return Convert.ToString(EntityTypeID) + " - " + Convert.ToString(ListID);
+
+                //string b = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(count++);
+
+                //mb.ListId = _item[i].ListID.ToString() != "0" ? a : b;
+            }
+        }
 
         public int EntityID { get; set; }
 

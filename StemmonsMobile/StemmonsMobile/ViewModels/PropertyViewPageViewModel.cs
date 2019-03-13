@@ -66,7 +66,7 @@ namespace StemmonsMobile.ViewModels
             AvailableUnitsCmd = new Command((parameter) =>
             {
                 var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails,"AVAILUNITS"));
+                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "UNITS"));
             });
             // same as Tanent Page should pass System code only
 

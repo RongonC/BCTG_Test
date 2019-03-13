@@ -71,26 +71,29 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
 
         public async void onItemTap(object item)
         {
-            var tap = item as EntityListMBView;
-            if (string.IsNullOrEmpty(ScreenCode))
+            if (item != null)
             {
-                // For Regualr Entity List Page
-                await Application.Current.MainPage.Navigation.PushAsync(new Entity_View(tap));
-            }
-            else if (ScreenCode == "CAMPS")
-            {
-                // For Campus Page
-                await Application.Current.MainPage.Navigation.PushAsync(new CampusPage(tap.EntityDetails));
-            }
-            else if (ScreenCode == "TNTLIST")
-            {
-                // For Campus Page
-                await Application.Current.MainPage.Navigation.PushAsync(new TenantViewPage(tap.EntityDetails));
-            }
-            else
-            {
-                // For Property List and My Property 
-                await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap.EntityDetails));
+                var tap = item as EntityListMBView;
+                if (string.IsNullOrEmpty(ScreenCode) || ScreenCode == "UNITS")
+                {
+                    // For Regualr Entity List Page
+                    await Application.Current.MainPage.Navigation.PushAsync(new Entity_View(tap));
+                }
+                else if (ScreenCode == "CAMPS")
+                {
+                    // For Campus Page
+                    await Application.Current.MainPage.Navigation.PushAsync(new CampusPage(tap.EntityDetails));
+                }
+                else if (ScreenCode == "TNTLIST")
+                {
+                    // For Campus Page
+                    await Application.Current.MainPage.Navigation.PushAsync(new TenantViewPage(tap.EntityDetails));
+                }
+                else
+                {
+                    // For Property List and My Property 
+                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap.EntityDetails));
+                }
             }
         }
 
@@ -137,7 +140,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 FILTER_VALUE fv = new FILTER_VALUE
                 {
                     SHOW_ENTITIES_ACTIVE_INACTIVE = "ALL",
-
+                    EXTERNAL_DATASOURCE_OBJECT_ID_ENTITY = EntityID,
                     ENTITY_TYPE = new List<int>
                     {
                         (int) _entityTypeID
@@ -149,6 +152,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 }
                 Lazyload_request.EntityTypeID = _entityTypeID;
                 Lazyload_request.entityTypeSchema = fv;
+
                 Lazyload_request.pageIndex = PageIndex;
                 Lazyload_request.pageSize = PageSize;
                 #endregion
@@ -165,8 +169,11 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
                     ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
                 }
-                else if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS"|| ScreenCode == "TNTLIST")
+                else if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS")
                 {
+                    Lazyload_request.pageIndex = 0;
+                    Lazyload_request.pageSize = 0;
+
                     await Task.Run(async () =>
                     {
                         ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
@@ -179,7 +186,6 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                         ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
                     });
                 }
-
 
                 var List_Entityitem = new ObservableCollection<EntityListMBView>();
 
@@ -225,6 +231,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                             }
                         }
                         mb.Field2 = "Created By: " + _item[i].EntityCreatedByFullName;
+
                         mb.Field4 = Convert.ToDateTime(DataServiceBus.OfflineHelper.DataTypes.Common.CommonConstants.DateFormatStringToString(_item[i].EntityCreatedDateTime)).Date.ToString("d");
 
                         string a = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(_item[i].ListID);

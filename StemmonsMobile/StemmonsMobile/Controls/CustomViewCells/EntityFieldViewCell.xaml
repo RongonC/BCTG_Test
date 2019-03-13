@@ -24,7 +24,7 @@
                         HorizontalOptions="StartAndExpand"/>
             </StackLayout>
             <StackLayout Grid.Row="2" Grid.Column="1" VerticalOptions="StartAndExpand">
-                <Label Text="{Binding FieldType}" 
+                <Label Text="{Binding AsscValue}" 
                         Style="{StaticResource defaultLabelSize_16}"                         
                         TextColor="Black"
                         HorizontalOptions="StartAndExpand"/>

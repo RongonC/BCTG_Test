@@ -4,16 +4,17 @@
              xmlns:ListCell="clr-namespace:StemmonsMobile.Controls.CustomViewCells"
              x:Class="StemmonsMobile.Controls.EntityFieldListView">
     <ContentView.Content>
-        <ListView ItemsSource="{Binding EntityAssocOrder}"
+        <ScrollView>
+            <ListView ItemsSource="{Binding EntityAssocOrder}"
           HasUnevenRows="True"
           SeparatorVisibility="None"
           HeightRequest="{Binding Heights}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ListCell:EntityFieldViewCell/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ListCell:EntityFieldViewCell/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
     </ContentView.Content>
 </ContentView>

@@ -95,6 +95,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             if (parametername == "caseAssgnSAM" || parametername == "caseCreateBySAM" || parametername == "caseOwnerSAM")
             {
                 //This shoudl be Grouped List
+                App.Isonline = false;
                 IsListGrouped = true;
                 btn_add.IsVisible = false;
                 simpleCaseList.IsVisible = false;
@@ -103,6 +104,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             else if (parametername == "RELATEDCASES")
             {
                 //This shoudl be Grouped List
+                App.Isonline = true;
                 IsListGrouped = true;
                 btn_add.IsVisible = true;
                 CaselistGrouped.IsVisible = true;
@@ -111,6 +113,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             else
             {
                 //it will no to be Grouped List
+                App.Isonline = true;
                 IsListGrouped = false;
                 btn_add.IsVisible = true;
                 CaselistGrouped.IsVisible = false;

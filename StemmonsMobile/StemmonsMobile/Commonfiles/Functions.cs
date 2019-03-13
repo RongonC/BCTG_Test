@@ -7,11 +7,13 @@ using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Plugin.Connectivity;
 using Plugin.DeviceInfo;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.DataTypes.DataType.Quest;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -549,5 +551,31 @@ namespace StemmonsMobile.Commonfiles
             return URl.ToString();
         }
 
+        public static ImageSource GetImageFromEntityAssoc(List<AssociationField> AssociationFieldCollection)
+        {
+            try
+            {
+                var FileID = AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
+
+                var EntityID = AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
+
+                string fileStr = string.Empty;
+
+                Task.Run(() =>
+                {
+                    var d = EntityAPIMethods.GetFileFromEntity(EntityID.ToString(), FileID.ToString(), Functions.UserName);
+                    fileStr = d.GetValue("ResponseContent").ToString();
+                }).Wait();
+
+                FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
+
+                return ImageSource.FromStream(() => new MemoryStream(fileResp.BLOB));
+            }
+            catch (Exception ex)
+            {
+                throw;
+                return null;
+            }
+        }
     }
 }

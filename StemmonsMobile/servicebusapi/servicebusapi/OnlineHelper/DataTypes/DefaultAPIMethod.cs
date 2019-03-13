@@ -68,7 +68,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
         #endregion
 
         #region GetLogo 
-        public static JObject GetLogo()
+        public static JObject GetLogo(string Code)
         {
             MobileAPIMethods Mapi = new MobileAPIMethods();
             #region API Details
@@ -81,6 +81,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             #region API Body Details
             var Body_value = new List<KeyValuePair<string, string>>
             {
+                new KeyValuePair<string, string>("System_Code", Code)
             };
             #endregion
             var Result = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");

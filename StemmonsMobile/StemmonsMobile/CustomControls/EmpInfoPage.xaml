@@ -33,7 +33,7 @@
                            HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  
                            Text="720 North Post Oak Road"  />-->
 
-                    <ImageButton x:Name="ProfileImg" Source="Assets/boxerlogo.png" Grid.Row ="3"  Grid.Column="1" 
+                    <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1" 
                                  Aspect="AspectFit" 
                                  BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" />
 

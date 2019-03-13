@@ -1,21 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.stemmonscentraltogo.com" android:installLocation="auto" android:largeHeap="true" android:versionName="1.0.8" android:versionCode="20">
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<uses-permission android:name="android.permission.WRITE_CONTACTS" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
-	<uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
-	<uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-	<uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.boxerproperty.s_bctg1" android:installLocation="auto" android:largeHeap="true" android:versionCode="1" android:versionName="1.0.0">
 	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28" />
-	<application android:allowBackup="true" android:hardwareAccelerated="true" android:largeHeap="true" android:supportsRtl="true" android:label="Stemmons Central To Go">
+	<application android:allowBackup="true" android:hardwareAccelerated="true" android:largeHeap="true" android:supportsRtl="true" android:label="Boxer Central To Go 2">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="com.stemmonscentraltogo.com.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>

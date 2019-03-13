@@ -22,6 +22,7 @@ using StemmonsMobile.CustomControls;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using StemmonsMobile.DataTypes.DataType.Default;
+using Newtonsoft.Json.Linq;
 
 namespace StemmonsMobile
 {
@@ -36,7 +37,7 @@ namespace StemmonsMobile
         public static bool Isonline = false;
         public static bool IsLoginCall = false;
 
-        public static bool IsPropertyPage = false;
+        public static bool IsPropertyPage = true;
 
         public static bool IsForceOnline = true;
         public App()
@@ -333,7 +334,7 @@ namespace StemmonsMobile
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-          
+
 
 
             try
@@ -676,6 +677,7 @@ namespace StemmonsMobile
             }
             catch (Exception)
             {
+
             }
         }
 
@@ -683,13 +685,15 @@ namespace StemmonsMobile
         {
             try
             {
-                var result = DefaultAPIMethod.GetLogo();
+                var result = DefaultAPIMethod.GetLogo("MLOGO");
                 var urlString = result.GetValue("ResponseContent");
 
-                ImageHelperClass iHeleper = new ImageHelperClass();
-                var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
-                Src.Wait();
+                var MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(urlString.ToString());
 
+                ImageHelperClass iHeleper = new ImageHelperClass();
+                var Src = iHeleper.DownloadImage(Convert.ToString(MBrand.Where(x => x.SYSTEM_CODE == "MLOGO")?.FirstOrDefault().VALUE));
+
+                Src.Wait();
                 var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
                 itm.Wait();
                 InstanceList ils = new InstanceList();

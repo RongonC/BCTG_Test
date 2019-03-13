@@ -26,6 +26,7 @@ namespace StemmonsMobile.CustomControls
         public TenantViewPage(EntityClass _entdetail)
         {
             InitializeComponent();
+            Title = _entdetail.EntityTitle;
             SetData(_entdetail);
         }
 
@@ -33,9 +34,9 @@ namespace StemmonsMobile.CustomControls
         {
             try
             {
-                EntityFieldVM = new EntityFieldViewModel(_entdetail);
+                // EntityFieldVM = new EntityFieldViewModel(_entdetail);
 
-                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "EPILR" }, new List<string>() { "1468" });
+                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE", "STTUS" }, new List<string>() { "5605", "5608", "5609", "5611", "5613", "5615", "5628", "5635", "5636", "5637", "7895", "7896", "7897" });
                 frmField.Content = ent;
             }
             catch (Exception e)

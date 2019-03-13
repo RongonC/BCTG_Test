@@ -46,7 +46,15 @@ namespace StemmonsMobile.CustomControls
             PropertyViewVM.EntityDetails = _entdetail;
 
             this.BindingContext = PropertyViewVM;
-            getData();
+
+            try
+            {
+                PropertyPicturecodebtn.Source = Functions.GetImageFromEntityAssoc(PropertyViewVM.EntityDetails.AssociationFieldCollection);
+            }
+            catch (Exception)
+            {
+                PropertyPicturecodebtn.Source = "Assets/PropertyImage.png";
+            }
         }
 
         public void getData()

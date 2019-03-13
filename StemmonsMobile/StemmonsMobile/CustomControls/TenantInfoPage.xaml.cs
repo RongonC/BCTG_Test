@@ -48,6 +48,7 @@ namespace StemmonsMobile.CustomControls
 
             Titlelbl.Text = entityDetails.EntityTitle;
             EntityListVM.ScreenCode = _pagecode;
+            EntityListVM.EntityID = entityDetails.EntityID;
             if (_pagecode == "TNTLIST")
             {
                 Title = "Tenant List";
@@ -58,26 +59,20 @@ namespace StemmonsMobile.CustomControls
             {
                 Title = "Available Units";
                 //EntityListVM.ScreenCode = "TNTLIST";
-                EntityListVM.SystemCodeEntityType = "No code";
+                EntityListVM.SystemCodeEntityType = "UNITS";
                 EntityListVM._Viewtype = "";
             }
 
 
+
             try
             {
-                var entFileID = entityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
-
-                var entEntityID = entityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
-
-                GetEntityImage(entEntityID.ToString(), entFileID.ToString());
+                ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
             }
-
-            catch (Exception ex)
+            catch (Exception)
             {
-                ProfileImg.Source = "Assets/Property_Default.png";
+                ProfileImg.Source = "Assets/PropertyImage.png";
             }
-
-
         }
 
         int? _pageindex = 1;

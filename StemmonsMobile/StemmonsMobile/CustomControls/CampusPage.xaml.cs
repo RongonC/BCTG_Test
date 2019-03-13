@@ -49,7 +49,7 @@ namespace StemmonsMobile.CustomControls
             InitializeComponent();
             try
             {
-                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "EPILR" }, new List<string>() { "1468" });
+                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE" }, new List<string>() { "1769" });
                 frmField.Content = ent;
 
                 EntityListCustomControl lstEntity = new EntityListCustomControl();
@@ -69,5 +69,5 @@ namespace StemmonsMobile.CustomControls
             }
         }
     }
-   
+
 }

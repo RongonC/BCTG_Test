@@ -47,15 +47,15 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Text="{Binding Field2}" FontSize="12"
+                    <Label Text="{Binding CreatedByForListView}" FontSize="12"
                                                            LineBreakMode="TailTruncation" TextColor="Black"
                                                            Grid.Column="1" HorizontalOptions="Start"  />
 
-                    <Label Text="{Binding Field3}" FontSize="12" 
+                    <Label Text="{Binding ListIdForListView}" FontSize="12" 
                                                            LineBreakMode="TailTruncation" TextColor="Black"
                                                            Grid.Column="2" HorizontalOptions="Center" />
 
-                    <Label Text="{Binding Field4}"
+                    <Label Text="{Binding CreatedDateForListview}"
                                                            LineBreakMode="TailTruncation" FontSize="12" TextColor="Black"
                                                            Grid.Column="3"  HorizontalOptions="End"  />
                 </Grid>
