@@ -5,11 +5,8 @@
     <ViewCell.View >
         <Grid RowSpacing="5" ColumnSpacing="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="0"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0"/>
@@ -17,10 +14,10 @@
                 <!--<ColumnDefinition Width="10"/>-->
                 <!--<ColumnDefinition Width="*"/>-->
             </Grid.ColumnDefinitions>
-            <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="End">
+            <StackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="End">
                 <Label Text="{Binding FullName}" HorizontalOptions="Fill" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
             </StackLayout>
-            <StackLayout Grid.Row="2" Grid.Column="1" VerticalOptions="Start">
+            <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="Start">
                 <Label Text="{Binding RoleName}" HorizontalOptions="Fill" Font="12"  HorizontalTextAlignment="Start"/>
             </StackLayout>
             <!--<BoxView BackgroundColor="LightBlue" HorizontalOptions="Fill" VerticalOptions="EndAndExpand"  Grid.ColumnSpan="3" Grid.Row="4"/>-->

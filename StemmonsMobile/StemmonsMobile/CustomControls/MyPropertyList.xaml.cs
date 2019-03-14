@@ -63,7 +63,7 @@ namespace StemmonsMobile.CustomControls
             EntityListVM.PageIndex = 1;
             EntityListVM.ListEntityitem.Clear();
             await EntityListVM.GetEntityListwithCall();
-            EntityListVM.ListEntityitem.OrderBy(x => Title);
+            EntityListVM.ListEntityitem.OrderByDescending(x => x.EntityTitle);
             IsBusy = false;
         }
     }

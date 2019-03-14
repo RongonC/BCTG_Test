@@ -21,10 +21,10 @@ namespace StemmonsMobile.Views.Entity
     public partial class EntityRealatedApplist : ContentPage
     {
         EntityAppRelatedTypes EntityAppRelatedTypes;
-        EntityListMBView EntityListMBView;
+        EntityClass EntityListMBView;
         // string NavScreenname = string.Empty;
         string Appname = "";
-        public EntityRealatedApplist(EntityAppRelatedTypes _entityAppRelatedTypes, EntityListMBView _entityListMBView, string _appname)
+        public EntityRealatedApplist(EntityAppRelatedTypes _entityAppRelatedTypes, EntityClass _entityListMBView, string _appname)
         {
             InitializeComponent();
             App.SetConnectionFlag();
@@ -59,7 +59,7 @@ namespace StemmonsMobile.Views.Entity
                     SHOW_ENTITIES_CREATED_BY_USER = "N",
                     SHOW_ENTITIES_OWNED_BY_USER = "N",
                     SHOW_ENTITIES_INACTIVE_BY_USER = "N",
-                    EXTERNAL_DATASOURCE_OBJECT_ID_ENTITY = EntityListMBView.EntityDetails.EntityID,
+                    EXTERNAL_DATASOURCE_OBJECT_ID_ENTITY = EntityListMBView.EntityID,
                     ENTITY_TYPE = new List<int>
                     {
                         Convert.ToInt32(EntityAppRelatedTypes.Id)
@@ -76,7 +76,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         await Task.Run(() =>
                         {
-                            var _temp = EntitySyncAPIMethods.GetEntitiesRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityDetails.EntityID), EntityAppRelatedTypes.Id, Functions.UserName, App.DBPath, req);
+                            var _temp = EntitySyncAPIMethods.GetEntitiesRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityID), EntityAppRelatedTypes.Id, Functions.UserName, App.DBPath, req);
                             _temp.Wait();
                             lst = _temp.Result;
                         });
@@ -96,7 +96,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         await Task.Run(() =>
                         {
-                            var _temp = EntitySyncAPIMethods.GetCasesRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityDetails.EntityID), EntityAppRelatedTypes.Id, Functions.UserName, "", "", "", "", "", "", "", App.DBPath);
+                            var _temp = EntitySyncAPIMethods.GetCasesRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityID), EntityAppRelatedTypes.Id, Functions.UserName, "", "", "", "", "", "", "", App.DBPath);
                             lst = _temp.Result;
                         });
                         if (lst?.Count > 0)
@@ -114,7 +114,7 @@ namespace StemmonsMobile.Views.Entity
                     {
                         await Task.Run(() =>
                         {
-                            var _temp = EntitySyncAPIMethods.GetQuestRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityDetails.EntityID), EntityAppRelatedTypes.AreaId, EntityAppRelatedTypes.Id, Functions.UserName, App.DBPath);
+                            var _temp = EntitySyncAPIMethods.GetQuestRelationData(App.Isonline, Convert.ToString(EntityListMBView.EntityID), EntityAppRelatedTypes.AreaId, EntityAppRelatedTypes.Id, Functions.UserName, App.DBPath);
                             lst = _temp.Result;
                         });
                         if (lst?.Count > 0)
@@ -140,10 +140,9 @@ namespace StemmonsMobile.Views.Entity
 
             if (Appname.ToLower() == "entity")
             {
-                EntityListMBView mbView = new EntityListMBView();
-                mbView.EntityDetails = new EntityClass();
-                mbView.EntityDetails.EntityID = Convert.ToInt32(item.EntityID);
-                mbView.EntityDetails.EntityTypeID = Convert.ToInt32(item.ListID);
+                EntityClass mbView = new EntityClass();
+                mbView.EntityID = Convert.ToInt32(item.EntityID);
+                mbView.EntityTypeID = Convert.ToInt32(item.ListID);
                 await Navigation.PushAsync(new Entity_View(mbView));
             }
             else if (Appname.ToLower() == "cases")

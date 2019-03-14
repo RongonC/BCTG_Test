@@ -20,11 +20,11 @@ namespace StemmonsMobile.Views.Entity
     public partial class Entity_AppList : ContentPage
     {
         private ChillerEntity _chillerEntity;
-        EntityListMBView _entityListMBView;
+        EntityClass _entityListMBView;
         List<EntityAppRelatedTypes> BindList = new List<EntityAppRelatedTypes>();
         //string NavScreenname = string.Empty;
 
-        public Entity_AppList(ChillerEntity chillerEntity, EntityListMBView _entityList)
+        public Entity_AppList(ChillerEntity chillerEntity, EntityClass _entityList)
         {
             InitializeComponent();
 
@@ -52,7 +52,7 @@ namespace StemmonsMobile.Views.Entity
                 Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 await Task.Run(() =>
                  {
-                     Task<List<EntityAppRelatedTypes>> list = EntitySyncAPIMethods.GetEntityRelatedTypes(App.Isonline, _chillerEntity?.Name, _entityListMBView.EntityDetails.EntityID.ToString(), _entityListMBView.EntityDetails.EntityTypeID.ToString(), Functions.UserName, App.DBPath);
+                     Task<List<EntityAppRelatedTypes>> list = EntitySyncAPIMethods.GetEntityRelatedTypes(App.Isonline, _chillerEntity?.Name, _entityListMBView.EntityID.ToString(), _entityListMBView.EntityTypeID.ToString(), Functions.UserName, App.DBPath);
                      list.Wait();
                      BindList = list.Result;
                  });

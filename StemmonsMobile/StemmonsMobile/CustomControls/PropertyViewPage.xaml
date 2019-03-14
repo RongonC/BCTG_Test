@@ -44,7 +44,7 @@
                                 Style="{StaticResource buttonStyle}" />
 
                         <Button x:Name="PropertyInformationbtn" Grid.Row="2"  Grid.Column="1"     
-                                Text="Property Informatiom" 
+                                Text="Property Information" 
                                 Command ="{Binding PropertyinfomationCmd}"  CommandParameter="{Binding .}"
                                 Style="{StaticResource buttonStyle}"/>
 

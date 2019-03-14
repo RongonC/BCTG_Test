@@ -12,9 +12,10 @@
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height= "10" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height= "8" />
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height= "10" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height= "10" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />

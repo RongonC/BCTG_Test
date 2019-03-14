@@ -8,13 +8,13 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 {
 
 
-    public class EntityListMBView
+    public class EntityListMBView1
     {
-        public EntityListMBView()
+        public EntityListMBView1()
         {
         }
 
-        public EntityListMBView(string _title, string _listId, string _assocField2, string _assocField3, string _assocField4, EntityClass _EntityDetails)
+        public EntityListMBView1(string _title, string _listId, string _assocField2, string _assocField3, string _assocField4, EntityClass _EntityDetails)
         {
             Title = _title;
             ListId = _listId;

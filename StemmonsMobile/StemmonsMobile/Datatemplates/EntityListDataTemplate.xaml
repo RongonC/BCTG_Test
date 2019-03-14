@@ -24,7 +24,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid  Grid.Row="1" Grid.ColumnSpan="2"  >
-                    <Label  Text="{Binding Title}" Grid.ColumnSpan="2"   
+                    <Label  Text="{Binding EntityTitle}" Grid.ColumnSpan="2"   
                                                             Style="{StaticResource defaultLabelSize_16}" TextColor="Black"
                                                             Margin="10,0,0,0" 
                                                                 LineBreakMode="TailTruncation"

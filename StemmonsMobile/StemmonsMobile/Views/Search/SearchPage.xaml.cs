@@ -88,11 +88,11 @@ namespace StemmonsMobile.Views.Search
                 }
                 else if (searchtype == "Search Entities")
                 {
-                    EntityListMBView md = new EntityListMBView();
-                    md.Title = listitem.TYPE_NAME;
-                    md.EntityDetails = new EntityClass();
-                    md.EntityDetails.EntityTypeID = Convert.ToInt32(listitem.TypeID);
-                    md.EntityDetails.EntityID = Convert.ToInt32(listitem.LINK_ID);
+                    EntityClass md = new EntityClass();
+                    //md.Title = listitem.TYPE_NAME;
+                    md= new EntityClass();
+                    md.EntityTypeID = Convert.ToInt32(listitem.TypeID);
+                    md.EntityID = Convert.ToInt32(listitem.LINK_ID);
 
                     await Navigation.PushAsync(new Entity_View(md));
                 }

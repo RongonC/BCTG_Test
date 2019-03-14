@@ -26,7 +26,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
 
         public EntityListViewModel()
         {
-            ListEntityitem = new ObservableCollection<EntityListMBView>();
+            ListEntityitem = new ObservableCollection<EntityClass>();
             refreshCommand = RefreshCommand;
 
             this.LoadDataCommand = new Command(async () =>
@@ -56,7 +56,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             set;
         }
 
-        public ObservableCollection<EntityListMBView> ListEntityitem { get; set; }
+        public ObservableCollection<EntityClass> ListEntityitem { get; set; }
 
         public string _Viewtype { get; set; }
 
@@ -73,7 +73,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
         {
             if (item != null)
             {
-                var tap = item as EntityListMBView;
+                var tap = item as EntityClass;
                 if (string.IsNullOrEmpty(ScreenCode) || ScreenCode == "UNITS")
                 {
                     // For Regualr Entity List Page
@@ -82,23 +82,23 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 else if (ScreenCode == "CAMPS")
                 {
                     // For Campus Page
-                    await Application.Current.MainPage.Navigation.PushAsync(new CampusPage(tap.EntityDetails));
+                    await Application.Current.MainPage.Navigation.PushAsync(new CampusPage(tap));
                 }
                 else if (ScreenCode == "TNTLIST")
                 {
                     // For Campus Page
-                    await Application.Current.MainPage.Navigation.PushAsync(new TenantViewPage(tap.EntityDetails));
+                    await Application.Current.MainPage.Navigation.PushAsync(new TenantViewPage(tap));
                 }
                 else
                 {
                     // For Property List and My Property 
-                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap.EntityDetails));
+                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap));
                 }
             }
         }
 
-        EntityListMBView _elist;
-        public EntityListMBView _elist_property
+        EntityClass _elist;
+        public EntityClass _elist_property
         {
             get => _elist;
             set
@@ -150,6 +150,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 {
                     fv.SYSTEM_CODE_ENTITY_TYPE = SystemCodeEntityType;
                 }
+                Lazyload_request.isActive = 'Y';
                 Lazyload_request.EntityTypeID = _entityTypeID;
                 Lazyload_request.entityTypeSchema = fv;
 
@@ -178,6 +179,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     {
                         ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
                     });
+                    ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
                 }
                 else
                 {
@@ -187,72 +189,77 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     });
                 }
 
-                var List_Entityitem = new ObservableCollection<EntityListMBView>();
+                //var List_Entityitem = new ObservableCollection<EntityListMBView>();
 
                 var _item = new ObservableCollection<EntityClass>(ListEntity);
 
-                if (_item?.Count > 0)
-                {
-                    int count = _item.Count();
-                    EntityListMBView mb = new EntityListMBView();
-                    for (int i = 0; i < _item.Count; i++)
-                    {
-                        var te1 = _item[i].AssociationFieldCollection;
-                        for (int j = 0; j < te1.Count; j++)
-                        {
-                            switch (te1[j]?.FieldType?.ToLower())
-                            {
-                                case "se":
-                                case "el":
-                                case "me":
-                                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                        if (te1[j].AssocMetaData.Count != 0)
-                                            mb.Title = te1[j].AssocMetaData[0].FieldValue;
-                                        else
-                                            mb.Title = "";
-                                    break;
-                                default:
-                                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
-                                        if (te1[j].AssocMetaDataText.Count != 0)
-                                        {
-                                            if (te1[j].AssocMetaDataText.Count != 0)
-                                                mb.Title = te1[j].AssocMetaDataText[0].TextValue;
-                                            else
-                                                mb.Title = "";
-                                        }
-                                        else if (te1[j].AssocDecode.Count != 0)
-                                        {
-                                            if (te1[j].AssocDecode.Count != 0)
-                                                mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
-                                            else
-                                                mb.Title = "";
-                                        }
-                                    break;
-                            }
-                        }
-                        mb.Field2 = "Created By: " + _item[i].EntityCreatedByFullName;
+                #region Using EntityListMBView
+                //if (_item?.Count > 0)
+                //{
+                //    int count = _item.Count();
+                //    EntityListMBView mb = new EntityListMBView();
+                //    for (int i = 0; i < _item.Count; i++)
+                //    {
+                //        var te1 = _item[i].AssociationFieldCollection;
+                //        for (int j = 0; j < te1.Count; j++)
+                //        {
+                //            switch (te1[j]?.FieldType?.ToLower())
+                //            {
+                //                case "se":
+                //                case "el":
+                //                case "me":
+                //                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+                //                        if (te1[j].AssocMetaData.Count != 0)
+                //                            mb.Title = te1[j].AssocMetaData[0].FieldValue;
+                //                        else
+                //                            mb.Title = "";
+                //                    break;
+                //                default:
+                //                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+                //                        if (te1[j].AssocMetaDataText.Count != 0)
+                //                        {
+                //                            if (te1[j].AssocMetaDataText.Count != 0)
+                //                                mb.Title = te1[j].AssocMetaDataText[0].TextValue;
+                //                            else
+                //                                mb.Title = "";
+                //                        }
+                //                        else if (te1[j].AssocDecode.Count != 0)
+                //                        {
+                //                            if (te1[j].AssocDecode.Count != 0)
+                //                                mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
+                //                            else
+                //                                mb.Title = "";
+                //                        }
+                //                    break;
+                //            }
+                //        }
+                //        mb.Field2 = "Created By: " + _item[i].EntityCreatedByFullName;
 
-                        mb.Field4 = Convert.ToDateTime(DataServiceBus.OfflineHelper.DataTypes.Common.CommonConstants.DateFormatStringToString(_item[i].EntityCreatedDateTime)).Date.ToString("d");
+                //        mb.Field4 = Convert.ToDateTime(DataServiceBus.OfflineHelper.DataTypes.Common.CommonConstants.DateFormatStringToString(_item[i].EntityCreatedDateTime)).Date.ToString("d");
 
-                        string a = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(_item[i].ListID);
+                //        string a = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(_item[i].ListID);
 
-                        string b = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(count++);
+                //        string b = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(count++);
 
-                        mb.ListId = _item[i].ListID.ToString() != "0" ? a : b;
+                //        mb.ListId = _item[i].ListID.ToString() != "0" ? a : b;
 
-                        mb.EntityDetails = _item[i];
-                        List_Entityitem.Add(mb);
-                        mb = new EntityListMBView();
-                    }
-                }
+                //        mb.EntityDetails = _item[i];
+                //        List_Entityitem.Add(mb);
+                //        mb = new EntityListMBView();
+                //    }
+                //} 
+                #endregion
 
                 ListEntityitem.Clear();
-                foreach (var item in List_Entityitem)
+
+                foreach (var item in _item)
                 {
                     ListEntityitem.Add(item);
                 }
+
+
             }
-            catch (Exception)
+            catch (Exception wc)
             {
             }
         }

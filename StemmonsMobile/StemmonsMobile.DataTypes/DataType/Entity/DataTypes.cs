@@ -4400,10 +4400,11 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
             }
         }
-
-
-
-
+        public override string ToString()
+        {
+            string format = "{0}, EntityTypeID = {1},EntityTitle = {2}";
+            return string.Format(format, EntityTypeName, EntityTypeID, EntityTitle);
+        }
     }
 
     public class FILTER_VALUE
@@ -4672,8 +4673,8 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
         public override string ToString()
         {
-            string format = "{0}, EntityID = {1},EntityTypeID = {2}";
-            return string.Format(format, EntityTypeName, this.EntityID, EntityTypeID);
+            string format = "{0}, EntityID = {1},EntityTypeID = {2}, EntityTitle = {3}";
+            return string.Format(format, EntityTypeName, this.EntityID, EntityTypeID, EntityTitle);
         }
     }
 

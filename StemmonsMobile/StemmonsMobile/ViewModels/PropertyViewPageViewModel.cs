@@ -73,9 +73,7 @@ namespace StemmonsMobile.ViewModels
             PropertyEntityCmd = new Command((parameter) =>
             {
                 var cm = parameter as PropertyViewPageViewModel;
-                EntityListMBView tem = new EntityListMBView();
-                tem.EntityDetails = cm.EntityDetails;
-                Application.Current.MainPage.Navigation.PushAsync(new Entity_View(tem));
+                Application.Current.MainPage.Navigation.PushAsync(new Entity_View(cm.EntityDetails));
             });
             // Entity View Page
         }

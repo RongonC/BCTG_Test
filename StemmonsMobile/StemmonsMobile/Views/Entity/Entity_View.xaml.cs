@@ -39,7 +39,7 @@ namespace StemmonsMobile.Views.Entity
         EntityClass EntityLists = new EntityClass();
         List<Entity_Notes> EntityListsNotes = new List<Entity_Notes>();
         string NavScreenname = string.Empty; // To manage Online and Offline View entity as per Screen name i.ee Associed To Me.
-        public EntityListMBView _entityListMBView = new EntityListMBView();
+        public EntityClass _entityListMBView = new EntityClass();
 
         /// <summary>  Main Required Para is Below for this page Work
         ///     _entityListMBView.EntityDetails.EntityTypeID;
@@ -48,11 +48,11 @@ namespace StemmonsMobile.Views.Entity
         /// </summary>
         /// <param name="_SelectedEntity"></param>
         /// 
-        public Entity_View(EntityListMBView _SelectedEntity, string _navscreenname = "")
+        public Entity_View(EntityClass _SelectedEntity, string _navscreenname = "")
         {
             InitializeComponent();
             _entityListMBView = _SelectedEntity;
-            Title = string.IsNullOrEmpty(_SelectedEntity.Title) ? "View Entity" : _SelectedEntity.Title;
+            Title = string.IsNullOrEmpty(_SelectedEntity.EntityTitle) ? "View Entity" : _SelectedEntity.EntityTitle;
             lbl_createname.Text = "";
             Groups.Clear();
             NavScreenname = _navscreenname;
@@ -84,14 +84,14 @@ namespace StemmonsMobile.Views.Entity
                 {
                     try
                     {
-                        EntityLists = await EntitySyncAPIMethods.GetEntityByEntityID(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), App.DBPath);
+                        EntityLists = await EntitySyncAPIMethods.GetEntityByEntityID(Onlineflag, _entityListMBView.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityTypeID.ToString(), App.DBPath);
                     }
                     catch (Exception)
                     {
                     }
                     try
                     {
-                        EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityDetails.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.EntityTypeName, App.DBPath);
+                        EntityListsNotes = await EntitySyncAPIMethods.GetNotes(Onlineflag, _entityListMBView.EntityID.ToString(), Functions.UserName, _entityListMBView.EntityTypeID.ToString(), _entityListMBView.EntityTypeName, App.DBPath);
                     }
                     catch (Exception)
                     {
@@ -99,7 +99,7 @@ namespace StemmonsMobile.Views.Entity
                     try
                     {
                         /*PHASE II Implementation*/
-                        EntityRelatedResponse = await EntitySyncAPIMethods.GetEntityRelatedApplications(Onlineflag, _entityListMBView.EntityDetails.EntityTypeName, _entityListMBView.EntityDetails.EntityID.ToString(), _entityListMBView.EntityDetails.EntityTypeID.ToString(), Functions.UserName, App.DBPath);
+                        EntityRelatedResponse = await EntitySyncAPIMethods.GetEntityRelatedApplications(Onlineflag, _entityListMBView.EntityTypeName, _entityListMBView.EntityID.ToString(), _entityListMBView.EntityTypeID.ToString(), Functions.UserName, App.DBPath);
                     }
                     catch (Exception)
                     {
@@ -111,7 +111,7 @@ namespace StemmonsMobile.Views.Entity
                 {
                     var lbl = new Label
                     { VerticalOptions = LayoutOptions.Start };
-                    lbl.Text = _entityListMBView.Title;
+                    lbl.Text = _entityListMBView.EntityTitle;
                     lbl.HorizontalOptions = LayoutOptions.Start;
                     lbl.FontSize = 22;
                     lbl.Margin = new Thickness(0, 10, 0, 0);
@@ -477,7 +477,7 @@ namespace StemmonsMobile.Views.Entity
                     string subject = Functions.UserFullName + " wants to share this Entity with you: " + EntityTypeName;
                     subject = WebUtility.UrlEncode(subject).Replace("+", "%20");
 
-                    string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityDetails.EntityID;
+                    string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityID;
 
                     body = WebUtility.UrlEncode(body).Replace("+", "%20");
 
@@ -486,7 +486,7 @@ namespace StemmonsMobile.Views.Entity
                 else
                 {
                     string subject = Functions.UserFullName + " wants to share this Entity with you: " + EntityTypeName;
-                    string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityDetails.EntityID;
+                    string body = "Please Visit this URL:  " + App.EntityImgURL + "/EntityView.aspx?EntityID=" + _entityListMBView.EntityID;
                     shareurl = "mailto:?subject=" + subject + "&body=" + body;
                 }
                 Device.OpenUri(new Uri(shareurl));
@@ -496,9 +496,9 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        async void Copylink(EntityListMBView _Entitydata)
+        async void Copylink(EntityClass _Entitydata)
         {
-            string body = "http://entities-s-15.boxerproperty.com/EntityView.aspx?EntityID=" + _Entitydata.EntityDetails.EntityID;
+            string body = "http://entities-s-15.boxerproperty.com/EntityView.aspx?EntityID=" + _Entitydata.EntityID;
 
             //CrossClipboard.Current.SetText(body);
 
@@ -552,12 +552,12 @@ namespace StemmonsMobile.Views.Entity
             {
                 await Task.Run(async () =>
                 {
-                    recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, _entityListMBView.EntityDetails.EntityTypeID, _entityListMBView.EntityDetails.EntityID.ToString(), EntityNotes, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
+                    recID = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, _entityListMBView.EntityTypeID, _entityListMBView.EntityID.ToString(), EntityNotes, Functions.UserName, "Notes Type ID is Static", (Enum.GetNames(typeof(ActionTypes)))[1], App.DBPath, Functions.UserFullName);
                 });
                 if (!string.IsNullOrEmpty(recID?.ToString()) && recID.ToString() != "[]" && recID != "-1")
                 {
 
-                    if (_entityListMBView.EntityDetails.NewestNotesOnTop.ToLower() == "n")
+                    if (_entityListMBView.NewestNotesOnTop.ToLower() == "n")
                     {
                         var str = ReplceDownloadFilename(EntityNotes);
                         if (EntityNotes.Contains("<img"))
@@ -769,13 +769,13 @@ namespace StemmonsMobile.Views.Entity
 
         private async void btn_add_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityDetails.EntityTypeID, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeName, _entityListMBView));
+            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityTypeID, _entityListMBView.EntityID, _entityListMBView.EntityTypeName, _entityListMBView));
         }
 
         private async void btn_editentity_Clicked(object sender, EventArgs e)
         {
             Functions.IsEditEntity = true;
-            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityDetails.EntityTypeID, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeName, _entityListMBView));
+            await Navigation.PushAsync(new CreateEntityPage(_entityListMBView.EntityTypeID, _entityListMBView.EntityID, _entityListMBView.EntityTypeName, _entityListMBView));
         }
 
         private async void btn_more_Clicked(object sender, EventArgs e)
@@ -850,7 +850,7 @@ namespace StemmonsMobile.Views.Entity
                             await Navigation.PushAsync(new EntitySearchUser(EntityLists, "Assign"));
                             break;
                         case "Activity Log":
-                            await Navigation.PushAsync(new EntityActivityLogPage(Convert.ToString(_entityListMBView.EntityDetails.EntityID)));
+                            await Navigation.PushAsync(new EntityActivityLogPage(Convert.ToString(_entityListMBView.EntityID)));
                             break;
                         case "Delete Item":
                             try
@@ -862,7 +862,7 @@ namespace StemmonsMobile.Views.Entity
                                         bool success = false;
                                         await Task.Run(() =>
                                         {
-                                            var temp = EntitySyncAPIMethods.DeleteEntityItem(App.Isonline, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeID, Functions.UserName, App.DBPath);
+                                            var temp = EntitySyncAPIMethods.DeleteEntityItem(App.Isonline, _entityListMBView.EntityID, _entityListMBView.EntityTypeID, Functions.UserName, App.DBPath);
                                             temp.Wait();
                                             success = temp.Result;
                                         });
@@ -871,8 +871,8 @@ namespace StemmonsMobile.Views.Entity
                                         {
                                             EntityOrgCenterList t = new EntityOrgCenterList
                                             {
-                                                EntityTypeID = _entityListMBView.EntityDetails.EntityTypeID,
-                                                EntityTypeName = _entityListMBView.EntityDetails.EntityTypeName.ToString()
+                                                EntityTypeID = _entityListMBView.EntityTypeID,
+                                                EntityTypeName = _entityListMBView.EntityTypeName.ToString()
                                             };
                                             await Navigation.PushAsync(new EntityDetailsSubtype(t, null));
                                         }
@@ -892,7 +892,7 @@ namespace StemmonsMobile.Views.Entity
                                 bool IsOwnerChangeed = false;
                                 await Task.Run(() =>
                                 {
-                                    IsOwnerChangeed = EntitySyncAPIMethods.TakeOwnership(App.Isonline, Functions.UserName, _entityListMBView.EntityDetails.EntityID, _entityListMBView.EntityDetails.EntityTypeID, App.DBPath);
+                                    IsOwnerChangeed = EntitySyncAPIMethods.TakeOwnership(App.Isonline, Functions.UserName, _entityListMBView.EntityID, _entityListMBView.EntityTypeID, App.DBPath);
                                 });
                                 Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                                 if (IsOwnerChangeed)
@@ -931,10 +931,10 @@ namespace StemmonsMobile.Views.Entity
                                         await EntityAddnotes(txt_EntNotes.Text);
                                     }
 
-                                    var TempList = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.EntityInstance, EntityItemView, _entityListMBView.EntityDetails.EntityTypeID, App.DBPath, null);
+                                    var TempList = DBHelper.GetAppTypeInfoByNameTypeIdScreenInfo(ConstantsSync.EntityInstance, EntityItemView, _entityListMBView.EntityTypeID, App.DBPath, null);
                                     TempList.Wait();
 
-                                    CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(EntityLists), EntityInstance, EntityItemView, INSTANCE_USER_ASSOC_ID, App.DBPath, TempList.Result.APP_TYPE_INFO_ID, _entityListMBView.EntityDetails.EntityTypeID.ToString(), _entityListMBView.EntityDetails.TransactionType, _entityListMBView.EntityDetails.EntityID.ToString(), 0, _entityListMBView.EntityDetails.EntityTypeName, "").Wait();
+                                    CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(EntityLists), EntityInstance, EntityItemView, INSTANCE_USER_ASSOC_ID, App.DBPath, TempList.Result.APP_TYPE_INFO_ID, _entityListMBView.EntityTypeID.ToString(), _entityListMBView.TransactionType, _entityListMBView.EntityID.ToString(), 0, _entityListMBView.EntityTypeName, "").Wait();
 
                                 }
                                 else
@@ -984,7 +984,7 @@ namespace StemmonsMobile.Views.Entity
                             Copylink(_entityListMBView);
                             break;
                         case "Email Link":
-                            EmailLink(_entityListMBView.EntityDetails.EntityTypeName);
+                            EmailLink(_entityListMBView.EntityTypeName);
                             break;
                     }
                 }
@@ -1026,7 +1026,7 @@ namespace StemmonsMobile.Views.Entity
 
                         await Task.Run(() =>
                         {
-                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", FileName, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityID.ToString(), "", FileName, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityTypeSystemCode, 'y', Functions.UserName);
 
                             FileId = d.GetValue("ResponseContent").ToString();
                         });
@@ -1048,11 +1048,11 @@ namespace StemmonsMobile.Views.Entity
 
                             if (extension.ToLower().Contains("image"))
                             {
-                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + FileName + "</a>";
+                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"><img class='entity_note_image' src=\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"/>  " + FileName + "</a>";
                             }
                             else
                             {
-                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\">" + FileName + "</a>";
+                                Notes = "<a href =\"download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\">" + FileName + "</a>";
                             }
 
                             var Re = await EntityAddnotes(Notes);
@@ -1148,14 +1148,14 @@ namespace StemmonsMobile.Views.Entity
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                         await Task.Run(() =>
                         {
-                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityTypeSystemCode, 'y', Functions.UserName);
 
                             FileId = d.GetValue("ResponseContent").ToString();
                         });
 
                         if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
                         {
-                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + File_Name + "</a>";
+                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"/>  " + File_Name + "</a>";
 
                             var Re = await EntityAddnotes(Notes);
                             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
@@ -1267,14 +1267,14 @@ namespace StemmonsMobile.Views.Entity
                         Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                         await Task.Run(() =>
                         {
-                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityDetails.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityDetails.EntityTypeSystemCode, 'y', Functions.UserName);
+                            var d = EntityAPIMethods.AddFileToEntity(_entityListMBView.EntityID.ToString(), "", File_Name, size.ToString(), fileBytes, "", 'N', _entityListMBView.EntityTypeSystemCode, 'y', Functions.UserName);
 
                             FileId = d.GetValue("ResponseContent").ToString();
                         });
 
                         if (!string.IsNullOrEmpty(FileId?.ToString()) && FileId.ToString() != "[]")
                         {
-                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityDetails.EntityID + "\"/>  " + File_Name + "</a>";
+                            string Notes = "<a href =\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"><img class='entity_note_image' src=\"Download.aspx?FileID=" + FileId + "&amp;EntityId=" + _entityListMBView.EntityID + "\"/>  " + File_Name + "</a>";
 
                             var Re = await EntityAddnotes(Notes);
                             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);

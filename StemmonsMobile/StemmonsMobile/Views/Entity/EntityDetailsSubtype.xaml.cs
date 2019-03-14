@@ -43,7 +43,7 @@ namespace StemmonsMobile.Views.Entity
             }
         }
 
-        ObservableCollection<EntityListMBView> List_Entityitem = new ObservableCollection<EntityListMBView>();
+        ObservableCollection<EntityClass> List_Entityitem = new ObservableCollection<EntityClass>();
         EntityOrgCenterList _selectedlist;
         List<EntityClass> EntityLists = new List<EntityClass>();
         int? _pageindex = 1;
@@ -218,21 +218,21 @@ namespace StemmonsMobile.Views.Entity
 
         private async void List_entity_subtypes_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var obj = e.Item as EntityListMBView;
+            var obj = e.Item as EntityClass;
             await Navigation.PushAsync(new Entity_View(obj));
         }
 
         private async void Menu_Del_entity_subtypes_Clicked(object sender, EventArgs e)
         {
             MenuItem ls = (MenuItem)sender;
-            var bind = ls.BindingContext as EntityListMBView;
+            var bind = ls.BindingContext as EntityClass;
 
-            if (bind.EntityDetails.EntityTypeSecurityType != null)
+            if (bind.EntityTypeSecurityType != null)
             {
 
-                bool hasDeleteRightOnEntityType = bind.EntityDetails.EntityTypeSecurityType != null && (bind.EntityDetails.EntityTypeSecurityType.ToLowerInvariant().Equals("open") || bind.EntityDetails.EntityTypeSecurityType.ToLowerInvariant().Contains("d"));
+                bool hasDeleteRightOnEntityType = bind.EntityTypeSecurityType != null && (bind.EntityTypeSecurityType.ToLowerInvariant().Equals("open") || bind.EntityTypeSecurityType.ToLowerInvariant().Contains("d"));
 
-                bool fields = bind.EntityDetails.EntityTypeSecurityType.ToLowerInvariant().Contains("u") || bind.EntityDetails.EntityTypeSecurityType.ToLowerInvariant().Equals("open");
+                bool fields = bind.EntityTypeSecurityType.ToLowerInvariant().Contains("u") || bind.EntityTypeSecurityType.ToLowerInvariant().Equals("open");
                 if (fields)
                 {
                     if (hasDeleteRightOnEntityType)
@@ -242,11 +242,11 @@ namespace StemmonsMobile.Views.Entity
                         {
                             case "Yes":
 
-                                var temp = EntitySyncAPIMethods.DeleteEntityItem(App.Isonline, bind.EntityDetails.EntityID, bind.EntityDetails.EntityTypeID, Functions.UserName, App.DBPath);
+                                var temp = EntitySyncAPIMethods.DeleteEntityItem(App.Isonline, bind.EntityID, bind.EntityTypeID, Functions.UserName, App.DBPath);
                                 temp.Wait();
                                 if (temp.Result)
                                 {
-                                    var Remove = List_Entityitem.Remove((List_Entityitem.Where(t => t.ListId == bind.ListId).ToList())[0]);
+                                    var Remove = List_Entityitem.Remove((List_Entityitem.Where(t => t.ListID == bind.ListID).ToList())[0]);
                                     if (Remove)
                                     { }
                                     //List_entity_subtypes.ListSource = List_Entityitem;
@@ -276,7 +276,7 @@ namespace StemmonsMobile.Views.Entity
 
                 else
                 {
-                    var itemlist = List_Entityitem.Where(x => x.Title != null && x.Title.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
+                    var itemlist = List_Entityitem.Where(x => x.EntityTitle != null && x.EntityTitle.ToLower().Contains(e.NewTextValue.ToLower())).ToList();
                     //List_entity_subtypes.ItemsSource = itemlist;
 
                     if (itemlist.Count <= 0)
@@ -295,10 +295,9 @@ namespace StemmonsMobile.Views.Entity
         {
             try
             {
-                EntityListMBView mb = new EntityListMBView();
-                mb.EntityDetails = new EntityClass();
-                mb.EntityDetails.EntityTypeID = _selectedlist.EntityTypeID;
-                mb.EntityDetails.EntityID = _selectedlist.EntityID;
+                EntityClass mb = new EntityClass();
+                mb.EntityTypeID = _selectedlist.EntityTypeID;
+                mb.EntityID = _selectedlist.EntityID;
                 Functions.IsEditEntity = false;
                 await Navigation.PushAsync(new CreateEntityPage(_selectedlist.EntityTypeID, _selectedlist.EntityID, _selectedlist.NewEntityText, mb));
             }

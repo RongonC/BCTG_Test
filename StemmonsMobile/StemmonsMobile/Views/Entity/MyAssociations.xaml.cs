@@ -75,12 +75,11 @@ namespace StemmonsMobile.Views.Entity
             try
             {
                 var Item = FormData.SelectedItem as BoxerCentralHomePage_EntityList_Mob;
-                EntityListMBView Entity = new EntityListMBView();
-                Entity.EntityDetails = new EntityClass();
-                Entity.EntityDetails.EntityTypeID = Convert.ToInt32(Item.ENTITY_TYPE_ID);
-                Entity.EntityDetails.EntityID = Convert.ToInt32(Item.ENTITY_ID);
-                Entity.EntityDetails.EntityTypeName = Item.ENTITY_TYPE_NAME;
-                Entity.Title = Item.ENTITY_TITLE;
+                EntityClass Entity = new EntityClass();
+                
+                Entity.EntityTypeID = Convert.ToInt32(Item.ENTITY_TYPE_ID);
+                Entity.EntityID = Convert.ToInt32(Item.ENTITY_ID);
+                Entity.EntityTypeName = Item.ENTITY_TYPE_NAME;
                 await Navigation.PushAsync(new Entity_View(Entity, "MyAssociations"));
             }
             catch (Exception)
