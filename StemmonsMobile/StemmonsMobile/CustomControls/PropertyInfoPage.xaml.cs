@@ -21,18 +21,19 @@ namespace StemmonsMobile.CustomControls
     public partial class PropertyInfoPage : ContentPage
     {
         public EntityClass EntityLists = new EntityClass();
+        EntityFieldListView entityfieldcontrol;
         public string fileStr = string.Empty;
         public PropertyInfoPage(EntityClass _entityClass)
         {
             InitializeComponent();
-            //. create obj  from cnt and pass to select entity
-
-            //add cntrl
             EntityLists = _entityClass;
-            EntityFieldListView entityfieldcontrol = new EntityFieldListView(_entityClass, new List<string>() { "TITLE" }, new List<string>() { "1814", "1815", "1816", "1819", "1820", "1821", "1822", "1823", "1824", "1825", "1826", "1827", "1829", "1830", "1833", "1834", "1836", "1842" });
-            
-            //ScrollView scView = new ScrollView();
-            //scView.Content = entityfieldcontrol;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            entityfieldcontrol = new EntityFieldListView(EntityLists, new List<string>() { "TITLE" }, new List<string>() { "1814", "1815", "1816", "1819", "1820", "1821", "1822", "1823", "1824", "1825", "1826", "1827", "1829", "1830", "1833", "1834", "1836", "1842" });
 
             controlFrame.Content = entityfieldcontrol;
 

@@ -193,6 +193,7 @@
     <Content Include="Assets\plusgrey20.png" />
     <Content Include="Assets\plussign.png" />
     <Content Include="Assets\plussign1.png" />
+    <Content Include="Assets\PropertyImage.png" />
     <Content Include="Assets\Questblack.png" />
     <Content Include="Assets\Questblack_1.png" />
     <AndroidResource Include="Assets\removeicn.png">

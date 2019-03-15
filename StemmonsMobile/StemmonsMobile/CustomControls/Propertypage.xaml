@@ -14,9 +14,8 @@
                     <RowDefinition Height= "auto" />
                 </Grid.RowDefinitions>
                 <Label HorizontalTextAlignment="Center" Grid.Row="1"  VerticalTextAlignment="Center" FontSize="Large" Text="Properties" />
-                <ScrollView Grid.Row="3">
-                    <Grid>
-                        <Grid.RowDefinitions>
+                 <Grid Grid.Row="3">
+                     <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height= "Auto" />
@@ -29,15 +28,21 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="MyPropertiesbutton" Text="My Properties"   Grid.Row="0" Grid.Column="1" 
-                                Command ="{Binding MyPropertiesbtnCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="PropertyListbutton" Text="Properties List" Grid.Row="0" Grid.Column="3" 
-                                Command ="{Binding PropertyListbtnCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Compusesbutton"     Text="Campuses"        Grid.Row="2" Grid.Column="1" 
-                                Command ="{Binding CompusesbuttonCmd}" Style="{StaticResource buttonStyle}"/>
+                        <Button x:Name="MyPropertiesbutton" Text="My Properties"   
+                                Grid.Row="0" Grid.Column="1" 
+                                Command ="{Binding MyPropertiesbtnCmd}" 
+                                Style="{StaticResource buttonStyle}"/>
+                        <Button x:Name="PropertyListbutton" Text="Properties List" 
+                                Grid.Row="0" Grid.Column="3" 
+                                Command ="{Binding PropertyListbtnCmd}" 
+                                Style="{StaticResource buttonStyle}"/>
+                        <Button x:Name="Compusesbutton"     Text="Campuses"     
+                                Grid.Row="2" Grid.Column="1" 
+                                Command ="{Binding CompusesbuttonCmd}"
+                                Style="{StaticResource buttonStyle}"/>
                     </Grid>
-                </ScrollView>
             </Grid>
+            
             <cnt:FooterControl x:Name="cnt_footer"></cnt:FooterControl>
 
         </StackLayout>

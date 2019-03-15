@@ -20,9 +20,5 @@ namespace StemmonsMobile.CustomControls
            
             this.BindingContext = new MyPropertypageViewModel();
         }
-
-        public void HumBurgerButton_clicked()
-        { }
     }
-
 }

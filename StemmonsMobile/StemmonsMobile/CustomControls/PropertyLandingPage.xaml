@@ -88,7 +88,8 @@
 
 
                         <Button x:Name="Propertiesbutton" Text="Properties"
-                                Grid.Row="1" Grid.Column="1"  Command ="{Binding PropertyButtonCmd}" Style="{StaticResource buttonStyle}" />
+                                Grid.Row="1" Grid.Column="1"   
+                                Command ="{Binding PropertyButtonCmd}" Style="{StaticResource buttonStyle}" />
                         <Button x:Name="NewCasebutton" Text="New Case"
                                 Grid.Row="1" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" Style="{StaticResource buttonStyle}"/>
                         <Button x:Name="Assignebutton" Text="Assigned To Me"

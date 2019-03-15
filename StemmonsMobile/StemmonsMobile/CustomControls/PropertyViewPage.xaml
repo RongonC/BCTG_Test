@@ -1,25 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
              x:Class="StemmonsMobile.CustomControls.PropertyViewPage"
              Title="Property Page" 
-             >
+             x:Name="this" BindingContext="{x:Reference this}" >
     <ContentPage.Content>
-        <StackLayout>
-            <Grid x:Name="PropertiesGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height= "10"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+        <AbsoluteLayout >
 
-                <Label x:Name="lblTitle" Grid.Row="1" 
+            <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                   AbsoluteLayout.LayoutFlags="All"
+                 VerticalOptions="Fill">
+                <Grid x:Name="PropertiesGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height= "10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label x:Name="lblTitle" Grid.Row="1" 
                        HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"
                        Text="{Binding  EntityDetails.EntityTitle}" />
 
-                <ScrollView Grid.Row="3" >
-                    <Grid x:Name="PropertyPageCustomGrid" RowSpacing="5" >
+                    <Grid x:Name="PropertyPageCustomGrid"  Grid.Row="3"  RowSpacing="5" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
@@ -34,8 +38,8 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
-                        <ImageButton x:Name="PropertyPicturecodebtn" Source="XamLogo.png" 
-                                     BorderColor="LightBlue" 
+                        <ImageButton x:Name="PropertyPicturecodebtn"  
+                                     BorderColor="LightBlue" BackgroundColor="Transparent"
                                      BorderWidth="2" Grid.Row="0" Grid.Column="1" 
                                      HeightRequest="200"/>
                         <Button x:Name="Propertycasebtn" Grid.Row="1"   Grid.Column="1"              
@@ -69,8 +73,12 @@
                                  Style="{StaticResource buttonStyle}"/>
 
                     </Grid>
-                </ScrollView>
-            </Grid>
-        </StackLayout>
+                </Grid>
+
+            <cnt:FooterControl x:Name="cnt_footer"></cnt:FooterControl>
+              
+            </StackLayout>
+            <cnt:ActivityProgressBar IsVisible="{Binding IsBUSY}" />
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

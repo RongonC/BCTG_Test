@@ -34,12 +34,14 @@ namespace StemmonsMobile.CustomControls
 
             this.BindingContext = EmpInfoVM;
 
-            ProfileImg.Source = new UriImageSource
+            try
             {
-                Uri = new Uri("https://atxre.com/wp-content/uploads/2019/01/Image-of-Properties-2.png"),
-                //new Uri(DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + "/userphotos/DownloadPhotomobile.aspx?username=" + Functions.UserName),
-                CachingEnabled = true,
-            };
+                ProfileImg.Source = Functions.GetImageFromEntityAssoc(_entity.AssociationFieldCollection);
+            }
+            catch (Exception)
+            {
+                ProfileImg.Source = "Assets/PropertyImage.png";
+            }
         }
     }
 }

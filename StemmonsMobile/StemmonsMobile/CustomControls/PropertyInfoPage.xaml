@@ -5,32 +5,38 @@
              x:Class="StemmonsMobile.CustomControls.PropertyInfoPage"  
              Title="Property Information">
     <ContentPage.Content>
-        <StackLayout>
-            <Grid x:Name="PropertiesGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height= "10" />
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="10"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
-                <Label x:Name="Titlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
+        <AbsoluteLayout >
+            <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                   AbsoluteLayout.LayoutFlags="All"
+                 VerticalOptions="Fill">
+                <Grid x:Name="PropertiesGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height= "10" />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="Titlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
                        Text="{Binding EntityTitle}" Grid.Row="1" Grid.Column="1"/>
 
-                <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  Text="{Binding PropertyTitle}"  Grid.Row="2"  Grid.Column="1"/>-->
-                <ImageButton x:Name="ProfileImg"   Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
-                <Frame x:Name="controlFrame"    Grid.Row="5"  Grid.Column="1"
+                    <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  Text="{Binding PropertyTitle}"  Grid.Row="2"  Grid.Column="1"/>-->
+                    <ImageButton x:Name="ProfileImg"   Aspect="AspectFit" 
+                                 BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
+                    <Frame x:Name="controlFrame"    Grid.Row="5"  Grid.Column="1"
                         OutlineColor="LightBlue" Padding="5" HasShadow="False"  >
-                    <!--<CustomList:EntityFieldListView x:Name="lst_Property_information" />-->
-                </Frame>
-            </Grid>
-        </StackLayout>
+                        <!--<CustomList:EntityFieldListView x:Name="lst_Property_information" />-->
+                    </Frame>
+                </Grid>
+            </StackLayout>
+            <!--<CustomList:ActivityProgressBar IsVisible="{Binding IsBUSY}" />-->
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

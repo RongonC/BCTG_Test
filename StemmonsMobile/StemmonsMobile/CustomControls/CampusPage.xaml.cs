@@ -1,4 +1,6 @@
-﻿using StemmonsMobile.Controls;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Entity;
+using StemmonsMobile.Commonfiles;
+using StemmonsMobile.Controls;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.ViewModels;
 using StemmonsMobile.ViewModels.EntityViewModel;
@@ -49,6 +51,15 @@ namespace StemmonsMobile.CustomControls
             InitializeComponent();
             try
             {
+
+                Task.Run(() =>
+                {
+                    var res = EntitySyncAPIMethods.GetEntityByEntityID(true, _entdetail.EntityID.ToString(), Functions.UserName, _entdetail.EntityTypeID.ToString(), App.DBPath);
+                    res.Wait();
+                    _entdetail = res.Result;
+                }).Wait();
+
+
                 EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE" }, new List<string>() { "1769" });
                 frmField.Content = ent;
 

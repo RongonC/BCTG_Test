@@ -92,7 +92,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 else
                 {
                     // For Property List and My Property 
-                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap));
+                  await  Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap));
                 }
             }
         }
@@ -111,6 +111,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             }
         }
 
+        public bool IsRefresh { get; set; } = false; //For Pull To Refesh than call API other wise get value from Local Variable
 
         public async Task GetEntityListwithCall()
         {
@@ -172,20 +173,48 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 }
                 else if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS")
                 {
-                    Lazyload_request.pageIndex = 0;
-                    Lazyload_request.pageSize = 0;
-
-                    await Task.Run(async () =>
+                    if (ScreenCode == "PROPLIST" && Functions.PropertyList.Count != 0 && !IsRefresh)
                     {
-                        ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
-                    });
-                    ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
+                        ListEntity = Functions.PropertyList;
+                    }
+                    else if (ScreenCode == "CAMPS" && Functions.CampusList.Count != 0 && !IsRefresh)
+                    {
+                        ListEntity = Functions.CampusList;
+                    }
+                    else
+                    {
+                        Lazyload_request.pageIndex = 0;
+                        Lazyload_request.pageSize = 0;
+
+                        await Task.Run(async () =>
+                        {
+                            ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
+                        });
+                        ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
+                        if (ScreenCode == "PROPLIST")
+                        {
+                            Functions.PropertyList = ListEntity;
+                        }
+                        else if (ScreenCode == "CAMPS")
+                        {
+                            Functions.CampusList = ListEntity;
+                        }
+                    }
                 }
                 else
                 {
                     await Task.Run(() =>
                     {
-                        ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
+                        if (Functions.MyProperty.Count == 0 && !IsRefresh)
+                        {
+                            ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
+
+                            Functions.MyProperty = ListEntity;
+                        }
+                        else
+                        {
+                            ListEntity = Functions.MyProperty;
+                        }
                     });
                 }
 
@@ -264,6 +293,162 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             }
         }
 
+
+
+        #region MyRegion
+        //public async Task GetEntityListwithCall()
+        //{
+        //    try
+        //    {
+        //        #region Parameter
+        //        GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest Lazyload_request = new GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest
+        //        {
+        //            user = StemmonsMobile.Commonfiles.Functions.UserName,
+        //        };
+
+        //        if (_Viewtype?.ToLower() == "assigned to me")
+        //            Lazyload_request.assignedToMe = 'Y';
+        //        if (_Viewtype?.ToLower() == "active")
+        //            Lazyload_request.isActive = 'Y';
+        //        if (_Viewtype?.ToLower() == "inactive")
+        //            Lazyload_request.isActive = 'N';
+        //        if (_Viewtype?.ToLower() == "created by me")
+        //            Lazyload_request.createdByMe = 'Y';
+        //        if (_Viewtype?.ToLower() == "owned by me")
+        //            Lazyload_request.ownedByMe = 'Y';
+        //        if (_Viewtype?.ToLower() == "associated by me")
+        //            Lazyload_request.associatedToMe = 'Y';
+        //        if (_Viewtype?.ToLower() == "inactivated by me")
+        //            Lazyload_request.inActivatedByMe = 'Y';
+
+        //        FILTER_VALUE fv = new FILTER_VALUE
+        //        {
+        //            SHOW_ENTITIES_ACTIVE_INACTIVE = "ALL",
+        //            EXTERNAL_DATASOURCE_OBJECT_ID_ENTITY = EntityID,
+        //            ENTITY_TYPE = new List<int>
+        //            {
+        //                (int) _entityTypeID
+        //            }
+        //        };
+        //        //if (ScreenCode == "PROPLIST")
+        //        {
+        //            fv.SYSTEM_CODE_ENTITY_TYPE = SystemCodeEntityType;
+        //        }
+        //        Lazyload_request.isActive = 'Y';
+        //        Lazyload_request.EntityTypeID = _entityTypeID;
+        //        Lazyload_request.entityTypeSchema = fv;
+
+        //        Lazyload_request.pageIndex = PageIndex;
+        //        Lazyload_request.pageSize = PageSize;
+        //        #endregion
+
+        //        List<EntityClass> ListEntity = new List<EntityClass>();
+
+        //        // EntityListVM.ScreenCode = "MYPROPLIST";
+        //        // EntityListVM.ScreenCode = "PROPLIST";
+        //        // EntityListVM.ScreenCode = "CAMPS";
+
+        //        if (ScreenCode == "CAMPSRELATED")
+        //        {
+        //            var Result = EntityAPIMethods.GetEntityTypeRelationDatabyentityid(EntityID, Functions.UserName, "");
+        //            string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
+        //            ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
+        //        }
+        //        else if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS")
+        //        {
+        //            Lazyload_request.pageIndex = 0;
+        //            Lazyload_request.pageSize = 0;
+
+        //            await Task.Run(async () =>
+        //            {
+        //                ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
+        //            });
+        //            ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
+        //        }
+        //        else
+        //        {
+        //            await Task.Run(() =>
+        //            {
+        //                ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
+        //            });
+        //        }
+
+        //        //var List_Entityitem = new ObservableCollection<EntityListMBView>();
+
+        //        var _item = new ObservableCollection<EntityClass>(ListEntity);
+
+        //        #region Using EntityListMBView
+        //        //if (_item?.Count > 0)
+        //        //{
+        //        //    int count = _item.Count();
+        //        //    EntityListMBView mb = new EntityListMBView();
+        //        //    for (int i = 0; i < _item.Count; i++)
+        //        //    {
+        //        //        var te1 = _item[i].AssociationFieldCollection;
+        //        //        for (int j = 0; j < te1.Count; j++)
+        //        //        {
+        //        //            switch (te1[j]?.FieldType?.ToLower())
+        //        //            {
+        //        //                case "se":
+        //        //                case "el":
+        //        //                case "me":
+        //        //                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+        //        //                        if (te1[j].AssocMetaData.Count != 0)
+        //        //                            mb.Title = te1[j].AssocMetaData[0].FieldValue;
+        //        //                        else
+        //        //                            mb.Title = "";
+        //        //                    break;
+        //        //                default:
+        //        //                    if (te1[j]?.AssocSystemCode?.ToLower() == "title")
+        //        //                        if (te1[j].AssocMetaDataText.Count != 0)
+        //        //                        {
+        //        //                            if (te1[j].AssocMetaDataText.Count != 0)
+        //        //                                mb.Title = te1[j].AssocMetaDataText[0].TextValue;
+        //        //                            else
+        //        //                                mb.Title = "";
+        //        //                        }
+        //        //                        else if (te1[j].AssocDecode.Count != 0)
+        //        //                        {
+        //        //                            if (te1[j].AssocDecode.Count != 0)
+        //        //                                mb.Title = te1[j].AssocDecode[0].AssocDecodeName;
+        //        //                            else
+        //        //                                mb.Title = "";
+        //        //                        }
+        //        //                    break;
+        //        //            }
+        //        //        }
+        //        //        mb.Field2 = "Created By: " + _item[i].EntityCreatedByFullName;
+
+        //        //        mb.Field4 = Convert.ToDateTime(DataServiceBus.OfflineHelper.DataTypes.Common.CommonConstants.DateFormatStringToString(_item[i].EntityCreatedDateTime)).Date.ToString("d");
+
+        //        //        string a = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(_item[i].ListID);
+
+        //        //        string b = Convert.ToString(_item[i].EntityTypeID) + " - " + Convert.ToString(count++);
+
+        //        //        mb.ListId = _item[i].ListID.ToString() != "0" ? a : b;
+
+        //        //        mb.EntityDetails = _item[i];
+        //        //        List_Entityitem.Add(mb);
+        //        //        mb = new EntityListMBView();
+        //        //    }
+        //        //} 
+        //        #endregion
+
+        //        ListEntityitem.Clear();
+
+        //        foreach (var item in _item)
+        //        {
+        //            ListEntityitem.Add(item);
+        //        }
+
+
+        //    }
+        //    catch (Exception wc)
+        //    {
+        //    }
+        //} 
+        #endregion
+
         private bool isShow;
         public bool IsShow
         {
@@ -300,21 +485,22 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             {
                 return new Command(() =>
                 {
-
                     RefreshList();
                 });
-                ;
             }
         }
 
-        async Task RefreshList()
+        async void RefreshList()
         {
             IsBusy = true;
             PageIndex = 0;
             PageSize = 0;
+            IsRefresh = true;
             await GetEntityListwithCall();
             IsBusy = false;
+            IsRefresh = false;
         }
+
 
         //private async Task ExecuteRefreshCommand()
         //{

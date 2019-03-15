@@ -60,11 +60,15 @@ namespace StemmonsMobile.CustomControls
         {
             base.OnAppearing();
             IsBusy = true;
-            EntityListVM.PageIndex = 1;
-            EntityListVM.ListEntityitem.Clear();
-            await EntityListVM.GetEntityListwithCall();
-            EntityListVM.ListEntityitem.OrderByDescending(x => x.EntityTitle);
+            if (EntityListVM.ListEntityitem.Count == 0)
+            {
+                EntityListVM.PageIndex = 1;
+                EntityListVM.ListEntityitem.Clear();
+                await EntityListVM.GetEntityListwithCall();
+                EntityListVM.ListEntityitem.OrderByDescending(x => x.EntityTitle);
+            }
             IsBusy = false;
         }
+
     }
 }

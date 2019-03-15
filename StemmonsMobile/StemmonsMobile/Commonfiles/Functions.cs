@@ -44,6 +44,10 @@ namespace StemmonsMobile.Commonfiles
         public static string UserLoginName = "";
         public static string UserPassword = "";
         public static Add_Questions_MetadataRequest questObjectData = null;
+        public static List<EntityClass> MyProperty = new List<EntityClass>();
+        public static List<EntityClass> PropertyList = new List<EntityClass>();
+        public static List<EntityClass> CampusList = new List<EntityClass>();
+
 
         public enum BookCategoryTypes
         {
@@ -573,8 +577,7 @@ namespace StemmonsMobile.Commonfiles
             }
             catch (Exception ex)
             {
-                throw;
-                return null;
+                return ImageSource.FromUri(new Uri("Assets/PropertyImage.png"));
             }
         }
     }

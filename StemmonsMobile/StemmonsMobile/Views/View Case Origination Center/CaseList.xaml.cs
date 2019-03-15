@@ -81,6 +81,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         bool IsListGrouped = false;
         int? _pagenumber = 50;
         bool IsEntityRelationalData = false;
+        bool isFirstAppearing = true;
+
         public CaseList(string _parametername, string _value, string _searchvalue, string _Titile = "", string _uname = "", bool isEntityRelationalData = false)
         {
             InitializeComponent();
@@ -95,7 +97,14 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             if (parametername == "caseAssgnSAM" || parametername == "caseCreateBySAM" || parametername == "caseOwnerSAM")
             {
                 //This shoudl be Grouped List
-                App.Isonline = false;
+                if (_value != Functions.UserName)
+                {
+                    App.Isonline = true;
+                }
+                else
+                {
+                    App.Isonline = false;
+                }
                 IsListGrouped = true;
                 btn_add.IsVisible = false;
                 simpleCaseList.IsVisible = false;
@@ -191,12 +200,19 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             base.OnAppearing();
             try
             {
-                if (count == 0)
+                //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                CaselistGrouped.SelectedItem = null;
+                if (isFirstAppearing)
                 {
-                    SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
+                    isFirstAppearing = false;
+                    if (count == 0)
+                    {
+                        SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
 
-                    Getcaselistdatafromapi(parametername, value, searchvalue);
+                        Getcaselistdatafromapi(parametername, value, searchvalue);
+                    }
                 }
+                //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 //UpdateListContent();
             }
             catch (Exception ex)
@@ -239,7 +255,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     CaseListVM.ShowOpenCloseType = this.showOpenClosetype;
                     CaseListVM.ShowPastCase = this.showpastcase;
                     CaseListVM.SearchQuery = this.searchquery;
-                    //CaseListVM.STitle = this.sTitle;
                     CaseListVM.SaveRec = this.saveRec;
                     CaseListVM.ScrnName = this.scrnName;
                     CaseListVM.PageNumber = this._pagenumber;

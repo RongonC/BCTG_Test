@@ -4494,10 +4494,6 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
                 return "";
             }
         }
-
-
-
-
         public int AssocTypeID { get; set; }
         public int EntityTypeID { get; set; }
         public string SecurityType { get; set; }
@@ -4565,11 +4561,10 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
         public string SeparatorCharactor { get; set; }
 
-
         public override string ToString()
         {
-            string format = "{0}, AssocTypeID = {1},ItemDesktopPriorityValue = {2}";
-            return string.Format(format, this.AssocName, this.AssocTypeID, this.ItemDesktopPriorityValue);
+            string format = "{0}, AssocTypeID = {1},ItemDesktopPriorityValue = {2}, FieldType = {3}";
+            return string.Format(format, this.AssocName, this.AssocTypeID, this.ItemDesktopPriorityValue, FieldType);
         }
     }
 

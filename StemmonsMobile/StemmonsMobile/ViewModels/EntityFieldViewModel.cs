@@ -5,6 +5,7 @@ using StemmonsMobile.Models;
 using StemmonsMobile.Views.Entity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -69,8 +70,8 @@ namespace StemmonsMobile.ViewModels
             }
         }
 
-        private List<AssociationField> _entityAssocOrder;
-        public List<AssociationField> EntityAssocOrder
+        private ObservableCollection<AssociationField> _entityAssocOrder;
+        public ObservableCollection<AssociationField> EntityAssocOrder
         {
             get
             {
@@ -82,7 +83,6 @@ namespace StemmonsMobile.ViewModels
                 if (value != null)
                 {
                     _entityAssocOrder = value;
-                    // OnPropertyChanged(nameof(EntityAssocOrder));
                     _heights = (_entityAssocOrder.Count * 100) / 2;
                 }
             }
@@ -98,6 +98,19 @@ namespace StemmonsMobile.ViewModels
 
         public EntityClass SelectedEntity { get; set; }
 
+        private bool _isbuzy;
+
+        public bool IsBuZy
+        {
+            get { return _isbuzy; }
+            set
+            {
+                _isbuzy = value;
+                OnPropertyChanged(nameof(IsBuZy));
+            }
+        }
+
+
         public EntityFieldViewModel(EntityClass _entdetail, List<string> _acsystemcode = null, List<string> _assoctypeid = null)
         {
             SelectedEntity = _entdetail;
@@ -105,7 +118,7 @@ namespace StemmonsMobile.ViewModels
             AcTypeId = _assoctypeid;
 
             _entitytitle = SelectedEntity.EntityTitle;
-            _entityAssocOrder = new List<AssociationField>();
+            _entityAssocOrder = new ObservableCollection<AssociationField>();
             getEntityFieldValue();
 
             if (_entityAssocOrder.Count > 0)
@@ -116,10 +129,15 @@ namespace StemmonsMobile.ViewModels
 
         public async void getEntityFieldValue() // get feild/value according AssocCode and AssocTypeId
         {
+            IsBuZy = true;
             try
             {
-                EntityLists = await EntitySyncAPIMethods.GetEntityByEntityID(Onlineflag, SelectedEntity.EntityID.ToString(), Functions.UserName, SelectedEntity.EntityTypeID.ToString(), App.DBPath);
-
+                await Task.Run(() =>
+                 {
+                     var lst = EntitySyncAPIMethods.GetEntityByEntityID(Onlineflag, SelectedEntity.EntityID.ToString(), Functions.UserName, SelectedEntity.EntityTypeID.ToString(), App.DBPath);
+                     lst.Wait();
+                     EntityLists = lst.Result;
+                 });
                 if (AcSystemCode?.Count > 0 || AcTypeId?.Count > 0)
                 {
                     foreach (var code in AcSystemCode)
@@ -146,26 +164,21 @@ namespace StemmonsMobile.ViewModels
                 }
                 else
                 {
-                    _entityAssocOrder = EntityLists.AssociationFieldCollection;
+                    _entityAssocOrder = new ObservableCollection<AssociationField>(EntityLists.AssociationFieldCollection);
                 }
-
-                //_entityAssocOrder = data;
                 if (_entityAssocOrder.Count > 0)
                 {
-                    _entityAssocOrder = _entityAssocOrder.OrderBy(x => x.ItemDesktopPriorityValue).ToList();
+                    _entityAssocOrder = new ObservableCollection<AssociationField>(_entityAssocOrder.OrderBy(x => x.ItemDesktopPriorityValue).ToList());
                 }
                 else
                 {
                     await Application.Current.MainPage.DisplayAlert("Alert", "SystemCode and TypeId does not match!", "Okay");
-                    //_entityAssocOrder = _entityListMBView.EntityDetails.AssociationFieldCollection.OrderBy(x => x.ItemDesktopPriorityValue).ToList();
                 }
-
-
-                //var list_data = EntityLists.AssociationFieldCollection.Where(x => x.AssocSystemCode == "TITLE" && x.AssocTypeID == 40).ToList();
             }
             catch (Exception)
             {
             }
+            IsBuZy = false;
         }
     }
 }
