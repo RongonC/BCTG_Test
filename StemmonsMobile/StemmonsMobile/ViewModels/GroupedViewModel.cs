@@ -281,7 +281,10 @@ namespace StemmonsMobile.ViewModels
                     }
                     catch
                     {
-                        BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                        if (GetCaseList != null)
+                        {
+                            BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                        }
                     }
                 });
             });

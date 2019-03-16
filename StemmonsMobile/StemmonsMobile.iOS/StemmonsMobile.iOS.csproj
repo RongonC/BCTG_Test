@@ -105,11 +105,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
-    <MtouchArch>ARMv7, ARM64</MtouchArch>
-    <CodesignProvision>iOS Team Provisioning Profile: com.stemmons.stemmonsxamarin</CodesignProvision>
-    <CodesignKey>iPhone Developer: Willilam Daugherty II (S43UH9XBSL)</CodesignKey>
-    <CodesignEntitlements>
-    </CodesignEntitlements>
+    <MtouchArch>ARM64</MtouchArch>
+    <CodesignKey>iPhone Distribution: Stemmons Enterprise, LLC. (T7TYT9DM27)</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignExtraArgs />
     <CodesignResourceRules />
   </PropertyGroup>
