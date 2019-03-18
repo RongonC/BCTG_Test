@@ -398,9 +398,15 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                         break;
                     case "caseAssgnSAM":
+
                         caseAssgnSam = val;
-                        scrnName = "_AssignedToMe";
-                        AssgnSam = Functions.UserName;
+                        if(caseAssgnSam == Functions.UserName)
+                        { scrnName = "_AssignedToMe";
+                            AssgnSam = Functions.UserName; }
+                        else{
+                            scrnName = "_AssignedToSAM";
+                            AssgnSam = val;
+                        }
 
                         break;
                     case "caseAssgnTM":
@@ -451,11 +457,18 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     Samusername = Team_Username;
                     saveRec = false;
                 }
+
+                if (scrnName == "_AssignedToSAM")
+                {
+                    saveRec = false;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                }
                 #endregion
 
                 if ((!string.IsNullOrEmpty(OwnerSam)) || (!string.IsNullOrEmpty(AssgnSam)) || (!string.IsNullOrEmpty(CreateBySam)) || (!string.IsNullOrEmpty(AssgnSamTM)))
                 {
                     isOnlineCall = false;
+
                 }
                 else
                 {
