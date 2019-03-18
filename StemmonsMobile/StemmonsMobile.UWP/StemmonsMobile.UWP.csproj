@@ -115,6 +115,9 @@
     </AppxManifest>
     <Content Include="Assets\320\Stawix - SoinSansNeue-ExtraLight.otf" />
     <Content Include="Assets\320\Stawix - SoinSansNeue-Roman.otf" />
+    <Content Include="Assets\AdvancedView.png" />
+    <Content Include="Assets\AssignToMe.png" />
+    <Content Include="Assets\BoxerStandards.png" />
     <Content Include="Assets\btnmsg.png" />
     <None Include="StemmonsMobile.UWP_TemporaryKey.pfx" />
   </ItemGroup>
@@ -141,6 +144,7 @@
     <Content Include="Assets\alertIcon.png" />
     <Content Include="Assets\backicon.png" />
     <Content Include="Assets\boxerlogo.png" />
+    <Content Include="Assets\Campuses.png" />
     <Content Include="Assets\Cars.png" />
     <Content Include="Assets\Casesblack.png" />
     <Content Include="Assets\Casesblack_1.png" />
@@ -148,6 +152,8 @@
     <Content Include="Assets\Checked.png" />
     <Content Include="Assets\Checked2.png" />
     <Content Include="Assets\create.png" />
+    <Content Include="Assets\CreateCase.png" />
+    <Content Include="Assets\CreatedByMe.png" />
     <Content Include="Assets\Delete.png" />
     <Content Include="Assets\Departmentblack.png" />
     <Content Include="Assets\Departmentblack_1.png" />
@@ -168,6 +174,7 @@
     <Content Include="Assets\FilterIcon.png" />
     <Content Include="Assets\home.png" />
     <Content Include="Assets\Home_Icon.png" />
+    <Content Include="Assets\HopperCenter.png" />
     <Content Include="Assets\icon_book.png" />
     <Content Include="Assets\icon_topic.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
@@ -185,6 +192,8 @@
     <Content Include="Assets\magnify1.png" />
     <Content Include="Assets\menuicon.png" />
     <Content Include="Assets\more.png" />
+    <Content Include="Assets\MyProperties.png" />
+    <Content Include="Assets\OwenedByMe.png" />
     <Content Include="Assets\Phone.png" />
     <Content Include="Assets\plus.png" />
     <Content Include="Assets\plus11.png" />
@@ -193,7 +202,9 @@
     <Content Include="Assets\plusgrey20.png" />
     <Content Include="Assets\plussign.png" />
     <Content Include="Assets\plussign1.png" />
+    <Content Include="Assets\Properties.png" />
     <Content Include="Assets\PropertyImage.png" />
+    <Content Include="Assets\PropertyList.png" />
     <Content Include="Assets\Questblack.png" />
     <Content Include="Assets\Questblack_1.png" />
     <AndroidResource Include="Assets\removeicn.png">

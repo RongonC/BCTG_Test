@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
-             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page">
+             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page" BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout x:Name="mainstack">
             <Grid x:Name="PropertiesGrid">
@@ -28,15 +28,18 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="MyPropertiesbutton" Text="My Properties"   
+                    <Button x:Name="MyPropertiesbutton" BackgroundColor="Transparent"
+                                     Image="Assets/MyProperties.png"
                                 Grid.Row="0" Grid.Column="1" 
                                 Command ="{Binding MyPropertiesbtnCmd}" 
                                 Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="PropertyListbutton" Text="Properties List" 
+                    <Button x:Name="PropertyListbutton" BackgroundColor="Transparent"
+                                     Image="Assets/PropertyList.png"
                                 Grid.Row="0" Grid.Column="3" 
                                 Command ="{Binding PropertyListbtnCmd}" 
                                 Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Compusesbutton"     Text="Campuses"     
+                    <Button x:Name="Compusesbutton"    BackgroundColor="Transparent"
+                                     Image="Assets/Campuses.png"
                                 Grid.Row="2" Grid.Column="1" 
                                 Command ="{Binding CompusesbuttonCmd}"
                                 Style="{StaticResource buttonStyle}"/>

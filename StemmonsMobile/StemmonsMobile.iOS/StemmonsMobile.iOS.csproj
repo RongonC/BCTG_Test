@@ -502,34 +502,70 @@
     <BundleResource Include="Resources\Assets\Departmentblack_1.png" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-152_152@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\1024.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-167_167@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\120 - Copy.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-180_180@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\120.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\1201.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\152.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x4-@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\167.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40-@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\180.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\20.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-60x60@1x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\29.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iTunesArtwork@2x.png">
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\401.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\402.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\581.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\60.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\80.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\801.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\87.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Icon-App-20x20@3x.png.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\iTunesArtwork@2x.png.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json">
@@ -538,31 +574,10 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\.DS_Store">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-120_120%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-58_58%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76_76%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-80_80%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App120_120%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App58_58%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App80_80%402x.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App87_87%402x.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-152_152%401x.png">
@@ -641,6 +656,39 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Assets\PropertyImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\Properties.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\AdvancedView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\AssignToMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\BoxerStandards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\CreateCase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\CreatedByMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\HopperCenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\OwenedByMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\PropertyList.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\Campuses.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\MyProperties.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

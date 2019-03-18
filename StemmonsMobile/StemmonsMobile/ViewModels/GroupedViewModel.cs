@@ -482,9 +482,9 @@ namespace StemmonsMobile.ViewModels
             catch (Exception ex)
             {
 
-                
+
             }
-            
+
         }
 
         public void UpdateListContent()

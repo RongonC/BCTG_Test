@@ -15,7 +15,7 @@
                         <RowDefinition.Height>
                             <OnPlatform x:TypeArguments="GridLength">
                                 <On Platform="iOS" Value="30"/>
-                                <On Platform="Android, WinPhone, Windows" Value="20" />
+                                <On Platform="Android, WinPhone, Windows" Value="10" />
                             </OnPlatform>
                         </RowDefinition.Height>
                     </RowDefinition>
@@ -38,7 +38,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image  x:Name="App_Logo" Aspect="AspectFit" HorizontalOptions="Start" 
-                           Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+                           Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="3" 
                        VerticalOptions="Center" Margin="20,0,0,0" Source="Assets/boxerlogo.png" />
 
                     <!--<cntrl:SettingButton x:Name="btnSetting" Grid.Row="0" Grid.Column="2"/>-->
@@ -87,22 +87,30 @@
                         </Grid.ColumnDefinitions>
 
 
-                        <Button x:Name="Propertiesbutton" Text="Properties"
-                                Grid.Row="1" Grid.Column="1"   
+                        <Button x:Name="Propertiesbutton" BackgroundColor="Transparent"
+                                Grid.Row="1" Grid.Column="1"  
+                                Image="Assets/Properties.png"
                                 Command ="{Binding PropertyButtonCmd}" Style="{StaticResource buttonStyle}" />
-                        <Button x:Name="NewCasebutton" Text="New Case"
+                        <Button x:Name="NewCasebutton" BackgroundColor="Transparent"
+                                Image="Assets/CreateCase.png"
                                 Grid.Row="1" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Assignebutton" Text="Assigned To Me"
+                        <Button x:Name="Assignebutton" BackgroundColor="Transparent"
+                                Image="Assets/AssignToMe.png"
                                 Grid.Row="3" Grid.Column="1"  Command ="{Binding AssignButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Createbutton" Text="Created By Me"
+                        <Button x:Name="Createbutton" BackgroundColor="Transparent"
+                                     Image="Assets/CreatedByMe.png"
                                  Grid.Row="3" Grid.Column="3"  Command ="{Binding CreateButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Ownedbutton" Text="Owned By Me"
+                        <Button x:Name="Ownedbutton" BackgroundColor="Transparent"
+                                           Image="Assets/OwenedByMe.png"
                                  Grid.Row="5" Grid.Column="1"  Command ="{Binding OwnedButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Advancebutton" Text="Advanced Search"
+                        <Button x:Name="Advancebutton" BackgroundColor="Transparent"
+                                         Image="Assets/AdvancedView.png"
                                  Grid.Row="5" Grid.Column="3" Command ="{Binding AdvanceButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Standardbutton" Text="Boxer Standards"
+                        <Button x:Name="Standardbutton" BackgroundColor="Transparent"
+                                           Image="Assets/BoxerStandards.png"
                                  Grid.Row="7" Grid.Column="1" Command ="{Binding StandardsButtonCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Hopperbutton" Text="Hopper Center"
+                        <Button x:Name="Hopperbutton" BackgroundColor="Transparent"
+                                  Image="Assets/HopperCenter.png"
                                 Grid.Row="7" Grid.Column="3"  Command ="{Binding HopperButtonCmd}" Style="{StaticResource buttonStyle}"/>
                     </Grid>
                 </ScrollView>
