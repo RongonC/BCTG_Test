@@ -77,7 +77,7 @@ namespace StemmonsMobile.Behavior
             if (items != null && e.Item == items[items.Count - 1])
             {
                 if (LoadMoreCommand != null && LoadMoreCommand.CanExecute(null))
-                    LoadMoreCommand.Execute(null);
+                    LoadMoreCommand.Execute(e);
             }
         }
 

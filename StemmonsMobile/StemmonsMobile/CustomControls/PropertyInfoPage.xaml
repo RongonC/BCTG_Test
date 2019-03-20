@@ -29,7 +29,7 @@
 
                     <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  Text="{Binding PropertyTitle}"  Grid.Row="2"  Grid.Column="1"/>-->
                     <ImageButton x:Name="ProfileImg"   Aspect="AspectFit" 
-                                 BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
+                                 BackgroundColor="Transparent"   HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
                     <Frame x:Name="controlFrame"    Grid.Row="5"  Grid.Column="1"
                         OutlineColor="LightBlue" Padding="5" HasShadow="False"  >
                         <!--<CustomList:EntityFieldListView x:Name="lst_Property_information" />-->

@@ -22,22 +22,42 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
         public string ScreenCode { get; set; }
         // Blank Means Fetch All Entity List Based on Type ID
         //"MYPROPLIST" - To Fetch Properties Related to User
-        //"PROPLIST" - To Fetch Properties Based on Entity Type System Code
+        //"PROPLIST" - To Fetch Properties 
+        //"CAMPS"  = To Fetch Campus Based 
+        //"TNTLIST" = To Fetch Tanent List 
+        //"UNITS" = = To Fetch Units
+        //"MKT" = To Fetch Property Markets Based 
 
         public EntityListViewModel()
         {
             ListEntityitem = new ObservableCollection<EntityClass>();
             refreshCommand = RefreshCommand;
 
-            this.LoadDataCommand = new Command(async () =>
+            LoadDataCommand = new Command<ItemVisibilityEventArgs>(async (para) =>
             {
+                var item = para.Item as EntityClass;
+                int index = 0;
+                try
+                {
+                    index = ListEntityitem.IndexOf(item);
+                }
+                catch (Exception eqs)
+                {
 
-                PageIndex += 1;
+                }
+                if (ListEntityitem.Count - 1 <= index)
+                {
+                    if (ListEntityitem.Count == (PageSize * PageIndex))
+                    {
+                        PageIndex++;
+                        IsShow = true;
+                        await GetEntityListwithCall();
+                        IsShow = false;
+                    }
+                }
 
-                IsShow = true;
-                //await GetEntityListwithCall();
-                IsShow = false;
-
+                if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS" || ScreenCode == "MKT")
+                    ListEntityitem.OrderByDescending(x => x.EntityTitle);
             });
 
             this.ItemTappedCommand = new Command<ItemTappedEventArgs>(onItemTap);
@@ -73,6 +93,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
         {
             if (item != null)
             {
+
                 var tap = item as EntityClass;
                 if (string.IsNullOrEmpty(ScreenCode) || ScreenCode == "UNITS")
                 {
@@ -89,10 +110,15 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     // For Campus Page
                     await Application.Current.MainPage.Navigation.PushAsync(new TenantViewPage(tap));
                 }
+                else if (ScreenCode == "MKT")
+                {
+                    // For Property List Page
+                    await Application.Current.MainPage.Navigation.PushAsync(new MyPropertyList("PROPLIST", tap));
+                }
                 else
                 {
                     // For Property List and My Property 
-                  await  Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap));
+                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyViewPage(tap));
                 }
             }
         }
@@ -107,6 +133,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 {
                     _elist = value;
                     onItemTap(_elist);
+                    _elist = null;
                 }
             }
         }
@@ -171,50 +198,51 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
                     ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
                 }
-                else if (ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS")
+                else if (string.IsNullOrEmpty(ScreenCode) || ScreenCode == "PROPLIST" || ScreenCode == "CAMPS" || ScreenCode == "TNTLIST" || ScreenCode == "UNITS" || ScreenCode == "MKT")
                 {
-                    if (ScreenCode == "PROPLIST" && Functions.PropertyList.Count != 0 && !IsRefresh)
+                    //if (ScreenCode == "PROPLIST" && Functions.PropertyList.Count != 0 && !IsRefresh)
+                    //{
+                    //    ListEntity = Functions.PropertyList;
+                    //}
+                    //else if (ScreenCode == "CAMPS" && Functions.CampusList.Count != 0 && !IsRefresh)
+                    //{
+                    //    ListEntity = Functions.CampusList;
+                    //}
+                    //else
                     {
-                        ListEntity = Functions.PropertyList;
-                    }
-                    else if (ScreenCode == "CAMPS" && Functions.CampusList.Count != 0 && !IsRefresh)
-                    {
-                        ListEntity = Functions.CampusList;
-                    }
-                    else
-                    {
-                        Lazyload_request.pageIndex = 0;
-                        Lazyload_request.pageSize = 0;
+                        //Lazyload_request.pageIndex = 0;
+                        //Lazyload_request.pageSize = 0;
 
                         await Task.Run(async () =>
                         {
                             ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
                         });
                         ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
-                        if (ScreenCode == "PROPLIST")
-                        {
-                            Functions.PropertyList = ListEntity;
-                        }
-                        else if (ScreenCode == "CAMPS")
-                        {
-                            Functions.CampusList = ListEntity;
-                        }
+
+                        //if (ScreenCode == "PROPLIST")
+                        //{
+                        //    Functions.PropertyList = ListEntity;
+                        //}
+                        //else if (ScreenCode == "CAMPS")
+                        //{
+                        //    Functions.CampusList = ListEntity;
+                        //}
                     }
                 }
                 else
                 {
                     await Task.Run(() =>
                     {
-                        if (Functions.MyProperty.Count == 0 && !IsRefresh)
-                        {
-                            ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
+                        // if (Functions.MyProperty.Count == 0 && !IsRefresh)
+                        //{
+                        ListEntity = EntitySyncAPIMethods.GetEntityRoleAssignByEmp(App.Isonline, Functions.UserName, "PROPY", App.DBPath);
 
-                            Functions.MyProperty = ListEntity;
-                        }
-                        else
-                        {
-                            ListEntity = Functions.MyProperty;
-                        }
+                        // Functions.MyProperty = ListEntity;
+                        //}
+                        //else
+                        //{
+                        //  ListEntity = Functions.MyProperty;
+                        // }
                     });
                 }
 
@@ -279,21 +307,23 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                 //} 
                 #endregion
 
-                ListEntityitem.Clear();
-
                 foreach (var item in _item)
                 {
                     ListEntityitem.Add(item);
                 }
-
-
             }
             catch (Exception wc)
             {
             }
         }
 
-
+        public ImageSource ImgProperty
+        {
+            get
+            {
+                return Functions.GetImageFromEntityAssoc(_elist_property.AssociationFieldCollection);
+            }
+        }
 
         #region MyRegion
         //public async Task GetEntityListwithCall()

@@ -90,28 +90,28 @@
                         <Button x:Name="Propertiesbutton" BackgroundColor="Transparent"
                                 Grid.Row="1" Grid.Column="1"  
                                 Image="Assets/Properties.png"
-                                Command ="{Binding PropertyButtonCmd}" Style="{StaticResource buttonStyle}" />
+                                Command ="{Binding PropertyButtonCmd}"  />
                         <Button x:Name="NewCasebutton" BackgroundColor="Transparent"
                                 Image="Assets/CreateCase.png"
-                                Grid.Row="1" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                Grid.Row="1" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" />
                         <Button x:Name="Assignebutton" BackgroundColor="Transparent"
                                 Image="Assets/AssignToMe.png"
-                                Grid.Row="3" Grid.Column="1"  Command ="{Binding AssignButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                Grid.Row="3" Grid.Column="1"  Command ="{Binding AssignButtonCmd}" />
                         <Button x:Name="Createbutton" BackgroundColor="Transparent"
                                      Image="Assets/CreatedByMe.png"
-                                 Grid.Row="3" Grid.Column="3"  Command ="{Binding CreateButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                 Grid.Row="3" Grid.Column="3"  Command ="{Binding CreateButtonCmd}" />
                         <Button x:Name="Ownedbutton" BackgroundColor="Transparent"
                                            Image="Assets/OwenedByMe.png"
-                                 Grid.Row="5" Grid.Column="1"  Command ="{Binding OwnedButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                 Grid.Row="5" Grid.Column="1"  Command ="{Binding OwnedButtonCmd}" />
                         <Button x:Name="Advancebutton" BackgroundColor="Transparent"
                                          Image="Assets/AdvancedView.png"
-                                 Grid.Row="5" Grid.Column="3" Command ="{Binding AdvanceButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                 Grid.Row="5" Grid.Column="3" Command ="{Binding AdvanceButtonCmd}" />
                         <Button x:Name="Standardbutton" BackgroundColor="Transparent"
                                            Image="Assets/BoxerStandards.png"
-                                 Grid.Row="7" Grid.Column="1" Command ="{Binding StandardsButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                 Grid.Row="7" Grid.Column="1" Command ="{Binding StandardsButtonCmd}" />
                         <Button x:Name="Hopperbutton" BackgroundColor="Transparent"
                                   Image="Assets/HopperCenter.png"
-                                Grid.Row="7" Grid.Column="3"  Command ="{Binding HopperButtonCmd}" Style="{StaticResource buttonStyle}"/>
+                                Grid.Row="7" Grid.Column="3"  Command ="{Binding HopperButtonCmd}"  />
                     </Grid>
                 </ScrollView>
 

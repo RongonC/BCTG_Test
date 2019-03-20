@@ -65,11 +65,12 @@ namespace StemmonsMobile.CustomControls
 
             try
             {
-                PropertyPicturecodebtn.Source = Functions.GetImageFromEntityAssoc(PropertyViewVM.EntityDetails.AssociationFieldCollection);
+                //PropertyPicturecodebtn.Source = "Assets/DefaultIMG.png";
+                //PropertyPicturecodebtn.Source = Functions.GetImageFromEntityAssoc(PropertyViewVM.EntityDetails.AssociationFieldCollection);
             }
             catch (Exception)
             {
-                PropertyPicturecodebtn.Source = "Assets/PropertyImage.png";
+               // PropertyPicturecodebtn.Source = "Assets/DefaultIMG.png";
             }
         }
     }

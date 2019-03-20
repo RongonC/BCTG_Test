@@ -46,7 +46,7 @@ namespace StemmonsMobile.CustomControls
         {
             InitializeComponent();
 
-            Titlelbl.Text = entityDetails.EntityTitle;
+            //Titlelbl.Text = entityDetails.EntityTitle;
             EntityListVM.ScreenCode = _pagecode;
             EntityListVM.EntityID = entityDetails.EntityID;
             if (_pagecode == "TNTLIST")
@@ -58,6 +58,8 @@ namespace StemmonsMobile.CustomControls
             else
             {
                 Title = "Available Units";
+             
+                //Must pass Entity Id
                 //EntityListVM.ScreenCode = "TNTLIST";
                 EntityListVM.SystemCodeEntityType = "UNITS";
                 EntityListVM._Viewtype = "";
@@ -67,23 +69,22 @@ namespace StemmonsMobile.CustomControls
 
             try
             {
-                ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
+                // ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
             }
             catch (Exception)
             {
-                ProfileImg.Source = "Assets/PropertyImage.png";
+                // ProfileImg.Source = "Assets/PropertyImage.png";
             }
         }
 
         int? _pageindex = 1;
-        int? pageSize = 50;
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
 
-
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            IsBusy = true;
             try
             {
                 for (int i = 1; i <= _pageindex; i++)
@@ -95,37 +96,9 @@ namespace StemmonsMobile.CustomControls
             catch (Exception ex)
             {
             }
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
+            IsBusy = false;
+            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
 
-        }
-
-        async public void GetEntityImage(string EntityID, string FileID)
-        {
-            await Task.Run(() =>
-            {
-                var d = EntityAPIMethods.GetFileFromEntity(EntityID, FileID, Functions.UserName);
-                fileStr = d.GetValue("ResponseContent").ToString();
-            });
-
-            FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
-            //byte[] fileData = fileResp.BLOB; //File byte array
-
-            OpenImage(fileResp.BLOB);
-        }
-        private void OpenImage(byte[] imageBytes)
-        {
-            ProfileImg.BorderColor = Color.Transparent;
-            ProfileImg.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
         }
     }
-
-
-    //class TenantInformationList
-    //{
-    //    public string TenantFieldName { get; set; }
-    //    public string TenantFieldValue { get; set; }
-    //    public string TenantExpDate { get; set; }
-
-    //    public List<TenantInformationList> lst_entity = new List<TenantInformationList>();
-    //}
 }

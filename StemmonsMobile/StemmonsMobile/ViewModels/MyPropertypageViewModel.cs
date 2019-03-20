@@ -23,7 +23,9 @@ namespace StemmonsMobile.ViewModels
             });
             PropertyListbtnCmd = new Command(() =>
             {
-                Application.Current.MainPage.Navigation.PushAsync(new MyPropertyList("PROPLIST"));
+                //MKT
+               
+                Application.Current.MainPage.Navigation.PushAsync(new MyPropertyList("MKT"));
             });
             CompusesbuttonCmd = new Command(() =>
             {

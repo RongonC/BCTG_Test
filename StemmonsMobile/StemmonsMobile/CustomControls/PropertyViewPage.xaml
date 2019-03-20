@@ -39,38 +39,38 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
                         <ImageButton x:Name="PropertyPicturecodebtn"  
-                                     BorderColor="LightBlue" BackgroundColor="Transparent"
-                                     BorderWidth="2" Grid.Row="0" Grid.Column="1" 
-                                     HeightRequest="200"/>
+                                      BackgroundColor="Transparent"
+                                     Grid.Row="0" Grid.Column="1" 
+                                     HeightRequest="200" Source="{Binding ImgProperty}"/>
                         <Button x:Name="Propertycasebtn" Grid.Row="1"   Grid.Column="1"              
                                 Text="Property Cases" 
                                 Command ="{Binding PropertyCaseCmd}" CommandParameter="{Binding .}"
-                                Style="{StaticResource buttonStyle}" />
+                                />
 
                         <Button x:Name="PropertyInformationbtn" Grid.Row="2"  Grid.Column="1"     
                                 Text="Property Information" 
                                 Command ="{Binding PropertyinfomationCmd}"  CommandParameter="{Binding .}"
-                                Style="{StaticResource buttonStyle}"/>
+                                />
 
                         <Button x:Name="PropertyEmployeebtn"  Grid.Row="3"  Grid.Column="1"    
                                 Text="Property Employees"     
                                 Command ="{Binding PropertyEmpolyeeCmd}"  CommandParameter="{Binding .}"
-                                Style="{StaticResource buttonStyle}"/>
+                                />
 
                         <Button x:Name="PropertyTenantsbtn"    Grid.Row="4"  Grid.Column="1"       
                                  Text="Property Tenants" 
                                  Command ="{Binding PropertyTenantsCmd}"  CommandParameter="{Binding .}"
-                                Style="{StaticResource buttonStyle}"/>
+                                />
 
                         <Button x:Name="Availableunitbtn" Grid.Row="5"  Grid.Column="1"  
                                 Text="Available Units"    
                                 Command ="{Binding AvailableUnitsCmd}" CommandParameter="{Binding .}"
-                                Style="{StaticResource buttonStyle}"/>
+                                />
 
                         <Button x:Name="PropertyEntitybtn"     Grid.Row="6" Grid.Column="1" 
                                  Text="Show Full Property Entity" 
                                  Command ="{Binding  PropertyEntityCmd}"  CommandParameter="{Binding .}"
-                                 Style="{StaticResource buttonStyle}"/>
+                             />
 
                     </Grid>
                 </Grid>

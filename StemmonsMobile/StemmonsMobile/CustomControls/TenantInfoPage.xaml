@@ -2,11 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:customListview="clr-namespace:StemmonsMobile.CustomControls"
+             xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
              x:Class="StemmonsMobile.CustomControls.TenantInfoPage" 
              Title= "Tenant Information"
              x:Name="this" BindingContext="{x:Reference this}">
     <ContentPage.Content>
         <AbsoluteLayout>
+
             <Grid x:Name="masterGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
@@ -28,17 +30,19 @@
 
                 <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2"  Grid.Column="1"/>-->
 
-                <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1"
+                <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1" Source="{Binding ImgProperty}"
                               Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200"  />
 
-                <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
-                       Margin="0" Padding="1" HasShadow="False">
+                <!--<Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
+                       Margin="0" Padding="1" HasShadow="False">-->
                     <!--<customListview:TenantCustomListview x:Name="lst_tenant_information" BindingContext="{Binding }" HeightRequest="{Binding Heights}"/>-->
-                    <customListview:EntityListCustomControl  BindingContext="{Binding EntityListVM}" />
-                </Frame>
+                    <customListview:EntityListCustomControl Grid.Column="1"  BindingContext="{Binding EntityListVM}" />
+                <!--</Frame>-->
             </Grid>
 
-            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
+            <cnt:ActivityProgressBar IsVisible="{Binding IsBusy}"/>
+
+            <!--<ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
                          IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">
@@ -59,7 +63,7 @@
                         </Label.Margin>
                     </Label>
                 </StackLayout>
-            </ContentView>
+            </ContentView>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 

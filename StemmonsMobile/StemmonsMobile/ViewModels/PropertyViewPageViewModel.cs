@@ -96,14 +96,12 @@ namespace StemmonsMobile.ViewModels
             // Entity View Page
         }
 
-        //private ImageSource _imageSource;
-        //public ImageSource ImageSource
-        //{
-        //    get
-        //    {
-        //        return 
-        //    }
-        //}
-
+        public ImageSource ImgProperty
+        {
+            get
+            {
+                return Functions.GetImageFromEntityAssoc(EntityDetails.AssociationFieldCollection);
+            }
+        }
     }
 }

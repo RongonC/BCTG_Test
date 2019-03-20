@@ -5,5 +5,13 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
+    <Source>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</Source>
+    <SmallTileSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</SmallTileSource>
+    <MediumTileSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</MediumTileSource>
+    <WideTileSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</WideTileSource>
+    <LargeTileSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</LargeTileSource>
+    <AppIconSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</AppIconSource>
+    <SplashScreenSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</SplashScreenSource>
+    <PackageLogoSource>\\STEMS-WKS2052\2052 Shared Code\2019\03-18-2019\BCTG - 1024x500.png</PackageLogoSource>
   </PropertyGroup>
 </Project>

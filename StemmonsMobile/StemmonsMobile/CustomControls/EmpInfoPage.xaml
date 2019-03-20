@@ -35,7 +35,7 @@
 
                     <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1" 
                                  Aspect="AspectFit" 
-                                 BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200" />
+                                 BackgroundColor="Transparent"  HeightRequest="200" />
 
                     <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
                            Margin="0" 

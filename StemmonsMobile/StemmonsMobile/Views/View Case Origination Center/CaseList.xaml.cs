@@ -400,10 +400,13 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     case "caseAssgnSAM":
 
                         caseAssgnSam = val;
-                        if(caseAssgnSam == Functions.UserName)
-                        { scrnName = "_AssignedToMe";
-                            AssgnSam = Functions.UserName; }
-                        else{
+                        if (caseAssgnSam == Functions.UserName)
+                        {
+                            scrnName = "_AssignedToMe";
+                            AssgnSam = Functions.UserName;
+                        }
+                        else
+                        {
                             scrnName = "_AssignedToSAM";
                             AssgnSam = val;
                         }

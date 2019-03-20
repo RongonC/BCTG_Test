@@ -4579,7 +4579,10 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         {
             get
             {
-                return "Created By: " + EntityCreatedByFullName;
+                if (!string.IsNullOrEmpty(EntityCreatedByFullName))
+                    return "Created By: " + EntityCreatedByFullName;
+                else
+                    return "";
             }
 
         }
