@@ -10,7 +10,7 @@
             <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                    AbsoluteLayout.LayoutFlags="All"
                  VerticalOptions="Fill">
-                <ListView ItemsSource="{Binding EntityAssocOrder}"
+                <ListView x:Name="cntList" ItemsSource="{Binding EntityAssocOrder}"
     HasUnevenRows="True"
     SeparatorVisibility="None">
                     <ListView.ItemTemplate>

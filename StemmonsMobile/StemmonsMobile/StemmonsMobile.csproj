@@ -170,7 +170,6 @@
     </Compile>
     <Compile Include="ViewModels\ApplicationListViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\CampusPageViewModel.cs" />
     <Compile Include="ViewModels\CustomlistViewModel.cs" />
     <Compile Include="ViewModels\EmpInfoViewModel.cs" />
     <Compile Include="ViewModels\EntityFieldViewModel.cs" />

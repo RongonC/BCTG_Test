@@ -1,4 +1,5 @@
-﻿using StemmonsMobile.Commonfiles;
+﻿using Plugin.Connectivity;
+using StemmonsMobile.Commonfiles;
 using StemmonsMobile.Controls;
 using StemmonsMobile.Models;
 using StemmonsMobile.ViewModels;
@@ -37,6 +38,8 @@ namespace StemmonsMobile.CustomControls
 
         protected override void OnAppearing()
         {
+            App.Isonline = CrossConnectivity.Current.IsConnected;
+
             if (App.IsLoginCall)
             {
                 if (Functions.AppStartCount <= 1)

@@ -21,22 +21,12 @@ namespace StemmonsMobile.CustomControls
     public partial class PropertyInfoPage : ContentPage
     {
         public EntityClass EntityLists = new EntityClass();
-        EntityFieldListView entityfieldcontrol;
+
         public string fileStr = string.Empty;
         public PropertyInfoPage(EntityClass _entityClass)
         {
             InitializeComponent();
             EntityLists = _entityClass;
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            entityfieldcontrol = new EntityFieldListView(EntityLists, new List<string>() { "TITLE" }, new List<string>() { "1814", "1815", "1816", "1819", "1820", "1821", "1822", "1823", "1824", "1825", "1826", "1827", "1829", "1830", "1833", "1834", "1836", "1842" });
-
-            controlFrame.Content = entityfieldcontrol;
-
             this.BindingContext = EntityLists;// new PropInfoPageViewModel(_entityClass);
 
             try
@@ -45,8 +35,18 @@ namespace StemmonsMobile.CustomControls
             }
             catch (Exception)
             {
-                ProfileImg.Source = "Assets/PropertyImage.png";
+                ProfileImg.Source = "Assets/na.png";
             }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            EntityFieldListView entityfieldcontrol = new EntityFieldListView(EntityLists, new List<string>() { "TITLE" }, new List<string>() { "1814", "1815", "1816", "1819", "1820", "1821", "1822", "1823", "1824", "1825", "1826", "1827", "1829", "1830", "1833", "1834", "1836", "1842" });
+
+            controlFrame.Children.Add(entityfieldcontrol);
+
         }
     }
 }

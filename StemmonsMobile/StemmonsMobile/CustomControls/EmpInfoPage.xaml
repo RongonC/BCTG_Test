@@ -9,13 +9,8 @@
         <AbsoluteLayout >
             <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
             AbsoluteLayout.LayoutFlags="All"          >
-                <Grid x:Name="Gridview"  >
+                <Grid x:Name="Gridview" RowSpacing="10" >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height= "10" />
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height= "8" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
@@ -25,25 +20,25 @@
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
 
-                    <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
-                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" 
+                    <StackLayout   Grid.Column="1" Grid.Row="0" 
+                           >
+                        <Clist:EmpCustomListView x:Name="lst_Employee_Role"  HeightRequest="{Binding Heights}">
+                            <ListView.Header>
+                                <StackLayout>
+                                    <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" 
                            Text="{Binding SelectedEntity.EntityTitle}" />
 
-                    <!--<Label x:Name="Subtitlelbl" Grid.Row="2"  Grid.Column="1"
-                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  
-                           Text="720 North Post Oak Road"  />-->
-
-                    <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1" 
+                                    <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" 
                                  Aspect="AspectFit" 
                                  BackgroundColor="Transparent"  HeightRequest="200" />
+                                </StackLayout>
+                            </ListView.Header>
+                        </Clist:EmpCustomListView>
+                    </StackLayout>
 
-                    <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
-                           Margin="0" 
-                           Padding="1" HasShadow="False">
-                        <Clist:EmpCustomListView x:Name="lst_Employee_Role"  HeightRequest="{Binding Heights}"/>
-                    </Frame>
-
-                    <contr:FooterControl x:Name="cnt_footer" Grid.ColumnSpan="3" Grid.Row="6"                            />
+                    <contr:FooterControl x:Name="cnt_footer" 
+                                         Grid.ColumnSpan="3" Grid.Row="1"/>
                 </Grid>
             </StackLayout>
             <contr:ActivityProgressBar IsVisible="{Binding isbusy}" />

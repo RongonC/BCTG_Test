@@ -577,7 +577,7 @@ namespace StemmonsMobile.Commonfiles
             }
             catch (Exception ex)
             {
-                return ImageSource.FromFile("Assets/DefaultIMG.png");
+                return ImageSource.FromFile("Assets/na.png");
             }
         }
     }

@@ -466,6 +466,13 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     saveRec = false;
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 }
+
+                // For BCTG only to not to store Case in SQLite Table
+                if (param == "RELATEDCASES")
+                {
+                    saveRec = false;
+                }
+
                 #endregion
 
                 if ((!string.IsNullOrEmpty(OwnerSam)) || (!string.IsNullOrEmpty(AssgnSam)) || (!string.IsNullOrEmpty(CreateBySam)) || (!string.IsNullOrEmpty(AssgnSamTM)))

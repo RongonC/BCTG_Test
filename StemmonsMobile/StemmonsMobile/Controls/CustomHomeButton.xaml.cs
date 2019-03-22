@@ -26,7 +26,6 @@ namespace StemmonsMobile.Controls
         public void HomeButton()
         {
             App.GotoHome();
-            Application.Current.MainPage.Navigation.PushAsync(new LandingPage());
         }
     }
 }

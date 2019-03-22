@@ -9,13 +9,32 @@
     <ContentPage.Content>
         <AbsoluteLayout>
 
-            <Grid x:Name="masterGrid">
+            <!--<ListView  >
+                <ListView.Header>
+                    <StackLayout>
+                        <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
+                       HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
+
+                        <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" 
+                              Aspect="AspectFit" BackgroundColor="Transparent" HeightRequest="200"  />-->
+
+            <customListview:EntityListCustomControl   VerticalOptions="FillAndExpand" BindingContext="{Binding EntityListVM}"  Margin="0,0,20,15">
+                <ListView.Header>
+                    <StackLayout>
+                        <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
+                       HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
+
+                        <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" 
+                              Aspect="AspectFit" BackgroundColor="Transparent" HeightRequest="200" />
+                    </StackLayout>
+                </ListView.Header>
+            </customListview:EntityListCustomControl>
+
+            <!--<Grid x:Name="masterGrid" RowSpacing="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height= "10" />
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height= "10" />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height= "10" />
                 </Grid.RowDefinitions>
@@ -28,17 +47,12 @@
                 <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
                        HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
 
-                <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2"  Grid.Column="1"/>-->
+                <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" Source="{Binding ImgProperty}"
+                              Aspect="AspectFit" BackgroundColor="Transparent" HeightRequest="200"  />
 
-                <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1" Source="{Binding ImgProperty}"
-                              Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200"  />
-
-                <!--<Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
-                       Margin="0" Padding="1" HasShadow="False">-->
-                    <!--<customListview:TenantCustomListview x:Name="lst_tenant_information" BindingContext="{Binding }" HeightRequest="{Binding Heights}"/>-->
-                    <customListview:EntityListCustomControl Grid.Column="1"  BindingContext="{Binding EntityListVM}" />
-                <!--</Frame>-->
-            </Grid>
+             
+                <customListview:EntityListCustomControl Grid.Column="1" Grid.Row="3"  BindingContext="{Binding EntityListVM}" />
+            </Grid>-->
 
             <cnt:ActivityProgressBar IsVisible="{Binding IsBusy}"/>
 
@@ -66,5 +80,4 @@
             </ContentView>-->
         </AbsoluteLayout>
     </ContentPage.Content>
-
 </ContentPage>

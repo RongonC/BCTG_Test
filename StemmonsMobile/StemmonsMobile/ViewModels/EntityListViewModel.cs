@@ -76,7 +76,15 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             set;
         }
 
-        public ObservableCollection<EntityClass> ListEntityitem { get; set; }
+        public ObservableCollection<EntityClass> ListEntityitem
+        {
+            get => _listEntityitem;
+            set
+            {
+                _listEntityitem = value;
+
+            }
+        }
 
         public string _Viewtype { get; set; }
 
@@ -209,25 +217,25 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
                     //    ListEntity = Functions.CampusList;
                     //}
                     //else
+                    //{
+                    //Lazyload_request.pageIndex = 0;
+                    //Lazyload_request.pageSize = 0;
+
+                    await Task.Run(async () =>
                     {
-                        //Lazyload_request.pageIndex = 0;
-                        //Lazyload_request.pageSize = 0;
+                        ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype, App.IsPropertyPage);
+                    });
+                    ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
 
-                        await Task.Run(async () =>
-                        {
-                            ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype);
-                        });
-                        ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
-
-                        //if (ScreenCode == "PROPLIST")
-                        //{
-                        //    Functions.PropertyList = ListEntity;
-                        //}
-                        //else if (ScreenCode == "CAMPS")
-                        //{
-                        //    Functions.CampusList = ListEntity;
-                        //}
-                    }
+                    //if (ScreenCode == "PROPLIST")
+                    //{
+                    //    Functions.PropertyList = ListEntity;
+                    //}
+                    //else if (ScreenCode == "CAMPS")
+                    //{
+                    //    Functions.CampusList = ListEntity;
+                    //}
+                    //}
                 }
                 else
                 {
@@ -508,6 +516,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
         }
 
         private Command refreshCommand;
+        private ObservableCollection<EntityClass> _listEntityitem;
 
         public Command RefreshCommand
         {
@@ -526,6 +535,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
             PageIndex = 0;
             PageSize = 0;
             IsRefresh = true;
+            ListEntityitem.Clear();
             await GetEntityListwithCall();
             IsBusy = false;
             IsRefresh = false;

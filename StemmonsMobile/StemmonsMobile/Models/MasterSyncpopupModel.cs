@@ -345,90 +345,90 @@ namespace StemmonsMobile.Models
                     }
                     #endregion
 
-                    #region Entity Sync
-                    //Entity Sync
+                    //#region Entity Sync
+                    ////Entity Sync
 
-                    try
-                    {
-                        SyncPopupRunTimeChangeTitle("Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + "");
-                        await Task.Run(() =>
-                        {
-                            try
-                            {
-                                string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
+                    //try
+                    //{
+                    //    SyncPopupRunTimeChangeTitle("Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + "");
+                    //    await Task.Run(() =>
+                    //    {
+                    //        try
+                    //        {
+                    //            string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
-                                    Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
-                                else
-                                    Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        });
-                        SyncPopupRunTimeChange(0.64, Convert.ToString(Percentage * 8) + "%", "Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + " completed");
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    #endregion
+                    //            if (!String.IsNullOrEmpty(str))
+                    //                Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
+                    //            else
+                    //                Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //        }
+                    //    });
+                    //    SyncPopupRunTimeChange(0.64, Convert.ToString(Percentage * 8) + "%", "Entity Types and Items Sync", "Operation " + 8 + " of " + itemCount + " completed");
+                    //}
+                    //catch (Exception)
+                    //{
+                    //}
+                    //#endregion
 
-                    #region Entity associated with Me
-                    //Get CaseList Owned By Me
+                    //#region Entity associated with Me
+                    ////Get CaseList Owned By Me
 
-                    try
-                    {
-                        SyncPopupRunTimeChangeTitle("Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + "");
-                        await Task.Run(() =>
-                        {
-                            try
-                            {
+                    //try
+                    //{
+                    //    SyncPopupRunTimeChangeTitle("Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + "");
+                    //    await Task.Run(() =>
+                    //    {
+                    //        try
+                    //        {
 
-                                string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
+                    //            string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
-                                    Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
-                                else
-                                    Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        });
+                    //            if (!String.IsNullOrEmpty(str))
+                    //                Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
+                    //            else
+                    //                Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //        }
+                    //    });
 
-                        SyncPopupRunTimeChange(0.72, Convert.ToString(Percentage * 9) + "%", "Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + " completed");
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    #endregion
+                    //    SyncPopupRunTimeChange(0.72, Convert.ToString(Percentage * 9) + "%", "Get Entity Associated List Sync", "Operation " + 9 + " of " + itemCount + " completed");
+                    //}
+                    //catch (Exception)
+                    //{
+                    //}
+                    //#endregion
 
-                    #region Quest Sync
-                    //Quest Sync
-                    try
-                    {
-                        SyncPopupRunTimeChangeTitle("Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + "");
-                        await Task.Run(() =>
-                        {
-                            try
-                            {
-                                string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
+                    //#region Quest Sync
+                    ////Quest Sync
+                    //try
+                    //{
+                    //    SyncPopupRunTimeChangeTitle("Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + "");
+                    //    await Task.Run(() =>
+                    //    {
+                    //        try
+                    //        {
+                    //            string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
-                                    Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
-                                else
-                                    Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
-                                SyncPopupRunTimeChange(0.80, Convert.ToString(Percentage * 10) + "%", "Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + " completed");
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        });
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    #endregion
+                    //            if (!String.IsNullOrEmpty(str))
+                    //                Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
+                    //            else
+                    //                Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
+                    //            SyncPopupRunTimeChange(0.80, Convert.ToString(Percentage * 10) + "%", "Quest Area and Item List Sync", "Operation " + 10 + " of " + itemCount + " completed");
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //        }
+                    //    });
+                    //}
+                    //catch (Exception)
+                    //{
+                    //}
+                    //#endregion
 
                     #region Standard Sync
                     //Standard Sync

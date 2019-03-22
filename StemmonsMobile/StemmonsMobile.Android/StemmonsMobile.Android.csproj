@@ -1530,6 +1530,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\Assets\DefaultIMG.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\na.gif" />
     <Content Include="Resources\drawable-hdpi\Assets\PropertyImage.png" />
     <AndroidResource Include="Resources\drawable\Assets\about.info.png" />
     <AndroidResource Include="Resources\drawable\Assets\actor.png" />
@@ -1594,6 +1595,9 @@
     <AndroidResource Include="Resources\drawable\Assets\DefaultIMG.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\Assets\DefaultIMG.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Assets\DefaultIMG.png" />
+    <AndroidResource Include="Resources\drawable\Assets\na.gif" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\na.gif" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\na.gif" />
     <Content Include="Resources\drawable\Assets\PropertyImage.png" />
     <AndroidResource Include="Resources\drawable\Assets\PropertyList.png" />
     <AndroidResource Include="Resources\drawable\Assets\Questblack.png" />
@@ -1751,6 +1755,7 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\Assets\PropertyList.png" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\na.gif" />
     <Content Include="Resources\drawable\PropertyImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

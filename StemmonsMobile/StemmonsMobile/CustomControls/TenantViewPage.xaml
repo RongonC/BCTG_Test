@@ -9,8 +9,8 @@
 
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" x:Name="PropertiesGrid"  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                    AbsoluteLayout.LayoutFlags="All" >
-                <Frame x:Name="frmField" VerticalOptions="StartAndExpand" Grid.Row="0" CornerRadius="3" 
-                   Padding="0" Margin="10,5,10,0" HasShadow="False" BorderColor="LightBlue"/>
+                <StackLayout x:Name="frmField" VerticalOptions="StartAndExpand" Grid.Row="0" 
+                   Padding="0" Margin="10,5,10,0" />
             </StackLayout>
             <!--<cnt:ActivityProgressBar IsVisible="{Binding IsBUSY}" />-->
         </AbsoluteLayout>

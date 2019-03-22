@@ -46,7 +46,15 @@ namespace StemmonsMobile.CustomControls
         {
             InitializeComponent();
 
-            //Titlelbl.Text = entityDetails.EntityTitle;
+            Titlelbl.Text = entityDetails.EntityTitle;
+            try
+            {
+                ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
+            }
+            catch (Exception)
+            {
+                ProfileImg.Source = "Assets/na.png";
+            }
             EntityListVM.ScreenCode = _pagecode;
             EntityListVM.EntityID = entityDetails.EntityID;
             if (_pagecode == "TNTLIST")
@@ -58,22 +66,9 @@ namespace StemmonsMobile.CustomControls
             else
             {
                 Title = "Available Units";
-             
-                //Must pass Entity Id
                 //EntityListVM.ScreenCode = "TNTLIST";
                 EntityListVM.SystemCodeEntityType = "UNITS";
                 EntityListVM._Viewtype = "";
-            }
-
-
-
-            try
-            {
-                // ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
-            }
-            catch (Exception)
-            {
-                // ProfileImg.Source = "Assets/PropertyImage.png";
             }
         }
 
@@ -83,7 +78,6 @@ namespace StemmonsMobile.CustomControls
         {
             base.OnAppearing();
 
-            //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             IsBusy = true;
             try
             {
@@ -97,8 +91,6 @@ namespace StemmonsMobile.CustomControls
             {
             }
             IsBusy = false;
-            //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
         }
     }
 }

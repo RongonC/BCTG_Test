@@ -125,8 +125,6 @@ namespace StemmonsMobile.Views.LoginProcess
                                 string userDomain = userInfo[0].ToLower();
                                 Functions.UserName = userInfo[1].ToLower();
 
-                               
-
                                 Functions.HasTeam = (Boolean)val.GetValue("HasTeam");
 
                                 Application.Current.Properties["HasTeam"] = Functions.HasTeam;

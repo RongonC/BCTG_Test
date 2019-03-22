@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:Sync="clr-namespace:StemmonsMobile.CustomControls"
              xmlns:cntrl="clr-namespace:StemmonsMobile.Controls"
-             x:Class="StemmonsMobile.CustomControls.PropertyLandingPage"
+             x:Class="StemmonsMobile.CustomControls.PropertyLandingPage" BackgroundColor="White"
              >
     <ContentPage.Content>
         <AbsoluteLayout  >
@@ -66,17 +66,12 @@
                 </Grid>
 
                 <ScrollView Grid.Row="2" VerticalOptions="Fill" >
-                    <Grid x:Name="MainMenuGrid" >
+                    <Grid x:Name="MainMenuGrid" RowSpacing="15">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto"  />
-                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="20" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10" />
@@ -86,32 +81,39 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
-
                         <Button x:Name="Propertiesbutton" BackgroundColor="Transparent"
-                                Grid.Row="1" Grid.Column="1"  
+                                Grid.Row="0" Grid.Column="1"  
+                                HeightRequest="100"
                                 Image="Assets/Properties.png"
                                 Command ="{Binding PropertyButtonCmd}"  />
                         <Button x:Name="NewCasebutton" BackgroundColor="Transparent"
-                                Image="Assets/CreateCase.png"
-                                Grid.Row="1" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" />
+                                Image="Assets/CreateCase.png" 
+                                HeightRequest="100"
+                                Grid.Row="0" Grid.Column="3"  Command ="{Binding NewCaseButtonCmd}" />
                         <Button x:Name="Assignebutton" BackgroundColor="Transparent"
-                                Image="Assets/AssignToMe.png"
-                                Grid.Row="3" Grid.Column="1"  Command ="{Binding AssignButtonCmd}" />
-                        <Button x:Name="Createbutton" BackgroundColor="Transparent"
-                                     Image="Assets/CreatedByMe.png"
-                                 Grid.Row="3" Grid.Column="3"  Command ="{Binding CreateButtonCmd}" />
-                        <Button x:Name="Ownedbutton" BackgroundColor="Transparent"
-                                           Image="Assets/OwenedByMe.png"
-                                 Grid.Row="5" Grid.Column="1"  Command ="{Binding OwnedButtonCmd}" />
+                                Image="Assets/AssignToMe.png"  
+                                HeightRequest="100"
+                                Grid.Row="1" Grid.Column="1"  Command ="{Binding AssignButtonCmd}" />
+                        <Button x:Name="Createbutton" BackgroundColor="Transparent" 
+                                Image="Assets/CreatedByMe.png" 
+                                HeightRequest="100"
+                                 Grid.Row="1" Grid.Column="3"  Command ="{Binding CreateButtonCmd}" />
+                        <Button x:Name="Ownedbutton" BackgroundColor="Transparent"   
+                                Image="Assets/OwenedByMe.png" 
+                                HeightRequest="100"
+                                 Grid.Row="2" Grid.Column="1"  Command ="{Binding OwnedButtonCmd}" />
                         <Button x:Name="Advancebutton" BackgroundColor="Transparent"
-                                         Image="Assets/AdvancedView.png"
-                                 Grid.Row="5" Grid.Column="3" Command ="{Binding AdvanceButtonCmd}" />
-                        <Button x:Name="Standardbutton" BackgroundColor="Transparent"
-                                           Image="Assets/BoxerStandards.png"
-                                 Grid.Row="7" Grid.Column="1" Command ="{Binding StandardsButtonCmd}" />
+                                Image="Assets/AdvancedView.png" 
+                                HeightRequest="100"
+                                 Grid.Row="2" Grid.Column="3" Command ="{Binding AdvanceButtonCmd}" />
+                        <Button x:Name="Standardbutton" BackgroundColor="Transparent"  
+                                Image="Assets/BoxerStandards.png" 
+                                HeightRequest="100"
+                                 Grid.Row="3" Grid.Column="1" Command ="{Binding StandardsButtonCmd}" />
                         <Button x:Name="Hopperbutton" BackgroundColor="Transparent"
-                                  Image="Assets/HopperCenter.png"
-                                Grid.Row="7" Grid.Column="3"  Command ="{Binding HopperButtonCmd}"  />
+                                Image="Assets/HopperCenter.png"  
+                                HeightRequest="100"
+                                Grid.Row="3" Grid.Column="3"  Command ="{Binding HopperButtonCmd}"  />
                     </Grid>
                 </ScrollView>
 

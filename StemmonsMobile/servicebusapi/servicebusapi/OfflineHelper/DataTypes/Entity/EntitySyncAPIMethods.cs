@@ -339,7 +339,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
         #endregion
 
         #region #3 GetEntitiesBySystemCodeKeyValuePair_LazyLoad
-        public async static Task<List<EntityClass>> GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(bool _IsOnline, string username, GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest _Body_value, string _DBPath, int EntityTypeId, string Fullname, string _Viewtype)
+        public async static Task<List<EntityClass>> GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(bool _IsOnline, string username, GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest _Body_value, string _DBPath, int EntityTypeId, string Fullname, string _Viewtype, bool _isPropertyPage = false)
         {
             List<EntityClass> json = null;
             List<EntityClass> ListEntity = new List<EntityClass>();
@@ -369,52 +369,57 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
 
                     ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
-                    if (ListEntity.Count > 0)
+                    #region Insert To SQLite
+                    if (!_isPropertyPage)
                     {
-                        AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList
+                        if (ListEntity.Count > 0)
                         {
-                            APP_TYPE_INFO_ID = 0,
-                            ASSOC_FIELD_INFO = jsonValue,
-                            LAST_SYNC_DATETIME = DateTime.Now,
-                            SYSTEM = ConstantsSync.EntityInstance,
-                            TYPE_ID = EntityTypeId,
-                            TYPE_NAME = ListEntity[0].EntityTypeName,
-                            CategoryId = 0,
-                            CategoryName = "",
-                            TransactionType = "M",
-                            TYPE_SCREEN_INFO = ScreenName,
-                            INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
-                            IS_ONLINE = _IsOnline
+                            AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList
+                            {
+                                APP_TYPE_INFO_ID = 0,
+                                ASSOC_FIELD_INFO = jsonValue,
+                                LAST_SYNC_DATETIME = DateTime.Now,
+                                SYSTEM = ConstantsSync.EntityInstance,
+                                TYPE_ID = EntityTypeId,
+                                TYPE_NAME = ListEntity[0].EntityTypeName,
+                                CategoryId = 0,
+                                CategoryName = "",
+                                TransactionType = "M",
+                                TYPE_SCREEN_INFO = ScreenName,
+                                INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                                IS_ONLINE = _IsOnline
 
-                        };
-                        ListEntity = ListEntity.Select(i =>
-                        {
-                            i.TransactionType = "M";
-                            return i;
-                        }).ToList();
+                            };
+                            ListEntity = ListEntity.Select(i =>
+                                            {
+                                                i.TransactionType = "M";
+                                                return i;
+                                            }).ToList();
 
-                        /*VishalPr*/
-                        Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
-                        record.Wait();
-                        // Check if record is Exist or not
-                        var isrecordExist = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
+                            /*VishalPr*/
+                            Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
+                            record.Wait();
+                            // Check if record is Exist or not
+                            var isrecordExist = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
 
-                        if (isrecordExist == null)
-                        {
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                            if (isrecordExist == null)
+                            {
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                            }
+                            else
+                            {
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = isrecordExist.APP_TYPE_INFO_ID;
+                                //Existing Record Convert to list
+                                var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(isrecordExist.ASSOC_FIELD_INFO);
+                                entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
+                                _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
+                            }
+
+                            Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                            inserted.Wait();
                         }
-                        else
-                        {
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = isrecordExist.APP_TYPE_INFO_ID;
-                            //Existing Record Convert to list
-                            var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(isrecordExist.ASSOC_FIELD_INFO);
-                            entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
-                            _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
-                        }
-
-                        Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                        inserted.Wait();
                     }
+                    #endregion
                 }
                 else
                 {

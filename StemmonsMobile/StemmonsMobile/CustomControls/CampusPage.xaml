@@ -17,8 +17,8 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Frame x:Name="frmField" VerticalOptions="StartAndExpand" Grid.Row="0" CornerRadius="3" 
-                           Padding="0" Margin="10,5,10,0" HasShadow="False" BorderColor="LightBlue">
+                    <StackLayout x:Name="frmField" VerticalOptions="StartAndExpand" Grid.Row="0" 
+                           Padding="0" Margin="10,5,10,0"  >
 
                         <!--<Local:EntityFieldListView  x:Name="FieldView_ListControl"/>-->
                         <!--<ListView HasUnevenRows="True" SeparatorVisibility="None" x:Name="EntityDetails" ItemsSource="{Binding entityDetails}" >
@@ -48,10 +48,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>-->
-                    </Frame>
-                    <Frame x:Name="frmList" VerticalOptions="StartAndExpand" Grid.Row="1"
-                           CornerRadius="3" Padding="0" 
-                           Margin="10,5,10,10" HasShadow="False"  BorderColor="LightBlue">
+                    </StackLayout>
+                    <StackLayout x:Name="frmList" VerticalOptions="StartAndExpand" Grid.Row="1"
+                           Padding="0" 
+                           Margin="10,5,10,10"  >
                         <!--<control:EntityListCustomControl x:Name="lstEntity"  Grid.Row="0"                            BindingContext="{Binding EntityListVM}" />-->
 
                         <!--<ListView HasUnevenRows="True" SeparatorVisibility="None" ItemsSource="{Binding entityName}" HeightRequest="{Binding Heights}" >
@@ -75,7 +75,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>-->
-                    </Frame>
+                    </StackLayout>
                 </Grid>
             </StackLayout>
         </StackLayout>

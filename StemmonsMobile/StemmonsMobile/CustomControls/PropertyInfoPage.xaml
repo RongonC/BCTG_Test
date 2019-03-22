@@ -9,31 +9,26 @@
             <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                    AbsoluteLayout.LayoutFlags="All"
                  VerticalOptions="Fill">
-                <Grid x:Name="PropertiesGrid">
+                <Grid x:Name="PropertiesGrid" RowSpacing="20">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height= "10" />
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="Titlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
-                       Text="{Binding EntityTitle}" Grid.Row="1" Grid.Column="1"/>
+                    
+                    <Label x:Name="Titlelbl"
+                           HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
+                       Text="{Binding EntityTitle}" Grid.Row="0" Grid.Column="1"/>
 
-                    <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small"  Text="{Binding PropertyTitle}"  Grid.Row="2"  Grid.Column="1"/>-->
-                    <ImageButton x:Name="ProfileImg"   Aspect="AspectFit" 
-                                 BackgroundColor="Transparent"   HeightRequest="200" Grid.Row ="3"  Grid.Column="1"/>
-                    <Frame x:Name="controlFrame"    Grid.Row="5"  Grid.Column="1"
-                        OutlineColor="LightBlue" Padding="5" HasShadow="False"  >
-                        <!--<CustomList:EntityFieldListView x:Name="lst_Property_information" />-->
-                    </Frame>
+                    <Image x:Name="ProfileImg"   Aspect="AspectFit" 
+                           HeightRequest="200" Grid.Row ="1"  Grid.Column="1"/>
+
+                    <StackLayout x:Name="controlFrame"  VerticalOptions="StartAndExpand"  Grid.Row="2"    Grid.Column="1"/>
                 </Grid>
             </StackLayout>
             <!--<CustomList:ActivityProgressBar IsVisible="{Binding IsBUSY}" />-->

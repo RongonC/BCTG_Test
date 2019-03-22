@@ -57,7 +57,7 @@ namespace StemmonsMobile.CustomControls
             try
             {
                 EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE", "STTUS" }, new List<string>() { "5605", "5608", "5609", "5611", "5613", "5615", "5628", "5635", "5636", "5637", "7895", "7896", "7897" });
-                frmField.Content = ent;
+                frmField.Children.Add(ent);
             }
             catch (Exception e)
             {

@@ -32,11 +32,5 @@ namespace StemmonsMobile.ViewModels
                 Application.Current.MainPage.Navigation.PushAsync(new MyPropertyList("CAMPS"));
             });
         }
-
-        public void MoveToNext()
-        {
-            //Application.Current.MainPage.Navigation.PushAsync(new Property_Page_Custom());
-        }
-
     }
 }

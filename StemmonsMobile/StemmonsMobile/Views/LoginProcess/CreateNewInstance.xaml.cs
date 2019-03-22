@@ -20,7 +20,6 @@ namespace StemmonsMobile.Views.LoginProcess
         {
             InitializeComponent();
             Createbtn.TextColor = Color.FromHex("1D9FEC");
-
         }
 
         protected override void OnAppearing()
@@ -149,7 +148,8 @@ namespace StemmonsMobile.Views.LoginProcess
                 {
                     if (Uri.IsWellFormedUriString(I_URL, UriKind.Absolute))
                     {
-                        I_URL = I_URL.Split(new string[] { "/token" }, StringSplitOptions.None)[0]; //(0, I_URL.LastIndexOf('/token'));
+                        I_URL = I_URL.Split(new string[] { "/token" }, StringSplitOptions.None)[0];
+                        //(0, I_URL.LastIndexOf('/token'));
 
                         InstanceList insta = new InstanceList
                         {
@@ -161,7 +161,6 @@ namespace StemmonsMobile.Views.LoginProcess
                         var s = await DBHelper.SaveInstance(insta, App.DBPath);
                         if (s == 1)
                         {
-                            //DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = I_URL;
                             DisplayAlert("Success", "Database Operation Succcess.\n URL: " + I_URL, "Ok");
                             Navigation.PopAsync();
                         }

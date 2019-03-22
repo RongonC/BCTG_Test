@@ -42,13 +42,6 @@ namespace StemmonsMobile.ViewModels
         {
             PropertyCaseCmd = new Command(async (parameter) =>
             {
-
-                //    List<GetCaseTypesResponse.BasicCase> s = null;
-
-                //    var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(EntityDetails.EntityID, Functions.UserName);
-
-                //    var result = res.GetValue("ResponseContent").ToString();
-                //    var GetCaseList = JsonConvert.DeserializeObject<ObservableCollection<BasicCase>>(result);
                 var cm = parameter as PropertyViewPageViewModel;
                 await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
             });

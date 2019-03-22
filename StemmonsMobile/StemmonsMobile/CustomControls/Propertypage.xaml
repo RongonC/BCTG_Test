@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
-             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page" BackgroundColor="White">
+             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page"
+             BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout x:Name="mainstack">
             <ScrollView>
@@ -30,20 +31,20 @@
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="MyPropertiesbutton" BackgroundColor="Transparent"
-                                     Image="Assets/MyProperties.png"
+                                Image="Assets/MyProperties.png"
+                                HeightRequest="100"
                                 Grid.Row="0" Grid.Column="1" 
-                                Command ="{Binding MyPropertiesbtnCmd}" 
-                                 />
+                                Command ="{Binding MyPropertiesbtnCmd}"/>
                         <Button x:Name="PropertyListbutton" BackgroundColor="Transparent"
-                                     Image="Assets/PropertyList.png"
+                                Image="Assets/PropertyList.png"
+                                HeightRequest="100"
                                 Grid.Row="0" Grid.Column="3" 
-                                Command ="{Binding PropertyListbtnCmd}" 
-                                />
+                                Command ="{Binding PropertyListbtnCmd}" />
                         <Button x:Name="Compusesbutton"    BackgroundColor="Transparent"
-                                     Image="Assets/Campuses.png"
+                                Image="Assets/Campuses.png"
+                                HeightRequest="100"
                                 Grid.Row="2" Grid.Column="1" 
-                                Command ="{Binding CompusesbuttonCmd}"
-                                 />
+                                Command ="{Binding CompusesbuttonCmd}"/>
                     </Grid>
                 </Grid>
             </ScrollView>

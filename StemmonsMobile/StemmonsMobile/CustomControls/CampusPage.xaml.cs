@@ -18,14 +18,6 @@ namespace StemmonsMobile.CustomControls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CampusPage : ContentPage
     {
-        private CampusPageViewModel _campuspageVM;
-
-        public CampusPageViewModel CampusPageVM
-        {
-            get { return _campuspageVM; }
-            set { _campuspageVM = value; }
-        }
-
         private EntityListViewModel _entitylistVM = new EntityListViewModel();
 
         public EntityListViewModel EntityListVM
@@ -54,17 +46,17 @@ namespace StemmonsMobile.CustomControls
 
                 Task.Run(() =>
                 {
-                    var res = EntitySyncAPIMethods.GetEntityByEntityID(true, _entdetail.EntityID.ToString(), Functions.UserName, _entdetail.EntityTypeID.ToString(), App.DBPath);
+                    var res = EntitySyncAPIMethods.GetEntityByEntityID(App.Isonline, _entdetail.EntityID.ToString(), Functions.UserName, _entdetail.EntityTypeID.ToString(), App.DBPath);
                     res.Wait();
                     _entdetail = res.Result;
                 }).Wait();
 
 
                 EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE" }, new List<string>() { "1769" });
-                frmField.Content = ent;
+                frmField.Children.Add(ent);
 
                 EntityListCustomControl lstEntity = new EntityListCustomControl();
-                frmList.Content = lstEntity;
+                frmList.Children.Add(lstEntity);
 
                 EntityListVM.EntityID = _entdetail.EntityID;
                 EntityListVM.ScreenCode = "CAMPSRELATED";
