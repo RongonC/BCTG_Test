@@ -7,79 +7,79 @@
              x:Name="this" BindingContext="{x:Reference this}" >
     <ContentPage.Content>
         <AbsoluteLayout >
-
             <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                    AbsoluteLayout.LayoutFlags="All"
                  VerticalOptions="Fill">
-                <ScrollView>
-                    <Grid x:Name="PropertiesGrid" Margin="0,10,0,0" RowSpacing="15">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                <StackLayout VerticalOptions="FillAndExpand">
+                    <ScrollView VerticalOptions="FillAndExpand">
+                        <Grid x:Name="PropertiesGrid" Margin="0,10,0,0" RowSpacing="15">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                        <StackLayout  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label x:Name="lblTitle" HorizontalTextAlignment="Center"
+                            <StackLayout  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label x:Name="lblTitle" HorizontalTextAlignment="Center"
                         FontSize="Medium" FontAttributes="Bold"
                        Text="{Binding  EntityDetails.EntityTitle}" />
 
-                        </StackLayout>
-                        
-                        <Grid x:Name="PropertyPageCustomGrid"  Grid.Row="1"  RowSpacing="5" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                            </Grid.ColumnDefinitions>
+                            </StackLayout>
 
-                            <Image x:Name="PropertyPicturecodebtn"
+                            <Grid x:Name="PropertyPageCustomGrid"  Grid.Row="1"  RowSpacing="5" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image x:Name="PropertyPicturecodebtn"
                                BackgroundColor="Transparent"
                                Grid.Row="0" Grid.Column="1" 
                                HeightRequest="200" Source="{Binding ImgProperty}"/>
-                            <Button x:Name="Propertycasebtn" Grid.Row="1"   Grid.Column="1"              
+                                
+                                <Button x:Name="Propertycasebtn" Grid.Row="1"   Grid.Column="1"              
                                 Text="Property Cases" 
                                 Command ="{Binding PropertyCaseCmd}"
                                 CommandParameter="{Binding .}"/>
 
-                            <Button x:Name="PropertyInformationbtn" Grid.Row="2"  Grid.Column="1"     
+                                <Button x:Name="PropertyInformationbtn" Grid.Row="2"  Grid.Column="1"     
                                 Text="Property Information" 
                                 Command ="{Binding PropertyinfomationCmd}" 
                                 CommandParameter="{Binding .}"/>
 
-                            <Button x:Name="PropertyEmployeebtn"  Grid.Row="3"  Grid.Column="1"    
+                                <Button x:Name="PropertyEmployeebtn"  Grid.Row="3"  Grid.Column="1"    
                                 Text="Property Employees"     
                                 Command ="{Binding PropertyEmpolyeeCmd}" 
                                 CommandParameter="{Binding .}"/>
 
-                            <Button x:Name="PropertyTenantsbtn"    Grid.Row="4"  Grid.Column="1"       
+                                <Button x:Name="PropertyTenantsbtn"    Grid.Row="4"  Grid.Column="1"       
                                  Text="Property Tenants" 
                                 Command ="{Binding PropertyTenantsCmd}"  
                                 CommandParameter="{Binding .}"/>
 
-                            <Button x:Name="Availableunitbtn" Grid.Row="5"  Grid.Column="1"  
+                                <Button x:Name="Availableunitbtn" Grid.Row="5"  Grid.Column="1"  
                                 Text="Available Units"    
                                 Command ="{Binding AvailableUnitsCmd}" 
                                 CommandParameter="{Binding .}"/>
 
-                            <Button x:Name="PropertyEntitybtn"     Grid.Row="6" Grid.Column="1" 
+                                <Button x:Name="PropertyEntitybtn"     Grid.Row="6" Grid.Column="1" 
                                 Text="Show Full Property Entity" 
                                 Command ="{Binding  PropertyEntityCmd}" 
                                 CommandParameter="{Binding .}"/>
-
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </ScrollView>
-            <cnt:FooterControl x:Name="cnt_footer"></cnt:FooterControl>
-              
+                    </ScrollView>
+                </StackLayout>
+            <cnt:FooterControl x:Name="cnt_footer"  VerticalOptions="End"></cnt:FooterControl>
             </StackLayout>
             <cnt:ActivityProgressBar IsVisible="{Binding IsBUSY}" />
         </AbsoluteLayout>

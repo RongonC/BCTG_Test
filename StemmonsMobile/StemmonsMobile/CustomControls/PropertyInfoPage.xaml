@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:CustomList="clr-namespace:StemmonsMobile.Controls"
+             xmlns:CustomCnt="clr-namespace:StemmonsMobile.Controls"
              x:Class="StemmonsMobile.CustomControls.PropertyInfoPage"  
              Title="Property Information">
     <ContentPage.Content>
@@ -9,28 +9,25 @@
             <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                    AbsoluteLayout.LayoutFlags="All"
                  VerticalOptions="Fill">
-                <Grid x:Name="PropertiesGrid" RowSpacing="20">
+                <Grid x:Name="PropertiesGrid"  >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
-                    </Grid.ColumnDefinitions>
                     
-                    <Label x:Name="Titlelbl"
+                    <!--<Label x:Name="Titlelbl"
                            HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  
                        Text="{Binding EntityTitle}" Grid.Row="0" Grid.Column="1"/>
 
                     <Image x:Name="ProfileImg"   Aspect="AspectFit" 
-                           HeightRequest="200" Grid.Row ="1"  Grid.Column="1"/>
+                           HeightRequest="200" Grid.Row ="1"  Grid.Column="1"/>-->
 
-                    <StackLayout x:Name="controlFrame"  VerticalOptions="StartAndExpand"  Grid.Row="2"    Grid.Column="1"/>
+                    <StackLayout x:Name="controlFrame"  VerticalOptions="StartAndExpand"  Grid.Row="0"  />
+
+                    <CustomCnt:FooterControl x:Name="cnt_footer" Grid.Row="1" />
                 </Grid>
             </StackLayout>
+            
             <!--<CustomList:ActivityProgressBar IsVisible="{Binding IsBUSY}" />-->
         </AbsoluteLayout>
     </ContentPage.Content>

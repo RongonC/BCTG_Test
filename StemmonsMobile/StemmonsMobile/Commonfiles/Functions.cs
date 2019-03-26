@@ -509,7 +509,7 @@ namespace StemmonsMobile.Commonfiles
 
         #region Messages For Whole APp
 
-        public static string Appinfomsg = "Stemmons Central to Go (v" + CrossDeviceInfo.Current.AppVersion + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
+        public static string Appinfomsg = "Stemmons Central to Go v" + CrossDeviceInfo.Current.AppVersion + "(" + CrossDeviceInfo.Current.AppBuild + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
         public static string Goonline_forFunc = "Please Go online to use this functionality!";
 
         public static string nRcrdOffline = "No Record Found.\nPlease go online to view full list.";

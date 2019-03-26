@@ -20,6 +20,9 @@ namespace StemmonsMobile.CustomControls
         public PropertyLandingPage()
         {
             InitializeComponent();
+
+            BackgroundColor = Color.Transparent;
+
             App.IsPropertyPage = true;
             SettingButton settings = new SettingButton(null);
             settings.HorizontalOptions = LayoutOptions.EndAndExpand;

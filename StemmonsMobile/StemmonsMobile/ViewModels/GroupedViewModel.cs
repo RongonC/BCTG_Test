@@ -239,6 +239,7 @@ namespace StemmonsMobile.ViewModels
             await Task.Run(() =>
             {
                 List<BasicCase> GetCaseList = null;
+
                 var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(Convert.ToInt32(Casetypeid), Functions.UserName);
                 var result = res.GetValue("ResponseContent").ToString();
                 GetCaseList = JsonConvert.DeserializeObject<List<BasicCase>>(result);
@@ -374,8 +375,11 @@ namespace StemmonsMobile.ViewModels
         }
         public async void onItemTap(object item)
         {
-            var tap = item as BasicCase;
-            await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ""));
+            if (item != null)
+            {
+                var tap = item as BasicCase;
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ""));
+            }
         }
 
         BasicCase _clist;

@@ -37,6 +37,17 @@ namespace StemmonsMobile.Droid
                 RequestPermissions(permissions, 1);
             }
 
+            //ScreenState.sleepTimeout = SleepTimeout.NeverSleep;
+
+            //PowerManager pm = (PowerManager)GetSystemService(Context.POWER_SERVICE);
+            //PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+            //wl.acquire();
+
+            //// screen and CPU will stay awake during this section
+
+            //wl.release();
+
+
             Xamarin.Essentials.Platform.Init(this, bundle); // add this line to your code, it may also be called: bundle
 
 

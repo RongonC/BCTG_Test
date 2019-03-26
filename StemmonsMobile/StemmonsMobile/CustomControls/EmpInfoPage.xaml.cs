@@ -29,19 +29,25 @@ namespace StemmonsMobile.CustomControls
         {
             InitializeComponent();
 
-            _empinfovm = new EmpInfoViewModel(_entity.EntityID.ToString());
-            _empinfovm.SelectedEntity = _entity;
+            EmpInfoVM = new EmpInfoViewModel(_entity.EntityID.ToString());
+            EmpInfoVM.SelectedEntity = _entity;
 
             this.BindingContext = EmpInfoVM;
+        }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             try
             {
-                ProfileImg.Source = Functions.GetImageFromEntityAssoc(_entity.AssociationFieldCollection);
+                ProfileImg.Source = Functions.GetImageFromEntityAssoc(EmpInfoVM.SelectedEntity.AssociationFieldCollection);
             }
             catch (Exception)
             {
                 ProfileImg.Source = "Assets/PropertyImage.png";
             }
+
+            lst_Employee_Role.SelectedItem = null;
         }
     }
 }

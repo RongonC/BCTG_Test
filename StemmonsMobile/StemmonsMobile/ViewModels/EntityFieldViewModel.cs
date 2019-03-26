@@ -121,10 +121,7 @@ namespace StemmonsMobile.ViewModels
             _entityAssocOrder = new ObservableCollection<AssociationField>();
             getEntityFieldValue();
 
-            if (_entityAssocOrder.Count > 0)
-            {
-                _heights = (42 * _entityAssocOrder.Count) + (10 * _entityAssocOrder.Count);
-            }
+         
         }
 
         public async void getEntityFieldValue() // get feild/value according AssocCode and AssocTypeId
@@ -177,6 +174,10 @@ namespace StemmonsMobile.ViewModels
             }
             catch (Exception)
             {
+            }
+            if (_entityAssocOrder.Count > 0)
+            {
+                Heights = (42 * _entityAssocOrder.Count) + (10 * _entityAssocOrder.Count);
             }
             IsBuZy = false;
         }

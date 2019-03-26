@@ -572,10 +572,10 @@ namespace StemmonsMobile
                                 {
                                     //EntityDetails = new EntityClass
                                     //{
-                                        EntityID = System.Convert.ToInt32(link_Nav_id),
-                                        EntityTypeID = System.Convert.ToInt32(info.Result.TYPE_ID)
+                                    EntityID = System.Convert.ToInt32(link_Nav_id),
+                                    EntityTypeID = System.Convert.ToInt32(info.Result.TYPE_ID)
                                     //},
-                                   // Title = info.Result.TYPE_NAME
+                                    // Title = info.Result.TYPE_NAME
                                 };
                             }
                             else
@@ -592,12 +592,8 @@ namespace StemmonsMobile
                                         var tp = JsonConvert.DeserializeObject<EntityBasicDetails>(eInfo);
                                         mbView = new EntityClass
                                         {
-                                            //EntityDetails = new EntityClass
-                                            //{
-                                                EntityID = System.Convert.ToInt32(link_Nav_id),
-                                                EntityTypeID = System.Convert.ToInt32(tp.ENTITY_TYPE_ID)
-                                            //},
-                                            //Title = tp.ENTITY_TYPE_NAME
+                                            EntityID = System.Convert.ToInt32(link_Nav_id),
+                                            EntityTypeID = System.Convert.ToInt32(tp.ENTITY_TYPE_ID)
                                         };
                                     }
                                 });

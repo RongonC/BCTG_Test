@@ -646,6 +646,48 @@
   <ItemGroup>
     <BundleResource Include="Resources\Assets\PropertyImage.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\AdvancedView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\BoxerStandards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\Campuses.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\CreateCase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\CreatedByMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\HopperCenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\MyProperties.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\OwenedByMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\Properties.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\PropertyList.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\removeicn%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\removeicn%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\AssignToMe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\na.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

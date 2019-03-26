@@ -42,49 +42,68 @@ namespace StemmonsMobile.ViewModels
         {
             PropertyCaseCmd = new Command(async (parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
+
+                }
             });
 
 
             PropertyinfomationCmd = new Command(async (parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                IsBUSY = true;
-                await Application.Current.MainPage.Navigation.PushAsync(new PropertyInfoPage(cm.EntityDetails));
-                IsBUSY = false;
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    IsBUSY = true;
+                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyInfoPage(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
             PropertyEmpolyeeCmd = new Command((parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                IsBUSY = true;
-                Application.Current.MainPage.Navigation.PushAsync(new EmpInfoPage(cm.EntityDetails));
-                IsBUSY = false;
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    IsBUSY = true;
+                    Application.Current.MainPage.Navigation.PushAsync(new EmpInfoPage(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
 
             PropertyTenantsCmd = new Command((parameter) =>
             {
-                IsBUSY = true;
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "TNTLIST"));
-                IsBUSY = false;
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "TNTLIST"));
+                    IsBUSY = false;
+                }
             });
 
             AvailableUnitsCmd = new Command((parameter) =>
             {
-                IsBUSY = true;
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "UNITS"));
-                IsBUSY = false;
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "UNITS"));
+                    IsBUSY = false;
+                }
             });
             // same as Tanent Page should pass System code only
 
             PropertyEntityCmd = new Command((parameter) =>
             {
-                IsBUSY = true;
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new Entity_View(cm.EntityDetails));
-                IsBUSY = false;
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new Entity_View(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
             // Entity View Page
         }

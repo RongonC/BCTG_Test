@@ -14,22 +14,16 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
-                    </Grid.ColumnDefinitions>
 
-                    <StackLayout   Grid.Column="1" Grid.Row="0" 
-                           >
+                    <StackLayout    Grid.Row="0" >
                         <Clist:EmpCustomListView x:Name="lst_Employee_Role"  HeightRequest="{Binding Heights}">
                             <ListView.Header>
                                 <StackLayout>
-                                    <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"
+                                    <Label x:Name="Titlelbl"  FontAttributes="Bold"
                            HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" 
                            Text="{Binding SelectedEntity.EntityTitle}" />
 
-                                    <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" 
+                                    <Image x:Name="ProfileImg"  
                                  Aspect="AspectFit" 
                                  BackgroundColor="Transparent"  HeightRequest="200" />
                                 </StackLayout>
@@ -37,8 +31,7 @@
                         </Clist:EmpCustomListView>
                     </StackLayout>
 
-                    <contr:FooterControl x:Name="cnt_footer" 
-                                         Grid.ColumnSpan="3" Grid.Row="1"/>
+                    <contr:FooterControl x:Name="cnt_footer"    Grid.Row="1"    />
                 </Grid>
             </StackLayout>
             <contr:ActivityProgressBar IsVisible="{Binding isbusy}" />

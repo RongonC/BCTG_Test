@@ -8,13 +8,6 @@
                      HorizontalOptions="StartAndExpand">
     <ContentView.Content>
         <StackLayout>
-            <!--<StackLayout x:Name="FooterBtnLayout" 
-                     Orientation="Horizontal" 
-                     IsClippedToBounds="True"
-                     VerticalOptions="EndAndExpand" 
-                     HorizontalOptions="StartAndExpand">
-
-            </StackLayout>-->
             <StackLayout>
                 <Grid ColumnSpacing="20">
                     <Grid.ColumnDefinitions>

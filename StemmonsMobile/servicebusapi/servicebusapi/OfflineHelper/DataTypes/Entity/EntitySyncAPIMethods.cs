@@ -369,6 +369,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
 
                     ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
+
                     #region Insert To SQLite
                     if (!_isPropertyPage)
                     {

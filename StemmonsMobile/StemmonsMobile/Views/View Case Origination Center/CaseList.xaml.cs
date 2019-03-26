@@ -200,6 +200,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             base.OnAppearing();
             try
             {
+//                DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = "http://localhost:54493";
+
                 //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 CaselistGrouped.SelectedItem = null;
                 if (isFirstAppearing)
@@ -355,10 +357,10 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                 switch (param)
                 {
-                    case "casetypeid":
+                    case "RELATEDCASES":
                         casetypeid = val;
                         break;
-                    case "RELATEDCASES":
+                    case "casetypeid":
                         casetypeid = val;
                         switch (searchvalue)
                         {
@@ -617,7 +619,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 //    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                 //}
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);

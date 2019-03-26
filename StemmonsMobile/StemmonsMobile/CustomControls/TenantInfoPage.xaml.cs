@@ -77,7 +77,7 @@ namespace StemmonsMobile.CustomControls
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
+            lstCntrol.SelectedItem = null;
             IsBusy = true;
             try
             {
@@ -91,6 +91,7 @@ namespace StemmonsMobile.CustomControls
             {
             }
             IsBusy = false;
+           
         }
     }
 }

@@ -94,7 +94,10 @@ namespace StemmonsMobile.ViewModels
 
         private async void EntitySelectedItem(EntityRoleRelationAssignment obj)
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new UserDetail(obj.Username));
+            if (obj != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new UserDetail(obj.Username));
+            }
         }
 
         private ObservableCollection<EntityRoleRelationAssignment> _employee_Role_List;

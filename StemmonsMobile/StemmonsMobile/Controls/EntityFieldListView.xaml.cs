@@ -42,7 +42,6 @@ namespace StemmonsMobile.Controls
             Entdetail = _entdetail;
             AcsyStemcode = _acsystemcode;
             AssocTypeid = _assoctypeid;
-            
           
             try
             {
