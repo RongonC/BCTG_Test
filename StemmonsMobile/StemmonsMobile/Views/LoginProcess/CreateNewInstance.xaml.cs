@@ -25,12 +25,13 @@ namespace StemmonsMobile.Views.LoginProcess
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            txt_instanceurl.Text = "http://home.boxerproperty.com/mobileapi";
-            txt_instancename.Text = "BoxerProperty Property";
+          
             if (Functions.Selected_Instance == 0)
             {
                 Title = "Create New Instance";
                 Createbtn.Text = "Create";
+                txt_instanceurl.Text = "http://home.boxerproperty.com/mobileapi";
+                txt_instancename.Text = "BoxerProperty Property";
             }
             else
             {
