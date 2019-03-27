@@ -281,7 +281,7 @@ namespace StemmonsMobile.ViewModels.CaseListViewModels
             if (item != null)
             {
                 var tap = item as GetCaseTypesResponse.BasicCase;
-                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ""));
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ScrnName));
             }
         }
 

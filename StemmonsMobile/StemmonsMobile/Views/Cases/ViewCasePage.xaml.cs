@@ -1001,6 +1001,7 @@ namespace StemmonsMobile.Views.Cases
                                         {
                                             Button btn = controlbtn as Button;
                                             var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue; //null than make it blank
+
                                             SelItmname = SelItmname ?? metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
 
                                             List<ExternalDatasourceValue> lst = new List<ExternalDatasourceValue>();
@@ -1016,9 +1017,6 @@ namespace StemmonsMobile.Views.Cases
                                                 lstextdatasourceHistory.Add(Metaitem.ASSOC_TYPE_ID, lst);
                                             else
                                                 lstextdatasourceHistory[Metaitem.ASSOC_TYPE_ID] = lst;
-
-
-
 
                                             if (!string.IsNullOrEmpty(SelItmname))
                                             {
@@ -1304,15 +1302,33 @@ namespace StemmonsMobile.Views.Cases
                                                 int j = 0;
                                                 for (j = 0; j < lst_SSsource.Count; j++)
                                                 {
-                                                    if (lst_SSsource.Count != 0)
-                                                    {
-                                                        var i = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID).FirstOrDefault();
+                                                    var _ADecode = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
 
-                                                        if (i?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || i?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
+                                                    if (lst_SSsource.Count < 1)
+                                                    {
+                                                        if (_ADecode?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || _ADecode?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
                                                             break;
                                                     }
                                                     else
+                                                    {
+
+                                                        var list = new List<ItemValue>();
+                                                        list.Add(new ItemValue
+                                                        {
+                                                            Name = "-- Select Item --",
+                                                            Description = "-- Select Item --",
+                                                            ID = 0
+                                                        });
+                                                        list.Add(new ItemValue
+                                                        {
+                                                            Name = _ADecode.FieldValue,
+                                                            Description = _ADecode.FieldValue,
+                                                            ID = _ADecode.AssociatedDecodeID
+                                                        });
+                                                        control.ItemsSource = list;
+                                                        j = 1;
                                                         break;
+                                                    }
                                                 }
                                                 control.SelectedIndex = j;
                                             }

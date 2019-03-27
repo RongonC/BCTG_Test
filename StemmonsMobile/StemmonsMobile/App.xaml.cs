@@ -212,10 +212,20 @@ namespace StemmonsMobile
         {
             try
             {
-                DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
+                if (!IsPropertyPage)
+                {
+                    DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
 
-                //Required To create Database
-                DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
+                    //Required To create Database
+                    DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
+                }
+                else
+                {
+                    DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("BCTGMobile.db");
+
+                    //Required To create Database
+                    DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("BCTGMobile.db"));
+                }
             }
             catch (System.Exception e)
             {

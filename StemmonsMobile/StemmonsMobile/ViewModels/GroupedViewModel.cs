@@ -197,16 +197,6 @@ namespace StemmonsMobile.ViewModels
             try
             {
                 Master_list = new ObservableCollection<Group_Caselist>();
-                //{
-                //    OnLoadMore = async () =>
-                //    {
-
-                //        //load the next page
-                //        await GetCaseListWithCall();
-                //        return null;
-
-                //    }
-                //};
 
                 TempList = new ObservableCollection<Group_Caselist>();
                 _headerTapCommand = new Command<object>(HeaderTapped);
@@ -214,71 +204,60 @@ namespace StemmonsMobile.ViewModels
             catch (Exception ex)
             {
             }
-
-            #region InfiniteScroll Class Implementation
-            //this.LoadDataCommand = new Command(async () =>
-            //{
-            //    PageIndex += 1;
-            //    await this.GetCaseListWithCall();
-
-            //    //if (Master_list?.FirstOrDefault().Count - 2 <= PageIndex)
-            //    //{
-            //    //    if (Master_list?.FirstOrDefault().Count == (PageNumber * PageIndex))
-            //    //    {
-            //    //        await this.GetCaseListWithCall();
-            //    //        PageIndex += 1;
-            //    //    }
-            //    //}
-            //});
-            #endregion
         }
 
         public async Task GetCaseListByEntityID()
         {
 
-            await Task.Run(() =>
+            try
             {
-                List<BasicCase> GetCaseList = null;
-
-                var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(Convert.ToInt32(Casetypeid), Functions.UserName);
-                var result = res.GetValue("ResponseContent").ToString();
-                GetCaseList = JsonConvert.DeserializeObject<List<BasicCase>>(result);
-
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    try
+                await Task.Run(() =>
                     {
-                        BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
-                        var tm = BasicCase_lst.Select(i =>
+                        List<BasicCase> GetCaseList = null;
+
+                        var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(Convert.ToInt32(Casetypeid), Functions.UserName);
+                        var result = res.GetValue("ResponseContent").ToString();
+                        GetCaseList = JsonConvert.DeserializeObject<List<BasicCase>>(result);
+
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            if (!string.IsNullOrEmpty(i.strCaseDue))
+                            try
                             {
-                                i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
-                                i.DueDateVisibility = true;
+                                BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                                var tm = BasicCase_lst.Select(i =>
+                                {
+                                    if (!string.IsNullOrEmpty(i.strCaseDue))
+                                    {
+                                        i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                        i.DueDateVisibility = true;
+                                    }
+                                    else
+                                    {
+                                        i.bg_color = "Black";
+                                        i.DueDateVisibility = false;
+                                    }
+                                    return i;
+                                });
+
+                                BasicCase_lst = new ObservableCollection<BasicCase>(tm);
                             }
-                            else
+                            catch
                             {
-                                i.bg_color = "Black";
-                                i.DueDateVisibility = false;
+                                if (GetCaseList != null)
+                                {
+                                    BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                                }
                             }
-                            return i;
                         });
+                    });
 
-                        BasicCase_lst = new ObservableCollection<BasicCase>(tm);
-                    }
-                    catch
-                    {
-                        if (GetCaseList != null)
-                        {
-                            BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
-                        }
-                    }
-                });
-            });
+                Master_list.Clear();
 
-            Master_list.Clear();
-
-            Master_List_Function(BasicCase_lst);
+                Master_List_Function(BasicCase_lst);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         #region Pull To refresh Case List
@@ -378,7 +357,7 @@ namespace StemmonsMobile.ViewModels
             if (item != null)
             {
                 var tap = item as BasicCase;
-                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ""));
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ScrnName));
             }
         }
 

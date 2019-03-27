@@ -2716,7 +2716,7 @@ namespace StemmonsMobile
                         await Navigation.PushAsync(new PropertyLandingPage());
                         break;
                     case "VCasePage":
-                        await Navigation.PushAsync(new VCasePage());
+                        //await Navigation.PushAsync(new VCasePage());
                         break;
                     case "Logout":
                         App.Logout(this);

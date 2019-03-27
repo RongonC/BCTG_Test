@@ -355,9 +355,6 @@
     <Compile Include="Views\Standards\TreeView\TreeViewItem.cs" />
     <Compile Include="Views\SwipeGestureRecognizer.cs" />
     <Compile Include="Views\SwipeGestureRecognizerDirectonConverter.cs" />
-    <Compile Include="Views\VCasePage.xaml.cs">
-      <DependentUpon>VCasePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\View Case Origination Center\CaseList.xaml.cs">
       <DependentUpon>CaseList.xaml</DependentUpon>
     </Compile>
@@ -786,12 +783,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Sync_Popup.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\VCasePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
