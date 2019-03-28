@@ -326,7 +326,8 @@ namespace StemmonsMobile
 
                 var res = DBHelper.GetinstanceuserassocListByUsername_Id(Functions.UserName, Functions.Selected_Instance, DBPath);
                 res.Wait();
-                ConstantsSync.INSTANCE_USER_ASSOC_ID = res.Result.INSTANCE_USER_ASSOC_ID;
+                if (res.Result != null)
+                    ConstantsSync.INSTANCE_USER_ASSOC_ID = res.Result.INSTANCE_USER_ASSOC_ID;
             }
             catch (Exception)
             {

@@ -62,8 +62,8 @@
                 </ViewCell>
               </DataTemplate>
             </ListView.ItemTemplate>
-            <ListView.Footer>
-            </ListView.Footer>
+            <!--<ListView.Footer>
+            </ListView.Footer>-->
           </ListView>
         </StackLayout>
 

@@ -73,7 +73,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exception Log => " + ex.Message.ToString(), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
+                DefaultAPIMethod.AddLog("Exception Log => " + ex.ToString(), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exception Log => " + Convert.ToString(Result), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
             }
             return sError;
@@ -202,7 +202,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
             }
             return ResponseContent;
@@ -3201,7 +3201,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     List<EDSResultList> Result = DBHelper.EDSResultByAssocFieldId(Request.caseTypeID.ToString(), "C1_C2_CASES_CASETYPELIST", Request.assocCaseTypeID, ConstantsSync.CasesInstance, _DBPath).Result;
 
-                    lstResult = JsonConvert.DeserializeObject<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>>(Result.FirstOrDefault().EDS_RESULT);
+                    lstResult = JsonConvert.DeserializeObject<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>>(Result?.FirstOrDefault()?.EDS_RESULT);
 
                 }
             }

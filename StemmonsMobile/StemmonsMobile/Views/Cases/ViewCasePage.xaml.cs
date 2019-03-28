@@ -440,6 +440,7 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         switch (ControlsItem.ASSOC_FIELD_TYPE.ToLower())
                                         {
+                                            #region O - E
                                             case "o":
                                             case "e":
 
@@ -600,6 +601,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                 break;
 
+                                            #endregion
                                             case "d":
                                                 Picker pkr = new Picker();
                                                 pkr.WidthRequest = 200;
@@ -1294,39 +1296,38 @@ namespace StemmonsMobile.Views.Cases
                                         var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
                                         if (control != null)
                                         {
-                                            List<ItemValue> lst_SSsource = new List<ItemValue>();
 
-                                            lst_SSsource = control.ItemsSource as List<ItemValue>;
+                                            var Cnt_Source = control.ItemsSource as List<ItemValue>;
                                             try
                                             {
                                                 int j = 0;
-                                                for (j = 0; j < lst_SSsource.Count; j++)
+                                                for (j = 0; j < Cnt_Source.Count; j++)
                                                 {
                                                     var _ADecode = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
 
-                                                    if (lst_SSsource.Count < 1)
+                                                    if (Cnt_Source.Count != 0)
                                                     {
-                                                        if (_ADecode?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || _ADecode?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
+                                                        if (_ADecode?.AssociatedDecodeName?.ToLower() == Cnt_Source[j]?.Name?.ToLower() || _ADecode?.TextValue?.ToLower() == Cnt_Source[j]?.Name?.ToLower())
                                                             break;
                                                     }
                                                     else
                                                     {
 
-                                                        var list = new List<ItemValue>();
-                                                        list.Add(new ItemValue
-                                                        {
-                                                            Name = "-- Select Item --",
-                                                            Description = "-- Select Item --",
-                                                            ID = 0
-                                                        });
-                                                        list.Add(new ItemValue
-                                                        {
-                                                            Name = _ADecode.FieldValue,
-                                                            Description = _ADecode.FieldValue,
-                                                            ID = _ADecode.AssociatedDecodeID
-                                                        });
-                                                        control.ItemsSource = list;
-                                                        j = 1;
+                                                        //var list = new List<ItemValue>();
+                                                        //list.Add(new ItemValue
+                                                        //{
+                                                        //    Name = "-- Select Item --",
+                                                        //    Description = "-- Select Item --",
+                                                        //    ID = 0
+                                                        //});
+                                                        //list.Add(new ItemValue
+                                                        //{
+                                                        //    Name = _ADecode.FieldValue,
+                                                        //    Description = _ADecode.FieldValue,
+                                                        //    ID = _ADecode.AssociatedDecodeID
+                                                        //});
+                                                        //control.ItemsSource = list;
+                                                        //j = 1;
                                                         break;
                                                     }
                                                 }

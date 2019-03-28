@@ -130,7 +130,10 @@ namespace StemmonsMobile.Models
                 Debug.WriteLine("Master sync started ");
                 if (CrossConnectivity.Current.IsConnected)
                 {
-
+                    Task.Run(() =>
+                    {
+                        Functions.GetImageDownloadURL();
+                    });
                     #region Home Count Sync
                     //Home Count Sync
                     try
