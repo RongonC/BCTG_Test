@@ -688,6 +688,24 @@
   <ItemGroup>
     <BundleResource Include="Resources\Assets\na.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\Usersearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\cross_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\tick_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\cross_2 - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\tick_2 - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Assets\available_update.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

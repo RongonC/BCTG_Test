@@ -383,7 +383,7 @@ namespace StemmonsMobile.Commonfiles
 
         }
 
-        public static void GetImageDownloadURL()
+        public static void GetSystemCodesfromSqlServer()
         {
             try
             {
@@ -464,6 +464,8 @@ namespace StemmonsMobile.Commonfiles
                     App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
                     App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
                     App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+                    App.CurretVer = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "B2VER").FirstOrDefault().VALUE;
+
                 }
             }
             catch (Exception)

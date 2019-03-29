@@ -1,5 +1,6 @@
 ﻿using StemmonsMobile.Commonfiles;
 using StemmonsMobile.CustomControls;
+using StemmonsMobile.Views;
 using StemmonsMobile.Views.Setting;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,10 @@ namespace StemmonsMobile.Controls
             try
             {
 
-                var action = await Application.Current.MainPage.DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout"/* ,"Landing Page"*/);
+
+                var action = await Application.Current.MainPage.DisplayActionSheet("Select Option", "Cancel", sb.ToString(), "Run Synchronization", "Setting", "About", "Logout", "Check Sync Status"/* ,"Landing Page"*/);
+
+
 
                 if (action.ToLower().Contains("offline"))
                     action = "offline";
@@ -56,6 +60,16 @@ namespace StemmonsMobile.Controls
                 switch (action)
                 {
 
+                    case "Check Sync Status":
+                        if (App.SyncProgressFlag)
+                        {
+                            await Application.Current.MainPage.Navigation.PushAsync(new SyncStatusPage());
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Alert", "Please wait for sync to complete", "OK");
+                        }
+                        break;
                     case "Landing Page":
                         if (App.IsPropertyPage)
                             Application.Current.MainPage.Navigation.PushAsync(new LandingPage());

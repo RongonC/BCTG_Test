@@ -2,6 +2,7 @@
 using StemmonsMobile.CustomControls;
 using StemmonsMobile.Views.Cases;
 using StemmonsMobile.Views.Cases_Hopper_Center;
+using StemmonsMobile.Views.People_Screen;
 using StemmonsMobile.Views.Search;
 using StemmonsMobile.Views.Standards;
 using StemmonsMobile.Views.View_Case_Origination_Center;
@@ -26,6 +27,9 @@ namespace StemmonsMobile.ViewModels
         public ICommand StandardsButtonCmd { get; private set; }
         public ICommand HopperButtonCmd { get; private set; }
 
+        public ICommand EmpSearchButtonCmd { get; private set; }
+
+   
         public PropLandingViewModel()
         {
             PropertyButtonCmd = new Command(async () =>
@@ -67,6 +71,11 @@ namespace StemmonsMobile.ViewModels
             HopperButtonCmd = new Command(async () =>
             {
                 await Application.Current.MainPage.Navigation.PushAsync(new SelectCaseHopper(Functions.UserName, ""));
+            });
+
+            EmpSearchButtonCmd = new Command(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new UserSearch());
             });
         }
     }

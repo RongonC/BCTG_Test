@@ -40,6 +40,11 @@ namespace StemmonsMobile
         public static bool IsPropertyPage = true;
 
         public static bool IsForceOnline = true;
+
+
+        public static int[] SyncSuccessFlagArr = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static bool SyncProgressFlag = false;
+
         public App()
         {
             InitializeComponent();
@@ -338,6 +343,7 @@ namespace StemmonsMobile
         public static string EntityImgURL = string.Empty;
         public static string CasesImgURL = string.Empty;
         public static string StandardImgURL = string.Empty;
+        public static string CurretVer = string.Empty;
 
         protected override void OnStart()
         {
@@ -696,10 +702,16 @@ namespace StemmonsMobile
         {
             try
             {
-                var result = DefaultAPIMethod.GetLogo("MLOGO");
-                var urlString = result.GetValue("ResponseContent");
-
-                var MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(urlString.ToString());
+                var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                List<MobileBranding> MBrand = new List<MobileBranding>();
+                if (!string.IsNullOrEmpty(Check.ASSOC_FIELD_INFO))
+                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Check.ASSOC_FIELD_INFO.ToString());
+                else
+                {
+                    var result = DefaultAPIMethod.GetLogo("MLOGO");
+                    var urlString = result.GetValue("ResponseContent");
+                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(urlString.ToString());
+                }
 
                 ImageHelperClass iHeleper = new ImageHelperClass();
                 var Src = iHeleper.DownloadImage(Convert.ToString(MBrand.Where(x => x.SYSTEM_CODE == "MLOGO")?.FirstOrDefault().VALUE));

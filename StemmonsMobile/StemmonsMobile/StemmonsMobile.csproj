@@ -56,6 +56,9 @@
     <Compile Include="Controls\ActivityProgressBar.xaml.cs">
       <DependentUpon>ActivityProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AppVersionPopup.xaml.cs">
+      <DependentUpon>AppVersionPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CaseList_CustomControl.xaml.cs">
       <DependentUpon>CaseList_CustomControl.xaml</DependentUpon>
     </Compile>
@@ -355,6 +358,9 @@
     <Compile Include="Views\Standards\TreeView\TreeViewItem.cs" />
     <Compile Include="Views\SwipeGestureRecognizer.cs" />
     <Compile Include="Views\SwipeGestureRecognizerDirectonConverter.cs" />
+    <Compile Include="Views\SyncStatusPage.xaml.cs">
+      <DependentUpon>SyncStatusPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\View Case Origination Center\CaseList.xaml.cs">
       <DependentUpon>CaseList.xaml</DependentUpon>
     </Compile>
@@ -945,6 +951,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Ungrouped_CaseList_CustomControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SyncStatusPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\AppVersionPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

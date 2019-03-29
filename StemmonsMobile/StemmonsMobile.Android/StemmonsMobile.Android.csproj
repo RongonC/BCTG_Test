@@ -1531,6 +1531,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\Assets\DefaultIMG.png" />
     <AndroidResource Include="Resources\drawable-hdpi\Assets\na.gif" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\cross_2.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\available_update.png" />
     <Content Include="Resources\drawable-hdpi\Assets\PropertyImage.png" />
     <AndroidResource Include="Resources\drawable\Assets\about.info.png" />
     <AndroidResource Include="Resources\drawable\Assets\actor.png" />
@@ -1598,6 +1600,18 @@
     <AndroidResource Include="Resources\drawable\Assets\na.gif" />
     <AndroidResource Include="Resources\drawable-xhdpi\Assets\na.gif" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Assets\na.gif" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\Usersearch.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\Usersearch.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\Usersearch.png" />
+    <AndroidResource Include="Resources\drawable\Assets\cross_2.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Assets\tick_2.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\cross_2.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\tick_2.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\cross_2.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\tick_2.png" />
+    <AndroidResource Include="Resources\drawable\Assets\available_update.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Assets\available_update.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Assets\available_update.png" />
     <Content Include="Resources\drawable\Assets\PropertyImage.png" />
     <AndroidResource Include="Resources\drawable\Assets\PropertyList.png" />
     <AndroidResource Include="Resources\drawable\Assets\Questblack.png" />
@@ -1615,6 +1629,8 @@
     <AndroidResource Include="Resources\drawable\Assets\userIcon.png" />
     <AndroidResource Include="Resources\drawable\Assets\xamarin_logo.png" />
     <AndroidResource Include="Resources\drawable\DefaultIMG.png" />
+    <AndroidResource Include="Resources\drawable\Usersearch.png" />
+    <AndroidResource Include="Resources\drawable\tick_2.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\Assets\PropertyImage.png" />
@@ -1756,6 +1772,10 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\na.gif" />
+    <AndroidResource Include="Resources\drawable\Assets\Usersearch.png" />
+    <AndroidResource Include="Resources\drawable\cross_2.png" />
+    <AndroidResource Include="Resources\drawable\Assets\tick_2.png" />
+    <AndroidResource Include="Resources\drawable\available_update.png" />
     <Content Include="Resources\drawable\PropertyImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

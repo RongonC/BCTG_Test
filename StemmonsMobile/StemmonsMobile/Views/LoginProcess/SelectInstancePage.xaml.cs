@@ -21,8 +21,8 @@ namespace StemmonsMobile.Views.LoginProcess
         public SelectInstancePage()
         {
             InitializeComponent();
-
-            //loader.IsRunning = true;
+            IsBusy = false;
+            loader.IsVisible = false;
         }
         private async void ContentPage_Appearing(object sender, EventArgs e)
         {
@@ -35,12 +35,15 @@ namespace StemmonsMobile.Views.LoginProcess
                 {
                     Functions.GetBaseURLfromSQLite();
                 });
+
                 App.IsLoginCall = true;
                 if (App.IsPropertyPage)
                     await Navigation.PushAsync(new PropertyLandingPage());
                 else
                     await Navigation.PushAsync(new LandingPage());
             }
+
+            loader.IsVisible = false;
         }
 
         async void Handle_Clicked(object sender, System.EventArgs e)
@@ -48,10 +51,12 @@ namespace StemmonsMobile.Views.LoginProcess
             Functions.Selected_Instance = 0;
             await Navigation.PushAsync(new CreateNewInstance());
         }
-        void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            Task.Run(() =>
+            loader.IsVisible =   true;
+            await Task.Run(() =>
             {
+                Functions.GetSystemCodesfromSqlServer();
                 App.DownloadCompanyLog();
             });
 
@@ -60,6 +65,7 @@ namespace StemmonsMobile.Views.LoginProcess
             DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = value.InstanceUrl;
             this.Navigation.PushAsync(new LoginPage(value) { BindingContext = value });
             InstanceList.SelectedItem = null;
+            loader.IsVisible = false;
         }
     }
 }

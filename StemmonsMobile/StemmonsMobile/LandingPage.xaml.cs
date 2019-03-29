@@ -1882,7 +1882,7 @@ namespace StemmonsMobile
                 {
                     Task.Run(() =>
                     {
-                        Functions.GetImageDownloadURL();
+                        Functions.GetSystemCodesfromSqlServer();
                     });
 
                     #region Home Count Sync
