@@ -7,7 +7,6 @@ using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
