@@ -3,7 +3,6 @@ using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
-using PCLStorage;
 using Plugin.FilePicker;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -1181,12 +1180,13 @@ namespace StemmonsMobile.Views.Entity
                         {
                             if (Device.RuntimePlatform == Device.UWP)
                             {
-                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
                             }
                             else
                             {
-                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
                             }
+                           
                         }
                         catch (Exception)
                         {
@@ -1300,12 +1300,13 @@ namespace StemmonsMobile.Views.Entity
                         {
                             if (Device.RuntimePlatform == Device.UWP)
                             {
-                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
                             }
                             else
                             {
-                                await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
                             }
+                           
                         }
                         catch (Exception)
                         {

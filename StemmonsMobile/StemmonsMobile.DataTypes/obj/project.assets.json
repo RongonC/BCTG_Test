@@ -2559,29 +2559,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jigarrp\\.nuget\\packages\\": {},
+    "C:\\Users\\jayp\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj",
+      "projectUniqueName": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj",
       "projectName": "StemmonsMobile.DataTypes",
-      "projectPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj",
-      "packagesPath": "C:\\Users\\jigarrp\\.nuget\\packages\\",
-      "outputPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\obj\\",
+      "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj",
+      "packagesPath": "C:\\Users\\jayp\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\jigarrp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jayp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },

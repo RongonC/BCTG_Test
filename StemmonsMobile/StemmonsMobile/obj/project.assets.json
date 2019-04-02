@@ -4679,7 +4679,7 @@
       ]
     },
     "System.ValueTuple/4.5.0": {
-      "sha512": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "sha512": "+gDrtQRdEsUSdPZEEcVRmBvs6xJmqGBqRzEGMQm5XqHxWTkZe/PSuomdth5ZPcOb/Oh2kIu6NChoI1JQk649jg==",
       "type": "package",
       "path": "system.valuetuple/4.5.0",
       "files": [
@@ -5403,7 +5403,7 @@
       ]
     },
     "Xamarin.Plugin.FilePicker/2.0.135": {
-      "sha512": "NCD5/Xy2RGNlGYBoiSnC2qbiuecb9TZ4lyZZERYEH1Ge6g580yHkv2W7Tj/rf1I3QSI9ClDwHA23dDb6L/khKw==",
+      "sha512": "5aRpZYfrW2sp+8TPqeibx6gmj2Ljl2C9sCkjbUCbrqoMMcfav0eUv8mFMSmCt4kAXBcfoBZnuACcLlKqr79hZQ==",
       "type": "package",
       "path": "xamarin.plugin.filepicker/2.0.135",
       "files": [
@@ -5498,40 +5498,42 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jigarrp\\.nuget\\packages\\": {},
+    "C:\\Users\\jayp\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
+      "projectUniqueName": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
       "projectName": "StemmonsMobile",
-      "projectPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
-      "packagesPath": "C:\\Users\\jigarrp\\.nuget\\packages\\",
-      "outputPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\obj\\",
+      "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
+      "packagesPath": "C:\\Users\\jayp\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\jigarrp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jayp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj": {
-              "projectPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj"
+            "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj": {
+              "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj"
             },
-            "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
-              "projectPath": "D:\\Mobile Project\\SCTG\\StemmonsCentralToGo\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
+            "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
+              "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
             }
           }
         }

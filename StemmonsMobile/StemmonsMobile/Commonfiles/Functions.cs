@@ -4,7 +4,6 @@ using DataServiceBus.OfflineHelper.DataTypes.Common;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PCLStorage;
 using Plugin.Connectivity;
 using Plugin.DeviceInfo;
 using StemmonsMobile.DataTypes.DataType.Default;
@@ -307,12 +306,14 @@ namespace StemmonsMobile.Commonfiles
                 Uri url = new Uri(Url);
                 var client = new HttpClient();
 
-                IFile file = await FileSystem.Current.LocalStorage.CreateFileAsync(UserName + ".png", CreationCollisionOption.ReplaceExisting);
-                using (var fileHandler = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
+                //IFile file = await FileSystem.Current.LocalStorage.CreateFileAsync(UserName + ".png", CreationCollisionOption.ReplaceExisting);
+                //using (var fileHandler = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
                 {
                     var httpResponse = await client.GetAsync(url);
+                    
                     byte[] dataBuffer = await httpResponse.Content.ReadAsByteArrayAsync();
-                    await fileHandler.WriteAsync(dataBuffer, 0, dataBuffer.Length);
+                    await FileExtensions.SaveToLocalFolderAsync(dataBuffer, UserName + ".png");
+                    //await fileHandler.WriteAsync(dataBuffer, 0, dataBuffer.Length);
                 }
             }
             catch (Exception ex)

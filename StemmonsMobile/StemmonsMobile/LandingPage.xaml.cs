@@ -7,7 +7,6 @@ using DataServiceBus.OfflineHelper.DataTypes.Quest;
 using DataServiceBus.OfflineHelper.DataTypes.Standards;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
-using PCLStorage;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using StemmonsMobile.Commonfiles;

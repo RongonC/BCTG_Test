@@ -242,7 +242,7 @@ namespace StemmonsMobile.Views.Standards
             }
         }
 
-        private void HeaderTapped(object sender, ItemTappedEventArgs e)
+        private void HeaderTapped(object sender, EventArgs e)
         {
             try
             {

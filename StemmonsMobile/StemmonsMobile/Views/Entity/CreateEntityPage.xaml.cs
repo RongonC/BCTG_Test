@@ -4,7 +4,6 @@ using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PCLStorage;
 using Plugin.Media;
 using StemmonsMobile.Commonfiles;
 using StemmonsMobile.DataTypes.DataType;
@@ -2206,12 +2205,13 @@ namespace StemmonsMobile.Views.Entity
                     {
                         if (Device.RuntimePlatform == Device.UWP)
                         {
-                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
+                            FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
                         }
                         else
                         {
-                            await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
+                            FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
                         }
+                        
                     }
                     catch (Exception)
                     {
@@ -2265,8 +2265,8 @@ namespace StemmonsMobile.Views.Entity
 
                 try
                 {
-                    IFolder rootFolder = FileSystem.Current.LocalStorage;
-                    await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
+                    //IFolder rootFolder = FileSystem.Current.LocalStorage;
+                    //await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
                 }
                 catch (Exception)
                 {

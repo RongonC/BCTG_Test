@@ -66,13 +66,4 @@
     <ProjectReference Include="../servicebusapi/servicebusapi/DataServiceBus.csproj" />
     <ProjectReference Include="..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="PCLStorage">
-      <HintPath>C:\Users\jigarrp\Desktop\PCLStorage.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions">
-      <HintPath>C:\Users\jigarrp\Desktop\PCLStorage.Abstractions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
