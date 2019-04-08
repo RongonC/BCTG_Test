@@ -60,7 +60,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 					metadtaid = "-1";
 				}
 				Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-				var AttachmentCall = APICalls.GetFilesByQuestionID(App.Isonline, metadtaid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+				var AttachmentCall = QuestSyncAPIMethods.GetFilesByQuestionID(App.Isonline, metadtaid, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 				listdata.ItemsSource = null;
 				listdata.ItemsSource = AttachmentCall.Result;
 				Functions.ShowOverlayView_Grid(overlay, false, masterGrid);

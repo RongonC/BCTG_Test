@@ -8,12 +8,12 @@
           ItemsSource="{Binding Employee_Role_List}"
           SelectedItem="{Binding SelectedItemsEntity,Mode=TwoWay}"
           SeparatorVisibility="Default" 
+          HasUnevenRows="True"
            >
     <ListView.ItemTemplate>
         <DataTemplate>
             <VC:EmpListViewCell/>
         </DataTemplate>
-
     </ListView.ItemTemplate>
     <ListView.Behaviors>
         <Behavior:InfiniteScroll LoadMoreCommand="{Binding LoadDataCommand }"/>

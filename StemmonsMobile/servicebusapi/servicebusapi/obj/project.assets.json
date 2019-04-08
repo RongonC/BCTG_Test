@@ -4561,39 +4561,41 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jayp\\.nuget\\packages\\": {},
+    "C:\\Users\\vishalpr\\.nuget\\packages\\": {},
+    "C:\\ProgramData\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj",
+      "projectUniqueName": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj",
       "projectName": "DataServiceBus",
-      "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj",
-      "packagesPath": "C:\\Users\\jayp\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\obj\\",
+      "projectPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj",
+      "packagesPath": "C:\\Users\\vishalpr\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\servicebusapi\\servicebusapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\ProgramData\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\jayp\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\vishalpr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://packages.nuget.org/v1/FeedService.svc/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
-              "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
+            "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
+              "projectPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
             }
           }
         }

@@ -7,7 +7,7 @@
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout x:Name="Main_Stack">
-                <Label Text="Instance Name" TextColor="Gray" Margin="20,25,0,0" FontSize="12" FontAttributes="Italic" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                <Label Text="Instance Name" TextColor="Gray" Margin="20,25,0,0" FontSize="12" FontAttributes="Italic"  />
                 <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0,0,0"/>
 
 
@@ -39,10 +39,10 @@
                     </Button>
 
                 </StackLayout>
-                <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,-5,0,0"/>
+                <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="0,-5,0,0"/>
 
                 <Label Text="Login Information" TextColor="Gray" Margin="20,40,0,0" FontSize="12" FontAttributes="Italic" />
-                <Label BackgroundColor="#D0D0D0" HeightRequest="1" Margin="10,0,0,0"/>
+                <Label BackgroundColor="#D0D0D0" HeightRequest="1" />
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -55,7 +55,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="0"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition />

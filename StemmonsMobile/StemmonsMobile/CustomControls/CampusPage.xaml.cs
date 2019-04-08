@@ -1,9 +1,12 @@
-﻿using StemmonsMobile.Controls;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Entity;
+using StemmonsMobile.Commonfiles;
+using StemmonsMobile.Controls;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.ViewModels;
 using StemmonsMobile.ViewModels.EntityViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +19,6 @@ namespace StemmonsMobile.CustomControls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CampusPage : ContentPage
     {
-        private CampusPageViewModel _campuspageVM;
-
-        public CampusPageViewModel CampusPageVM
-        {
-            get { return _campuspageVM; }
-            set { _campuspageVM = value; }
-        }
-
         private EntityListViewModel _entitylistVM = new EntityListViewModel();
 
         public EntityListViewModel EntityListVM
@@ -49,25 +44,70 @@ namespace StemmonsMobile.CustomControls
             InitializeComponent();
             try
             {
-                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "EPILR" }, new List<string>() { "1468" });
-                frmField.Content = ent;
+                Task.Run(() =>
+                {
+                    var res = EntitySyncAPIMethods.GetEntityByEntityID(App.Isonline, _entdetail.EntityID.ToString(), Functions.UserName, _entdetail.EntityTypeID.ToString(), App.DBPath);
+                    res.Wait();
+                    _entdetail = res.Result;
+                }).Wait();
 
-                EntityListCustomControl lstEntity = new EntityListCustomControl();
-                frmList.Content = lstEntity;
+                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE" }, new List<string>() { "1769" });
 
                 EntityListVM.EntityID = _entdetail.EntityID;
                 EntityListVM.ScreenCode = "CAMPSRELATED";
-
                 EntityListVM.GetEntityListwithCall().Wait();
 
+                Label lb1 = new Label();
+                lb1.Text = _entdetail.EntityTitle;
+                lb1.FontSize = 17;
+                lb1.FontAttributes = FontAttributes.Bold;
+                lb1.HorizontalOptions = LayoutOptions.Center;
+                lb1.HorizontalTextAlignment = TextAlignment.Center;
+                lb1.Margin = new Thickness(0, 15, 0, 15);
+
+
+                EntityListCustomControl lstEntity = new EntityListCustomControl();//Listview for Related Entity
                 lstEntity.BindingContext = EntityListVM;
 
+                lstEntity.Header = new StackLayout()
+                {
+                    Children =
+                    {
+                        lb1,
+                        ent,
+                        new BoxView()
+                        {
+                            BackgroundColor =Color.Gray,
+                            HeightRequest =2
+                        },
+                        new Label()
+                        {
+                            Text ="Property",
+                            FontSize =18,
+                            Margin=new Thickness(5),
+                            FontAttributes = FontAttributes.Bold
+                        },
+                        new BoxView()
+                        {
+                            BackgroundColor = Color.Gray,
+                            HeightRequest = 2
+                        }
+                    }
+                };
+
+                frmList.Children.Add(lstEntity);
+
                 BindingContext = _entdetail;
+
+                //var ls = ent.FindByName("cntList") as ListView;
+                //var tl = ls.ItemsSource as ObservableCollection<AssociationField>;
+                //frmField.HeightRequest = (42 * tl.Count) + (10 * tl.Count);
+
             }
             catch (Exception e)
             {
             }
         }
     }
-   
+
 }

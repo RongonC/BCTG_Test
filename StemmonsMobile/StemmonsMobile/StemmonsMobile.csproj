@@ -13,12 +13,26 @@
     <None Remove="backup-2019-04-02-103917\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Controls\CustomCell.cs" />
+    <Compile Remove="Controls\EntityListCustomCell.cs" />
+    <Compile Remove="Views\BaseGestureRecognizer.cs" />
     <Compile Remove="Views\Cases\ViewcasePage_New.xaml.cs" />
+    <Compile Remove="Views\GestureRecognizerExtensions.cs" />
+    <Compile Remove="Views\INativeGestureRecognizer.cs" />
+    <Compile Remove="Views\INativeGestureRecognizerCoordinator.cs" />
+    <Compile Remove="Views\INativeGestureRecognizerFactory.cs" />
     <Compile Remove="Views\LoginProcess\EditInstanceList.xaml.cs" />
     <Compile Remove="Views\LoginProcess\SelectCaseType.xaml.cs" />
+    <Compile Remove="Views\LongPressGestureRecognizer.cs" />
+    <Compile Remove="Views\PanGestureRecognizer.cs" />
+    <Compile Remove="Views\PinchGestureRecognizer.cs" />
+    <Compile Remove="Views\ResourceRectLabel.cs" />
     <Compile Remove="Views\Search\SearchList.xaml.cs" />
     <Compile Remove="Views\Search\SearchList1.xaml.cs" />
     <Compile Remove="Views\Search\SearchResult.xaml.cs" />
+    <Compile Remove="Views\SwipeGestureRecognizer.cs" />
+    <Compile Remove="Views\SwipeGestureRecognizerDirectonConverter.cs" />
+    <Compile Remove="Views\VCasePage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\Cases\ViewcasePage_New.xaml" />
@@ -27,6 +41,7 @@
     <EmbeddedResource Remove="Views\Search\SearchList.xaml" />
     <EmbeddedResource Remove="Views\Search\SearchList1.xaml" />
     <EmbeddedResource Remove="Views\Search\SearchResult.xaml" />
+    <EmbeddedResource Remove="Views\VCasePage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.4" />
@@ -41,9 +56,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.188" />
     <PackageReference Include="runtime.native.System" Version="4.3.1" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.13" />
+    <PackageReference Include="sqlite-net-standard" Version="1.5.1" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />

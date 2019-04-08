@@ -1,5 +1,11 @@
-﻿using StemmonsMobile.Commonfiles;
+﻿using DataServiceBus.OnlineHelper.DataTypes;
+using Newtonsoft.Json;
+using Plugin.Connectivity;
+using Plugin.DeviceInfo;
+using Rg.Plugins.Popup.Services;
+using StemmonsMobile.Commonfiles;
 using StemmonsMobile.Controls;
+using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.Models;
 using StemmonsMobile.ViewModels;
 using System;
@@ -19,6 +25,9 @@ namespace StemmonsMobile.CustomControls
         public PropertyLandingPage()
         {
             InitializeComponent();
+
+            BackgroundColor = Color.Transparent;
+
             App.IsPropertyPage = true;
             SettingButton settings = new SettingButton(null);
             settings.HorizontalOptions = LayoutOptions.EndAndExpand;
@@ -33,37 +42,105 @@ namespace StemmonsMobile.CustomControls
             MasterSyncPopup.PropertyChange += new PropertyChangingEventHandler(OnPropertyChage);
 
             this.BindingContext = new PropLandingViewModel();
+
+            //string CurretVer = string.Empty;
+            //var result = DefaultAPIMethod.GetLogo("B2VER");
+            //var res = result.GetValue("ResponseContent").ToString();
+            //var LiveVer = JsonConvert.DeserializeObject<List<MobileBranding>>(res).Where(x => x.SYSTEM_CODE == "B2VER")?.FirstOrDefault();
+            //CurretVer = LiveVer.VALUE;
+            try
+            {
+                HeaderLayout.Children.Clear();
+
+                //  StackLayout updateStack = new StackLayout();
+                //  updateStack.Orientation = StackOrientation.Vertical;
+                ////  updateStack.Margin = new Thickness(0, 10, 5, 0);
+
+                var grid = new Grid();
+                grid.RowSpacing = 0;
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(17) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(30) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50) });
+
+                SettingButton updateBtn = new SettingButton(UpdateBtn_Clicked);
+                var sBtn = updateBtn.FindByName("btnSetting") as Button;
+                sBtn.Image = "Assets/available_update.png";
+                updateBtn.HorizontalOptions = LayoutOptions.Center;
+
+                Label updateText = new Label();
+                updateText.Text = "New Update";
+                updateText.TextColor = Color.Red;
+                updateText.HorizontalOptions = LayoutOptions.Center;
+                updateText.FontSize = 8;
+
+                grid.Children.Add(updateBtn, 0, 1);
+                grid.Children.Add(updateText, 0, 2);
+                grid.IsVisible = false;
+                //updateStack.Children.Add(grid);
+                // updateStack.Children.Add(updateText);
+
+                HeaderLayout.Children.Add(grid);
+
+                SettingButton csb = new SettingButton(null);
+                csb.HorizontalOptions = LayoutOptions.EndAndExpand;
+                csb.Margin = new Thickness(0, 10, 5, 0);
+                HeaderLayout.Children.Add(csb);
+
+                if (App.CurretVer != CrossDeviceInfo.Current.AppVersion)
+                {
+                    grid.IsVisible = true;
+                    PopupNavigation.Instance.PushAsync(new AppVersionPopup());
+                }
+            }
+            catch
+            { }
         }
 
         protected override void OnAppearing()
         {
-            if (App.IsLoginCall)
+            App.Isonline = CrossConnectivity.Current.IsConnected;
+
+            if (App.Isonline)
             {
-                if (Functions.AppStartCount <= 1)
+                if (App.IsLoginCall)
                 {
-                    MasterSyncpopupModel.IsClosed = true;
-                    MasterSyncpopupModel.Is_Popup_Open = false;
-                    MainGrid.BackgroundColor = new Color(211, 211, 211);
-                    MainGrid.Opacity = 0.4;
-                    MainGrid.IsEnabled = false;
-                    cnt_syncPopup.IsVisible = true;
-                    Cont_sync.IsVisible = true;
-                    Cont_sync.BindingContext = new MasterSyncpopupModel();
-                    Grd_sync.IsVisible = false;
-                }
-                else
-                {
-                    MainGrid.BackgroundColor = new Color(255, 255, 255);
-                    MainGrid.Opacity = 1;
-                    MainGrid.IsEnabled = true;
-                    cnt_syncPopup.IsVisible = false;
-                    Grd_sync.IsVisible = true;
-                    Grd_sync.BindingContext = new MasterSyncpopupModel();
-                    Cont_sync.IsVisible = false;
+                    if (Functions.AppStartCount <= 1)
+                    {
+                        MasterSyncpopupModel.IsClosed = true;
+                        MasterSyncpopupModel.Is_Popup_Open = false;
+                        MainGrid.BackgroundColor = new Color(211, 211, 211);
+                        MainGrid.Opacity = 0.4;
+                        MainGrid.IsEnabled = false;
+                        cnt_syncPopup.IsVisible = true;
+                        Cont_sync.IsVisible = true;
+                        Cont_sync.BindingContext = new MasterSyncpopupModel(Functions.lstSyncAPIStatus);
+                        Grd_sync.IsVisible = false;
+                    }
+                    else
+                    {
+                        MainGrid.BackgroundColor = new Color(255, 255, 255);
+                        MainGrid.Opacity = 1;
+                        MainGrid.IsEnabled = true;
+                        cnt_syncPopup.IsVisible = false;
+                        Grd_sync.IsVisible = true;
+                        Grd_sync.BindingContext = new MasterSyncpopupModel(Functions.lstSyncAPIStatus);
+                        Cont_sync.IsVisible = false;
 
-                }
+                    }
 
-                App.IsLoginCall = false;
+                    App.IsLoginCall = false;
+                }
+            }
+            else //No internet available
+            {
+                MainGrid.BackgroundColor = new Color(255, 255, 255);
+                MainGrid.Opacity = 1;
+                MainGrid.IsEnabled = true;
+                cnt_syncPopup.IsVisible = false;
+                Grd_sync.IsVisible = false;
+                Grd_sync.BindingContext = new MasterSyncpopupModel(Functions.lstSyncAPIStatus);
+                Cont_sync.IsVisible = false;
             }
         }
 
@@ -102,6 +179,12 @@ namespace StemmonsMobile.CustomControls
         private void Setting_Clicked(object sender, EventArgs e)
         {
 
+        }
+
+        private void UpdateBtn_Clicked(object sender, EventArgs e)
+        {
+            //PopupNavigation.Instance.PushAsync(new AppVersionPopup());
+            AppVersionPopup.UpdateAppURLs();
         }
     }
 }

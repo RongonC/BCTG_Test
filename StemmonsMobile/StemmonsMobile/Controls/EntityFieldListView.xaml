@@ -2,18 +2,24 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ListCell="clr-namespace:StemmonsMobile.Controls.CustomViewCells"
-             x:Class="StemmonsMobile.Controls.EntityFieldListView">
-    <ContentView.Content>
-        <ListView ItemsSource="{Binding EntityAssocOrder}"
-          HasUnevenRows="True"
-          SeparatorVisibility="None"
-          HeightRequest="{Binding Heights}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ListCell:EntityFieldViewCell/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+             xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
+             x:Class="StemmonsMobile.Controls.EntityFieldListView" HeightRequest="{Binding Heights}">
+  <ContentView.Content>
+    <AbsoluteLayout >
+      <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+             AbsoluteLayout.LayoutFlags="All"
+           VerticalOptions="Fill">
+        <ListView x:Name="cntList" ItemsSource="{Binding EntityAssocOrder}"
+                SeparatorVisibility="None">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ListCell:EntityFieldViewCell  IsEnabled="false"/>
+            </DataTemplate>
+          </ListView.ItemTemplate>
         </ListView>
+      </StackLayout>
+      <cnt:ActivityProgressBar IsVisible="{Binding IsBuZy}" />
+    </AbsoluteLayout>
 
-    </ContentView.Content>
+  </ContentView.Content>
 </ContentView>

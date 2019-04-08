@@ -1,4 +1,6 @@
-﻿using StemmonsMobile.ViewModels.EntityViewModel;
+﻿using DataServiceBus.OnlineHelper.DataTypes;
+using StemmonsMobile.DataTypes.DataType.Entity;
+using StemmonsMobile.ViewModels.EntityViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +33,18 @@ namespace StemmonsMobile.CustomControls
                 _EntityListviewmodel = value;
             }
         }
-        public MyPropertyList(string _pageFor)
+
+        public MyPropertyList(string _pageFor, EntityClass Eclass = null)
         {
 
             InitializeComponent();
-            if (_pageFor == "MYPROPLIST")
+            if (_pageFor == "MKT")
+            {
+                Title = "Select Market";
+                EntityListVM.ScreenCode = "MKT";
+                EntityListVM.SystemCodeEntityType = "MKT";
+            }
+            else if (_pageFor == "MYPROPLIST")
             {
                 Title = "My Properties";
                 EntityListVM.ScreenCode = "MYPROPLIST";
@@ -48,8 +57,9 @@ namespace StemmonsMobile.CustomControls
             }
             else
             {
-                Title = "Property List";
+                Title = Eclass.EntityTitle + " Property List";
                 EntityListVM.ScreenCode = "PROPLIST";
+                EntityListVM.EntityID = Eclass.EntityID;
                 EntityListVM.SystemCodeEntityType = "PROPY";
             }
 
@@ -59,11 +69,18 @@ namespace StemmonsMobile.CustomControls
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            List_entity_subtypes.SelectedItem = null;
             IsBusy = true;
-            EntityListVM.PageIndex = 1;
-            EntityListVM.ListEntityitem.Clear();
-            await EntityListVM.GetEntityListwithCall();
+            if (EntityListVM.ListEntityitem.Count == 0)
+            {
+                EntityListVM.PageIndex = 1;
+                EntityListVM.ListEntityitem.Clear();
+               
+                await EntityListVM.GetEntityListwithCall();
+                EntityListVM.ListEntityitem.OrderByDescending(x => x.EntityTitle);
+            }
             IsBusy = false;
         }
+
     }
 }

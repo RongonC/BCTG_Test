@@ -81,6 +81,8 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
         bool IsListGrouped = false;
         int? _pagenumber = 50;
         bool IsEntityRelationalData = false;
+        bool isFirstAppearing = true;
+
         public CaseList(string _parametername, string _value, string _searchvalue, string _Titile = "", string _uname = "", bool isEntityRelationalData = false)
         {
             InitializeComponent();
@@ -95,6 +97,14 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             if (parametername == "caseAssgnSAM" || parametername == "caseCreateBySAM" || parametername == "caseOwnerSAM")
             {
                 //This shoudl be Grouped List
+                if (_value != Functions.UserName)
+                {
+                    App.Isonline = true;
+                }
+                else
+                {
+                    App.Isonline = false;
+                }
                 IsListGrouped = true;
                 btn_add.IsVisible = false;
                 simpleCaseList.IsVisible = false;
@@ -103,6 +113,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             else if (parametername == "RELATEDCASES")
             {
                 //This shoudl be Grouped List
+                App.Isonline = true;
                 IsListGrouped = true;
                 btn_add.IsVisible = true;
                 CaselistGrouped.IsVisible = true;
@@ -111,6 +122,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             else
             {
                 //it will no to be Grouped List
+                App.Isonline = true;
                 IsListGrouped = false;
                 btn_add.IsVisible = true;
                 CaselistGrouped.IsVisible = false;
@@ -188,12 +200,21 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
             base.OnAppearing();
             try
             {
-                if (count == 0)
-                {
-                    SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
+//                DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = "http://localhost:54493";
 
-                    Getcaselistdatafromapi(parametername, value, searchvalue);
+                //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                CaselistGrouped.SelectedItem = null;
+                if (isFirstAppearing)
+                {
+                    isFirstAppearing = false;
+                    if (count == 0)
+                    {
+                        SyncSqlitetoOnlineFromViewcaseonly(true, overlay, masterGrid);
+
+                        Getcaselistdatafromapi(parametername, value, searchvalue);
+                    }
                 }
+                //Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
                 //UpdateListContent();
             }
             catch (Exception ex)
@@ -236,7 +257,6 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     CaseListVM.ShowOpenCloseType = this.showOpenClosetype;
                     CaseListVM.ShowPastCase = this.showpastcase;
                     CaseListVM.SearchQuery = this.searchquery;
-                    //CaseListVM.STitle = this.sTitle;
                     CaseListVM.SaveRec = this.saveRec;
                     CaseListVM.ScrnName = this.scrnName;
                     CaseListVM.PageNumber = this._pagenumber;
@@ -337,10 +357,10 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                 switch (param)
                 {
-                    case "casetypeid":
+                    case "RELATEDCASES":
                         casetypeid = val;
                         break;
-                    case "RELATEDCASES":
+                    case "casetypeid":
                         casetypeid = val;
                         switch (searchvalue)
                         {
@@ -380,9 +400,18 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                         break;
                     case "caseAssgnSAM":
+
                         caseAssgnSam = val;
-                        scrnName = "_AssignedToMe";
-                        AssgnSam = Functions.UserName;
+                        if (caseAssgnSam == Functions.UserName)
+                        {
+                            scrnName = "_AssignedToMe";
+                            AssgnSam = Functions.UserName;
+                        }
+                        else
+                        {
+                            scrnName = "_AssignedToSAM";
+                            AssgnSam = val;
+                        }
 
                         break;
                     case "caseAssgnTM":
@@ -433,11 +462,25 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                     Samusername = Team_Username;
                     saveRec = false;
                 }
+
+                if (scrnName == "_AssignedToSAM")
+                {
+                    saveRec = false;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                }
+
+                // For BCTG only to not to store Case in SQLite Table
+                if (param == "RELATEDCASES")
+                {
+                    saveRec = false;
+                }
+
                 #endregion
 
                 if ((!string.IsNullOrEmpty(OwnerSam)) || (!string.IsNullOrEmpty(AssgnSam)) || (!string.IsNullOrEmpty(CreateBySam)) || (!string.IsNullOrEmpty(AssgnSamTM)))
                 {
                     isOnlineCall = false;
+
                 }
                 else
                 {
@@ -576,7 +619,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
                 //    DisplayAlert(null, App.Isonline ? Functions.nRcrdOnline : Functions.nRcrdOffline, "Ok");
                 //}
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
             Functions.ShowOverlayView_Grid(overlay, false, masterGrid);

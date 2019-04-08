@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataServiceBus.OfflineHelper.DataTypes.Entity;
 using DataServiceBus.OnlineHelper.DataTypes;
 using Newtonsoft.Json;
 using StemmonsMobile.Commonfiles;
@@ -38,52 +39,39 @@ namespace StemmonsMobile.CustomControls
                 _propertyviewvm = value;
             }
         }
-
+        EntityClass Entdetail = new EntityClass();
         public PropertyViewPage(EntityClass _entdetail)
         {
             InitializeComponent();
-            //PropertyPicturecodebtn.Source = "https://atxre.com/wp-content/uploads/2019/01/Image-of-Properties-2.png";
-            PropertyViewVM.EntityDetails = _entdetail;
+            Entdetail = _entdetail;
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            PropertyViewVM.IsBUSY = true;
+
+            await Task.Run(() =>
+             {
+                 var res = EntitySyncAPIMethods.GetEntityByEntityID(true, Entdetail.EntityID.ToString(), Functions.UserName, Entdetail.EntityTypeID.ToString(), App.DBPath);
+                 res.Wait();
+                 Entdetail = res.Result;
+             });
+            PropertyViewVM.EntityDetails = Entdetail;
+
+            PropertyViewVM.IsBUSY = false;
 
             this.BindingContext = PropertyViewVM;
-            getData();
-        }
 
-        public void getData()
-        {
             try
             {
-                var entFileID = PropertyViewVM.EntityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
-
-                var entEntityID = PropertyViewVM.EntityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
-                //PropertyPicturecodebtn.Source = "https://atxre.com/wp-content/uploads/2019/01/Image-of-Properties-2.png";
-
-                GetEntityImage(entEntityID.ToString(), entFileID.ToString());
+                //PropertyPicturecodebtn.Source = "Assets/DefaultIMG.png";
+                //PropertyPicturecodebtn.Source = Functions.GetImageFromEntityAssoc(PropertyViewVM.EntityDetails.AssociationFieldCollection);
             }
-            catch (Exception ec)
+            catch (Exception)
             {
-                PropertyPicturecodebtn.Source = "Assets/PropertyImage.png";
+               // PropertyPicturecodebtn.Source = "Assets/DefaultIMG.png";
             }
-        }
-
-        async public void GetEntityImage(string EntityID, string FileID)
-        {
-            await Task.Run(() =>
-            {
-                var d = EntityAPIMethods.GetFileFromEntity(EntityID, FileID, Functions.UserName);
-                fileStr = d.GetValue("ResponseContent").ToString();
-            });
-
-            FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
-
-            OpenImage(fileResp.BLOB);
-        }
-        private void OpenImage(byte[] imageBytes)
-        {
-            //img.VerticalOptions = LayoutOptions.Center;
-            //img.HorizontalOptions = LayoutOptions.Center;
-            PropertyPicturecodebtn.BorderColor = Color.Transparent;
-            PropertyPicturecodebtn.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
         }
     }
 }

@@ -20,50 +20,50 @@ namespace StemmonsMobile.Commonfiles
 {
     class APICalls
     {
-        public static string Grant_type = "password";
-        public static string Username = "api_admin";
-        public static string Password = "Boxer@123";
+        //public static string Grant_type = "password";
+       // public static string Username = "api_admin";
+       // public static string Password = "Boxer@123";
 
         #region Done By Vishal Prajapati
 
-        public static JObject AllpostAPIcall(List<KeyValuePair<string, string>> APIDetails, List<KeyValuePair<string, string>> BodyValue)
-        {
-            JObject obj = null;
-            try
-            {
-                string url = APIDetails[0].Value;
-                string Api_Type = APIDetails[1].Value;
-                string _ContentType = "application/json";
+        //public static JObject AllpostAPIcall(List<KeyValuePair<string, string>> APIDetails, List<KeyValuePair<string, string>> BodyValue)
+        //{
+        //    JObject obj = null;
+        //    try
+        //    {
+        //        string url = APIDetails[0].Value;
+        //        string Api_Type = APIDetails[1].Value;
+        //        string _ContentType = "application/json";
 
-                HttpClient httpClient = new HttpClient();
+        //        HttpClient httpClient = new HttpClient();
 
-                HttpRequestMessage httpContent;
-                httpContent = new HttpRequestMessage(HttpMethod.Post, url);
-                httpContent.Headers.ExpectContinue = false;
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Functions.access_token);
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
+        //        HttpRequestMessage httpContent;
+        //        httpContent = new HttpRequestMessage(HttpMethod.Post, url);
+        //        httpContent.Headers.ExpectContinue = false;
+        //        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Functions.access_token);
+        //        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_ContentType));
 
-                Task<HttpResponseMessage> response;
+        //        Task<HttpResponseMessage> response;
 
-                if (Api_Type == "POST")
-                {
-                    httpContent.Content = new FormUrlEncodedContent(BodyValue);
-                    response = httpClient.SendAsync(httpContent);
-                }
-                else
-                {
-                    response = httpClient.GetAsync(url);
-                }
+        //        if (Api_Type == "POST")
+        //        {
+        //            httpContent.Content = new FormUrlEncodedContent(BodyValue);
+        //            response = httpClient.SendAsync(httpContent);
+        //        }
+        //        else
+        //        {
+        //            response = httpClient.GetAsync(url);
+        //        }
 
-                var result = response.Result.Content.ReadAsStringAsync();
-                obj = JObject.Parse(result.Result);
-            }
-            catch (Exception e)
-            {
-            }
-            return obj;
+        //        var result = response.Result.Content.ReadAsStringAsync();
+        //        obj = JObject.Parse(result.Result);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //    }
+        //    return obj;
 
-        }
+        //}
        
         //public static void Getaccesstoken()
         //{
@@ -309,66 +309,9 @@ namespace StemmonsMobile.Commonfiles
 
         //}
 
-        public static JObject GetFilesByQuestionID(string itemQuestionMetadataID)
-        {
-            #region API Details
-            var API_value = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("API_Name", DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + Constants.GetFilesByQuestionID),
-            };
+    
 
-            #endregion
 
-            #region API Body Details
-            var Body_value = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("itemQuestionMetaDataID",itemQuestionMetadataID)
-            };
-            #endregion
-
-            var val = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
-            if (val != null)
-            {
-                return val;
-            }
-            else
-                return null;
-
-        }
-
-        #region Get Files By Question ID
-        public async static Task<List<GetFilesByQuestionIDResponse.GetFilesByQuestionIDModel>> GetFilesByQuestionID(bool _IsOnline, string _intItemID, int _InstanceUserAssocId, string _DBPath)
-        {
-            List<GetFilesByQuestionIDResponse.GetFilesByQuestionIDModel> ItemList = new List<GetFilesByQuestionIDResponse.GetFilesByQuestionIDModel>();
-            List<AppTypeInfoList> lstResult = new List<AppTypeInfoList>();
-            int id = CommonConstants.GetResultBySytemcode(ConstantsSync.QuestInstance, "H9_GetFilesByQuestionID", _DBPath);
-            try
-            {
-                if (_IsOnline)
-                {
-                    var result = APICalls.GetFilesByQuestionID(_intItemID);
-                    var temp = result.GetValue("ResponseContent");
-                    if (!string.IsNullOrEmpty(temp?.ToString()) && temp.ToString() != "[]")
-                    {
-                        ItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetFilesByQuestionIDResponse.GetFilesByQuestionIDModel>>(temp.ToString());
-                        if (ItemList.Count > 0)
-                        {
-                            var inserted = CommonConstants.AddRecordOfflineStore_AppTypeInfo(JsonConvert.SerializeObject(ItemList), ConstantsSync.QuestInstance, "H9_GetFilesByQuestionID", _InstanceUserAssocId, _DBPath, id, _intItemID,"M");
-                        }
-                    }
-                }
-                else
-                {
-                    ItemList = CommonConstants.ReturnListResult<GetFilesByQuestionIDResponse.GetFilesByQuestionIDModel>(ConstantsSync.QuestInstance, "H9_GetFilesByQuestionID", _DBPath);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return ItemList;
-        }
-        #endregion
 
         #endregion        
 

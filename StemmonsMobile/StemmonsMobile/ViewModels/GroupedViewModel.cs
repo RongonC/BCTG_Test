@@ -23,9 +23,6 @@ namespace StemmonsMobile.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        //public static readonly BindableProperty IsWorkingProperty =
-        //     BindableProperty.Create(nameof(IsWorking), typeof(bool), typeof(ViewModel_1), default(bool));
-
         #region MyRegion Props
 
         private string _casetypeid;
@@ -200,99 +197,68 @@ namespace StemmonsMobile.ViewModels
             try
             {
                 Master_list = new ObservableCollection<Group_Caselist>();
-                //{
-                //    OnLoadMore = async () =>
-                //    {
-
-                //        //load the next page
-                //        await GetCaseListWithCall();
-                //        return null;
-
-                //    }
-                //};
 
                 TempList = new ObservableCollection<Group_Caselist>();
                 _headerTapCommand = new Command<object>(HeaderTapped);
-
-                //Master_list.LoadMoreAsync();
             }
             catch (Exception ex)
             {
-
             }
-
-            #region InfiniteScroll Class Implementation
-            //this.LoadDataCommand = new Command(async () =>
-            //{
-            //    PageIndex += 1;
-            //    await this.GetCaseListWithCall();
-
-            //    //if (Master_list?.FirstOrDefault().Count - 2 <= PageIndex)
-            //    //{
-            //    //    if (Master_list?.FirstOrDefault().Count == (PageNumber * PageIndex))
-            //    //    {
-            //    //        await this.GetCaseListWithCall();
-            //    //        PageIndex += 1;
-            //    //    }
-            //    //}
-            //});
-            #endregion
         }
-
-        //public bool IsWorking
-        //{
-        //    get { return (bool)GetValue(IsWorkingProperty); }
-        //    set { SetValue(IsWorkingProperty, value); }
-
-        //}
-
 
         public async Task GetCaseListByEntityID()
         {
 
-            await Task.Run(() =>
+            try
             {
-                List<BasicCase> GetCaseList = null;
-                var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(Convert.ToInt32(Casetypeid), Functions.UserName);
-                var result = res.GetValue("ResponseContent").ToString();
-                GetCaseList = JsonConvert.DeserializeObject<List<BasicCase>>(result);
-
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    try
+                await Task.Run(() =>
                     {
-                        BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
-                        var tm = BasicCase_lst.Select(i =>
+                        List<BasicCase> GetCaseList = null;
+
+                        var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(Convert.ToInt32(Casetypeid), Functions.UserName);
+                        var result = res.GetValue("ResponseContent").ToString();
+                        GetCaseList = JsonConvert.DeserializeObject<List<BasicCase>>(result);
+
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            if (!string.IsNullOrEmpty(i.strCaseDue))
+                            try
                             {
-                                i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
-                                i.DueDateVisibility = true;
+                                BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                                var tm = BasicCase_lst.Select(i =>
+                                {
+                                    if (!string.IsNullOrEmpty(i.strCaseDue))
+                                    {
+                                        i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                        i.DueDateVisibility = true;
+                                    }
+                                    else
+                                    {
+                                        i.bg_color = "Black";
+                                        i.DueDateVisibility = false;
+                                    }
+                                    return i;
+                                });
+
+                                BasicCase_lst = new ObservableCollection<BasicCase>(tm);
                             }
-                            else
+                            catch
                             {
-                                i.bg_color = "Black";
-                                i.DueDateVisibility = false;
+                                if (GetCaseList != null)
+                                {
+                                    BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
+                                }
                             }
-                            return i;
                         });
+                    });
 
-                        BasicCase_lst = new ObservableCollection<BasicCase>(tm);
-                    }
-                    catch
-                    {
-                        BasicCase_lst = new ObservableCollection<BasicCase>(GetCaseList);
-                    }
-                });
-            });
+                Master_list.Clear();
 
-            Master_list.Clear();
-
-            Master_List_Function(BasicCase_lst);
+                Master_List_Function(BasicCase_lst);
+            }
+            catch (Exception)
+            {
+            }
         }
-
-
-
 
         #region Pull To refresh Case List
         private bool _isRefreshing = false;
@@ -388,8 +354,11 @@ namespace StemmonsMobile.ViewModels
         }
         public async void onItemTap(object item)
         {
-            var tap = item as BasicCase;
-            await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ""));
+            if (item != null)
+            {
+                var tap = item as BasicCase;
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewCasePage(Convert.ToString(tap.CaseID), Convert.ToString(tap.CaseTypeID), tap.CaseTypeName, ScrnName));
+            }
         }
 
         BasicCase _clist;
@@ -406,7 +375,6 @@ namespace StemmonsMobile.ViewModels
             }
         }
 
-        //public async Task GetCaseListWithCall(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM, string _PropertyID, string _TenantCode, string _TenantID, string _showOpenClosedCasesType, string _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, string sTitle, bool SaveSql, string screenName, int? _pageindex, int? _pagenumber)
         public async Task GetCaseListWithCall()
         {
 
@@ -418,8 +386,7 @@ namespace StemmonsMobile.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     BasicCase_lst = new ObservableCollection<BasicCase>(result.Result);
-                    //listdata.IsRefreshing = false;
-                    //Code by BipinP
+
                     var tm = BasicCase_lst.Select(i =>
                     {
                         if (!string.IsNullOrEmpty(i.strCaseDue))
@@ -482,9 +449,9 @@ namespace StemmonsMobile.ViewModels
             catch (Exception ex)
             {
 
-                
+
             }
-            
+
         }
 
         public void UpdateListContent()
@@ -495,9 +462,9 @@ namespace StemmonsMobile.ViewModels
                 for (int i = 0; i < Master_list.Count; i++)
                 {
                     Group_Caselist group = Master_list[i];
-                    //Create new FoodGroups so we do not alter original list
+                    //Create new Groups so we do not alter original list
                     Group_Caselist newGroup = new Group_Caselist(group.Title, group.Expanded);
-                    //Add the count of food items for Lits Header Titles to use
+                    //Add the count of items for Lits Header Titles to use
 
                     if (group.Expanded)
                     {
@@ -509,11 +476,9 @@ namespace StemmonsMobile.ViewModels
                     }
                     _expandedGroups.Add(newGroup);
                 }
-                //listdata.SelectedItem = null;
                 Master_list.Clear();
                 Master_list = _expandedGroups;
 
-                // Case_type_List.HeightRequest = 250;
             }
             catch (Exception)
             {

@@ -394,7 +394,7 @@ namespace DataServiceBus.OnlineHelper.DataTypes
             req.Pagenumber = _pagenumber;
             try
             {
-                req.tenant_Id = Convert.ToInt32(TenantID);
+                req.tenant_Id = string.IsNullOrEmpty(TenantID) ? 0 : Convert.ToInt32(TenantID);
             }
             catch (Exception)
             {

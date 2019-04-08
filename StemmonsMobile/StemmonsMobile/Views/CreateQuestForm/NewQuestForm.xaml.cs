@@ -1652,7 +1652,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
 
                             if (result_fav != null && result_fav?.Result > 0)
                             {
-                                DisplayAlert("Success", "Added Favourite Successfully.", "OK");
+                                DisplayAlert("Success", "Added Favorite Successfully.", "OK");
                                 this.Navigation.PopAsync();
                             }
                         }
@@ -1696,7 +1696,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             // remove code
             try
             {
-                var result = await DisplayAlert("Alert", "Would you like to remove this quest from Your favourite list?", "Yes", "No");
+                var result = await DisplayAlert("Alert", "Would you like to remove this quest from Your Favorite list?", "Yes", "No");
 
                 if (result)
                 {

@@ -23,13 +23,16 @@ namespace StemmonsMobile.Views
         public static string currImgURL = "";
         string fileExt = string.Empty;
         string AppType = string.Empty;
-        string EntityID = string.Empty;
+        string FileID = string.Empty;
+        byte[] fileData;
+        bool isFirstAppearing = true;
+
         //Stopwatch stopwatch = new Stopwatch();
 
         public ViewAttachment(string imgurl, string appType)
         {
             InitializeComponent();
-            currImgURL = imgurl;
+            currImgURL = imgurl.ToLower();
             BackgroundColor = Color.LightGray;
             AppType = appType;
 
@@ -40,110 +43,131 @@ namespace StemmonsMobile.Views
             base.OnAppearing();
             try
             {
-                Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
-                string fileStr = string.Empty;
-
-                int fileIDMarker = currImgURL.IndexOf('=');
-                string FileID = currImgURL.Substring(fileIDMarker + 1, 4);
-
-                if (AppType.Equals("Entities"))
+                if (isFirstAppearing)
                 {
-                    int entityIDMarker = currImgURL.LastIndexOf('=');
-                    EntityID = currImgURL.Substring(entityIDMarker + 1);
-                }
+                    isFirstAppearing = false;
+                    Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+                    string FileID = "0";
+                    string EntityID = "0";
 
-                string userName = Functions.UserName;
-
-                if (AppType.Equals("Cases"))
-                {
-                    await Task.Run(() =>
+                    if (AppType.Equals("Entities"))
                     {
-                        var d = CasesAPIMethods.GetFileFromCase(FileID, userName);
-                        fileStr = d.GetValue("ResponseContent").ToString();
-                    });
-                }
-                else if (AppType.Equals("Entities"))
-                {
-                    await Task.Run(() =>
+                        //http://home-s-21.boxerproperty.com/ENTITIES/Download.aspx?FileID=1129&EntityId=2326
+                        var eqsplit = currImgURL.Split(new string[] { "?fileid=" }, StringSplitOptions.None);
+                        foreach (var ite in eqsplit[1].ToCharArray())
+                        {
+                            if (char.IsDigit(ite))
+                            {
+                                FileID += ite;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        eqsplit = currImgURL.Split(new string[] { "&entityid=" }, StringSplitOptions.None);
+                        foreach (var ite in eqsplit[1].ToCharArray())
+                        {
+                            if (char.IsDigit(ite))
+                            {
+                                EntityID += ite;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+
+                        await Task.Run(() =>
+                        {
+                            var d = EntityAPIMethods.GetFileFromEntity(EntityID, this.FileID, Functions.UserName);
+                            FileID = d.GetValue("ResponseContent").ToString();
+                        });
+                    }
+                    else if (AppType.Equals("Cases"))
                     {
-                        var d = EntityAPIMethods.GetFileFromEntity(EntityID, FileID, userName);
-                        fileStr = d.GetValue("ResponseContent").ToString();
-                    });
+                        //http://cases.boxerproperty.com/DownloadFile.aspx?CaseFileID=1453439
+                        var eqsplit = currImgURL.Split(new string[] { "?casefileid=" }, StringSplitOptions.None);
+                        this.FileID = eqsplit[1];
+
+                        await Task.Run(() =>
+                        {
+                            var d = CasesAPIMethods.GetFileFromCase(this.FileID, Functions.UserName);
+                            FileID = d.GetValue("ResponseContent").ToString();
+                        });
+                    }
+
+                    if (FileID != null && FileID != "")
+                    {
+                        FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(FileID);
+                        byte[] fileData = fileResp.BLOB; //File byte array
+                        try
+                        {
+                            fileExt = fileResp.FileName.Substring(fileResp.FileName.LastIndexOf('.'));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                    }
+                    else
+                    {
+                        await DisplayAlert("Alert", "Unable to view attachment", "OK");
+
+                    }
+                    switch (fileExt)
+                    {
+                        case ".pdf":
+                            txtScrollView.IsVisible = false;
+                            imgStackLayout.IsVisible = false;
+                            //VideoPlayer.IsVisible = false;
+                            OpenPDFViewer(fileData);
+                            break;
+
+                        case ".jpg":
+                        case ".jpeg":
+                        case ".png":
+                        case ".gif":
+
+                            PdfView.IsVisible = false;
+                            txtScrollView.IsVisible = false;
+                            imgStackLayout.IsVisible = true;
+                            OpenImage(fileData);
+                            break;
+
+                        case ".txt":
+                            txtScrollView.IsVisible = true;
+                            OpenTxt(fileData);
+                            break;
+
+                        //case ".mp4":
+                        //case ".mkv":
+                        //case ".vod":
+                        //case ".avi":
+                        //case ".flv":
+                        //case ".mpeg":
+                        //case ".wmv":
+                        //VideoPlayer.IsVisible = true;
+                        //OpenVideo(fileData);
+                        //break;
+
+                        default:
+                            //Preview not available
+                            //DisplayAlert("File cannot be viewed","File format not supported","OK");
+                            Device.OpenUri(new Uri(currImgURL));
+                            break;
+
+                    }
                 }
-
-                FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
-
-                byte[] fileData = fileResp.BLOB; //File byte array
-
-                try
-                {
-                    fileExt = fileResp.FileName.Substring(fileResp.FileName.LastIndexOf('.'));
-                }
-                catch (Exception)
-                {
-
-                }
-
-                switch (fileExt)
-                {
-                    case ".pdf":
-                        /*PdfView should be Visible and other Control will be False*/
-                        PdfView.IsVisible = true;
-                        imgStackLayout.IsVisible = false;
-                        txtScrollView.IsVisible = false;
-
-                        OpenPDFViewer(fileData);
-                        break;
-
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".png":
-                    case ".gif":
-                        /*imgStackLayout should be Visible and other Control will be False*/
-                        PdfView.IsVisible = false;
-                        imgStackLayout.IsVisible = true;
-                        txtScrollView.IsVisible = false;
-                        OpenImage(fileData);
-                        break;
-
-                    case ".txt":
-                        /*txtScrollView should be Visible and other Control will be False*/
-                        PdfView.IsVisible = false;
-                        imgStackLayout.IsVisible = false;
-                        txtScrollView.IsVisible = true;
-                        OpenTxt(fileData);
-                        break;
-
-                    //case ".mp4":
-                    //case ".mkv":
-                    //case ".vod":
-                    //case ".avi":
-                    //case ".flv":
-                    //case ".mpeg":
-                    //case ".wmv":
-                    //VideoPlayer.IsVisible = true;
-                    //OpenVideo(fileData);
-                    //break;
-
-                    default:
-                        //Preview not available
-                        //DisplayAlert("File cannot be viewed","File format not supported","OK");
-                        Device.OpenUri(new Uri(currImgURL));
-                        break;
-
-                }
-
-                //string fileName = fileResp.FileName.Substring(0, fileResp.FileName.LastIndexOf('.'));
-                Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
             }
             catch (Exception ex)
             {
-
             }
+            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
         }
-
-
 
         private void OpenPDFViewer(byte[] fileBytes)
         {
@@ -185,6 +209,16 @@ namespace StemmonsMobile.Views
             img.VerticalOptions = LayoutOptions.Center;
             img.HorizontalOptions = LayoutOptions.Center;
             img.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+
+
+
+            //img.Source = new UriImageSource
+            //{
+            //    Uri = new Uri(currImgURL),
+            //    CachingEnabled = true,
+            //    CacheValidity = new TimeSpan(5, 0, 0, 0)
+
+            //};
         }
 
         private void OpenTxt(byte[] fileBytes)
@@ -196,10 +230,13 @@ namespace StemmonsMobile.Views
             if (dependency == null)
             {
                 DisplayAlert("Error loading file", "Computer says no", "OK");
+
                 return;
             }
 
             var fileName = Guid.NewGuid().ToString();
+
+            //var pdfStream = Task.Run(() => httpClient.GetByteArrayAsync(url)).Result;
 
             fileContents =
                 Task.Run(() => dependency.ReadWriteTxtFile(fileBytes, $"{fileName}.txt")).Result;
@@ -213,6 +250,7 @@ namespace StemmonsMobile.Views
 
             txtDataLabel.Text = fileContents;
         }
+
 
         #region Video
         //async private void OpenVideo(byte[] fileBytes)

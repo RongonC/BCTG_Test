@@ -439,6 +439,7 @@ namespace StemmonsMobile.Views.Cases
                                     {
                                         switch (ControlsItem.ASSOC_FIELD_TYPE.ToLower())
                                         {
+                                            #region O - E
                                             case "o":
                                             case "e":
 
@@ -599,6 +600,7 @@ namespace StemmonsMobile.Views.Cases
 
                                                 break;
 
+                                            #endregion
                                             case "d":
                                                 Picker pkr = new Picker();
                                                 pkr.WidthRequest = 200;
@@ -1000,6 +1002,7 @@ namespace StemmonsMobile.Views.Cases
                                         {
                                             Button btn = controlbtn as Button;
                                             var SelItmname = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.FieldValue; //null than make it blank
+
                                             SelItmname = SelItmname ?? metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault()?.TextValue;
 
                                             List<ExternalDatasourceValue> lst = new List<ExternalDatasourceValue>();
@@ -1015,9 +1018,6 @@ namespace StemmonsMobile.Views.Cases
                                                 lstextdatasourceHistory.Add(Metaitem.ASSOC_TYPE_ID, lst);
                                             else
                                                 lstextdatasourceHistory[Metaitem.ASSOC_TYPE_ID] = lst;
-
-
-
 
                                             if (!string.IsNullOrEmpty(SelItmname))
                                             {
@@ -1295,23 +1295,40 @@ namespace StemmonsMobile.Views.Cases
                                         var control = FindPickerControls(Metaitem.ASSOC_TYPE_ID) as Picker;
                                         if (control != null)
                                         {
-                                            List<ItemValue> lst_SSsource = new List<ItemValue>();
 
-                                            lst_SSsource = control.ItemsSource as List<ItemValue>;
+                                            var Cnt_Source = control.ItemsSource as List<ItemValue>;
                                             try
                                             {
                                                 int j = 0;
-                                                for (j = 0; j < lst_SSsource.Count; j++)
+                                                for (j = 0; j < Cnt_Source.Count; j++)
                                                 {
-                                                    if (lst_SSsource.Count != 0)
-                                                    {
-                                                        var i = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID).FirstOrDefault();
+                                                    var _ADecode = metadatacollection?.Where(c => c.AssociatedTypeID == Metaitem.ASSOC_TYPE_ID)?.FirstOrDefault();
 
-                                                        if (i?.AssociatedDecodeName?.ToLower() == lst_SSsource[j]?.Name?.ToLower() || i?.TextValue?.ToLower() == lst_SSsource[j]?.Name?.ToLower())
+                                                    if (Cnt_Source.Count != 0)
+                                                    {
+                                                        if (_ADecode?.AssociatedDecodeName?.ToLower() == Cnt_Source[j]?.Name?.ToLower() || _ADecode?.TextValue?.ToLower() == Cnt_Source[j]?.Name?.ToLower())
                                                             break;
                                                     }
                                                     else
+                                                    {
+
+                                                        //var list = new List<ItemValue>();
+                                                        //list.Add(new ItemValue
+                                                        //{
+                                                        //    Name = "-- Select Item --",
+                                                        //    Description = "-- Select Item --",
+                                                        //    ID = 0
+                                                        //});
+                                                        //list.Add(new ItemValue
+                                                        //{
+                                                        //    Name = _ADecode.FieldValue,
+                                                        //    Description = _ADecode.FieldValue,
+                                                        //    ID = _ADecode.AssociatedDecodeID
+                                                        //});
+                                                        //control.ItemsSource = list;
+                                                        //j = 1;
                                                         break;
+                                                    }
                                                 }
                                                 control.SelectedIndex = j;
                                             }
@@ -3778,21 +3795,21 @@ namespace StemmonsMobile.Views.Cases
                 if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName && _Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner and CaseAssignedTo to the Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favorite", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else if (_Casedata.CaseOwnerSAM.ToLower() == Functions.UserName)
                 {
                     //if Case Owner is Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favorite", "Assigned To Me", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else if (_Casedata.CaseAssignedToSAM.ToLower() == Functions.UserName)
                 {
                     //if CaseAssignedTo is Current User
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favorite", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
                 else
                 {
-                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favourite", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
+                    buttons = new string[] { sb.ToString(), "Run Synchronization", "Assign", "Return to Last Assigner", "Return to Last Assignee", "Approve and Return", "Approve and Assign", "Decline and Return", "Decline and Assign", "Resolve & Exit", "Save As Favorite", "Assigned To Me", "Take Ownership", "Email Link", "Add Attachment", "Activity Log", "Logout" };
                 }
 
                 var action = await this.DisplayActionSheet(null, "Cancel", null, buttons);
@@ -4520,7 +4537,7 @@ namespace StemmonsMobile.Views.Cases
                     #endregion
 
                     #region Save As Favourite
-                    case "Save As Favourite":
+                    case "Save As Favorite":
                         var user_dialogs = await UserDialogs.Instance.PromptAsync(new PromptConfig().SetTitle(
                             "Name of Favorite").
                             SetInputMode(InputType.Name).SetOkText("Create"));
@@ -4542,7 +4559,7 @@ namespace StemmonsMobile.Views.Cases
 
                                 if (result_fav != null && result_fav?.Result > 0)
                                 {
-                                    DisplayAlert("Success", "Added Favourite Successfully.", "OK");
+                                    DisplayAlert("Success", "Added Favorite Successfully.", "OK");
 
                                     var existingPages = this.Navigation.NavigationStack.ToList();
                                     // Get the page before Create Case
@@ -4581,7 +4598,7 @@ namespace StemmonsMobile.Views.Cases
                             }
                             else
                             {
-                                DisplayAlert("Alert", "Please Add Favourite Name.", "OK");
+                                DisplayAlert("Alert", "Please Add Favorite Name.", "OK");
                             }
                         }
                         break;
@@ -4894,11 +4911,11 @@ namespace StemmonsMobile.Views.Cases
                         {
                             if (Device.RuntimePlatform == Device.UWP)
                             {
-                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
+                               // await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                             }
                             else
                             {
-                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
+                               // await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                             }
 
                         }
@@ -5009,13 +5026,12 @@ namespace StemmonsMobile.Views.Cases
                         {
                             if (Device.RuntimePlatform == Device.UWP)
                             {
-                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
+                               // await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                             }
                             else
                             {
-                                FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
+                               // await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                             }
-                            
 
                         }
                         catch (Exception)

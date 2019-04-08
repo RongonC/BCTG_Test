@@ -6,11 +6,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Connectivity;
 using Plugin.DeviceInfo;
+using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Default;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.DataTypes.DataType.Quest;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -41,6 +44,26 @@ namespace StemmonsMobile.Commonfiles
         public static string UserLoginName = "";
         public static string UserPassword = "";
         public static Add_Questions_MetadataRequest questObjectData = null;
+        public static List<EntityClass> MyProperty = new List<EntityClass>();
+        public static List<EntityClass> PropertyList = new List<EntityClass>();
+        public static List<EntityClass> CampusList = new List<EntityClass>();
+
+
+        public static ObservableCollection<SyncStatus> lstSyncAPIStatus = new ObservableCollection<SyncStatus>()
+        {
+            new SyncStatus() { APIName = "Home Count" },
+            new SyncStatus() { APIName = "Cases Origination" },
+            new SyncStatus() { APIName = "Cases Sync" },
+            new SyncStatus() { APIName = "CaseList Assigned To Me" },
+            new SyncStatus() { APIName = "CaseList Created By Me" },
+            new SyncStatus() { APIName = "CaseList Owned By Me" },
+            new SyncStatus() { APIName = "CaseList Assigned To My Team" },
+            //new SyncStatus() { APIName = "Entity Sync" },
+            //new SyncStatus() { APIName = "Entity Associated With Me" },
+            //new SyncStatus() { APIName = "Quest Sync" },
+            new SyncStatus() { APIName = "Standard Sync" },
+            new SyncStatus() { APIName = "Employee Search Sync" },
+        };
 
         public enum BookCategoryTypes
         {
@@ -289,37 +312,11 @@ namespace StemmonsMobile.Commonfiles
             }
         }
 
-
         public static void ShowtoastAlert(string Message)
         {
             ToastConfig t = new ToastConfig(Message);
             t.SetDuration(2000);
             UserDialogs.Instance.Toast(t);
-        }
-
-
-
-        public static async Task DownloadImageFile(string Url)
-        {
-            try
-            {
-                Uri url = new Uri(Url);
-                var client = new HttpClient();
-
-                //IFile file = await FileSystem.Current.LocalStorage.CreateFileAsync(UserName + ".png", CreationCollisionOption.ReplaceExisting);
-                //using (var fileHandler = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
-                {
-                    var httpResponse = await client.GetAsync(url);
-                    
-                    byte[] dataBuffer = await httpResponse.Content.ReadAsByteArrayAsync();
-                    await FileExtensions.SaveToLocalFolderAsync(dataBuffer, UserName + ".png");
-                    //await fileHandler.WriteAsync(dataBuffer, 0, dataBuffer.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                //throw ex;
-            }
         }
 
         public static void ShowOverlayView_Grid(ContentView ActInd, bool IsHide, Grid grd)
@@ -334,25 +331,24 @@ namespace StemmonsMobile.Commonfiles
             Stack.Opacity = IsHide ? 0.5 : 1;
         }
 
+        //public static void ShowIndicator(ActivityIndicator ActInd, StackLayout Stack_indicator, bool IsHide, StackLayout Mainstack, double Opacity)
+        //{
+        //    ActInd.IsEnabled = IsHide;
+        //    ActInd.IsRunning = IsHide;
+        //    Stack_indicator.IsVisible = IsHide;
+        //    Mainstack.IsEnabled = !IsHide;
+        //    Mainstack.Opacity = Opacity;
+        //}
 
-        public static void ShowIndicator(ActivityIndicator ActInd, StackLayout Stack_indicator, bool IsHide, StackLayout Mainstack, double Opacity)
-        {
-            ActInd.IsEnabled = IsHide;
-            ActInd.IsRunning = IsHide;
-            Stack_indicator.IsVisible = IsHide;
-            Mainstack.IsEnabled = !IsHide;
-            Mainstack.Opacity = Opacity;
-        }
-
-        public static void ShowIndicatorUpdate(ActivityIndicator ActInd, StackLayout Stack_indicator, bool IsHide, AbsoluteLayout Mainstack, double Opacity, Page Pg)
-        {
-            ActInd.IsEnabled = IsHide;
-            ActInd.IsRunning = IsHide;
-            Stack_indicator.IsVisible = IsHide;
-            Mainstack.IsEnabled = !IsHide;
-            Mainstack.Opacity = Opacity;
-            Pg.IsBusy = IsHide;
-        }
+        //public static void ShowIndicatorUpdate(ActivityIndicator ActInd, StackLayout Stack_indicator, bool IsHide, AbsoluteLayout Mainstack, double Opacity, Page Pg)
+        //{
+        //    ActInd.IsEnabled = IsHide;
+        //    ActInd.IsRunning = IsHide;
+        //    Stack_indicator.IsVisible = IsHide;
+        //    Mainstack.IsEnabled = !IsHide;
+        //    Mainstack.Opacity = Opacity;
+        //    Pg.IsBusy = IsHide;
+        //}
 
         public static string GetDecodeConnectionString(string Connectionstr)
         {
@@ -378,7 +374,7 @@ namespace StemmonsMobile.Commonfiles
 
         }
 
-        public static void GetImageDownloadURL()
+        public static void GetSystemCodesfromSqlServer()
         {
             try
             {
@@ -400,6 +396,9 @@ namespace StemmonsMobile.Commonfiles
                         App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
                         App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
                         App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+
+                        string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
+                        App.CurretVer = lst.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
 
                         var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
 
@@ -459,6 +458,9 @@ namespace StemmonsMobile.Commonfiles
                     App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
                     App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
                     App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+
+                    string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
+                    App.CurretVer = lst.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
                 }
             }
             catch (Exception)
@@ -501,10 +503,9 @@ namespace StemmonsMobile.Commonfiles
 
         }
 
-
         #region Messages For Whole APp
 
-        public static string Appinfomsg = "Stemmons Central to Go (v" + CrossDeviceInfo.Current.AppVersion + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
+        public static string Appinfomsg = "Stemmons Central to Go v" + CrossDeviceInfo.Current.AppVersion + "(" + CrossDeviceInfo.Current.AppBuild + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
         public static string Goonline_forFunc = "Please Go online to use this functionality!";
 
         public static string nRcrdOffline = "No Record Found.\nPlease go online to view full list.";
@@ -550,5 +551,30 @@ namespace StemmonsMobile.Commonfiles
             return URl.ToString();
         }
 
+        public static ImageSource GetImageFromEntityAssoc(List<AssociationField> AssociationFieldCollection)
+        {
+            try
+            {
+                var FileID = AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
+
+                var EntityID = AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
+
+                string fileStr = string.Empty;
+
+                Task.Run(() =>
+                {
+                    var d = EntityAPIMethods.GetFileFromEntity(EntityID.ToString(), FileID.ToString(), Functions.UserName);
+                    fileStr = d.GetValue("ResponseContent").ToString();
+                }).Wait();
+
+                FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
+
+                return ImageSource.FromStream(() => new MemoryStream(fileResp.BLOB));
+            }
+            catch (Exception ex)
+            {
+                return ImageSource.FromFile("Assets/na.png");
+            }
+        }
     }
 }

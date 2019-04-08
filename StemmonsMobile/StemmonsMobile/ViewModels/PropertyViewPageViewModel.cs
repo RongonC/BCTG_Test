@@ -15,6 +15,7 @@ using StemmonsMobile.Commonfiles;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using StemmonsMobile.Views.Entity;
+using System.ComponentModel;
 
 namespace StemmonsMobile.ViewModels
 {
@@ -29,61 +30,90 @@ namespace StemmonsMobile.ViewModels
 
         public EntityClass EntityDetails { get; set; }
 
+        private bool _isbusy;
+
+        public bool IsBUSY
+        {
+            get { return _isbusy; }
+            set { _isbusy = value; }
+        }
+
         public PropertyViewPageViewModel()
         {
             PropertyCaseCmd = new Command(async (parameter) =>
             {
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
 
-                //    List<GetCaseTypesResponse.BasicCase> s = null;
-
-                //    var res = CasesAPIMethods.GetCaseListRelationDatabyentityid(EntityDetails.EntityID, Functions.UserName);
-
-                //    var result = res.GetValue("ResponseContent").ToString();
-                //    var GetCaseList = JsonConvert.DeserializeObject<ObservableCollection<BasicCase>>(result);
-                var cm = parameter as PropertyViewPageViewModel;
-                await Application.Current.MainPage.Navigation.PushAsync(new CaseList("RELATEDCASES", cm.EntityDetails.EntityID.ToString(), "", "", "", true));
+                }
             });
 
 
-            PropertyinfomationCmd = new Command((parameter) =>
+            PropertyinfomationCmd = new Command(async (parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new PropertyInfoPage(cm.EntityDetails));
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    IsBUSY = true;
+                    await Application.Current.MainPage.Navigation.PushAsync(new PropertyInfoPage(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
             PropertyEmpolyeeCmd = new Command((parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-
-                Application.Current.MainPage.Navigation.PushAsync(new EmpInfoPage(cm.EntityDetails));
+                if (parameter != null)
+                {
+                    var cm = parameter as PropertyViewPageViewModel;
+                    IsBUSY = true;
+                    Application.Current.MainPage.Navigation.PushAsync(new EmpInfoPage(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
 
             PropertyTenantsCmd = new Command((parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "TNTLIST"));
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "TNTLIST"));
+                    IsBUSY = false;
+                }
             });
 
             AvailableUnitsCmd = new Command((parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails,"AVAILUNITS"));
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new TenantInfoPage(cm.EntityDetails, "UNITS"));
+                    IsBUSY = false;
+                }
             });
             // same as Tanent Page should pass System code only
 
             PropertyEntityCmd = new Command((parameter) =>
             {
-                var cm = parameter as PropertyViewPageViewModel;
-                EntityListMBView tem = new EntityListMBView();
-                tem.EntityDetails = cm.EntityDetails;
-                Application.Current.MainPage.Navigation.PushAsync(new Entity_View(tem));
+                if (parameter != null)
+                {
+                    IsBUSY = true;
+                    var cm = parameter as PropertyViewPageViewModel;
+                    Application.Current.MainPage.Navigation.PushAsync(new Entity_View(cm.EntityDetails));
+                    IsBUSY = false;
+                }
             });
             // Entity View Page
         }
 
-        private void MoveToNext()
+        public ImageSource ImgProperty
         {
-            //navigation.PushAsync(new PropertyInformationPage());
-
+            get
+            {
+                return Functions.GetImageFromEntityAssoc(EntityDetails.AssociationFieldCollection);
+            }
         }
     }
 }

@@ -159,7 +159,10 @@
     <Content Include="Assets\Email.png" />
     <Content Include="Assets\entitiesblack.png" />
     <Content Include="Assets\entitiesblack_1.png" />
-    <Content Include="Assets\erase16.png" />
+    <AndroidResource Include="Assets\erase16.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <Content Include="Assets\Factblack.png" />
     <Content Include="Assets\filter.png" />
     <Content Include="Assets\FilterIcon.png" />
@@ -192,7 +195,10 @@
     <Content Include="Assets\plussign1.png" />
     <Content Include="Assets\Questblack.png" />
     <Content Include="Assets\Questblack_1.png" />
-    <Content Include="Assets\removeicn.png" />
+    <AndroidResource Include="Assets\removeicn.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <Content Include="Assets\Save.png" />
     <Content Include="Assets\setting.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
@@ -297,8 +303,8 @@
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>1.1.5.188</Version>
     </PackageReference>
-    <PackageReference Include="sqlite-net-pcl">
-      <Version>1.5.231</Version>
+    <PackageReference Include="sqlite-net-standard">
+      <Version>1.5.1</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Connectivity">
       <Version>3.2.0</Version>

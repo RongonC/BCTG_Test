@@ -338,19 +338,6 @@
           }
         }
       },
-      "sqlite-net-pcl/1.5.231": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "SQLitePCLRaw.bundle_green": "1.1.11"
-        },
-        "compile": {
-          "lib/netstandard1.1/SQLite-net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.1/SQLite-net.dll": {}
-        }
-      },
       "sqlite-net-standard/1.5.1": {
         "type": "package",
         "dependencies": {
@@ -364,11 +351,11 @@
           "lib/netstandard1.1/SQLiteNetStandard.dll": {}
         }
       },
-      "SQLitePCLRaw.bundle_green/1.1.13": {
+      "SQLitePCLRaw.bundle_green/1.1.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
-          "SQLitePCLRaw.core": "1.1.13"
+          "SQLitePCLRaw.core": "1.1.5"
         },
         "compile": {
           "lib/netstandard1.1/SQLitePCLRaw.batteries_green.dll": {},
@@ -379,7 +366,7 @@
           "lib/netstandard1.1/SQLitePCLRaw.batteries_v2.dll": {}
         }
       },
-      "SQLitePCLRaw.core/1.1.13": {
+      "SQLitePCLRaw.core/1.1.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0"
@@ -2167,22 +2154,6 @@
         "runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
       ]
     },
-    "sqlite-net-pcl/1.5.231": {
-      "sha512": "B9jScvqkishSMkpa9Mc4Q85LTHxRTzcUXZx9EQqgrvdz7MFEDHfpiPcKdjy1qXHdmHttEXfY4h6gu4FlgWP2Sw==",
-      "type": "package",
-      "path": "sqlite-net-pcl/1.5.231",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard1.1/SQLite-net.deps.json",
-        "lib/netstandard1.1/SQLite-net.dll",
-        "lib/netstandard1.1/SQLite-net.xml",
-        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10/SQLite-net.dll",
-        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10/SQLite-net.xml",
-        "sqlite-net-pcl.1.5.231.nupkg.sha512",
-        "sqlite-net-pcl.nuspec"
-      ]
-    },
     "sqlite-net-standard/1.5.1": {
       "sha512": "AuMmN/pIgLmvPt+DN536+HeVii0Zza6lHeQ06DT1ETuxn/5uQdEDOu9VE00FT8UyvgUgixa7riIMMxxzPm83CQ==",
       "type": "package",
@@ -2195,10 +2166,10 @@
         "sqlite-net-standard.nuspec"
       ]
     },
-    "SQLitePCLRaw.bundle_green/1.1.13": {
-      "sha512": "E0Hm/XTfleE/LlrRZVucB1dQqDlIDPgqvkFymbGqMO7bSaoB6R2X5Cgzq/RDxBFSzHjpzet2Tp5Kar8faLSZ+Q==",
+    "SQLitePCLRaw.bundle_green/1.1.5": {
+      "sha512": "rz+SPgp57CAWkEfCJmWqHXMd+fSqhgYmzOdjkSbCQ3OEG0I3+vUlycElvy5zTi0GAYg5pVrmRqbquotS0985CQ==",
       "type": "package",
-      "path": "sqlitepclraw.bundle_green/1.1.13",
+      "path": "sqlitepclraw.bundle_green/1.1.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2238,14 +2209,14 @@
         "lib/wp8/_._",
         "lib/wpa81/SQLitePCLRaw.batteries_green.dll",
         "lib/wpa81/SQLitePCLRaw.batteries_v2.dll",
-        "sqlitepclraw.bundle_green.1.1.13.nupkg.sha512",
+        "sqlitepclraw.bundle_green.1.1.5.nupkg.sha512",
         "sqlitepclraw.bundle_green.nuspec"
       ]
     },
-    "SQLitePCLRaw.core/1.1.13": {
-      "sha512": "I8Q9qL1urPegoyZ5uI32lgqsxl8aPRZAyVBJbO+0T/zlGz/LBc8vhRVyDyCOU9LWWpV8dYpT0nCpuLv1ua6zkA==",
+    "SQLitePCLRaw.core/1.1.5": {
+      "sha512": "NViT1KDYnPAQo7yoYmkAMWzT15ZjqbLTSZp9iTVwZDz7fBC5fQ9TYebOFUIxYxrD/RvBpYB8m9PtcL8x/QbKNg==",
       "type": "package",
-      "path": "sqlitepclraw.core/1.1.13",
+      "path": "sqlitepclraw.core/1.1.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2264,7 +2235,7 @@
         "lib/win8/SQLitePCLRaw.core.dll",
         "lib/win81/SQLitePCLRaw.core.dll",
         "lib/wpa81/SQLitePCLRaw.core.dll",
-        "sqlitepclraw.core.1.1.13.nupkg.sha512",
+        "sqlitepclraw.core.1.1.5.nupkg.sha512",
         "sqlitepclraw.core.nuspec"
       ]
     },
@@ -4679,7 +4650,7 @@
       ]
     },
     "System.ValueTuple/4.5.0": {
-      "sha512": "+gDrtQRdEsUSdPZEEcVRmBvs6xJmqGBqRzEGMQm5XqHxWTkZe/PSuomdth5ZPcOb/Oh2kIu6NChoI1JQk649jg==",
+      "sha512": "okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
       "type": "package",
       "path": "system.valuetuple/4.5.0",
       "files": [
@@ -5403,7 +5374,7 @@
       ]
     },
     "Xamarin.Plugin.FilePicker/2.0.135": {
-      "sha512": "5aRpZYfrW2sp+8TPqeibx6gmj2Ljl2C9sCkjbUCbrqoMMcfav0eUv8mFMSmCt4kAXBcfoBZnuACcLlKqr79hZQ==",
+      "sha512": "NCD5/Xy2RGNlGYBoiSnC2qbiuecb9TZ4lyZZERYEH1Ge6g580yHkv2W7Tj/rf1I3QSI9ClDwHA23dDb6L/khKw==",
       "type": "package",
       "path": "xamarin.plugin.filepicker/2.0.135",
       "files": [
@@ -5474,8 +5445,6 @@
       "NETStandard.Library >= 2.0.3",
       "Newtonsoft.Json >= 12.0.1",
       "Rg.Plugins.Popup >= 1.1.5.188",
-      "SQLitePCLRaw.bundle_green >= 1.1.13",
-      "SQLitePCLRaw.core >= 1.1.13",
       "StemmonsMobile.DataTypes >= 1.0.0",
       "System.Numerics.Vectors >= 4.5.0",
       "System.Reflection >= 4.3.0",
@@ -5494,46 +5463,48 @@
       "Xamarin.Forms >= 3.6.0.264807",
       "Xamarin.Plugin.FilePicker >= 2.0.135",
       "runtime.native.System >= 4.3.1",
-      "sqlite-net-pcl >= 1.5.231"
+      "sqlite-net-standard >= 1.5.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jayp\\.nuget\\packages\\": {},
+    "C:\\Users\\vishalpr\\.nuget\\packages\\": {},
+    "C:\\ProgramData\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
+      "projectUniqueName": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
       "projectName": "StemmonsMobile",
-      "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
-      "packagesPath": "C:\\Users\\jayp\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile\\obj\\",
+      "projectPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile\\StemmonsMobile.csproj",
+      "packagesPath": "C:\\Users\\vishalpr\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\ProgramData\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\jayp\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\vishalpr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://packages.nuget.org/v1/FeedService.svc/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj": {
-              "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj"
+            "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj": {
+              "projectPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\servicebusapi\\servicebusapi\\DataServiceBus.csproj"
             },
-            "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
-              "projectPath": "C:\\Projects\\GitHub\\StemmonsCentralToGo\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
+            "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj": {
+              "projectPath": "D:\\GitHub\\BCTG2-Fork\\StemmonsMobile\\StemmonsMobile.DataTypes\\StemmonsMobile.DataTypes.csproj"
             }
           }
         }
@@ -5590,14 +5561,6 @@
           "Rg.Plugins.Popup": {
             "target": "Package",
             "version": "[1.1.5.188, )"
-          },
-          "SQLitePCLRaw.bundle_green": {
-            "target": "Package",
-            "version": "[1.1.13, )"
-          },
-          "SQLitePCLRaw.core": {
-            "target": "Package",
-            "version": "[1.1.13, )"
           },
           "System.Numerics.Vectors": {
             "target": "Package",
@@ -5667,9 +5630,9 @@
             "target": "Package",
             "version": "[4.3.1, )"
           },
-          "sqlite-net-pcl": {
+          "sqlite-net-standard": {
             "target": "Package",
-            "version": "[1.5.231, )"
+            "version": "[1.5.1, )"
           }
         },
         "imports": [

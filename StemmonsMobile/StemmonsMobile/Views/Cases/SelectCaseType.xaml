@@ -62,14 +62,13 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout Orientation="Horizontal" Padding="5,5,5,5" BackgroundColor="Transparent">
-                                        <Button Image="{Binding StateIcon}" 
+                                        <Button x:Name="btn_Expand" Image="{Binding StateIcon}" 
                       BackgroundColor="Transparent"
                       BorderColor="Transparent"
-                      BorderWidth="0"
-                      Clicked="HeaderTapped" 
+                      BorderWidth="0"  Clicked="Btn_Expand_Clicked"
                       CommandParameter="{Binding .}"/>
                                         <!--<Label Text="{Binding TitleWithItemCount}" FontSize="14" VerticalOptions="Center"/>-->
-                                        <Button BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Clicked="HeaderTapped" 
+                                        <Button BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Clicked="Btn_Expand_Clicked"
                       Text="{Binding TitleWithItemCount}" FontSize="14" VerticalOptions="Center" CommandParameter="{Binding .}"/>
                                     </StackLayout>
                                 </ViewCell>

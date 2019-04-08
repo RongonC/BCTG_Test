@@ -47,7 +47,7 @@ namespace StemmonsMobile
                 if (CrossConnectivity.Current.IsConnected)
                 {
 
-                    
+
 
                     #region Get item counts operation
                     //Home Count Sync
@@ -75,10 +75,10 @@ namespace StemmonsMobile
                             {
                                 var str = HomeOffline.GetAllHomeCount(Functions.UserName, Functions.Selected_Instance, App.DBPath, ConstantsSync.INSTANCE_USER_ASSOC_ID);
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Item counts operation Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Item counts operation Sync having issue.");
+                                    Functions.ShowtoastAlert("Item counts operation Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -127,12 +127,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
+                                var str = CasesSyncAPIMethods.GetOriginationCenterForUserSync(Functions.UserName, "Y", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 
-                                if (!string.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Case Types Sync Operation Success.");
                                 else
-                                    Functions.ShowtoastAlert("Case Types Sync Operation having issue.");
+                                    Functions.ShowtoastAlert("Case Types Sync Operation failed.");
                             }
                             catch (Exception ex)
                             {
@@ -183,11 +183,11 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
-                                if (!string.IsNullOrEmpty(str))
+                                var str = CasesSyncAPIMethods.GetAllCaseTypeWithID(null, Functions.UserName, "Frequent", App.DBPath);
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Cases Items Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Cases Items Sync having issue.");
+                                    Functions.ShowtoastAlert("Cases Items Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -236,12 +236,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMe");
+                                var str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", Functions.UserName, "", "", "", "", "0", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMe");
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync having issue.");
+                                    Functions.ShowtoastAlert("Get CaseList Assigned To Me List Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -291,12 +291,12 @@ namespace StemmonsMobile
                             try
                             {
 
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_CreatedByMe");
+                                var str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", "", "", "", Functions.UserName, "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_CreatedByMe");
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Get CaseList Created By Me List Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Get CaseList Created By Me List Sync having issue.");
+                                    Functions.ShowtoastAlert("Get CaseList Created By Me List Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -346,12 +346,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_OwnedByMe");
+                                var str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_OwnedByMe");
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync having issue.");
+                                    Functions.ShowtoastAlert("Get CaseList Owned By Me List Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -402,12 +402,12 @@ namespace StemmonsMobile
                             {
                                 try
                                 {
-                                    string str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMyTeam");
+                                    var str = CasesSyncAPIMethods.GetCaseListSync(App.Isonline, Functions.UserName, "", Functions.UserName, "", "", "", "", "", "", new char(), new char(), "", ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, true, "_AssignedToMyTeam");
 
-                                    if (!String.IsNullOrEmpty(str))
+                                    if (str.ApiCallSuccess)
                                         Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync Success.");
                                     else
-                                        Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync having issue.");
+                                        Functions.ShowtoastAlert("Get CaseList Assigned To My Team List Sync failed.");
                                 }
                                 catch (Exception ex)
                                 {
@@ -461,12 +461,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
+                                var str = EntitySyncAPIMethods.GetAllEntityTypeWithID(null, Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Entity Types and Items Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Entity Types and Items Sync having issue.");
+                                    Functions.ShowtoastAlert("Entity Types and Items Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -516,12 +516,12 @@ namespace StemmonsMobile
                             try
                             {
 
-                                string str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
+                                var str = EntitySyncAPIMethods.GetAssociatedEntityList(Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Get Entity Associated List Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Get Entity Associated List Sync having issue.");
+                                    Functions.ShowtoastAlert("Get Entity Associated List Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -571,12 +571,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
+                                var str = QuestSyncAPIMethods.GetAllQuest(null, Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Quest Area and Item List Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Quest Area and Item List Sync having issue.");
+                                    Functions.ShowtoastAlert("Quest Area and Item List Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -625,13 +625,12 @@ namespace StemmonsMobile
                         {
                             try
                             {
-                                string str = StandardsSyncAPIMethods.GetAllStandards(Functions.UserName, App.DBPath);
+                                var str = StandardsSyncAPIMethods.GetAllStandards(Functions.UserName, App.DBPath);
 
-                                if (!String.IsNullOrEmpty(str))
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Standard Application Data Sync Success.");
                                 else
-                                    Functions.ShowtoastAlert("Standard Application Data Sync having issue.");
-
+                                    Functions.ShowtoastAlert("Standard Application Data Sync failed.");
                             }
                             catch (Exception ex)
                             {
@@ -683,13 +682,12 @@ namespace StemmonsMobile
 
                                 await CasesSyncAPIMethods.GetTeamMembers(App.Isonline, Functions.UserName, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath);
 
-                                string str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
-
-                                if (!String.IsNullOrEmpty(str))
+                                var str = CasesSyncAPIMethods.GetAllEmployeeUser(App.DBPath, Functions.UserName);
+                                if (str.ApiCallSuccess)
                                     Functions.ShowtoastAlert("Employee Data Sync Success.");
                                 else
                                 {
-                                    Functions.ShowtoastAlert("Employee Data Sync having issue.");
+                                    Functions.ShowtoastAlert("Employee Data Sync failed.");
                                 }
                             }
                             catch (Exception ex)

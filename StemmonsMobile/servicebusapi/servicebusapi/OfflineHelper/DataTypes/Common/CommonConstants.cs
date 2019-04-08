@@ -322,37 +322,37 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Common
 
                     // 10960ms - 715
 
-                    foreach (var item in Jobj.XDSCache)
-                    {
-                        var ischeck = DBHelper.GetXDSDetails(item.SYSTEM, item.EXT_DATASOURCE_ID, _DBPath);
-                        ischeck.Wait();
-                        //var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.EXT_DATASOURCE_ID == item.EXT_DATASOURCE_ID && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
+                    //foreach (var item in Jobj.XDSCache)
+                    //{
+                    //    var ischeck = DBHelper.GetXDSDetails(item.SYSTEM, item.EXT_DATASOURCE_ID, _DBPath);
+                    //    ischeck.Wait();
+                    //    //var ischeck = record.Result.Where(v => v.SYSTEM == item.SYSTEM && v.EXT_DATASOURCE_ID == item.EXT_DATASOURCE_ID && v.INSTANCE_USER_ASSOC_ID == item.INSTANCE_USER_ASSOC_ID).FirstOrDefault();
 
-                        if (ischeck.Result == null)
-                        {
-                            X_DSCacheList.EDS_CACHE_ID = 0;
-                            X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
-                            X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
-                            X_DSCacheList.SYSTEM = item.SYSTEM;
-                            X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
-                            X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //    if (ischeck.Result == null)
+                    //    {
+                    //        X_DSCacheList.EDS_CACHE_ID = 0;
+                    //        X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
+                    //        X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
+                    //        X_DSCacheList.SYSTEM = item.SYSTEM;
+                    //        X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
+                    //        X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
 
-                            Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
-                            inserted.Wait();
-                        }
-                        else
-                        {
-                            X_DSCacheList.EDS_CACHE_ID = ischeck.Result.EDS_CACHE_ID;
-                            X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
-                            X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
-                            X_DSCacheList.SYSTEM = item.SYSTEM;
-                            X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
-                            X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
+                    //        Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
+                    //        inserted.Wait();
+                    //    }
+                    //    else
+                    //    {
+                    //        X_DSCacheList.EDS_CACHE_ID = ischeck.Result.EDS_CACHE_ID;
+                    //        X_DSCacheList.EDS_VALUES = item.EDS_VALUES;
+                    //        X_DSCacheList.LAST_MODIFIED_DATETIME = DateTime.Now;
+                    //        X_DSCacheList.SYSTEM = item.SYSTEM;
+                    //        X_DSCacheList.EXT_DATASOURCE_ID = item.EXT_DATASOURCE_ID;
+                    //        X_DSCacheList.INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID;
 
-                            Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
-                            inserted.Wait();
-                        }
-                    }
+                    //        Task<int> inserted = DBHelper.SaveXDSDetails(X_DSCacheList, _DBPath);
+                    //        inserted.Wait();
+                    //    }
+                    //}
                     //5581
                     //4837
                 }

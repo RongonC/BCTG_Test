@@ -21,10 +21,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
     public class EntitySyncAPIMethods
     {
         #region Get All Entity Type With ID
-        public static string GetAllEntityTypeWithID(string CategoryId, string User, string _DBPath)
+        public static SyncStatus GetAllEntityTypeWithID(string CategoryId, string User, string _DBPath)
         {
             string sError = string.Empty;
             JObject Result = null;
+            SyncStatus syn = new SyncStatus();
             try
             {
                 MobileAPIMethods Mapi = new MobileAPIMethods();
@@ -50,6 +51,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 if (Result != null)
                 {
                     string ResponseContent = Convert.ToString(Result.GetValue("ResponseContent"));
+                    syn.ApiCallSuccess = true;
 
                     sError = ResponseContent;
 
@@ -106,20 +108,24 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
             }
             catch (Exception ex)
             {
+                syn.ApiCallSuccess = false;
+                syn.FailDesc = ex.Message.ToString();
+
                 DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllEntityTypeWithID", User, DateTime.Now.ToString());
 
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(Result), "N", "GetAllEntityTypeWithID", User, DateTime.Now.ToString());
             }
-            return sError;
+            return syn;
         }
         #endregion
 
         #region Get Associated Entity List
 
-        public static string GetAssociatedEntityList(string User, string _DBPath)
+        public static SyncStatus GetAssociatedEntityList(string User, string _DBPath)
         {
             string sError = string.Empty;
             JObject rResult = null;
+            SyncStatus syn = new SyncStatus();
             try
             {
                 //#region API Details
@@ -174,6 +180,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
 
                     if (!string.IsNullOrEmpty(ResponseContent?.ToString()) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+                        syn.ApiCallSuccess = true;
 
                         //MyEntityAssociationList
                         //G8_EntityitemView
@@ -183,7 +190,6 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                         //G10_GetEntitiesRelationData
                         //G10_GetCasesRelationData
                         //G10_GetQuestRelationData
-
 
                         Task.Run(() =>
                         {
@@ -223,15 +229,19 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                 }
                 else
                 {
+                    syn.FailDesc = "ResponseContent is Null.";
+                    syn.ApiCallSuccess = false;
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(rResult), "N", "GetAssociatedEntityList", User, DateTime.Now.ToString());
                 }
             }
             catch (Exception ex)
             {
+                syn.FailDesc = ex.Message.ToString();
+                syn.ApiCallSuccess = false;
                 DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAssociatedEntityList", User, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(rResult), "N", "GetAssociatedEntityList", User, DateTime.Now.ToString());
             }
-            return sError;
+            return syn;
         }
         #endregion
 
@@ -339,7 +349,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
         #endregion
 
         #region #3 GetEntitiesBySystemCodeKeyValuePair_LazyLoad
-        public async static Task<List<EntityClass>> GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(bool _IsOnline, string username, GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest _Body_value, string _DBPath, int EntityTypeId, string Fullname, string _Viewtype)
+        public async static Task<List<EntityClass>> GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(bool _IsOnline, string username, GetEntitiesBySystemCodeKeyValuePair_LazyLoadRequest _Body_value, string _DBPath, int EntityTypeId, string Fullname, string _Viewtype, bool _isPropertyPage = false)
         {
             List<EntityClass> json = null;
             List<EntityClass> ListEntity = new List<EntityClass>();
@@ -369,52 +379,58 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Entity
                     string jsonValue = Convert.ToString(Result.GetValue("ResponseContent"));
 
                     ListEntity = JsonConvert.DeserializeObject<List<EntityClass>>(jsonValue);
-                    if (ListEntity.Count > 0)
+
+                    #region Insert To SQLite
+                    if (!_isPropertyPage)
                     {
-                        AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList
+                        if (ListEntity.Count > 0)
                         {
-                            APP_TYPE_INFO_ID = 0,
-                            ASSOC_FIELD_INFO = jsonValue,
-                            LAST_SYNC_DATETIME = DateTime.Now,
-                            SYSTEM = ConstantsSync.EntityInstance,
-                            TYPE_ID = EntityTypeId,
-                            TYPE_NAME = ListEntity[0].EntityTypeName,
-                            CategoryId = 0,
-                            CategoryName = "",
-                            TransactionType = "M",
-                            TYPE_SCREEN_INFO = ScreenName,
-                            INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
-                            IS_ONLINE = _IsOnline
+                            AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList
+                            {
+                                APP_TYPE_INFO_ID = 0,
+                                ASSOC_FIELD_INFO = jsonValue,
+                                LAST_SYNC_DATETIME = DateTime.Now,
+                                SYSTEM = ConstantsSync.EntityInstance,
+                                TYPE_ID = EntityTypeId,
+                                TYPE_NAME = ListEntity[0].EntityTypeName,
+                                CategoryId = 0,
+                                CategoryName = "",
+                                TransactionType = "M",
+                                TYPE_SCREEN_INFO = ScreenName,
+                                INSTANCE_USER_ASSOC_ID = ConstantsSync.INSTANCE_USER_ASSOC_ID,
+                                IS_ONLINE = _IsOnline
 
-                        };
-                        ListEntity = ListEntity.Select(i =>
-                        {
-                            i.TransactionType = "M";
-                            return i;
-                        }).ToList();
+                            };
+                            ListEntity = ListEntity.Select(i =>
+                                            {
+                                                i.TransactionType = "M";
+                                                return i;
+                                            }).ToList();
 
-                        /*VishalPr*/
-                        Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
-                        record.Wait();
-                        // Check if record is Exist or not
-                        var isrecordExist = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
+                            /*VishalPr*/
+                            Task<List<AppTypeInfoList>> record = DBHelper.GetAllAppTypeInfoList(_DBPath);
+                            record.Wait();
+                            // Check if record is Exist or not
+                            var isrecordExist = record.Result.Where(v => v.SYSTEM == ConstantsSync.EntityInstance && v.TYPE_ID == EntityTypeId && v.INSTANCE_USER_ASSOC_ID == ConstantsSync.INSTANCE_USER_ASSOC_ID && v.TYPE_SCREEN_INFO == ScreenName).FirstOrDefault();
 
-                        if (isrecordExist == null)
-                        {
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                            if (isrecordExist == null)
+                            {
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
+                            }
+                            else
+                            {
+                                _AppTypeInfoList.APP_TYPE_INFO_ID = isrecordExist.APP_TYPE_INFO_ID;
+                                //Existing Record Convert to list
+                                var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(isrecordExist.ASSOC_FIELD_INFO);
+                                entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
+                                _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
+                            }
+
+                            Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
+                            inserted.Wait();
                         }
-                        else
-                        {
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = isrecordExist.APP_TYPE_INFO_ID;
-                            //Existing Record Convert to list
-                            var entItem = JsonConvert.DeserializeObject<List<EntityClass>>(isrecordExist.ASSOC_FIELD_INFO);
-                            entItem.AddRange(ListEntity);// Adding Online list to the Existing SQLite Record
-                            _AppTypeInfoList.ASSOC_FIELD_INFO = JsonConvert.SerializeObject(entItem);
-                        }
-
-                        Task<int> inserted = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, _DBPath);
-                        inserted.Wait();
                     }
+                    #endregion
                 }
                 else
                 {

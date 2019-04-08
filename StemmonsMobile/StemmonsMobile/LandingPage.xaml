@@ -585,7 +585,7 @@
                                                     <Label Text="More" Margin="0,-6,0,0" FontSize="11" 
                                                    Grid.Row="0" Grid.Column="0" TextColor="Black" 
                                                    WidthRequest="54" 
-                                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="{local:CustomFont FontFileAndName=Stawix - SoinSansNeue-Roman#Soin Sans Neue}"/>
+                                                   HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                                                 </StackLayout>
 
                                             </Grid>

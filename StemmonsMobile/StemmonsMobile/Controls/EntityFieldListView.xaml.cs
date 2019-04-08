@@ -1,4 +1,5 @@
-﻿using StemmonsMobile.DataTypes.DataType.Entity;
+﻿using StemmonsMobile.Commonfiles;
+using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,20 +24,36 @@ namespace StemmonsMobile.Controls
             set { _entityfieldVM = value; }
         }
 
+        private ImageSource _imageSource;
+        public ImageSource ImageSource
+        {
+            get
+            {
+                return Functions.GetImageFromEntityAssoc(EntityFieldVM.SelectedEntity.AssociationFieldCollection);
+            }
+        }
+
+        EntityClass Entdetail = new EntityClass();
+        List<string> AcsyStemcode = new List<string>();
+        List<string> AssocTypeid = new List<string>();
         public EntityFieldListView(EntityClass _entdetail, List<string> _acsystemcode = null, List<string> _assoctypeid = null)
         {
             InitializeComponent();
+            Entdetail = _entdetail;
+            AcsyStemcode = _acsystemcode;
+            AssocTypeid = _assoctypeid;
+          
             try
             {
-                EntityFieldVM = new EntityFieldViewModel(_entdetail, _acsystemcode, _assoctypeid);
-                EntityFieldVM.SelectedEntity = _entdetail;
-                EntityFieldVM.AcSystemCode = null;
-                BindingContext = EntityFieldVM;
+                EntityFieldVM = new EntityFieldViewModel(Entdetail, AcsyStemcode, AssocTypeid);
+                EntityFieldVM.SelectedEntity = Entdetail;
             }
             catch (System.Exception ec)
             {
 
             }
+            BindingContext = EntityFieldVM;
+            
         }
     }
 }

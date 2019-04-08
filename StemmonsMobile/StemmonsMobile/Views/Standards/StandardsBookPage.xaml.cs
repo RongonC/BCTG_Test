@@ -242,7 +242,7 @@ namespace StemmonsMobile.Views.Standards
             }
         }
 
-        private void HeaderTapped(object sender, EventArgs e)
+        private void Btn_Expand_Clicked(object sender, EventArgs e)
         {
             try
             {
@@ -250,7 +250,6 @@ namespace StemmonsMobile.Views.Standards
                ((Group_Standards)((Button)sender).CommandParameter));
                 Master_list[selectedIndex].Expanded = !Master_list[selectedIndex].Expanded;
                 UpdateListContent();
-
             }
             catch (Exception ex)
             {

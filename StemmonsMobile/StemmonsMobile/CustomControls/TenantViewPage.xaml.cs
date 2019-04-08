@@ -1,4 +1,6 @@
-﻿using StemmonsMobile.Controls;
+﻿using DataServiceBus.OfflineHelper.DataTypes.Entity;
+using StemmonsMobile.Commonfiles;
+using StemmonsMobile.Controls;
 using StemmonsMobile.DataTypes.DataType.Entity;
 using StemmonsMobile.ViewModels;
 using System;
@@ -23,20 +25,39 @@ namespace StemmonsMobile.CustomControls
             get { return _entityFieldVM; }
             set { _entityFieldVM = value; }
         }
+
+        EntityClass Entdetail = new EntityClass();
         public TenantViewPage(EntityClass _entdetail)
         {
             InitializeComponent();
-            SetData(_entdetail);
+            Entdetail = _entdetail;
         }
+
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            IsBusy = true;
+            await Task.Run(() =>
+             {
+                 var res = EntitySyncAPIMethods.GetEntityByEntityID(true, Entdetail.EntityID.ToString(), Functions.UserName, Entdetail.EntityTypeID.ToString(), App.DBPath);
+                 res.Wait();
+                 Entdetail = res.Result;
+             });
+
+            Title = Entdetail.EntityTitle;
+            SetData(Entdetail);
+
+            IsBusy = false;
+        }
+
 
         public void SetData(EntityClass _entdetail)
         {
             try
             {
-                EntityFieldVM = new EntityFieldViewModel(_entdetail);
-
-                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "EPILR" }, new List<string>() { "1468" });
-                frmField.Content = ent;
+                EntityFieldListView ent = new EntityFieldListView(_entdetail, new List<string>() { "EXTPK", "TITLE", "STTUS" }, new List<string>() { "5605", "5608", "5609", "5611", "5613", "5615", "5628", "5635", "5636", "5637", "7895", "7896", "7897" });
+                frmField.Children.Add(ent);
             }
             catch (Exception e)
             {

@@ -313,7 +313,7 @@ namespace StemmonsMobile.Views.CreateQuestForm
             }
         }
 
-        private void HeaderTapped(object sender, EventArgs e)
+        private void Btn_Expand_Clicked(object sender, EventArgs e)
         {
             try
             {

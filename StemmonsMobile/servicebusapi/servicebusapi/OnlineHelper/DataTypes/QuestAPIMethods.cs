@@ -11,6 +11,33 @@ namespace DataServiceBus.OnlineHelper.DataTypes
     public class QuestAPIMethods
     {
 
+        public static JObject GetFilesByQuestionID(string itemQuestionMetadataID)
+        {
+            #region API Details
+            var API_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("API_Name", DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl + Constants.GetFilesByQuestionID),
+            };
+
+            #endregion
+
+            #region API Body Details
+            var Body_value = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("itemQuestionMetaDataID",itemQuestionMetadataID)
+            };
+            #endregion
+
+            var val = MobileAPIMethods.CallAPIGetPost(API_value, Body_value, "POST");
+            if (val != null)
+            {
+                return val;
+            }
+            else
+                return null;
+
+        }
+
         #region Get Area FormList
         public static JObject GetAreaFormList(string _userName, string _areaId)
         {

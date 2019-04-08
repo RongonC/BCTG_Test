@@ -18,10 +18,11 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
     {
 
         #region Get All Standards Data By UserName
-        public static string GetAllStandards(string pUserSAM, string _DBPath)
+        public static SyncStatus GetAllStandards(string pUserSAM, string _DBPath)
         {
             string sError = string.Empty;
             JObject Result = null;
+            SyncStatus sn = new SyncStatus();
             try
             {
                 MobileAPIMethods Mapi = new MobileAPIMethods();
@@ -49,6 +50,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
 
                     if (!string.IsNullOrEmpty(ResponseContent) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+                        sn.ApiCallSuccess = true;
+
                         Task.Run(() =>
                         {
                             #region Delete Data Before Master Sync
@@ -66,14 +69,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                     }
                 }
                 else
+                {
+                    sn.FailDesc = "ResponseContent is Null.";
+                    sn.ApiCallSuccess = false;
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(Result), "N", "GetAllStandards", pUserSAM, DateTime.Now.ToString());
+                }
             }
             catch (Exception ex)
             {
+                sn.FailDesc = ex.Message.ToString();
+                sn.ApiCallSuccess = false;
                 DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllStandards", pUserSAM, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(Result), "N", "GetAllStandards", pUserSAM, DateTime.Now.ToString());
             }
-            return sError;
+            return sn;
         }
         #endregion
 
@@ -223,9 +232,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Standards
                 {
                     AppTypeInfoList result = DBHelper.UserScreenRetrive(ConstantsSync.StandardInstance, _DBPath, ConstantsSync.GetAllAppForUser);
 
-                    security_GetAllAppForUserResponse obj = new security_GetAllAppForUserResponse();
-
-                    obj.ResponseContent = JsonConvert.DeserializeObject<List<ForMe>>(result.ASSOC_FIELD_INFO);
+                    security_GetAllAppForUserResponse obj = new security_GetAllAppForUserResponse
+                    {
+                        ResponseContent = JsonConvert.DeserializeObject<List<ForMe>>(result.ASSOC_FIELD_INFO)
+                    };
 
                     Result = (JObject)JToken.FromObject(obj);
 

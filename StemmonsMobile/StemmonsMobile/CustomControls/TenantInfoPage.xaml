@@ -2,19 +2,43 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:customListview="clr-namespace:StemmonsMobile.CustomControls"
+             xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
              x:Class="StemmonsMobile.CustomControls.TenantInfoPage" 
              Title= "Tenant Information"
              x:Name="this" BindingContext="{x:Reference this}">
     <ContentPage.Content>
         <AbsoluteLayout>
-            <Grid x:Name="masterGrid">
+            <StackLayout  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                   AbsoluteLayout.LayoutFlags="All"
+                 VerticalOptions="Fill">
+                <Grid x:Name="PropertiesGrid"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <customListview:EntityListCustomControl  x:Name="lstCntrol" VerticalOptions="FillAndExpand"  Grid.Row="0"
+                                                      BindingContext="{Binding EntityListVM}"   >
+                        <ListView.Header>
+                    <StackLayout>
+                        <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
+                       HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
+
+                        <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" 
+                              Aspect="AspectFit" BackgroundColor="Transparent" HeightRequest="200" Margin="0,0,0,15"/>
+                    </StackLayout>
+                </ListView.Header>
+                    </customListview:EntityListCustomControl>
+                    
+                    <cnt:FooterControl x:Name="cnt_footer" Grid.Row="1" />
+                </Grid>
+            </StackLayout>
+            <!--<Grid x:Name="masterGrid" RowSpacing="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height= "10" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height= "8" />
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />
@@ -25,19 +49,16 @@
                 <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="1"
                        HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Medium" FontAttributes="Bold"  Text="{Binding EntityTitle}" />
 
-                <!--<Label x:Name="Subtitlelbl" HorizontalTextAlignment="Center"  VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2"  Grid.Column="1"/>-->
+                <Image x:Name="ProfileImg" Grid.Row ="2"  Grid.Column="1" Source="{Binding ImgProperty}"
+                              Aspect="AspectFit" BackgroundColor="Transparent" HeightRequest="200"  />
 
-                <ImageButton x:Name="ProfileImg" Grid.Row ="3"  Grid.Column="1"
-                              Aspect="AspectFit" BackgroundColor="Transparent" BorderColor="LightBlue" BorderWidth="2" HeightRequest="200"  />
+             
+                <customListview:EntityListCustomControl Grid.Column="1" Grid.Row="3"  BindingContext="{Binding EntityListVM}" />
+            </Grid>-->
 
-                <Frame OutlineColor="LightBlue" Grid.Column="1" Grid.Row="5" 
-                       Margin="0" Padding="1" HasShadow="False">
-                    <!--<customListview:TenantCustomListview x:Name="lst_tenant_information" BindingContext="{Binding }" HeightRequest="{Binding Heights}"/>-->
-                    <customListview:EntityListCustomControl  BindingContext="{Binding EntityListVM}" />
-                </Frame>
-            </Grid>
+            <cnt:ActivityProgressBar IsVisible="{Binding IsBusy}"/>
 
-            <ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
+            <!--<ContentView x:Name="overlay" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"  
                          IsVisible="False"
                          AbsoluteLayout.LayoutFlags="All" 
                          BackgroundColor="Transparent">
@@ -58,8 +79,7 @@
                         </Label.Margin>
                     </Label>
                 </StackLayout>
-            </ContentView>
+            </ContentView>-->
         </AbsoluteLayout>
     </ContentPage.Content>
-
 </ContentPage>

@@ -13,9 +13,7 @@ namespace StemmonsMobile.Views
 
         public static readonly BindableProperty CornerRadiusProperty =
             BindableProperty.Create<BorderEditor, float>(p => p.CornerRadius, 0);
-
-        
-
+   
         public static readonly BindableProperty SetCornerRadius =
             BindableProperty.Create<BorderEditor, Color>(p => p.BorderColor, Color.Transparent);
 

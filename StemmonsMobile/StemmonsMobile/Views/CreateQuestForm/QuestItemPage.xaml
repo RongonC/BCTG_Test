@@ -34,14 +34,13 @@
                                                 <ColumnDefinition Width="35" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Button Image="{Binding StateIcon}" 
+                                            <Button x:Name="btn_Expand" Image="{Binding StateIcon}" 
                                                 BackgroundColor="Transparent"
                                                 BorderColor="Transparent"
                                                 BorderWidth="0"
-                                                    Grid.Column="0"
-                                                Clicked="HeaderTapped" 
+                                                    Grid.Column="0" Clicked="Btn_Expand_Clicked"
                                                 CommandParameter="{Binding .}"/>
-                                            <Button BackgroundColor="Transparent" Grid.Column="1" BorderColor="Transparent" BorderWidth="0" Clicked="HeaderTapped" 
+                                            <Button BackgroundColor="Transparent" Grid.Column="1" BorderColor="Transparent" BorderWidth="0"  Clicked="Btn_Expand_Clicked"
                                               Text="{Binding TitleWithItemCount}" FontSize="14" HorizontalOptions="StartAndExpand" VerticalOptions="Center" CommandParameter="{Binding .}"/>
                                         </Grid>
                                     </StackLayout>

@@ -30,7 +30,7 @@ namespace StemmonsMobile.Views.Entity
     {
         BorderEditor txt_EntNotes = new BorderEditor();
 
-        EntityListMBView EntitymbView = new EntityListMBView();
+        EntityClass EntitymbView = new EntityClass();
         EntityClass EntitySchemaLists = null;
         EntityClass EntityListsValues = null;
         List<Entity_Notes> Entity_NotesLists = new List<Entity_Notes>();
@@ -56,7 +56,7 @@ namespace StemmonsMobile.Views.Entity
         List<Tuple<List<AssociationField>, string, string>> lstcalculationsFieldlist = new List<Tuple<List<AssociationField>, string, string>>();
         int EntityTypeID = 0;
         int EntityID = 0;
-        public CreateEntityPage(int _etytypeid, int eid, string _title, EntityListMBView _mbView)
+        public CreateEntityPage(int _etytypeid, int eid, string _title, EntityClass _mbView)
         //  public CreateEntityPage(int _etytypeid, int eid, EntityOrgCenterList value, EntityListMBView _mbView)
         {
 
@@ -78,17 +78,17 @@ namespace StemmonsMobile.Views.Entity
 
                 if (EntitymbView != null)
                 {
-                    Assign_Sam = EntitymbView.EntityDetails.EntitiyAssignedToUserName;
-                    Create_Sam = EntitymbView.EntityDetails.EntityCreatedByUserName;
-                    Modify_Sam = EntitymbView.EntityDetails.EntityModifiedByUserName;
-                    Owner_Sam = EntitymbView.EntityDetails.EntitiyOwnedByUserName;
+                    Assign_Sam = EntitymbView.EntitiyAssignedToUserName;
+                    Create_Sam = EntitymbView.EntityCreatedByUserName;
+                    Modify_Sam = EntitymbView.EntityModifiedByUserName;
+                    Owner_Sam = EntitymbView.EntitiyOwnedByUserName;
 
                     #region Created By Name
-                    if (EntitymbView.EntityDetails.EntityCreatedByFullName != null)
+                    if (EntitymbView.EntityCreatedByFullName != null)
                     {
                         //FrmtText.Spans.Add(new Span { Text = "Created By : ", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityCreatedByFullName + "\r\n", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityCreatedDateTime)).ToString(), FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityCreatedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityCreatedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_createname.FormattedText = Convert.ToString(FrmtText);
 
@@ -96,11 +96,11 @@ namespace StemmonsMobile.Views.Entity
 
                     #region Assigned to Name
                     FrmtText = new FormattedString();
-                    if (EntitymbView.EntityDetails.EntityAssignedToFullName != null)
+                    if (EntitymbView.EntityAssignedToFullName != null)
                     {
                         //FrmtText.Spans.Add(new Span { Text = "Assigned  To : ", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityAssignedToFullName + "\r\n", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityAssignedToFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityAssignedToDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_assignto.FormattedText = Convert.ToString(FrmtText);
 
@@ -110,11 +110,11 @@ namespace StemmonsMobile.Views.Entity
                     #region Owned By name
 
                     FrmtText = new FormattedString();
-                    if (EntitymbView.EntityDetails.EntityOwnedByFullName != null)
+                    if (EntitymbView.EntityOwnedByFullName != null)
                     {
                         //FrmtText.Spans.Add(new Span { Text = "Owner : ", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityOwnedByFullName + "\r\n", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityOwnedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityOwnedByDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_ownername.FormattedText = Convert.ToString(FrmtText);
 
@@ -124,11 +124,11 @@ namespace StemmonsMobile.Views.Entity
 
                     #region Modified by Name
                     FrmtText = new FormattedString();
-                    if (EntitymbView.EntityDetails.EntityModifiedByFullName != null)
+                    if (EntitymbView.EntityModifiedByFullName != null)
                     {
                         //FrmtText.Spans.Add(new Span { Text = "Modified  By : ", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityDetails.EntityModifiedByFullName + "\r\n", FontSize = 14 });
-                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityDetails.EntityModifiedDateTime)).ToString(), FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = EntitymbView.EntityModifiedByFullName + "\r\n", FontSize = 14 });
+                        FrmtText.Spans.Add(new Span { Text = (Convert.ToDateTime(EntitymbView.EntityModifiedDateTime)).ToString(), FontSize = 14 });
                     }
                     lbl_modifiedname.FormattedText = Convert.ToString(FrmtText);
 
@@ -2205,13 +2205,12 @@ namespace StemmonsMobile.Views.Entity
                     {
                         if (Device.RuntimePlatform == Device.UWP)
                         {
-                            FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('\\') + 1));
+                            //await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('\\') + 1))).DeleteAsync();
                         }
                         else
                         {
-                            FileExtensions.DeleteFile(file.Path.Substring(file.Path.LastIndexOf('/') + 1));
+                           // await (await FileSystem.Current.LocalStorage.GetFileAsync(file.Path.Substring(file.Path.LastIndexOf('/') + 1))).DeleteAsync();
                         }
-                        
                     }
                     catch (Exception)
                     {
@@ -2266,7 +2265,7 @@ namespace StemmonsMobile.Views.Entity
                 try
                 {
                     //IFolder rootFolder = FileSystem.Current.LocalStorage;
-                    //await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
+                   // await (await (rootFolder.GetFolderAsync("Sample"))).DeleteAsync();
                 }
                 catch (Exception)
                 {
@@ -2630,14 +2629,14 @@ namespace StemmonsMobile.Views.Entity
                             int result = await CreateEntitycall();
                             if (result > 0)
                             {
-                                EntitymbView = new EntityListMBView
+                                EntitymbView = new EntityClass
                                 {
-                                    EntityDetails = new EntityClass
-                                    {
+                                    //EntityDetails = new EntityClass
+                                    //{
                                         EntityID = result,
                                         EntityTypeID = EntitySchemaLists.EntityTypeID
-                                    },
-                                    Title = EntitySchemaLists.EntityTypeName
+                                   // },
+                                    //Title = EntitySchemaLists.EntityTypeName
                                 };
                                 try
                                 {
@@ -3123,7 +3122,7 @@ namespace StemmonsMobile.Views.Entity
                         {
                             await Task.Run(async () =>
                             {
-                                str = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntitymbView.EntityDetails.EntityTypeID, insertedRecordid.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", ((Enum.GetNames(typeof(ActionTypes)))[5] + "," + (Enum.GetNames(typeof(ActionTypes)))[1]), App.DBPath, Functions.UserFullName);
+                                str = await EntitySyncAPIMethods.StoreEntityNotes(App.Isonline, EntitymbView.EntityTypeID, insertedRecordid.ToString(), txt_EntNotes.Text, Functions.UserName, "Notes Type ID is Static", ((Enum.GetNames(typeof(ActionTypes)))[5] + "," + (Enum.GetNames(typeof(ActionTypes)))[1]), App.DBPath, Functions.UserFullName);
                             });
                         }
                     }

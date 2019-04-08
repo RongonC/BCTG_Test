@@ -7,6 +7,7 @@ using StemmonsMobile.DataTypes.DataType;
 using StemmonsMobile.DataTypes.DataType.Cases;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using static DataServiceBus.OfflineHelper.DataTypes.Common.ConstantsSync;
@@ -16,9 +17,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
     public class CasesSyncAPIMethods
     {
         #region Get All Case Type With ID
-        public static string GetAllCaseTypeWithID(string _CaseTypeId, string _UserName, string _ListType, string _DBPath)
+        public static SyncStatus GetAllCaseTypeWithID(string _CaseTypeId, string _UserName, string _ListType, string _DBPath)
         {
             string sError = string.Empty;
+            SyncStatus SyncST = new SyncStatus();
             JObject Result = null;
             try
             {
@@ -48,8 +50,9 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (!string.IsNullOrEmpty(Res) && Convert.ToString(Res) != "[]" && Convert.ToString(Res) != "{}" && Convert.ToString(Res) != "[ ]" && Convert.ToString(Res) != "{ }" && Convert.ToString(Res) != "[{ }]" && Convert.ToString(Res) != "[{}]")
                     {
+
+                        SyncST.ApiCallSuccess = true;
                         sError = Convert.ToString(Result);
-                        //CommonConstants.MasterOfflineStore(Res, _DBPath);
 
                         Task.Run(() =>
                         {
@@ -68,14 +71,20 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     }
                 }
                 else
+                {
+                    SyncST.ApiCallSuccess = false;
+                    SyncST.FailDesc = "ResponseContent IS NULL";
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(Result), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
+                }
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exception Log => " + ex.Message.ToString(), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
+                SyncST.ApiCallSuccess = false;
+                SyncST.FailDesc = ex.Message.ToString();
+                DefaultAPIMethod.AddLog("Exception Log => " + ex.ToString(), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exception Log => " + Convert.ToString(Result), "N", "GetAllCaseTypeWithID", _UserName, DateTime.Now.ToString());
             }
-            return sError;
+            return SyncST;
         }
 
         public static void DeleteRecordBeforeSync(string _DBPath, string MultiId)
@@ -100,12 +109,12 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get CaseList
-        public static string GetCaseListSync(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM,
+        public static SyncStatus GetCaseListSync(bool _IsOnline, string _user, string _CaseTypeID, string _CaseOwnerSAM, string _AssignedToSAM, string _ClosedBySAM, string _CreatedBySAM,
                                                     string _PropertyID, string _TenantCode, string _TenantID, char _showOpenClosedCasesType, char _showPastDueDate, string _SearchQuery, int _InstanceUserAssocId, string _DBPath, string _FullName, bool SaveSql = true, string screenName = "")
         {
             List<GetCaseTypesResponse.BasicCase> lstResult = new List<GetCaseTypesResponse.BasicCase>();
             List<KeyValuePair<string, string>> idAndDateTime = new List<KeyValuePair<string, string>>();
-
+            SyncStatus SyncST = new SyncStatus();
             try
             {
                 Task<List<AppTypeInfoList>> AppTypeInforesult = DBHelper.GetAppTypeInfoListBySystemName(ConstantsSync.CasesInstance, "E2_GetCaseList" + screenName, _DBPath);
@@ -146,6 +155,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 {
                     DefaultAPIMethod.AddLog("Result Success Log => " + Convert.ToString(result), "Y", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
                     ResponseContent = Convert.ToString(temp);
+
+                    SyncST.ApiCallSuccess = true;
 
                     MasterSyncGetAllCaseType Output = JsonConvert.DeserializeObject<MasterSyncGetAllCaseType>(ResponseContent);
                     var DeleteItem = Output.RemoveItemList;
@@ -196,22 +207,29 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 }
                 else
                 {
+                    SyncST.ApiCallSuccess = false;
+                    SyncST.FailDesc = "ResponseContent is NULL.";
+
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
                 }
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
+                SyncST.ApiCallSuccess = false;
+                SyncST.FailDesc = ex.Message.ToString();
+
+                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.ToString(), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetCaseList " + screenName, _user, DateTime.Now.ToString());
             }
-            return ResponseContent;
+            return SyncST;
         }
         #endregion
 
         #region Get Origination CenterForUser
-        public static string GetOriginationCenterForUserSync(string _User, string _ShowAll, int _InstanceUserAssocId, string _DBPath)
+        public static SyncStatus GetOriginationCenterForUserSync(string _User, string _ShowAll, int _InstanceUserAssocId, string _DBPath)
         {
             string sError = string.Empty;
+            SyncStatus SyncST = new SyncStatus();
             JObject result = null;
             List<OriginationCenterDataResponse.OriginationCenterData> lstResult = new List<OriginationCenterDataResponse.OriginationCenterData>();
             int id = CommonConstants.GetResultBySytemcode(CasesInstance, "C1_GetOriginationCenterForUser", _DBPath);
@@ -229,6 +247,8 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     if (!string.IsNullOrEmpty(Convert.ToString(ResponseContent)) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
                         sError = ResponseContent.ToString();
+                        SyncST.ApiCallSuccess = true;
+
                         lstResult = JsonConvert.DeserializeObject<List<OriginationCenterDataResponse.OriginationCenterData>>(ResponseContent.ToString());
                         if (lstResult.Count > 0)
                         {
@@ -249,15 +269,21 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     }
                 }
                 else
+                {
+                    SyncST.ApiCallSuccess = false;
+                    SyncST.FailDesc = "ResponseContent is NULL.";
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(result), "N", "GetOriginationCenterForUserSync", _User, DateTime.Now.ToString());
+                }
             }
             catch (Exception ex)
             {
+                SyncST.FailDesc = ex.Message.ToString();
+                SyncST.ApiCallSuccess = false;
                 DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetOriginationCenterForUserSync", _User, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetOriginationCenterForUserSync", _User, DateTime.Now.ToString());
 
             }
-            return sError;
+            return SyncST;
         }
 
         public static async Task<List<OriginationCenterDataResponse.OriginationCenterData>> GetOriginationCenterForUseragain(string _User, string _ShowAll, int _InstanceUserAssocId, string _DBPath)
@@ -301,9 +327,10 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
         #endregion
 
         #region Get All Employee User
-        public static string GetAllEmployeeUser(string _DBPath, string pUserSAM)
+        public static SyncStatus GetAllEmployeeUser(string _DBPath, string pUserSAM)
         {
             string sError = string.Empty;
+            SyncStatus SyncST = new SyncStatus();
             JObject result = null;
             List<GetUserInfoResponse.UserInfo> lstResult = new List<GetUserInfoResponse.UserInfo>();
             int id = CommonConstants.GetResultBySytemcode(UserDetailsInstance, "U1_GetAllEmployeeUser", _DBPath);
@@ -319,6 +346,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     if (!string.IsNullOrEmpty(Convert.ToString(ResponseContent)) && Convert.ToString(ResponseContent) != "[]" && Convert.ToString(ResponseContent) != "{}" && Convert.ToString(ResponseContent) != "[ ]" && Convert.ToString(ResponseContent) != "{ }" && Convert.ToString(ResponseContent) != "[{ }]" && Convert.ToString(ResponseContent) != "[{}]")
                     {
+                        SyncST.ApiCallSuccess = true;
                         sError = Convert.ToString(ResponseContent);
                         lstResult = JsonConvert.DeserializeObject<List<GetUserInfoResponse.UserInfo>>(ResponseContent.ToString());
                         if (lstResult.Count > 0)
@@ -329,15 +357,21 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                     }
                 }
                 else
+                {
+                    SyncST.FailDesc = "ResponseContent is Null.";
+                    SyncST.ApiCallSuccess = false;
                     DefaultAPIMethod.AddLog("Result Fail Log => " + Convert.ToString(result), "N", "GetAllEmployeeUser", pUserSAM, DateTime.Now.ToString());
+                }
             }
             catch (Exception ex)
             {
-                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllEmployeeUser", pUserSAM, DateTime.Now.ToString());
+                SyncST.FailDesc = ex.Message.ToString();
+                SyncST.ApiCallSuccess = false;
 
+                DefaultAPIMethod.AddLog("Exceptions Log => " + ex.Message.ToString(), "N", "GetAllEmployeeUser", pUserSAM, DateTime.Now.ToString());
                 DefaultAPIMethod.AddLog("Result Exceptions Log => " + Convert.ToString(result), "N", "GetAllEmployeeUser", pUserSAM, DateTime.Now.ToString());
             }
-            return sError;
+            return SyncST;
         }
         #endregion
 
@@ -3200,7 +3234,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
 
                     List<EDSResultList> Result = DBHelper.EDSResultByAssocFieldId(Request.caseTypeID.ToString(), "C1_C2_CASES_CASETYPELIST", Request.assocCaseTypeID, ConstantsSync.CasesInstance, _DBPath).Result;
 
-                    lstResult = JsonConvert.DeserializeObject<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>>(Result.FirstOrDefault().EDS_RESULT);
+                    lstResult = JsonConvert.DeserializeObject<List<GetTypeValuesByAssocCaseTypeExternalDSResponse.ItemValue>>(Result?.FirstOrDefault()?.EDS_RESULT);
 
                 }
             }
@@ -3901,7 +3935,7 @@ namespace DataServiceBus.OfflineHelper.DataTypes.Cases
                 {
                     Task.Run(() =>
                     {
-                        string str = GetAllEmployeeUser(_DBPath, currentuser);
+                         GetAllEmployeeUser(_DBPath, currentuser);
                     }).Wait();
 
                     list = CommonConstants.ReturnListResult<GetUserInfoResponse.UserInfo>(UserDetailsInstance, "U1_GetAllEmployeeUser", _DBPath);

@@ -74,16 +74,16 @@ namespace StemmonsMobile.Views.Entity
                         }
                     };
                     Lazyload_request.entityTypeSchema = fv;
-                    EntityListMBView mb = new EntityListMBView();
+                    EntityClass mb = new EntityClass();
                     Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                     await Task.Run(async () =>
                     {
                         var EntityLists = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, Convert.ToInt32((e.Item as EntityOrgCenterList).EntityTypeID), Functions.UserFullName, "");
 
                         if (EntityLists.Count > 0)
-                            mb.EntityDetails = EntityLists[0];
+                            mb= EntityLists[0];
                         else
-                            mb.EntityDetails = new EntityClass();
+                            mb= new EntityClass();
                     });
 
                     Functions.IsEditEntity = false;

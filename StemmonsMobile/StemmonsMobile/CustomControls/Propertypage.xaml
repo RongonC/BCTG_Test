@@ -2,20 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cnt="clr-namespace:StemmonsMobile.Controls"
-             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page">
+             x:Class="StemmonsMobile.CustomControls.Propertypage" Title="Property Page"
+             BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout x:Name="mainstack">
-            <Grid x:Name="PropertiesGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height= "*" />
-                    <RowDefinition Height= "auto" />
-                </Grid.RowDefinitions>
-                <Label HorizontalTextAlignment="Center" Grid.Row="1"  VerticalTextAlignment="Center" FontSize="Large" Text="Properties" />
-                <ScrollView Grid.Row="3">
-                    <Grid>
+            <ScrollView>
+                <Grid x:Name="PropertiesGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height= "*" />
+                        <RowDefinition Height= "auto" />
+                    </Grid.RowDefinitions>
+                    <Label HorizontalTextAlignment="Center" Grid.Row="1"  VerticalTextAlignment="Center" FontSize="Large" Text="Properties" />
+                    <Grid Grid.Row="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20"/>
@@ -29,15 +30,25 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="MyPropertiesbutton" Text="My Properties"   Grid.Row="0" Grid.Column="1" 
-                                Command ="{Binding MyPropertiesbtnCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="PropertyListbutton" Text="Properties List" Grid.Row="0" Grid.Column="3" 
-                                Command ="{Binding PropertyListbtnCmd}" Style="{StaticResource buttonStyle}"/>
-                        <Button x:Name="Compusesbutton"     Text="Campuses"        Grid.Row="2" Grid.Column="1" 
-                                Command ="{Binding CompusesbuttonCmd}" Style="{StaticResource buttonStyle}"/>
+                        <Button x:Name="MyPropertiesbutton" BackgroundColor="Transparent"
+                                Image="Assets/MyProperties.png"
+                                HeightRequest="100"
+                                Grid.Row="0" Grid.Column="1" 
+                                Command ="{Binding MyPropertiesbtnCmd}"/>
+                        <Button x:Name="PropertyListbutton" BackgroundColor="Transparent"
+                                Image="Assets/PropertyList.png"
+                                HeightRequest="100"
+                                Grid.Row="0" Grid.Column="3" 
+                                Command ="{Binding PropertyListbtnCmd}" />
+                        <Button x:Name="Compusesbutton"    BackgroundColor="Transparent"
+                                Image="Assets/Campuses.png"
+                                HeightRequest="100"
+                                Grid.Row="2" Grid.Column="1" 
+                                Command ="{Binding CompusesbuttonCmd}"/>
                     </Grid>
-                </ScrollView>
-            </Grid>
+                </Grid>
+            </ScrollView>
+
             <cnt:FooterControl x:Name="cnt_footer"></cnt:FooterControl>
 
         </StackLayout>

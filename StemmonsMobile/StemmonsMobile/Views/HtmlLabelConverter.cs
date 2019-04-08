@@ -562,20 +562,20 @@ namespace StemmonsMobile
                     {
                         if (System.Convert.ToInt32(link_Nav_id) != 0)
                         {
-                            EntityListMBView mbView = new EntityListMBView();
+                            EntityClass mbView = new EntityClass();
 
                             var info = DBHelper.GetAppTypeInfoListContains_scrname("ENTITY", System.Convert.ToInt32(link_Nav_id), "G8_EntityitemView", App.DBPath);
                             info.Wait();
                             if (info.Result != null)
                             {
-                                mbView = new EntityListMBView
+                                mbView = new EntityClass
                                 {
-                                    EntityDetails = new EntityClass
-                                    {
-                                        EntityID = System.Convert.ToInt32(link_Nav_id),
-                                        EntityTypeID = System.Convert.ToInt32(info.Result.TYPE_ID)
-                                    },
-                                    Title = info.Result.TYPE_NAME
+                                    //EntityDetails = new EntityClass
+                                    //{
+                                    EntityID = System.Convert.ToInt32(link_Nav_id),
+                                    EntityTypeID = System.Convert.ToInt32(info.Result.TYPE_ID)
+                                    //},
+                                    // Title = info.Result.TYPE_NAME
                                 };
                             }
                             else
@@ -590,14 +590,10 @@ namespace StemmonsMobile
                                     if (!string.IsNullOrEmpty(eInfo) && eInfo.ToString() != "[]")
                                     {
                                         var tp = JsonConvert.DeserializeObject<EntityBasicDetails>(eInfo);
-                                        mbView = new EntityListMBView
+                                        mbView = new EntityClass
                                         {
-                                            EntityDetails = new EntityClass
-                                            {
-                                                EntityID = System.Convert.ToInt32(link_Nav_id),
-                                                EntityTypeID = System.Convert.ToInt32(tp.ENTITY_TYPE_ID)
-                                            },
-                                            Title = tp.ENTITY_TYPE_NAME
+                                            EntityID = System.Convert.ToInt32(link_Nav_id),
+                                            EntityTypeID = System.Convert.ToInt32(tp.ENTITY_TYPE_ID)
                                         };
                                     }
                                 });

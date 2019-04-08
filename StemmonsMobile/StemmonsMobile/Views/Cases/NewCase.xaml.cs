@@ -710,7 +710,7 @@ namespace StemmonsMobile.Views.Cases
                     }
                     #endregion
 
-                    #region  Set Favourite Values to the Control
+                    #region  Set Favorite  Values to the Control
 
                     var layout = new StackLayout();
                     layout.Orientation = StackOrientation.Horizontal;
@@ -2807,7 +2807,7 @@ namespace StemmonsMobile.Views.Cases
                         {
                             if (user_dialogs.Text == "")
                             {
-                                await DisplayAlert("Alert", "Please Add Favourite Name.", "OK");
+                                await DisplayAlert("Alert", "Please Add Favorite Name.", "OK");
                                 goto AskAgain;
                             }
 
@@ -2824,7 +2824,7 @@ namespace StemmonsMobile.Views.Cases
 
                             if (result_fav != null && result_fav?.Result > 0)
                             {
-                                DisplayAlert("Success", "Added Favourite Successfully.", "OK");
+                                DisplayAlert("Success", "Added Favorite Successfully.", "OK");
                                 await Navigation.PushAsync(new SelectCaseType());
                             }
                         }
@@ -3046,7 +3046,7 @@ namespace StemmonsMobile.Views.Cases
             // remove code
             try
             {
-                var result = await DisplayAlert("Alert", "Would you like to remove this case from Your favourite list?", "Yes", "No");
+                var result = await DisplayAlert("Alert", "Would you like to remove this case from Your Favorite list?", "Yes", "No");
 
                 if (result)
                 {

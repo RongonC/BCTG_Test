@@ -21,68 +21,60 @@ namespace StemmonsMobile.CustomControls
     public partial class PropertyInfoPage : ContentPage
     {
         public EntityClass EntityLists = new EntityClass();
+
         public string fileStr = string.Empty;
         public PropertyInfoPage(EntityClass _entityClass)
         {
             InitializeComponent();
-            //. create obj  from cnt and pass to select entity
-
-            //add cntrl
             EntityLists = _entityClass;
-            EntityFieldListView control = new EntityFieldListView(_entityClass, new List<string>() { "TITLE", "EPILR" }, new List<string>() { "1470" });
-            controlFrame.Content = control;
-
-            this.BindingContext = EntityLists;// new PropInfoPageViewModel(_entityClass);
-
-            //if (App.Isonline)
-            //    PropertyInfoImage.Source = new UriImageSource
-            //    {
-            //        Uri = new Uri("https://atxre.com/wp-content/uploads/2019/01/Image-of-Properties-2.png"),
-            //        CachingEnabled = true,
-            //    };
-            //else
-            //    PropertyInfoImage.Source = ImageSource.FromFile("Assets/userIcon.png");
+            this.BindingContext = EntityLists;
 
             try
             {
-                var entFileID = EntityLists.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
-
-                var entEntityID = EntityLists.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
-
-                GetEntityImage(entEntityID.ToString(), entFileID.ToString());
+                //ProfileImg.Source = Functions.GetImageFromEntityAssoc(EntityLists.AssociationFieldCollection);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ProfileImg.Source = "Assets/PropertyImage.png";
+                //ProfileImg.Source = "Assets/na.png";
             }
         }
 
-        async public void GetEntityImage(string EntityID, string FileID)
+        protected override void OnAppearing()
         {
-            await Task.Run(() =>
+            base.OnAppearing();
+
+            EntityFieldListView entityfieldcontrol = new EntityFieldListView(EntityLists, new List<string>() { "TITLE" }, new List<string>() { "1814", "1815", "1816", "1819", "1820", "1821", "1822", "1823", "1824", "1825", "1826", "1827", "1829", "1830", "1833", "1834", "1836", "1842" });
+
+            var ls = entityfieldcontrol.FindByName("cntList") as ListView;
+
+            StackLayout header = new StackLayout();
+
+            Label lb1 = new Label();
+            lb1.Text = EntityLists.EntityTitle;
+            lb1.FontSize = 17;
+            lb1.FontAttributes = FontAttributes.Bold;
+            lb1.HorizontalOptions = LayoutOptions.Center;
+            lb1.HorizontalTextAlignment = TextAlignment.Center;
+            lb1.Margin = new Thickness(0, 15, 0, 15);
+
+            Image img1 = new Image();
+            img1.HeightRequest = 200;
+            try
             {
-                var d = EntityAPIMethods.GetFileFromEntity(EntityID, FileID, Functions.UserName);
-                fileStr = d.GetValue("ResponseContent").ToString();
-            });
+                img1.Source = Functions.GetImageFromEntityAssoc(EntityLists.AssociationFieldCollection);
+            }
+            catch (Exception)
+            {
+                img1.Source = "Assets/na.png";
+            }
 
-            FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
+            header.Children.Add(lb1);
+            header.Children.Add(img1);
 
-            OpenImage(fileResp.BLOB);
-        }
-        public void OpenImage(byte[] imageBytes)
-        {
-            ProfileImg.BorderColor = Color.Transparent;
-            ProfileImg.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+            ls.Header = header;
+
+            controlFrame.Children.Add(entityfieldcontrol);
+            ls.SelectedItem = null;
         }
     }
 }
-
-class PropertyInformationList
-{
-    public string PropertyFieldName { get; set; }
-    public string PropertyFieldValue { get; set; }
-
-    public List<PropertyInformationList> lst_entity = new List<PropertyInformationList>();
-}
-
-

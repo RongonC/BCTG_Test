@@ -47,7 +47,16 @@ namespace StemmonsMobile.CustomControls
             InitializeComponent();
 
             Titlelbl.Text = entityDetails.EntityTitle;
+            try
+            {
+                ProfileImg.Source = Functions.GetImageFromEntityAssoc(entityDetails.AssociationFieldCollection);
+            }
+            catch (Exception)
+            {
+                ProfileImg.Source = "Assets/na.png";
+            }
             EntityListVM.ScreenCode = _pagecode;
+            EntityListVM.EntityID = entityDetails.EntityID;
             if (_pagecode == "TNTLIST")
             {
                 Title = "Tenant List";
@@ -58,37 +67,18 @@ namespace StemmonsMobile.CustomControls
             {
                 Title = "Available Units";
                 //EntityListVM.ScreenCode = "TNTLIST";
-                EntityListVM.SystemCodeEntityType = "No code";
+                EntityListVM.SystemCodeEntityType = "UNITS";
                 EntityListVM._Viewtype = "";
             }
-
-
-            try
-            {
-                var entFileID = entityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityFileID;
-
-                var entEntityID = entityDetails.AssociationFieldCollection.Where(x => x.AssocSystemCode == "PHGAL").FirstOrDefault().AssocMetaDataText.FirstOrDefault().EntityID;
-
-                GetEntityImage(entEntityID.ToString(), entFileID.ToString());
-            }
-
-            catch (Exception ex)
-            {
-                ProfileImg.Source = "Assets/Property_Default.png";
-            }
-
-
         }
 
         int? _pageindex = 1;
-        int? pageSize = 50;
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
-
-            Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
+            lstCntrol.SelectedItem = null;
+            IsBusy = true;
             try
             {
                 for (int i = 1; i <= _pageindex; i++)
@@ -100,37 +90,8 @@ namespace StemmonsMobile.CustomControls
             catch (Exception ex)
             {
             }
-            Functions.ShowOverlayView_Grid(overlay, false, masterGrid);
-
-        }
-
-        async public void GetEntityImage(string EntityID, string FileID)
-        {
-            await Task.Run(() =>
-            {
-                var d = EntityAPIMethods.GetFileFromEntity(EntityID, FileID, Functions.UserName);
-                fileStr = d.GetValue("ResponseContent").ToString();
-            });
-
-            FileItem fileResp = JsonConvert.DeserializeObject<FileItem>(fileStr);
-            //byte[] fileData = fileResp.BLOB; //File byte array
-
-            OpenImage(fileResp.BLOB);
-        }
-        private void OpenImage(byte[] imageBytes)
-        {
-            ProfileImg.BorderColor = Color.Transparent;
-            ProfileImg.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+            IsBusy = false;
+           
         }
     }
-
-
-    //class TenantInformationList
-    //{
-    //    public string TenantFieldName { get; set; }
-    //    public string TenantFieldValue { get; set; }
-    //    public string TenantExpDate { get; set; }
-
-    //    public List<TenantInformationList> lst_entity = new List<TenantInformationList>();
-    //}
 }

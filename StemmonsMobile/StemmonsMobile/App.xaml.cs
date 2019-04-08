@@ -22,6 +22,10 @@ using StemmonsMobile.CustomControls;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using StemmonsMobile.DataTypes.DataType.Default;
+using Newtonsoft.Json.Linq;
+using StemmonsMobile.DataTypes.DataType;
+using System.Collections.ObjectModel;
+using StemmonsMobile.Models;
 
 namespace StemmonsMobile
 {
@@ -36,42 +40,32 @@ namespace StemmonsMobile
         public static bool Isonline = false;
         public static bool IsLoginCall = false;
 
-        public static bool IsPropertyPage = false;
+        public static bool IsPropertyPage = true;
 
         public static bool IsForceOnline = true;
+
+
+        public static int[] SyncSuccessFlagArr = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static bool SyncProgressFlag = false;
+
+
+       
+
         public App()
         {
             InitializeComponent();
 
-            //MainPage = new ViewcasePage_New();
-
-            //return;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
 
 
-            //if (Functions.IsPWDRemember && Functions.IsLogin)
-            //{
-            //    InstanceList inta = new InstanceList();
-            //    inta.InstanceUrl = DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl;
-            //    inta.InstanceID = Functions.Selected_Instance;
-            //    inta.InstanceName = Functions.InstanceName;
-            //    MainPage = new NavigationPage(new SelectInstancePage())
-            //    {
-            //        BarTextColor = Color.White,
-            //        BarBackgroundColor = Color.FromHex("696969"),
-            //    };
-            //}
-            //else
+            MainPage = new NavigationPage(new SelectInstancePage())
             {
-                MainPage = new NavigationPage(new SelectInstancePage())
-                {
-                    BarBackgroundColor = Color.FromHex("696969"),
-                    BindingContext = new InstanceList(),
-                    BarTextColor = Color.White,
-                };
-            }
+                BarBackgroundColor = Color.FromHex("696969"),
+                BindingContext = new InstanceList(),
+                BarTextColor = Color.White,
+            };
+
             SetConnectionFlag();
-            //CrossConnectivity.Current.ConnectivityChanged += Connectivity_ConnectivityChanged;
         }
 
         private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -211,10 +205,20 @@ namespace StemmonsMobile
         {
             try
             {
-                DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
+                if (!IsPropertyPage)
+                {
+                    DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
 
-                //Required To create Database
-                DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
+                    //Required To create Database
+                    DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db"));
+                }
+                else
+                {
+                    DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("BCTGMobile.db");
+
+                    //Required To create Database
+                    DBHelper dh = new DBHelper(DependencyService.Get<IDatalayer>().GetLocalFilePath("BCTGMobile.db"));
+                }
             }
             catch (System.Exception e)
             {
@@ -315,7 +319,8 @@ namespace StemmonsMobile
 
                 var res = DBHelper.GetinstanceuserassocListByUsername_Id(Functions.UserName, Functions.Selected_Instance, DBPath);
                 res.Wait();
-                ConstantsSync.INSTANCE_USER_ASSOC_ID = res.Result.INSTANCE_USER_ASSOC_ID;
+                if (res.Result != null)
+                    ConstantsSync.INSTANCE_USER_ASSOC_ID = res.Result.INSTANCE_USER_ASSOC_ID;
             }
             catch (Exception)
             {
@@ -326,6 +331,7 @@ namespace StemmonsMobile
         public static string EntityImgURL = string.Empty;
         public static string CasesImgURL = string.Empty;
         public static string StandardImgURL = string.Empty;
+        public static string CurretVer = string.Empty;
 
         protected override void OnStart()
         {
@@ -333,7 +339,7 @@ namespace StemmonsMobile
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-          
+
 
 
             try
@@ -676,6 +682,7 @@ namespace StemmonsMobile
             }
             catch (Exception)
             {
+
             }
         }
 
@@ -683,13 +690,21 @@ namespace StemmonsMobile
         {
             try
             {
-                var result = DefaultAPIMethod.GetLogo();
-                var urlString = result.GetValue("ResponseContent");
+                var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                List<MobileBranding> MBrand = new List<MobileBranding>();
+                if (!string.IsNullOrEmpty(Check.ASSOC_FIELD_INFO))
+                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Check.ASSOC_FIELD_INFO.ToString());
+                else
+                {
+                    var result = DefaultAPIMethod.GetLogo("MLOGO");
+                    var urlString = result.GetValue("ResponseContent");
+                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(urlString.ToString());
+                }
 
                 ImageHelperClass iHeleper = new ImageHelperClass();
-                var Src = iHeleper.DownloadImage(Convert.ToString(urlString));
-                Src.Wait();
+                var Src = iHeleper.DownloadImage(Convert.ToString(MBrand.Where(x => x.SYSTEM_CODE == "MLOGO")?.FirstOrDefault().VALUE));
 
+                Src.Wait();
                 var itm = DBHelper.GetInstanceListByID(Functions.Selected_Instance, App.DBPath);
                 itm.Wait();
                 InstanceList ils = new InstanceList();

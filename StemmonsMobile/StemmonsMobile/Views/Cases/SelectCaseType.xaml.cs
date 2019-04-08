@@ -83,7 +83,7 @@ namespace StemmonsMobile.Views.Cases
 
                 try
                 {
-                    Group_CaseType fav_case = new Group_CaseType("My Favourites");
+                    Group_CaseType fav_case = new Group_CaseType("My Favorite");
                     if (result_fav.Count > 0)
                     {
                         list_favorite = new ObservableCollection<GetFavorite>(result_fav as List<GetFavorite>);
@@ -346,7 +346,7 @@ namespace StemmonsMobile.Views.Cases
                         string name = string.Empty;
                         if (i == 0)
                         {
-                            name = "My Favourites";
+                            name = "My Favorite";
                         }
                         else
                         {
@@ -394,21 +394,6 @@ namespace StemmonsMobile.Views.Cases
         }
         #endregion
 
-        private void HeaderTapped(object sender, EventArgs e)
-        {
-            try
-            {
-                int selectedIndex = _expandedGroups.IndexOf(
-               ((Group_CaseType)((Button)sender).CommandParameter));
-                Master_list[selectedIndex].Expanded = !Master_list[selectedIndex].Expanded;
-                UpdateListContent();
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
         private void UpdateListContent()
         {
             try
@@ -476,5 +461,21 @@ namespace StemmonsMobile.Views.Cases
             }
         }
 
+     
+        private void Btn_Expand_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                int selectedIndex = _expandedGroups.IndexOf(
+               ((Group_CaseType)((Button)sender).CommandParameter));
+                Master_list[selectedIndex].Expanded = !Master_list[selectedIndex].Expanded;
+                UpdateListContent();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }
