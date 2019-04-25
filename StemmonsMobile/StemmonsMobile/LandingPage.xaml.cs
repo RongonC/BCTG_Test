@@ -1833,7 +1833,7 @@ namespace StemmonsMobile
 
 
         //JigarRp
-        public async void SyncAllRecorsToSQLite()
+        public void SyncAllRecorsToSQLite()
         {
             try
             {
@@ -1881,7 +1881,7 @@ namespace StemmonsMobile
                 {
                     Task.Run(() =>
                     {
-                        Functions.GetSystemCodesfromSqlServer();
+                        Functions.GetSystemCodesfromSqlServerAsync();
                     });
 
                     #region Home Count Sync

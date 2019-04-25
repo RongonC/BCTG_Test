@@ -132,10 +132,10 @@ namespace StemmonsMobile.ViewModels
                  //Functions.UserName = "guillermon";
                 if (CrossConnectivity.Current.IsConnected)
                 {
-                    Task.Run(() =>
-                    {
-                        Functions.GetSystemCodesfromSqlServer();
-                    });
+                   // Task.Run(() =>
+                   // {
+                    //    Functions.GetSystemCodesfromSqlServer();
+                   // });
 
 
                     for (int i = 0; i < lst.Count; i++)

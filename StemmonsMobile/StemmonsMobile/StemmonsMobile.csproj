@@ -56,7 +56,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.188" />
     <PackageReference Include="runtime.native.System" Version="4.3.1" />
-    <PackageReference Include="sqlite-net-standard" Version="1.5.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.258-beta" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />

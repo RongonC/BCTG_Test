@@ -48,15 +48,11 @@ namespace StemmonsMobile
         public static int[] SyncSuccessFlagArr = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static bool SyncProgressFlag = false;
 
-
-       
-
         public App()
         {
             InitializeComponent();
 
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-
 
             MainPage = new NavigationPage(new SelectInstancePage())
             {
@@ -339,8 +335,6 @@ namespace StemmonsMobile
             Functions.Platformtype = Xamarin.Forms.Device.RuntimePlatform;
             GetAppLocalData();
             //Crashes Report 
-
-
 
             try
             {
@@ -690,10 +684,13 @@ namespace StemmonsMobile
         {
             try
             {
-                var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                //var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+
+                var Check = DBHelper.GetAppTypeInfoListByTypeID_SystemName(Functions.Selected_Instance, "SYSTEMCODES", "SYSTEMCODES", App.DBPath);
+                Check.Wait();
                 List<MobileBranding> MBrand = new List<MobileBranding>();
-                if (!string.IsNullOrEmpty(Check.ASSOC_FIELD_INFO))
-                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Check.ASSOC_FIELD_INFO.ToString());
+                if (!string.IsNullOrEmpty(Check.Result?.ASSOC_FIELD_INFO))
+                    MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Check.Result.ASSOC_FIELD_INFO.ToString());
                 else
                 {
                     var result = DefaultAPIMethod.GetLogo("MLOGO");

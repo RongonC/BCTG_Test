@@ -58,9 +58,9 @@ namespace StemmonsMobile.Commonfiles
             new SyncStatus() { APIName = "CaseList Created By Me" },
             new SyncStatus() { APIName = "CaseList Owned By Me" },
             new SyncStatus() { APIName = "CaseList Assigned To My Team" },
-            //new SyncStatus() { APIName = "Entity Sync" },
-            //new SyncStatus() { APIName = "Entity Associated With Me" },
-            //new SyncStatus() { APIName = "Quest Sync" },
+            new SyncStatus() { APIName = "Entity Sync" },
+            new SyncStatus() { APIName = "Entity Associated With Me" },
+            new SyncStatus() { APIName = "Quest Sync" },
             new SyncStatus() { APIName = "Standard Sync" },
             new SyncStatus() { APIName = "Employee Search Sync" },
         };
@@ -374,42 +374,62 @@ namespace StemmonsMobile.Commonfiles
 
         }
 
-        public static void GetSystemCodesfromSqlServer()
+        public static void GetSystemCodesfromSqlServerAsync()
         {
             try
             {
-                List<MobileBranding> lst = new List<MobileBranding>();
+                List<MobileBranding> MBrand = new List<MobileBranding>();
                 if (CrossConnectivity.Current.IsConnected)
                 {
                     try
                     {
-                        Task.Run(() =>
+                        //var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                        //if (Check != null)
+                        //{
+                        //    if (!string.IsNullOrEmpty(Check?.ASSOC_FIELD_INFO))
+                        //    {
+                        //        MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Check.ASSOC_FIELD_INFO.ToString());
+                        //    }
+                        //}
+                        //else
+                        // {
+                        var Res = DefaultAPIMethod.GetImageList();
+                        var Result = Res.GetValue("ResponseContent");
+                        if (!string.IsNullOrEmpty(Convert.ToString(Result)))
                         {
-                            var Res = DefaultAPIMethod.GetImageList();
-                            var Result = Res.GetValue("ResponseContent");
-                            if (!string.IsNullOrEmpty(Convert.ToString(Result)))
-                            {
-                                lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ToString());
-                            }
-                        }).Wait();
+                            MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ToString());
+                        }
+                        //}
 
-                        App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
-                        App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
-                        App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+                        App.EntityImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
+                        App.CasesImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
+                        App.StandardImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
 
                         string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
-                        App.CurretVer = lst.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
+                        App.CurretVer = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
 
-                        var Check = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                       // App.CLientID = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLCL").FirstOrDefault().VALUE;
+                       // App.IsSAMLAuth = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "MSAML").FirstOrDefault().VALUE == "Y" ? true : false;
+                       // //App.ClientSecret = "c&;^#*%&.a{;+./V|v{$^?Y#[@.t&)8&])$!-";
+                       // App.ClientSecret = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLSR")?.FirstOrDefault()?.VALUE;
+                        ////App.Scope = "https://graph.microsoft.com/.default";
+                        //App.Scope = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLSC")?.FirstOrDefault()?.VALUE;
+                       // App.AuthorizeUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLAU").FirstOrDefault().VALUE;
+                       // App.AccessTokenUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLTU").FirstOrDefault().VALUE;
+                       // App.UserinfoUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLUL").FirstOrDefault().VALUE;
+                       // App.RedirectUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLRU").FirstOrDefault().VALUE;
+
+                        //var CheckRec = DBHelper.UserScreenRetrive("SYSTEMCODES", App.DBPath, "SYSTEMCODES");
+                        var CheckRec = DBHelper.GetAppTypeInfoListByTypeID_SystemName(Functions.Selected_Instance, "SYSTEMCODES", "SYSTEMCODES", App.DBPath);
 
                         AppTypeInfoList _AppTypeInfoList = new AppTypeInfoList();
 
                         _AppTypeInfoList = new AppTypeInfoList
                         {
-                            ASSOC_FIELD_INFO = JsonConvert.SerializeObject(lst),
+                            ASSOC_FIELD_INFO = JsonConvert.SerializeObject(MBrand),
                             LAST_SYNC_DATETIME = DateTime.Now,
                             SYSTEM = "SYSTEMCODES",
-                            TYPE_ID = 0,
+                            TYPE_ID = Functions.Selected_Instance,
                             ID = 0,
                             CategoryId = 0,
                             CategoryName = "",
@@ -419,14 +439,14 @@ namespace StemmonsMobile.Commonfiles
                             IS_ONLINE = true
                         };
 
-                        if (Check == null)
+                        if (CheckRec.Result == null)
                             _AppTypeInfoList.APP_TYPE_INFO_ID = 0;
                         else
-                            _AppTypeInfoList.APP_TYPE_INFO_ID = Check.APP_TYPE_INFO_ID;
+                            _AppTypeInfoList.APP_TYPE_INFO_ID = CheckRec.Result.APP_TYPE_INFO_ID;
                         var y = DBHelper.SaveAppTypeInfo(_AppTypeInfoList, App.DBPath);
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                     }
                 }
@@ -454,13 +474,24 @@ namespace StemmonsMobile.Commonfiles
 
                 if (!string.IsNullOrEmpty(Result.ASSOC_FIELD_INFO))
                 {
-                    var lst = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ASSOC_FIELD_INFO.ToString());
-                    App.EntityImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
-                    App.CasesImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
-                    App.StandardImgURL = lst.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
+                    var MBrand = JsonConvert.DeserializeObject<List<MobileBranding>>(Result.ASSOC_FIELD_INFO.ToString());
+                    App.EntityImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "ENTHM").FirstOrDefault().VALUE;
+                    App.CasesImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
+                    App.StandardImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
 
                     string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
-                    App.CurretVer = lst.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
+                    App.CurretVer = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
+
+                    //App.CLientID = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLCL").FirstOrDefault().VALUE;
+                    //App.IsSAMLAuth = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "MSAML").FirstOrDefault().VALUE == "Y" ? true : false;
+                   // //App.ClientSecret = "c&;^#*%&.a{;+./V|v{$^?Y#[@.t&)8&])$!-";
+                   // App.ClientSecret = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLSR")?.FirstOrDefault()?.VALUE;
+                    //App.Scope = "https://graph.microsoft.com/.default";
+                    //App.Scope = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLSC")?.FirstOrDefault()?.VALUE;
+                   // App.AuthorizeUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLAU").FirstOrDefault().VALUE;
+                    //App.AccessTokenUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLTU").FirstOrDefault().VALUE;
+                    //App.UserinfoUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLUL").FirstOrDefault().VALUE;
+                    //App.RedirectUrl = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLRU").FirstOrDefault().VALUE;
                 }
             }
             catch (Exception)
@@ -505,7 +536,7 @@ namespace StemmonsMobile.Commonfiles
 
         #region Messages For Whole APp
 
-        public static string Appinfomsg = "Stemmons Central to Go v" + CrossDeviceInfo.Current.AppVersion + "(" + CrossDeviceInfo.Current.AppBuild + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
+        public static string Appinfomsg = "Boxer Central to Go v" + CrossDeviceInfo.Current.AppVersion + "(" + CrossDeviceInfo.Current.AppBuild + ")\nCopyright © 2018 by Stemmons Enterprise LLC.";
         public static string Goonline_forFunc = "Please Go online to use this functionality!";
 
         public static string nRcrdOffline = "No Record Found.\nPlease go online to view full list.";

@@ -53,16 +53,17 @@ namespace StemmonsMobile.Views.LoginProcess
         }
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            loader.IsVisible =   true;
-            await Task.Run(() =>
-            {
-                Functions.GetSystemCodesfromSqlServer();
-                App.DownloadCompanyLog();
-            });
-
             var value = e.Item as InstanceList;
             Functions.Selected_Instance = value.InstanceID;
             DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = value.InstanceUrl;
+            loader.IsVisible =   true;
+            await Task.Run(() =>
+            {
+                Functions.GetSystemCodesfromSqlServerAsync();
+                App.DownloadCompanyLog();
+            });
+
+ 
             this.Navigation.PushAsync(new LoginPage(value) { BindingContext = value });
             InstanceList.SelectedItem = null;
             loader.IsVisible = false;

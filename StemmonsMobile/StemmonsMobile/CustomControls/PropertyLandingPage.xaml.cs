@@ -43,18 +43,9 @@ namespace StemmonsMobile.CustomControls
 
             this.BindingContext = new PropLandingViewModel();
 
-            //string CurretVer = string.Empty;
-            //var result = DefaultAPIMethod.GetLogo("B2VER");
-            //var res = result.GetValue("ResponseContent").ToString();
-            //var LiveVer = JsonConvert.DeserializeObject<List<MobileBranding>>(res).Where(x => x.SYSTEM_CODE == "B2VER")?.FirstOrDefault();
-            //CurretVer = LiveVer.VALUE;
             try
             {
                 HeaderLayout.Children.Clear();
-
-                //  StackLayout updateStack = new StackLayout();
-                //  updateStack.Orientation = StackOrientation.Vertical;
-                ////  updateStack.Margin = new Thickness(0, 10, 5, 0);
 
                 var grid = new Grid();
                 grid.RowSpacing = 0;
@@ -77,8 +68,6 @@ namespace StemmonsMobile.CustomControls
                 grid.Children.Add(updateBtn, 0, 1);
                 grid.Children.Add(updateText, 0, 2);
                 grid.IsVisible = false;
-                //updateStack.Children.Add(grid);
-                // updateStack.Children.Add(updateText);
 
                 HeaderLayout.Children.Add(grid);
 
@@ -94,7 +83,8 @@ namespace StemmonsMobile.CustomControls
                 }
             }
             catch
-            { }
+            {
+            }
         }
 
         protected override void OnAppearing()
@@ -116,6 +106,7 @@ namespace StemmonsMobile.CustomControls
                         Cont_sync.IsVisible = true;
                         Cont_sync.BindingContext = new MasterSyncpopupModel(Functions.lstSyncAPIStatus);
                         Grd_sync.IsVisible = false;
+                       // MainGrid.Opacity = 1;
                     }
                     else
                     {

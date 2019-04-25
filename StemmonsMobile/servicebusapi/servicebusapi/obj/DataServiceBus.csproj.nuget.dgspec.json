@@ -82,9 +82,9 @@
               "target": "Package",
               "version": "[3.6.0.264807, )"
             },
-            "sqlite-net-standard": {
+            "sqlite-net-pcl": {
               "target": "Package",
-              "version": "[1.5.1, )"
+              "version": "[1.6.258-beta, )"
             }
           },
           "imports": [

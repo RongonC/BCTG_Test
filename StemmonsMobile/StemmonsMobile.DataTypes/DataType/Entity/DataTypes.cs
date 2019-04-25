@@ -4453,6 +4453,40 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
 
     public class AssociationField
     {
+        public string AsscValue
+        {
+            get
+            {
+                switch (FieldType)
+                {
+                    case "se":
+                    case "el":
+                    case "me":
+                        if (AssocMetaData?.Count > 0)
+                            return AssocMetaData[0].FieldValue;
+                        break;
+                    default:
+                        if (AssocMetaDataText?.Count > 0)
+                        {
+                            var data = AssocMetaDataText;
+                            if (data?.Count > 0)
+                            {
+                                string sb = string.Empty;
+                                for (int j = 0; j < data.Count(); j++)
+                                {
+                                    if (j < 1)
+                                        sb = data[j].TextValue;
+                                    else
+                                        sb += Environment.NewLine + data[j].TextValue;
+                                }
+                                return sb.Trim();
+                            }
+                        }
+                        break;
+                }
+                return "";
+            }
+        }
         public int AssocTypeID { get; set; }
         public int EntityTypeID { get; set; }
         public string SecurityType { get; set; }

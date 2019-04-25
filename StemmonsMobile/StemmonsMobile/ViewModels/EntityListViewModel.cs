@@ -19,7 +19,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
 {
     public class EntityListViewModel : INotifyPropertyChanged
     {
-        public string ScreenCode { get; set; }
+        public string ScreenCode { get; set; }		
         // Blank Means Fetch All Entity List Based on Type ID
         //"MYPROPLIST" - To Fetch Properties Related to User
         //"PROPLIST" - To Fetch Properties 

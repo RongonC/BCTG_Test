@@ -35,7 +35,10 @@ namespace StemmonsMobile.Controls
         {
             if (Device.RuntimePlatform == Device.Android)
             {
-                Device.OpenUri(new Uri("https://play.google.com/store/apps/details?id=com.boxerproperty.s_bctg1"));
+                if (!App.IsPropertyPage)
+                    Device.OpenUri(new Uri("https://play.google.com/store/apps/details?id=com.stemmonscentraltogo.com"));
+                else
+                    Device.OpenUri(new Uri("https://play.google.com/store/apps/details?id=com.boxerproperty.s_bctg1"));
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {

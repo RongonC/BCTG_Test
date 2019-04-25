@@ -66,7 +66,8 @@ namespace StemmonsMobile.Views.LoginProcess
 
                     string[] prefixes =
                         {
-                        "","http://","https://","http://home.","https://home.","https://stems.","http://stems.","http://stemmons.","https://stemmons.", "http://central.", "https://central."
+                        //"","http://","https://","http://home.","https://home.","https://stems.","http://stems.","http://stemmons.","https://stemmons.", "http://central.", "https://central."
+                        "","https://","http://","https://home.","http://home.","https://stems.","http://stems.","https://stemmons.","http://stemmons.", "https://central.", "http://central."
                     };
 
                     string[] suffexes =
@@ -158,6 +159,8 @@ namespace StemmonsMobile.Views.LoginProcess
                             InstanceUrl = I_URL,
                             InstanceID = Functions.Selected_Instance
                         };
+
+                        DataServiceBus.OnlineHelper.DataTypes.Constants.Baseurl = I_URL;
 
                         var s = await DBHelper.SaveInstance(insta, App.DBPath);
                         if (s == 1)
