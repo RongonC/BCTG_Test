@@ -69,10 +69,10 @@ namespace StemmonsMobile.Controls
                         }
                         break;
                     case "Landing Page":
-                        if (App.IsPropertyPage)
+                        if (App.IsCustomLandingPage)
                             Application.Current.MainPage.Navigation.PushAsync(new LandingPage());
                         else
-                            Application.Current.MainPage.Navigation.PushAsync(new PropertyLandingPage());
+                            Application.Current.MainPage.Navigation.PushAsync(new CustomlandingPage());
                         break;
                     case "Logout":
                         App.Logout(Application.Current.MainPage);

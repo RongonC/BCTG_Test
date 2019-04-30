@@ -40,7 +40,7 @@ namespace StemmonsMobile
         public static bool Isonline = false;
         public static bool IsLoginCall = false;
 
-        public static bool IsPropertyPage = true;
+        public static bool IsCustomLandingPage = true;
 
         public static bool IsForceOnline = true;
 
@@ -201,7 +201,7 @@ namespace StemmonsMobile
         {
             try
             {
-                if (!IsPropertyPage)
+                if (!IsCustomLandingPage)
                 {
                     DBPath = DependencyService.Get<IDatalayer>().GetLocalFilePath("StemmonsMobile.db");
 
@@ -482,9 +482,9 @@ namespace StemmonsMobile
                 var existingPages = Application.Current.MainPage.Navigation.NavigationStack.ToList();
                 Page abc = new Page();
 
-                if (App.IsPropertyPage)
+                if (App.IsCustomLandingPage)
                 {
-                    abc = new PropertyLandingPage();
+                    abc = new CustomlandingPage();
                 }
                 else
                 {

@@ -79,4 +79,10 @@
     <ProjectReference Include="../servicebusapi/servicebusapi/DataServiceBus.csproj" />
     <ProjectReference Include="..\StemmonsMobile.DataTypes\StemmonsMobile.DataTypes.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="CustomControls\PropertyLandingPage.xaml.cs">
+      <DependentUpon>PropertyLandingPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

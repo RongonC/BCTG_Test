@@ -37,8 +37,8 @@ namespace StemmonsMobile.Views.LoginProcess
                 });
 
                 App.IsLoginCall = true;
-                if (App.IsPropertyPage)
-                    await Navigation.PushAsync(new PropertyLandingPage());
+                if (App.IsCustomLandingPage)
+                    await Navigation.PushAsync(new CustomlandingPage());
                 else
                     await Navigation.PushAsync(new LandingPage());
             }

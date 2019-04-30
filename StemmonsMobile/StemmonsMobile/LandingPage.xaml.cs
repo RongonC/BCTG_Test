@@ -53,7 +53,7 @@ namespace StemmonsMobile
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-            App.IsPropertyPage = false;
+            App.IsCustomLandingPage = false;
 
             SettingButton settings = new SettingButton(null);
             settings.HorizontalOptions = LayoutOptions.EndAndExpand;
@@ -2712,7 +2712,7 @@ namespace StemmonsMobile
                 switch (action)
                 {
                     case "Property Pages":
-                        await Navigation.PushAsync(new PropertyLandingPage());
+                        await Navigation.PushAsync(new CustomlandingPage());
                         break;
                     case "VCasePage":
                         //await Navigation.PushAsync(new VCasePage());

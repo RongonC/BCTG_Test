@@ -229,7 +229,7 @@ namespace StemmonsMobile.ViewModels.EntityViewModel
 
                     await Task.Run(async () =>
                     {
-                        ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype, App.IsPropertyPage);
+                        ListEntity = await EntitySyncAPIMethods.GetEntitiesBySystemCodeKeyValuePair_LazyLoadCommon(App.Isonline, Functions.UserName, Lazyload_request, App.DBPath, (int)_entityTypeID, Functions.UserFullName, _Viewtype, App.IsCustomLandingPage);
                     });
                     ListEntity = ListEntity.OrderBy(x => x.EntityTitle).ToList();
 

@@ -35,7 +35,7 @@ namespace StemmonsMobile.Controls
         {
             if (Device.RuntimePlatform == Device.Android)
             {
-                if (!App.IsPropertyPage)
+                if (!App.IsCustomLandingPage)
                     Device.OpenUri(new Uri("https://play.google.com/store/apps/details?id=com.stemmonscentraltogo.com"));
                 else
                     Device.OpenUri(new Uri("https://play.google.com/store/apps/details?id=com.boxerproperty.s_bctg1"));

@@ -124,7 +124,6 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="CustomRenderers\PullToRefreshLayoutRenderer.cs" />
     <Compile Include="CustomRenderers\ResourceRectEditorRenderer.cs" />
-    <Compile Include="CustomRenderers\ResourceRectLabelRenderer.cs" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>

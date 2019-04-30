@@ -20,15 +20,15 @@ using Xamarin.Forms.Xaml;
 namespace StemmonsMobile.CustomControls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PropertyLandingPage : ContentPage
+    public partial class CustomlandingPage : ContentPage
     {
-        public PropertyLandingPage()
+        public CustomlandingPage()
         {
             InitializeComponent();
 
             BackgroundColor = Color.Transparent;
 
-            App.IsPropertyPage = true;
+            App.IsCustomLandingPage = true;
             SettingButton settings = new SettingButton(null);
             settings.HorizontalOptions = LayoutOptions.EndAndExpand;
             settings.Margin = new Thickness(0, 10, 5, 0);

@@ -405,7 +405,7 @@ namespace StemmonsMobile.Commonfiles
                         App.CasesImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
                         App.StandardImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
 
-                        string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
+                        string Code = App.IsCustomLandingPage ? "B2VER" : "MBVER";
                         App.CurretVer = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
 
                        // App.CLientID = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLCL").FirstOrDefault().VALUE;
@@ -479,7 +479,7 @@ namespace StemmonsMobile.Commonfiles
                     App.CasesImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "CSHOM").FirstOrDefault().VALUE;
                     App.StandardImgURL = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "STHOM").FirstOrDefault().VALUE;
 
-                    string Code = App.IsPropertyPage ? "B2VER" : "MBVER";
+                    string Code = App.IsCustomLandingPage ? "B2VER" : "MBVER";
                     App.CurretVer = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == Code).FirstOrDefault().VALUE;
 
                     //App.CLientID = MBrand.Where(v => v.SYSTEM_CODE.ToUpper() == "SMLCL").FirstOrDefault().VALUE;
