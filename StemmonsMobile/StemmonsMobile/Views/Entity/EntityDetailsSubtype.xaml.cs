@@ -118,7 +118,7 @@ namespace StemmonsMobile.Views.Entity
             Functions.IsEditEntity = false;
             Title = _selectedlist.EntityTypeName;
             List_Entityitem.Clear();
-
+            EntityListVM.ListEntityitem.Clear();
             Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
             try
             {

@@ -304,74 +304,74 @@ namespace StemmonsMobile.ViewModels.CaseListViewModels
 
             try
             {
-                if (PageIndexList.Contains(PageIndex) && PageIndex != 0)
+                //if (PageIndexList.Contains(PageIndex) && PageIndex != 0)
+                //{
+                //    return;
+                //}
+                //else
+                //{
+                PageIndexList.Add(PageIndex);
+                //PageIndexList.RemoveAt(PageIndexList.Count - 1);
+                await Task.Run(() =>
                 {
-                    return;
-                }
-                else
-                {
-                    PageIndexList.Add(PageIndex);
-                    //PageIndexList.RemoveAt(PageIndexList.Count - 1);
-                    await Task.Run(() =>
-                    {
-                        var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Functions.UserName, _casetypeid, _caseOwnerSam, _caseAssgnSam, _caseClosebySam, _casecreatebysam, _propertyid, _tenantcode, _tenant_id, _showOpenClosetype, _showpastcase, _searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, _saveRec, _scrnName, PageIndex, PageNumber);
-                        result.Wait();
+                    var result = CasesSyncAPIMethods.GetCaseList(App.Isonline, Functions.UserName, _casetypeid, _caseOwnerSam, _caseAssgnSam, _caseClosebySam, _casecreatebysam, _propertyid, _tenantcode, _tenant_id, _showOpenClosetype, _showpastcase, _searchquery, ConstantsSync.INSTANCE_USER_ASSOC_ID, App.DBPath, Functions.UserFullName, _saveRec, _scrnName, PageIndex, PageNumber);
+                    result.Wait();
 
 
-                        if (!LoadMoreFlag) //Refresh or default
+                    if (!LoadMoreFlag) //Refresh or default
                         {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
-                                var tm = BasicCase_lst.Select(i =>
-                                {
-                                    if (!string.IsNullOrEmpty(i.strCaseDue))
-                                    {
-                                        i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
-                                        i.DueDateVisibility = true;
-                                    }
-                                    else
-                                    {
-                                        i.bg_color = "Black";
-                                        i.DueDateVisibility = false;
-                                    }
-                                    return i;
-                                });
-
-                                BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(tm);
-                            });
-                        }
-                        else //LoadMore
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            Device.BeginInvokeOnMainThread(() =>
+                            BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
+                            var tm = BasicCase_lst.Select(i =>
                             {
-                                TempList.Clear();
-                                TempList = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
-                                var tm = TempList.Select(i =>
+                                if (!string.IsNullOrEmpty(i.strCaseDue))
                                 {
-                                    if (!string.IsNullOrEmpty(i.strCaseDue))
-                                    {
-                                        i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
-                                        i.DueDateVisibility = true;
-                                    }
-                                    else
-                                    {
-                                        i.bg_color = "Black";
-                                        i.DueDateVisibility = false;
-                                    }
-                                    return i;
-                                });
-
-                                TempList = new ObservableCollection<GetCaseTypesResponse.BasicCase>(tm);
-
-                                foreach (var item in TempList)
-                                {
-                                    BasicCase_lst.Add(item);
+                                    i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                    i.DueDateVisibility = true;
                                 }
+                                else
+                                {
+                                    i.bg_color = "Black";
+                                    i.DueDateVisibility = false;
+                                }
+                                return i;
                             });
-                        }
-                    });
-                }
+
+                            BasicCase_lst = new ObservableCollection<GetCaseTypesResponse.BasicCase>(tm);
+                        });
+                    }
+                    else //LoadMore
+                        {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            TempList.Clear();
+                            TempList = new ObservableCollection<GetCaseTypesResponse.BasicCase>(result.Result);
+                            var tm = TempList.Select(i =>
+                            {
+                                if (!string.IsNullOrEmpty(i.strCaseDue))
+                                {
+                                    i.bg_color = Convert.ToDateTime(CommonConstants.DateFormatStringToString(i.strCaseDue)) > DateTime.Now ? "Black" : "Red";
+                                    i.DueDateVisibility = true;
+                                }
+                                else
+                                {
+                                    i.bg_color = "Black";
+                                    i.DueDateVisibility = false;
+                                }
+                                return i;
+                            });
+
+                            TempList = new ObservableCollection<GetCaseTypesResponse.BasicCase>(tm);
+
+                            foreach (var item in TempList)
+                            {
+                                BasicCase_lst.Add(item);
+                            }
+                        });
+                    }
+                });
+                //}
             }
             catch (Exception ex)
             {

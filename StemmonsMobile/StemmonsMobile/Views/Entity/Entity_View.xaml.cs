@@ -51,8 +51,12 @@ namespace StemmonsMobile.Views.Entity
         {
             InitializeComponent();
             _entityListMBView = _SelectedEntity;
-            Title = string.IsNullOrEmpty(_SelectedEntity.EntityTitle) ? "View Entity" : _SelectedEntity.EntityTitle;
-            lbl_createname.Text = "";
+
+            if (_SelectedEntity != null)
+                Title = string.IsNullOrEmpty(_SelectedEntity.EntityTitle) ? "View Entity" : _SelectedEntity.EntityTitle;
+            else
+                Title = "View Entity"; lbl_createname.Text = "";
+
             Groups.Clear();
             NavScreenname = _navscreenname;
         }

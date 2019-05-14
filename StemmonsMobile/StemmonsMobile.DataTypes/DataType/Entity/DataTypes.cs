@@ -4374,28 +4374,30 @@ namespace StemmonsMobile.DataTypes.DataType.Entity
         {
             get
             {
-                foreach (var item in this.AssociationFieldCollection)
+                try
                 {
-                    if (item.AssocSystemCode != null)
+                    foreach (var item in this.AssociationFieldCollection)
                     {
-                        if (item.AssocSystemCode.ToUpper().Trim() == "TITLE")
+                        if (item.AssocSystemCode != null)
                         {
-                            // TODO Why is this alternating?
-                            //return item.TextValue;
-                            //return item.MetaDataText;
-
-                            //return !string.IsNullOrEmpty(item.TextValue) ? item.TextValue : item.MetaDataText;
-                            if (item.AssocMetaDataText.Count > 0)
-                                return item.AssocMetaDataText[0].TextValue;
-                            else if (item.AssocDecode.Count > 0)
-                                return item.AssocDecode[0].AssocDecodeName;
-                            else
-                                return "NO TITLE PROVIDED";
+                            if (item.AssocSystemCode.ToUpper().Trim() == "TITLE")
+                            {
+                                if (item.AssocMetaDataText.Count > 0)
+                                    return item.AssocMetaDataText[0].TextValue;
+                                else if (item.AssocDecode.Count > 0)
+                                    return item.AssocDecode[0].AssocDecodeName;
+                                else if (item.AssocMetaData.Count > 0)
+                                    return item.AssocMetaData[0].FieldValue;
+                                else
+                                    return "NO TITLE PROVIDED";
+                            }
                         }
                     }
                 }
+                catch (Exception)
+                {
+                }
                 return "NO TITLE PROVIDED";
-
             }
         }
     }

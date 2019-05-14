@@ -204,7 +204,7 @@ namespace StemmonsMobile.Views.View_Case_Origination_Center
 
                 //Functions.ShowOverlayView_Grid(overlay, true, masterGrid);
                 CaselistGrouped.SelectedItem = null;
-                if (isFirstAppearing)
+                //if (isFirstAppearing)
                 {
                     isFirstAppearing = false;
                     if (count == 0)
